@@ -96,7 +96,7 @@ export const BpChrome:React.FC<{section:string;page:string}>=({section,page})=>{
  <AbsoluteFill style={{background:'radial-gradient(120% 80% at 50% 35%, transparent 55%, rgba(3,5,9,.75) 100%)'}}/>
  <div style={{position:'absolute',left:40,right:40,top:40,bottom:40,border:`1px solid ${BP.line}`}}/>
  <div style={{position:'absolute',left:136,right:50,top:86,display:'flex',justifyContent:'space-between',alignItems:'flex-end',paddingBottom:22,borderBottom:`1px solid ${BP.hair}`}}>
-  <div><div style={{fontFamily:SANS,fontSize:46,color:BP.ink,letterSpacing:1}}>DAN TECH</div><div style={{...lbl(19,BP.cy),marginTop:6}}>{t.label} · {t.subtitle}</div></div>
+  <div><div style={{fontFamily:'BVPX',fontSize:46,color:BP.ink,letterSpacing:1.5}}>DAN TECH</div><div style={{...lbl(19,BP.cy),marginTop:6}}>{t.label} · {t.subtitle}</div></div>
   <div style={{textAlign:'right',...lbl(19)}}><div>SHEET</div><div style={{fontFamily:SANS,fontSize:40,color:BP.ink,letterSpacing:0,marginTop:4}}>{page}</div></div></div>
  <div style={{position:'absolute',left:136,right:50,top:222,...lbl(19),display:'flex',gap:14}}><span style={{color:BP.cy}}>§</span>{section}</div>
  <div style={{position:'absolute',left:64,top:300,bottom:330,width:30}}>{Array.from({length:27},(_,k)=><div key={k} style={{position:'absolute',top:k*48,right:0,width:k%5===0?22:10,height:1,background:k%5===0?BP.dim:BP.hair}}>{k%5===0&&<span style={{position:'absolute',right:28,top:-9,fontFamily:MONO,fontSize:14,color:BP.dim}}>{k*48}</span>}</div>)}</div></>};
@@ -109,7 +109,7 @@ export const BpEndCard:React.FC<{dur?:number;handles?:{p:string;h:string}[];tagl
   <div style={{position:'absolute',left:136,right:110,top:640}}>
    <div style={{...lbl(22,BP.cy),opacity:p(4)}}>END OF SHEET</div>
    <svg width={834} height={8} style={{marginTop:22}}><path d="M0 4 H834" stroke={BP.cy} strokeWidth={2} pathLength={1} strokeDasharray={1} strokeDashoffset={1-p(6,30)}/></svg>
-   <div style={{fontFamily:SANS,fontSize:150,color:BP.ink,lineHeight:1.05,marginTop:30,letterSpacing:-3,opacity:p(10),transform:`translateY(${(1-p(10))*20}px)`}}>Dan Tech</div>
+   <div style={{fontFamily:'BVPX',fontSize:150,color:BP.ink,lineHeight:1.12,marginTop:30,letterSpacing:-3,opacity:p(10),transform:`translateY(${(1-p(10))*20}px)`}}>Dan Tech</div>
    <div style={{fontFamily:SANS,fontSize:46,color:BP.dim,marginTop:18,opacity:p(16)}}>{tagline}</div>
    <div style={{marginTop:70,display:'flex',flexDirection:'column',gap:0}}>{handles.map((h,k)=><div key={k} style={{display:'flex',justifyContent:'space-between',alignItems:'baseline',padding:'24px 0',borderTop:`1px solid ${BP.hair}`,borderBottom:k===handles.length-1?`1px solid ${BP.hair}`:'none',opacity:p(22+k*5)}}>
     <span style={lbl(22)}>{h.p}</span><span style={{fontFamily:MONO,fontSize:50,color:k===0?BP.cy:BP.ink}}>{h.h}</span></div>)}</div>
