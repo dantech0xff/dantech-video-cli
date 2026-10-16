@@ -2,7 +2,7 @@
  "theme": "commit",
  "title": "Inversion of Control (Koin)",
  "date": "16 · 10 · 2026",
- "caption": "Inversion of Control: thay vì tự new từng object, anh em khai báo, framework (Koin) lo tạo, nối và quản lý vòng đời. DI là một cách làm IoC. Bài đầy đủ trong khoá Mobile Action Pro trên dantech.academy. #DanTech #Kotlin #Android #Koin",
+ "caption": "Inversion of Control là gì? Thay vì tự new từng object, bạn khai báo và để framework (Koin) lo việc tạo, nối và quản lý vòng đời. Dependency Injection là một cách làm IoC. Bài đầy đủ trong khoá Mobile Action Pro trên dantech.academy. #DanTech #Kotlin #Android #Koin",
  "sources": [
   "Dan Tech Academy, Mobile Action Pro · Dependency Injection · Lesson 02 Inversion of Control: https://dantech.academy/courses/kotlin-accelerator/engineer-builder/07-dependency-injection/lesson-02-inversion-of-control",
   "Martin Fowler, Inversion of Control Containers and the Dependency Injection pattern: https://martinfowler.com/articles/injection.html",
@@ -18,7 +18,7 @@
  },
  "scenes": [
   {
-   "say": "Màn hình game của mình từng tự new năm object, rồi nhét hết vào một constructor tám tham số. Mệt thật sự.",
+   "say": "Thử tưởng tượng bạn mở màn hình game, và hàm onCreate phải tự tạo bốn object, rồi ráp tất cả vào GameManager với tám tham số. Vậy có cách nào để màn hình khỏi lo chuyện này?",
    "type": "CodeBlock",
    "section": "GameScreen.kt --before",
    "out": "scroll",
@@ -30,41 +30,55 @@
     "lines": [
      {
       "s": "val disp = QzDispatchersImpl()",
-      "at": "@Màn"
+      "at": "@Thử"
      },
      {
       "s": "val timer = GameTimer(disp)",
-      "at": "@game"
+      "at": "@mở"
      },
      {
       "s": "val help = DefaultLifelineHelper()",
-      "at": "@tự"
+      "at": "@hàm"
      },
      {
       "s": "val repo = QuestionRepositoryImpl()",
-      "at": "@năm"
+      "at": "@onCreate"
      },
      {
       "s": "val gm = GameManagerImpl(",
-      "at": "@rồi"
+      "at": "@phải"
      },
      {
       "s": "  repo, help, timer,",
-      "at": "@nhét"
+      "at": "@tạo"
      },
      {
       "s": "  // + 5 tham số nữa",
-      "at": "@constructor"
+      "at": "@bốn"
      },
      {
       "s": ")",
-      "at": "@tham"
+      "at": "@rồi"
      }
     ],
     "badge": {
      "text": "8 tham số",
      "at": "@tám"
-    }
+    },
+    "notes": [
+     {
+      "s": "Mỗi dòng là một object bạn tự new bằng tay.",
+      "at": "@tự"
+     },
+     {
+      "s": "GameManager cần đủ 8 thứ, thiếu một là hỏng.",
+      "at": "@GameManager"
+     },
+     {
+      "s": "Có cách nào để màn hình khỏi lo?",
+      "at": "@Vậy"
+     }
+    ]
    },
    "sfx": [
     {
@@ -75,7 +89,7 @@
    ]
   },
   {
-   "say": "Inversion of Control đảo ngược chuyện đó: tạo object khi nào, ra sao, giờ do framework quyết định.",
+   "say": "Đó là Inversion of Control, nghĩa là đảo ngược quyền kiểm soát. Thay vì code của bạn tự quyết định tạo object lúc nào và tạo ra sao, quyền đó được giao cho framework, ở đây là Koin.",
    "type": "DepGraph",
    "section": "inversion-of-control",
    "out": "push",
@@ -93,11 +107,11 @@
     "depsAt": "@Inversion",
     "you": "code của bạn",
     "fw": "framework (Koin)",
-    "flipAt": "@framework",
+    "flipAt": "@giao",
     "q": [
      {
-      "s": "khi nào?",
-      "at": "@khi"
+      "s": "lúc nào?",
+      "at": "@lúc"
      },
      {
       "s": "ra sao?",
@@ -107,14 +121,14 @@
    },
    "sfx": [
     {
-     "at": "@framework+8",
+     "at": "@giao+8",
      "s": "tick_002",
      "v": 0.4
     }
    ]
   },
   {
-   "say": "Không IoC, anh em là đầu bếp: tự đi chợ, nấu, bưng ra. Có IoC, anh em là khách: gọi món trong menu, nhà hàng lo hết.",
+   "say": "Thử nghĩ thế này: không có IoC, bạn là đầu bếp, tự đi chợ, tự nấu rồi bưng món ra. Có IoC, bạn là khách, chỉ cần gọi món. Và trong code, món bạn gọi chính là GameManager.",
    "type": "Analogy",
    "section": "nhà-hàng --analogy",
    "out": "scroll",
@@ -125,12 +139,12 @@
      {
       "title": "đầu bếp",
       "tag": "không IoC",
-      "at": "@Không",
+      "at": "@không",
       "steps": [
        {
         "icon": "basket",
         "label": "đi chợ",
-        "at": "@chợ"
+        "at": "@chợ,"
        },
        {
         "icon": "pan",
@@ -147,7 +161,7 @@
      {
       "title": "khách",
       "tag": "có IoC",
-      "at": "@Có",
+      "at": "@Có#2",
       "steps": [
        {
         "icon": "menu",
@@ -156,13 +170,13 @@
        },
        {
         "icon": "bell",
-        "label": "nhà hàng lo",
-        "at": "@nhà"
+        "label": "bếp lo",
+        "at": "@món.+4"
        },
        {
         "icon": "check",
-        "label": "xong",
-        "at": "@hết."
+        "label": "GameManager",
+        "at": "@GameManager."
        }
       ]
      }
@@ -170,14 +184,14 @@
    },
    "sfx": [
     {
-     "at": "@Có",
+     "at": "@Có#2",
      "s": "select_003",
      "v": 0.35
     }
    ]
   },
   {
-   "say": "Với Koin, anh em khai báo module, gọi startKoin trong App. Màn hình chỉ cần get hoặc by inject. Anh em khai báo, Koin điều khiển.",
+   "say": "Lúc này, bạn viết một module để chỉ cho Koin cách tạo từng thứ, rồi gọi startKoin trong App. Còn màn hình game chỉ cần gọi get, Koin sẽ đưa GameManager cho bạn.",
    "type": "CodeBlock",
    "section": "App.kt --after",
    "out": "bar",
@@ -190,19 +204,19 @@
     "lines": [
      {
       "s": "val appModule = module {",
-      "at": "@Với"
+      "at": "@Lúc"
      },
      {
       "s": "  single<AudioManager> {",
-      "at": "@khai"
+      "at": "@module"
      },
      {
       "s": "    AudioManagerImpl(get()) }",
-      "at": "@module,"
+      "at": "@cách"
      },
      {
       "s": "}",
-      "at": "@gọi"
+      "at": "@thứ,"
      },
      {
       "s": "startKoin {",
@@ -214,87 +228,89 @@
      },
      {
       "s": "  modules(coreModule, dataModule)",
-      "at": "@App."
+      "at": "@startKoin+18"
      },
      {
       "s": "}",
-      "at": "@Màn"
+      "at": "@App."
      },
      {
       "s": "val gm: GameManager = get()",
-      "at": "@get"
-     },
-     {
-      "s": "val audio: AudioManager",
-      "at": "@inject."
-     },
-     {
-      "s": "    by inject()",
-      "at": "@inject.+6"
+      "at": "@get,"
      }
     ],
-    "badge": {
-     "text": "Koin điều khiển",
-     "at": "@điều"
-    }
+    "notes": [
+     {
+      "s": "module là công thức: cần AudioManager thì tạo AudioManagerImpl.",
+      "at": "@module"
+     },
+     {
+      "s": "startKoin chạy một lần khi app mở, nạp các module.",
+      "at": "@startKoin"
+     },
+     {
+      "s": "get() là xin Koin đưa object, không cần new.",
+      "at": "@get,"
+     }
+    ]
    },
    "sfx": [
     {
-     "at": "@điều",
+     "at": "@get,",
      "s": "tick_002",
      "v": 0.4
     }
    ]
   },
   {
-   "say": "Ba thứ bị đảo ngược: thời điểm tạo, cách khởi tạo, và vòng đời, giờ do single, factory, scoped quản lý.",
+   "say": "Nói cách khác, có ba thứ được đảo ngược: lúc nào tạo object, tạo nó như thế nào, và nó sống bao lâu.",
    "type": "Inversions",
    "section": "3-inversions",
-   "out": "stack",
+   "out": "scroll",
    "props": {
     "n": "05",
     "kick": "3 lần đảo ngược",
     "rows": [
      {
-      "k": "thời điểm tạo",
+      "k": "lúc nào tạo",
       "from": "code của bạn",
-      "to": "framework",
-      "at": "@thời"
+      "to": "Koin",
+      "at": "@lúc"
      },
      {
-      "k": "cách khởi tạo",
+      "k": "tạo như thế nào",
       "from": "tự new",
-      "to": "khai báo",
-      "at": "@cách"
+      "to": "khai báo module",
+      "at": "@tạo#2"
      },
      {
-      "k": "vòng đời",
+      "k": "sống bao lâu",
       "from": "tự giải phóng",
-      "to": "single · factory · scoped",
-      "at": "@vòng"
+      "to": "Koin quản lý",
+      "at": "@và"
      }
     ]
    },
    "sfx": [
     {
-     "at": "@thời+14",
+     "at": "@lúc+14",
      "s": "tick_002",
      "v": 0.3
     },
     {
-     "at": "@cách+14",
+     "at": "@tạo#2+14",
      "s": "tick_002",
      "v": 0.3
     },
     {
-     "at": "@vòng+14",
+     "at": "@và+14",
      "s": "tick_002",
      "v": 0.3
     }
    ]
   },
   {
-   "say": "DI chỉ là một cách làm IoC, callback hay event listener cũng vậy. Bài đầy đủ có trong khoá Mobile Action Pro trên dantech chấm academy. Follow Dan Tech nhé!",
+   "say": "Nhớ nhé: Dependency Injection, tức là đưa phụ thuộc từ bên ngoài vào, chỉ là một cách làm IoC. Bạn nói mình cần gì, framework lo phần còn lại. Bài đầy đủ có trong khoá Mobile Action Pro trên dantech chấm academy. Follow Dan Tech nhé!",
    "type": "KeyPoint",
    "section": "key --takeaway",
    "props": {
@@ -302,19 +318,15 @@
     "kick": "điểm chính",
     "l1": "DI là một",
     "l2": "cách làm IoC",
-    "at": "@DI",
+    "at": "@Dependency",
     "chips": [
      {
-      "s": "DI",
-      "at": "@DI"
+      "s": "bạn: cần gì",
+      "at": "@nói"
      },
      {
-      "s": "callback",
-      "at": "@callback"
-     },
-     {
-      "s": "event listener",
-      "at": "@event"
+      "s": "framework: làm sao",
+      "at": "@lo"
      }
     ],
     "course": {

@@ -19,7 +19,7 @@ description: Viết videos/<slug>/script.json cho video Dan Tech từ một spec
    Schema đầy đủ và props từng scene: [SCHEMA.md](SCHEMA.md). Bản khởi đầu: [template.json](template.json).
 4. **Viết `say` từng cảnh** (tiếng Việt nói, câu ngắn):
    - **Hook trong 2 giây đầu:** cảnh 1 mở bằng xung đột, con số hoặc câu hỏi ("Vẫn click chuột lục menu…?", "OpenAI vừa xuống nước…").
-   - Độ dài: ~3 chữ (âm tiết)/giây → 30 s ≈ 90 chữ, 45 s ≈ 135 chữ. 5–6 cảnh.
+   - Độ dài: tốc độ phụ thuộc style giọng (đo từ các lần render): **hào hứng ~3.8**, **tự nhiên ~3.1**, **kể chuyện ~2.55** chữ (âm tiết)/giây. Vì style là ngẫu nhiên, ước lượng theo *tự nhiên* và chấp nhận dao động ±25%. `validate_script.py` in ước lượng cho cả 3 style. TIN NÓNG/MẸO: 30–50 s (~95–150 chữ). COMMIT/giải thích code: 50–70 s (~160–210 chữ), xem mục "Code explainer" bên dưới.
    - Câu cuối phải có **"follow Dan Tech"** (nút Follow bật ở "follow", bấm ở "Dan"). Handle do outro lo, không viết vào props.
    - Số và tên riêng viết sao cho TTS đọc đúng.
 5. **Props + nhấn nhịp bằng `@chữ`:** chỉ dùng scene type và khoá props trong SCHEMA.md. Mọi mốc xuất hiện (keycap, popup, tick, stamp, sfx) đặt bằng `"@chữ"` của chính cảnh đó, không đếm frame tay. SFX chỉ đặt ở khoảnh khắc có nghĩa (click, pop, stamp), volume 0.35–0.5.
@@ -28,3 +28,31 @@ description: Viết videos/<slug>/script.json cho video Dan Tech từ một spec
 8. **Humanize lời đọc:** áp dụng skill `humanizer` (`.agents/skills/humanizer/SKILL.md`) theo hướng dẫn tiếng Việt ở `.agents/skills/humanizer/VI.md` cho mọi `say`: bỏ sáo rỗng, đối lập giả, bộ ba ép, thổi phồng, filler; giữ văn nói ngắn. Không đổi sự kiện, số, nguồn, câu "follow Dan Tech". Chữ nào bị đổi mà đang được `@anchor` dùng thì cập nhật anchor.
 9. **Validate:** `python3 scripts/validate_script.py videos/<slug>/script.json`. Chạy lại sau mỗi lần sửa (kể cả sau bước humanize), đến khi `✅ OK` (cảnh báo về độ dài thì cân nhắc).
 10. **Báo Dan:** đường dẫn file, theme, số cảnh, số chữ/thời lượng ước tính, hook, danh sách nguồn, và những điểm chưa chắc chắn.
+
+## Code explainer / COMMIT
+
+Video giải thích code phải **dẫn chuyện** để người xem hiểu và ở lại. Người xem chỉ nghe được một lần, nên lời đọc phải tự nó dễ hiểu.
+
+**Mạch truyện (mỗi bước ~1 cảnh):**
+1. **Tình huống đau** cụ thể, gọi người xem là "bạn", không có nhân vật: "Thử tưởng tượng bạn mở màn hình game, và onCreate phải tự tạo…"
+2. **Câu hỏi** nối sang khái niệm: "Vậy có cách nào để…?"
+3. **Gọi tên khái niệm bằng một câu dễ hiểu**: "Đó là X, nghĩa là…"
+4. **Giải thích từng bước**, dùng từ nối: *vì vậy, lúc này, nói cách khác, thử tưởng tượng, tức là, thay vì*.
+5. **Ví dụ so sánh** (analogy), và **nối ngược lại về code** ("món bạn gọi chính là GameManager").
+6. **Một câu chốt** (takeaway).
+7. **CTA** nhẹ nhàng, rồi "follow Dan Tech".
+
+**Quy tắc:**
+- Câu nói đầy đủ, đúng ngữ pháp. Không viết kiểu ghi chú hay liệt kê từ khoá.
+- Định nghĩa mọi thuật ngữ ở lần đầu nhắc tới (IoC, DI, module, single…). Thuật ngữ nào hiện trên hình mà không giải thích được thì bỏ khỏi hình.
+- Một ý cho mỗi cảnh. Lời đọc **giải thích thứ đang hiện trên màn hình** (dòng code này làm gì), không chỉ đọc tên nó. Có thể dùng `notes` của `CodeBlock` để chú thích từng dòng.
+- Câu cuối của mỗi cảnh **bắc cầu** sang cảnh sau (câu hỏi, "lúc này…", "nói cách khác…").
+- Ưu tiên rõ ràng hơn ngắn gọn: budget 50–70 s. Quá dài thì **cắt bớt ý** (một ví dụ, một chi tiết phụ), **không bao giờ** cắt từ nối hay chủ ngữ cho ngắn.
+
+**Tự kiểm tra:** đọc to toàn bộ `say` liền mạch, không nhìn hình. Người chưa biết khái niệm có hiểu không? Có chỗ nào phải "nhìn hình mới hiểu" không? Có thuật ngữ nào chưa giải thích không?
+
+**Ví dụ trước / sau:**
+- ❌ Kiểu điện tín: "Inversion of Control đảo ngược chuyện đó: tạo object khi nào, ra sao, giờ do framework quyết định."
+- ✅ Dẫn chuyện: "Đó là Inversion of Control, nghĩa là đảo ngược quyền kiểm soát. Thay vì code của bạn tự quyết định tạo object lúc nào và tạo ra sao, quyền đó được giao cho framework, ở đây là Koin."
+- ❌ "Ba thứ bị đảo ngược: thời điểm tạo, cách khởi tạo, và vòng đời."
+- ✅ "Nói cách khác, có ba thứ được đảo ngược: lúc nào tạo object, tạo nó như thế nào, và nó sống bao lâu."

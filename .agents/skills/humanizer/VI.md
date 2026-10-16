@@ -14,6 +14,9 @@
 - Chi tiết cụ thể thay cho tính từ: con số, tên, hành động.
 - Hook cụ thể ở câu đầu, không mở bằng câu dàn dựng.
 
+## Không cắt từ nối
+Không xoá từ nối và câu dẫn có chức năng giải thích: "vì vậy", "lúc này", "nói cách khác", "thử tưởng tượng", "tức là", "nghĩa là", "trước khi", "thay vì". Những từ này không phải filler: chúng giúp người nghe theo được mạch (đặc biệt ở video giải thích code). Văn kiểu ghi chú, liệt kê từ khoá ("tạo khi nào, ra sao, framework") cũng là dấu hiệu AI/thiếu tự nhiên: viết lại thành câu nói đầy đủ.
+
 ## Không được đổi
 - Sự kiện, con số, tên riêng, trích dẫn, `sources`.
 - Câu kết có **"follow Dan Tech"**.

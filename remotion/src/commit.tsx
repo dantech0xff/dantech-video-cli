@@ -96,14 +96,17 @@ export const CommitCTA:React.FC<{n:string;kick:string;rows:{k:string;v:string;at
 const KW=/^(val|var|fun|class|private|by|override|object|return|this@\w+)$/;
 const kt=(line:string,t:any):React.ReactNode[]=>{if(line.trimStart().startsWith('//'))return [<span key={0} style={{color:C.dim}}>{line}</span>];
  return line.split(/(\s+|[(){}<>,:=.]|"[^"]*")/).filter(x=>x!=='').map((w,k)=>{const c=w.startsWith('"')?t.accent2:KW.test(w)?t.accent:/^[A-Z]/.test(w)?C.blue:/^(get|inject|single|factory|scoped|module|startKoin|androidContext|modules)$/.test(w)?t.accent2:/^[(){}<>,:=.]$/.test(w)?C.dim:t.ink;return <span key={k} style={{color:c}}>{w}</span>})};
-export const CodeBlock:React.FC<{n:string;kick:string;file:string;lines:{s:string;at:number}[];tone?:'bad'|'good';badge?:{text:string;at:number};size?:number}>=({n,kick,file,lines,tone,badge,size=40})=>{const {t,f}=useS();
+export const CodeBlock:React.FC<{n:string;kick:string;file:string;lines:{s:string;at:number}[];tone?:'bad'|'good';badge?:{text:string;at:number};size?:number;notes?:{s:string;at:number}[]}>=({n,kick,file,lines,tone,badge,size=40,notes=[]})=>{const {t,f}=useS();
+ const ni=notes.reduce((a,x,k)=>f>=x.at?k:a,-1);
  const bar=tone==='bad'?C.red:tone==='good'?t.accent2:C.line;
  return <div><Head n={n} txt={kick}/><div style={{background:C.panel,border:`3px solid ${C.line}`,borderTop:`8px solid ${bar}`,position:'relative'}}>
   <div style={{...Bd(t,30,C.dim),padding:'12px 24px',borderBottom:`3px solid ${C.line}`}}>● ● ●  {file}</div>
   <div style={{padding:'18px 24px 22px'}}>{lines.map((l,k)=>{if(f<l.at)return null;const shown=l.s.slice(0,Math.max(0,Math.floor((f-l.at)*2.4)));
    return <div key={k} style={{...Bd(t,size),fontWeight:600,whiteSpace:'pre',lineHeight:1.42,overflow:'hidden'}}>{kt(shown,t)}{shown.length<l.s.length&&<Caret h={size*.9}/>}</div>})}</div>
   {badge&&f>=badge.at&&<div style={{position:'absolute',right:-14,bottom:-84,transform:`rotate(-4deg) scale(${1.4-0.4*pop(f,badge.at,8)})`,opacity:pop(f,badge.at,5),...H(t,64,tone==='bad'?'#FFFFFF':t.onAccent),background:tone==='bad'?C.red:t.accent,padding:'6px 22px'}}>{badge.text}</div>}
- </div></div>};
+ </div>
+ {ni>=0&&<div key={ni} style={{marginTop:badge?120:40,opacity:pop(f,notes[ni].at,8),transform:`translateY(${(1-pop(f,notes[ni].at,8))*24}px)`,borderLeft:`8px solid ${t.accent}`,background:C.panel,padding:'18px 24px'}}><div style={{...Bd(t,30,C.dim),marginBottom:6}}>// giải thích</div><div style={{...Bd(t,44),fontWeight:700,lineHeight:1.3}}>{notes[ni].s}</div></div>}
+ </div>};
 
 /* dependency graph: root in the middle, deps around; "builder" node creating them flips from your code to the framework */
 export const DepGraph:React.FC<{n:string;kick:string;root:string;deps:string[];depsAt:number;you:string;fw:string;flipAt:number;q?:{s:string;at:number}[]}>=({n,kick,root,deps,depsAt,you,fw,flipAt,q=[]})=>{const {t,f}=useS();

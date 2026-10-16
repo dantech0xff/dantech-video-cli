@@ -63,8 +63,12 @@ for i,sc in enumerate(sc_list,1):
         if words.count(norm(m.group(1)))<n: err(f'{tag}: anchor {a}: word "{m.group(1)}" (x{n}) not in this scene\'s say')
 allw=[norm(w) for sc in sc_list for w in sc.get('say','').split()]
 if 'follow' not in allw or 'dan' not in allw: err('script must say "follow Dan Tech" (the Follow button pops on "follow" and is pressed on "Dan")')
-n=len(allw); sec=n/3.0
-if not 60<=n<=200: warn(f'{n} spoken words (~{sec:.0f}s): aim for ~90–150 words (30–50 s)')
+# words/second per Gemini style, measured from logs/voice_log.md renders (16 Oct 2026)
+RATE={'hao-hung':3.8,'tu-nhien':3.1,'ke-chuyen':2.55}
+n=len(allw); sec=n/3.0; est={k:n/r for k,r in RATE.items()}
+lo,hi=(50,70) if S.get('theme')=='commit' else (30,50)
+print('⏱  voice estimate: '+', '.join(f'{k} ~{v:.0f}s' for k,v in est.items())+f' (+~2.5s outro; budget {lo}–{hi}s)')
+if not lo<=est['tu-nhien']<=hi: warn(f'{n} words → ~{est["tu-nhien"]:.0f}s at tu-nhien: outside {lo}–{hi}s')
 for m in W: print('⚠️ ',m)
 for m in E: print('❌',m)
 print(f'{"✅ OK" if not E else "❌ FAIL"}: {p} · {len(sc_list)} scenes · {n} words (~{sec:.0f}s at ~3 words/s)')
