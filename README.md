@@ -10,7 +10,7 @@ Có 3 theme:
 | `quick-tips` | Mẹo, tutorial, review tool AI, listicle (cobalt + vàng, keycap, mockup IDE) | ✅ Đã duyệt |
 | `tech-explain` | Dev explainer: git, code, terminal (thanh tab vàng, gutter số dòng, lệnh gõ chữ, git graph, git log, chuyển cảnh `scroll`) | 🧪 v1 chờ Dan duyệt |
 | `tech-explain-cyber` | GIẢI THÍCH CYBER: dev explainer kiểu blueprint tối (nền #1C1C1C, accent lime, sơ đồ tự vẽ, terminal, cây thư mục); ví dụ `videos/flutter-mvvm` | ✅ Đã duyệt |
-| `hot-news-glitch` | TIN NÓNG GLITCH: tin nóng nền tối #1C1C1C, đỏ tín hiệu #FF2D2D, glitch "tín hiệu vỡ" chỉ ở khoảnh khắc nhấn + chuyển cảnh `signal`; ví dụ `videos/openai-vs-apple-glitch` | 🧪 experimental |
+| `hot-news-glitch` | TIN NÓNG GLITCH: tin nóng nền tối #1C1C1C, đỏ tín hiệu #FF2D2D, glitch "tín hiệu vỡ" chỉ ở khoảnh khắc nhấn + chuyển cảnh `signal`; ví dụ `videos/openai-vs-apple-glitch` | ✅ Đã duyệt |
 
 Id cũ `tin-nong`, `meo-nhanh`, `commit` vẫn được chấp nhận (alias, deprecated). Giao diện `~/commit` / `DAN/TECH.git` của GIẢI THÍCH là phong cách editor, không phải tên theme.
 

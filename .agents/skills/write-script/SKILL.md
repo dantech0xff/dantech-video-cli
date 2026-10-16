@@ -11,9 +11,10 @@ description: Viết videos/<slug>/script.json cho video Dan Tech từ một spec
 ## Các bước
 
 1. **Nghiên cứu, kiểm chứng.** Mở và đọc nguồn thật (link Dan đưa, báo lớn, tài liệu chính thức). Mỗi sự kiện, con số, trích dẫn phải lấy từ một nguồn bạn đã đọc. **Không bịa** sự kiện, số liệu, quote hay URL. Thông tin chưa chắc thì bỏ, hoặc ghi rõ "chưa xác nhận" và hỏi Dan.
-2. **Chọn theme:** drama/tin → `hot-news`; mẹo/tool/tutorial/listicle → `quick-tips`; code/dev explainer → `tech-explain` (editor sáng/vàng, mẫu `videos/git-merge-vs-rebase/`) hoặc `tech-explain-cyber` (blueprint tối, lime, mẫu `videos/flutter-mvvm/`). Nếu spec **không ghi theme**: đề xuất một theme kèm lý do một câu và **chờ Dan xác nhận** trước khi viết. Chỉ khi chạy không tương tác (không ai trả lời được) mới tự chọn, và ghi rõ lý do trong phần tóm tắt.
+2. **Chọn theme:** drama/tin → `hot-news` (báo in sáng) hoặc `hot-news-glitch` (nền tối, glitch tín hiệu vỡ, mẫu `videos/openai-vs-apple-glitch/`); mẹo/tool/tutorial/listicle → `quick-tips`; code/dev explainer → `tech-explain` (editor sáng/vàng, mẫu `videos/git-merge-vs-rebase/`) hoặc `tech-explain-cyber` (blueprint tối, lime, mẫu `videos/flutter-mvvm/`). Nếu spec **không ghi theme**: đề xuất một theme kèm lý do một câu và **chờ Dan xác nhận** trước khi viết. Chỉ khi chạy không tương tác (không ai trả lời được) mới tự chọn, và ghi rõ lý do trong phần tóm tắt.
 3. **Tạo slug** dạng kebab-case không dấu (`openai-vs-apple`). Copy mẫu cùng theme:
    - hot-news: `videos/openai-vs-apple/script.json`
+   - hot-news-glitch: `videos/openai-vs-apple-glitch/script.json`
    - quick-tips: `videos/android-studio-shortcuts/script.json`
    - tech-explain: `videos/git-merge-vs-rebase/script.json`
    - tech-explain-cyber: `videos/flutter-mvvm/script.json`
