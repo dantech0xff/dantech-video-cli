@@ -29,6 +29,15 @@ description: Viết videos/<slug>/script.json cho video Dan Tech từ một spec
 9. **Validate:** `python3 scripts/validate_script.py videos/<slug>/script.json`. Chạy lại sau mỗi lần sửa (kể cả sau bước humanize), đến khi `✅ OK` (không có cảnh báo độ dài).
 10. **Báo Dan:** đường dẫn file, theme, số cảnh, số chữ/thời lượng ước tính, hook, danh sách nguồn, và những điểm chưa chắc chắn.
 
+## Xoay quanh chủ đề (topic-centric)
+
+Dựng script quanh **sợi chỉ xuyên suốt của chủ đề**, không theo cấu trúc của nguồn hay ví dụ mở đầu của nó. **Không bao giờ thừa hưởng phần mở bài của bài học** (vd bài MVVM mở bằng setState, thì video MVVM không mở bằng setState).
+
+- Trước khi viết, ghi một câu "sợi chỉ" (vd "MVVM chia app thành ba lớp phụ thuộc một chiều, nên project dễ test, dùng lại và dễ đọc"). Mọi cảnh phải phục vụ câu đó; cảnh nào không phục vụ thì bỏ.
+- Thứ tự cảnh đi theo logic của chủ đề (là gì → vì sao mạnh → bằng chứng → lợi ích → cách áp dụng → chốt), không theo thứ tự mục trong bài.
+- Mỗi cảnh mở bằng từ nối nối với cảnh trước (*nhờ vậy, và chính điều đó, trong project, tóm lại*).
+- Chỉ dùng code / lệnh / đường dẫn **có thật trong nguồn**; không bịa kiểu dữ liệu, tên file hay chữ ký hàm.
+
 ## Hook trực diện (direct hook)
 
 Trong 3 giây đầu, người xem phải biết **video nói về chủ đề gì** (vd "MVVM trong Flutter"). Không dẫn vòng, không "thử tưởng tượng…" trước khi gọi tên chủ đề.
