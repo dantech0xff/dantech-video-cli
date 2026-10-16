@@ -49,3 +49,9 @@ Style rút ngẫu nhiên lần đầu được giữ nguyên. **Không bao giờ
 | Lỗi TTS 401/403/429 | kiểm `GEMINI_API_KEY`, billing/quota; thử lại sau |
 | `music file not found` / mix lỗi | thiếu mp3: `./dt fetch-music` hoặc tải tay Pixabay vào `assets/music/pixabay/` |
 | Nhạc lấn giọng | **không sửa chuỗi mix**; báo Dan số đo median, chỉ đổi `music.rel` khi Dan đồng ý |
+
+## Caption (karaoke, phân trang)
+- Không cuộn liên tục. Mỗi lần hiện **trọn một câu** (theo dấu câu trong script, giữ trong words.json); hết câu thì xoá và hiện câu mới.
+- Câu dài hơn 2 dòng được tách tại dấu phẩy / hai chấm thành các cụm trọn vẹn, mỗi cụm hiện nguyên; cụm vẫn quá dài thì chia đều theo từ.
+- Trong cụm, từng từ sáng lên theo timing whisper (từ đang đọc = accent + gạch chân, đã đọc = màu chữ, chưa đọc = mờ).
+- QC: chụp vài frame giữa câu, kiểm tra không quá 2 dòng và đúng font theme.

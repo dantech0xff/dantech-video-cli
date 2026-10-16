@@ -27,7 +27,13 @@
    "bar",
    "stack"
   ],
-  "subtitle": "tech explain"
+  "subtitle": "tech explain",
+  "caption": {
+   "font": "JBM",
+   "size": 52,
+   "upper": false,
+   "weight": 700
+  }
  },
  "tail_hold": 40,
  "cta": {

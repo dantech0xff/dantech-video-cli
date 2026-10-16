@@ -32,7 +32,12 @@
   "trans": [
    "stack",
    "push"
-  ]
+  ],
+  "caption": {
+   "font": "BVPM",
+   "size": 60,
+   "upper": false
+  }
  },
  "tail_hold": 40,
  "cta": {

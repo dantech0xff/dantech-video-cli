@@ -42,12 +42,28 @@ export const TermChrome:React.FC<{section:string;page:string;idx:number}>=({sect
   <div style={{fontFamily:'JBM',fontWeight:700,fontSize:32,color:t.onAccent}}>main ▸ {page}</div></div>
  <div style={{position:'absolute',left:0,top:110,bottom:0,width:96,borderRight:`3px solid ${t.rule}`}}>{Array.from({length:23},(_,k)=><div key={k} style={{position:'absolute',right:18,top:44+k*66,fontFamily:'JBM',fontSize:26,color:k===idx*3+3?t.accent:t.muted}}>{k+1}</div>)}</div>
  <div style={{position:'absolute',left:136,right:50,top:150,fontFamily:'JBM',fontSize:32,color:t.muted,borderBottom:`3px solid ${t.rule}`,paddingBottom:18,whiteSpace:'nowrap',overflow:'hidden'}}><span style={{color:t.accent2}}>~/commit</span> <span style={{color:t.ink}}>❯</span> {section}</div></>};
-export const Captions:React.FC<{words:{t:string;s:number;e:number}[]}>=({words})=>{const {t}=useS();if(t.id==='tech-explain-cyber')return <CyberCaptions words={words}/>;const f=useCurrentFrame();const tm=f/30;const i=words.findIndex(w=>tm<w.e+0.05);if(i<0||tm<words[i].s-0.3)return null;const g=Math.floor(i/3)*3;
- return <div style={{position:'absolute',left:136,right:50,top:1640,display:'flex',gap:12,flexWrap:'wrap'}}>{words.slice(g,g+3).map((w,k)=>{const a=g+k===i;const p=interpolate(tm,[w.s-0.05,w.s+0.08],[0,1],cl);
-  return <span key={k} style={{...H(t,t.head==='Anton'?72:62,a?t.onAccent:t.bg),textTransform:'uppercase',background:a?t.accent:t.ink,padding:t.head==='Anton'?'6px 18px 0':'6px 18px',borderRadius:t.id==='quick-tips'?14:0,transform:`translateY(${a?-6*p:0}px)`}}>{w.t.replace(/[.,!?:]$/,'')}</span>})}</div>};
-const CyberCaptions:React.FC<{words:{t:string;s:number;e:number}[]}>=({words})=>{const f=useCurrentFrame();const A=(useS().t as any).accent;const tm=f/30;const i=words.findIndex(w=>tm<w.e+0.05);if(i<0||tm<words[i].s-0.3)return null;const g=Math.floor(i/4)*4;
- return <div style={{position:'absolute',left:136,right:50,top:1660,display:'flex',gap:18,flexWrap:'wrap',alignItems:'baseline'}}>{words.slice(g,g+4).map((w,k)=>{const a=g+k===i;const done=g+k<i;
-  return <span key={k} style={{fontFamily:'BVPM',fontSize:60,color:a?A:done?'#E6E6E6':'#7A7A7A',borderBottom:`2px solid ${a?A:'transparent'}`,paddingBottom:4}}>{w.t.replace(/[.,!?:]$/,'')}</span>})}</div>};
+/* ---------- karaoke captions (all themes) ----------
+   Paged, never rolling: one complete sentence (or comma-phrase chunk if it would exceed 2 lines) is shown whole,
+   then words light up one by one on the whisper timings. Font comes from theme look.caption (default: theme head font). */
+const CW:Record<string,number>={Anton:.46,BVPX:.62,BVPM:.58,JBM:.6,Barlow:.5};
+export const capStyle=(t:Theme)=>{const c=(t as any).caption||{};const font=c.font??t.head;return {font,size:c.size??(font==='Anton'?72:font==='JBM'?52:60),upper:c.upper??(font==='Anton'),weight:c.weight??(font==='JBM'?700:400)}};
+type Wd={t:string;s:number;e:number};
+export const chunkWords=(words:Wd[],maxChars:number):number[][]=>{const out:number[][]=[];let sent:number[]=[];
+ const len=(ix:number[])=>ix.reduce((a,k)=>a+words[k].t.length+1,0);
+ const flush=()=>{if(!sent.length)return;if(len(sent)<=maxChars){out.push(sent);sent=[];return}
+  // split at commas / colons into whole phrases, merging small ones while they fit
+  const parts:number[][]=[];let cur:number[]=[];sent.forEach(k=>{cur.push(k);if(/[,;:]$/.test(words[k].t)){parts.push(cur);cur=[]}});if(cur.length)parts.push(cur);
+  let acc:number[]=[];for(const p of parts){if(acc.length&&len(acc)+len(p)>maxChars){out.push(acc);acc=[]}
+   if(len(p)>maxChars){const n=Math.ceil(len(p)/maxChars),per=Math.ceil(p.length/n);for(let q=0;q<p.length;q+=per)out.push(p.slice(q,q+per))}else acc=[...acc,...p]}
+  if(acc.length)out.push(acc);sent=[]};
+ words.forEach((w,k)=>{sent.push(k);if(/[.!?…]["”»)]*$/.test(w.t))flush()});flush();return out};
+export const Captions:React.FC<{words:Wd[]}>=({words})=>{const {t}=useS();const f=useCurrentFrame();const tm=f/30;const c=capStyle(t);
+ const W=894;const chunks=React.useMemo(()=>chunkWords(words,Math.floor(2*W/(c.size*(CW[c.font]??.55)))),[words,c.size,c.font]);
+ const ci=chunks.findIndex((ch,k)=>{const a=words[ch[0]].s-0.12;const b=k+1<chunks.length?words[chunks[k+1][0]].s-0.12:words[ch[ch.length-1]].e+0.6;return tm>=a&&tm<b});
+ if(ci<0)return null;const ch=chunks[ci];const cur=ch.findIndex(k=>tm<words[k].e);
+ const light=t.bg.toLowerCase()>'#888888';const dim=light?'rgba(0,0,0,.35)':'rgba(255,255,255,.38)';
+ return <div style={{position:'absolute',left:136,right:50,top:1630,display:'flex',flexWrap:'wrap',columnGap:c.size*.28,rowGap:6,alignItems:'baseline'}}>{ch.map((k,j)=>{const w=words[k];const a=j===cur&&tm>=w.s-0.05;const done=tm>=w.e||(cur<0);
+  return <span key={k} style={{fontFamily:c.font,fontWeight:c.weight,fontSize:c.size,lineHeight:1.12,textTransform:c.upper?'uppercase':'none',color:a?t.accent:done?t.ink:dim,borderBottom:`${Math.max(2,c.size/24)}px solid ${a?t.accent:'transparent'}`,paddingTop:c.font==='Anton'?6:0}}>{w.t}</span>})}</div>};
 /* ---------- timeline with designed transitions ---------- */
 export type Scene={dur:number;el:React.ReactNode;section:string;out?:'page'|'bar'|'zoom'|'push'|'stack'|'morph'|'scroll';focus?:[number,number];morph?:{from:number[];to:number[];txt:string}};
 const T=16;
