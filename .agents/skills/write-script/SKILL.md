@@ -29,6 +29,23 @@ description: Viết videos/<slug>/script.json cho video Dan Tech từ một spec
 9. **Validate:** `python3 scripts/validate_script.py videos/<slug>/script.json`. Chạy lại sau mỗi lần sửa (kể cả sau bước humanize), đến khi `✅ OK` (không có cảnh báo độ dài).
 10. **Báo Dan:** đường dẫn file, theme, số cảnh, số chữ/thời lượng ước tính, hook, danh sách nguồn, và những điểm chưa chắc chắn.
 
+## Bài học = nguồn, không phải dàn ý
+
+Khi spec là một bài học (khoá học của Dan, doc, bài blog), đó là **nguyên liệu**, không phải dàn ý để kể lại từng phần. Dan feedback mvvm_v1: dài dòng, phần đặt vấn đề chiếm 4 cảnh, gần nửa video, không ai xem tới cuối.
+
+- **Một ý cốt lõi cho mỗi video.** Bỏ các ý phụ; chúng thành chủ đề video khác (liệt kê "chủ đề gợi ý tiếp theo" trong báo cáo cho Dan).
+- **Hook / đặt vấn đề tối đa 2 câu (~5–8 giây)**, rồi vào thẳng ý chính.
+- **Cắt mọi câu mà bỏ đi người xem vẫn hiểu.** Không kể lại hết mọi ví dụ, mọi phương án, mọi triệu chứng trong bài; chọn một cái mạnh nhất hoặc gói thành một câu.
+- Vẫn giữ câu đầy đủ và từ nối. **Ngắn gọn ≠ điện tín.**
+- **Khung gợi ý cho explainer:** hook 1–2 câu → khái niệm cốt lõi → một bằng chứng / ví dụ cụ thể → takeaway + CTA.
+- Không giới hạn độ dài, nhưng độ dài phải đến từ **nội dung thật**, không phải từ phần dẫn dắt.
+
+**Tự kiểm tra:** người đang lướt feed có ở lại quá giây thứ 3 không, và tới giây thứ 8 đã biết vì sao mình đang xem chưa?
+
+**Ví dụ trước / sau (mở đầu MVVM):**
+- ❌ v1 (4 cảnh, ~75 giây trước khi tới MVVM): "Thử tưởng tượng bạn đang làm một mini game cờ caro bằng Flutter. Toàn bộ bàn cờ và lượt chơi nằm trong một StatefulWidget… Rồi một ngày có yêu cầu mới… Lúc này có ba cách chữa cháy quen thuộc… Cách một… Cách hai… Cách ba… Cả ba cách đều chung một nguyên nhân, lộ ra qua ba triệu chứng…"
+- ✅ v2 (2 câu, ~7 giây): "setState chỉ ổn khi app có đúng một màn hình. Thêm màn kết quả cần người thắng và bàn cờ cuối, là dữ liệu đó bị kẹt trong một State private của màn game." Rồi một câu bắc cầu: "Truyền qua constructor hay giữ tham chiếu tới State chỉ là chữa cháy, vì vấn đề thật là code đang nằm sai chỗ." → vào MVVM.
+
 ## Code explainer / GIẢI THÍCH
 
 Video giải thích code phải **dẫn chuyện** để người xem hiểu và ở lại. Người xem chỉ nghe được một lần, nên lời đọc phải tự nó dễ hiểu.
