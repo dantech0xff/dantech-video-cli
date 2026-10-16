@@ -30,6 +30,8 @@ Số trong `props`/`sfx` là frame tính từ đầu cảnh (30 fps). Anchor: `"
 
 Không có trường hay giới hạn độ dài: độ dài theo nội dung.
 
+- `topic` (khuyến nghị): list từ khoá chủ đề, vd `["MVVM","Flutter"]`; validator kiểm tra câu đầu cảnh 1 có gọi tên chủ đề.
+
 ## Scene templates (props, `?` = tuỳ chọn)
 
 TIN NÓNG / GIẢI THÍCH (`remotion/src/scenes.tsx`), mẫu: `videos/openai-vs-apple/script.json`

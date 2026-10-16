@@ -65,6 +65,15 @@ for i,sc in enumerate(sc_list,1):
         if words.count(norm(m.group(1)))<n: err(f'{tag}: anchor {a}: word "{m.group(1)}" (x{n}) not in this scene\'s say')
 allw=[norm(w) for sc in sc_list for w in sc.get('say','').split()]
 if 'follow' not in allw or 'dan' not in allw: err('script must say "follow Dan Tech" (the Follow button pops on "follow" and is pressed on "Dan")')
+# direct hook: first sentence of scene 1 names the topic ("topic": ["MVVM","Flutter"]) and is short (<=12 words, ~3s)
+if sc_list:
+    first=re.split(r'(?<=[.!?:])\s',sc_list[0].get('say','').strip(),maxsplit=1)[0]
+    fw=len(first.split())
+    if fw>12: warn(f'hook: first sentence of scene 1 has {fw} words (direct hook ≤ ~12 words / ~3s): "{first}"')
+    if not S.get('topic'): warn('hook: no "topic" keywords in script.json; add e.g. "topic": ["MVVM","Flutter"] so the hook can be checked')
+    else:
+        miss=[k for k in S['topic'] if k.lower() not in first.lower()]
+        if miss: warn(f'hook: first sentence of scene 1 does not name the topic {miss}: "{first}"')
 # info only (no warnings): rough voice length per Gemini style, words/second measured from past renders
 RATE={'hao-hung':3.8,'tu-nhien':3.1,'ke-chuyen':2.55}
 n=len(allw)

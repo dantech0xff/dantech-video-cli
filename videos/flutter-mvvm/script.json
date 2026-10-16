@@ -1,6 +1,10 @@
 {
  "theme": "tech-explain-cyber",
  "title": "MVVM trong Flutter: vì sao cần ba lớp",
+ "topic": [
+  "MVVM",
+  "Flutter"
+ ],
  "date": "16 · 10 · 2026",
  "caption": "setState chỉ ổn khi app có một màn hình. Thêm màn thứ hai là dữ liệu bị kẹt trong State private. MVVM chia code thành View, ViewModel, Model với phụ thuộc một chiều, nên luật chơi là Dart thuần, test được và dùng lại được. Bài đầy đủ trong khoá Flutter Mobile 101 trên dantech.academy. #DanTech #Flutter #MVVM #Dart",
  "sources": [
@@ -15,14 +19,14 @@
  },
  "scenes": [
   {
-   "say": "setState chỉ ổn khi app có đúng một màn hình. Thêm màn kết quả cần người thắng và bàn cờ cuối, là dữ liệu đó bị kẹt trong một State private của màn game.",
+   "say": "Vì sao app Flutter cần MVVM? Vì setState chỉ ổn khi app có đúng một màn hình. Thêm màn kết quả cần người thắng và bàn cờ cuối, là dữ liệu đó bị kẹt trong State private của màn game.",
    "type": "BpReq",
    "section": "yêu cầu mới",
    "out": "push",
    "props": {
     "n": "01",
-    "cap": "setState · nhiều màn hình",
-    "title": "Dữ liệu bị kẹt trong State",
+    "cap": "vì sao cần · setState không đủ",
+    "title": "MVVM trong Flutter",
     "from": "GameScreen",
     "to": "ResultScreen",
     "items": [

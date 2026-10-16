@@ -29,12 +29,29 @@ description: Viết videos/<slug>/script.json cho video Dan Tech từ một spec
 9. **Validate:** `python3 scripts/validate_script.py videos/<slug>/script.json`. Chạy lại sau mỗi lần sửa (kể cả sau bước humanize), đến khi `✅ OK` (không có cảnh báo độ dài).
 10. **Báo Dan:** đường dẫn file, theme, số cảnh, số chữ/thời lượng ước tính, hook, danh sách nguồn, và những điểm chưa chắc chắn.
 
+## Hook trực diện (direct hook)
+
+Trong 3 giây đầu, người xem phải biết **video nói về chủ đề gì** (vd "MVVM trong Flutter"). Không dẫn vòng, không "thử tưởng tượng…" trước khi gọi tên chủ đề.
+
+- **Câu đầu tiên của cảnh 1 gọi tên chủ đề rõ ràng**, ngắn: ≤ ~10–12 từ (~3 giây đọc).
+- Sau đó đặt vấn đề **tối đa 2 câu**, rồi vào ý chính.
+- **Chữ trên màn hình cảnh 1** (`title`) cũng hiện chủ đề ngay (vd "MVVM trong Flutter").
+- Khai báo `"topic": ["MVVM","Flutter"]` trong script.json: `validate_script.py` cảnh báo nếu câu đầu không chứa các từ khoá này hoặc dài quá 12 từ.
+
+**Ví dụ:**
+- ❌ "setState chỉ ổn khi app có đúng một màn hình." (chưa biết video nói về MVVM)
+- ❌ "Thử tưởng tượng bạn đang làm một mini game cờ caro bằng Flutter…" (dẫn vòng)
+- ✅ "Vì sao app Flutter cần MVVM? Vì setState chỉ ổn khi app có đúng một màn hình."
+- ❌ "Thử tưởng tượng bạn mở màn hình game, và hàm onCreate phải tự tạo bốn object…"
+- ✅ "Inversion of Control trong Koin: vì sao bạn không nên tự new object?"
+- ✅ "Git rebase hay merge? Đây là khác biệt thật sự."
+
 ## Bài học = nguồn, không phải dàn ý
 
 Khi spec là một bài học (khoá học của Dan, doc, bài blog), đó là **nguyên liệu**, không phải dàn ý để kể lại từng phần. Dan feedback mvvm_v1: dài dòng, phần đặt vấn đề chiếm 4 cảnh, gần nửa video, không ai xem tới cuối.
 
 - **Một ý cốt lõi cho mỗi video.** Bỏ các ý phụ; chúng thành chủ đề video khác (liệt kê "chủ đề gợi ý tiếp theo" trong báo cáo cho Dan).
-- **Hook / đặt vấn đề tối đa 2 câu (~5–8 giây)**, rồi vào thẳng ý chính.
+- **Hook trực diện** (xem mục trên): câu đầu gọi tên chủ đề, rồi đặt vấn đề **tối đa 2 câu (~5–8 giây)**, rồi vào thẳng ý chính.
 - **Cắt mọi câu mà bỏ đi người xem vẫn hiểu.** Không kể lại hết mọi ví dụ, mọi phương án, mọi triệu chứng trong bài; chọn một cái mạnh nhất hoặc gói thành một câu.
 - Vẫn giữ câu đầy đủ và từ nối. **Ngắn gọn ≠ điện tín.**
 - **Khung gợi ý cho explainer:** hook 1–2 câu → khái niệm cốt lõi → một bằng chứng / ví dụ cụ thể → takeaway + CTA.
@@ -44,7 +61,7 @@ Khi spec là một bài học (khoá học của Dan, doc, bài blog), đó là 
 
 **Ví dụ trước / sau (mở đầu MVVM):**
 - ❌ v1 (4 cảnh, ~75 giây trước khi tới MVVM): "Thử tưởng tượng bạn đang làm một mini game cờ caro bằng Flutter. Toàn bộ bàn cờ và lượt chơi nằm trong một StatefulWidget… Rồi một ngày có yêu cầu mới… Lúc này có ba cách chữa cháy quen thuộc… Cách một… Cách hai… Cách ba… Cả ba cách đều chung một nguyên nhân, lộ ra qua ba triệu chứng…"
-- ✅ v2 (2 câu, ~7 giây): "setState chỉ ổn khi app có đúng một màn hình. Thêm màn kết quả cần người thắng và bàn cờ cuối, là dữ liệu đó bị kẹt trong một State private của màn game." Rồi một câu bắc cầu: "Truyền qua constructor hay giữ tham chiếu tới State chỉ là chữa cháy, vì vấn đề thật là code đang nằm sai chỗ." → vào MVVM.
+- ✅ v2 (2 câu, ~7 giây; v3 thêm câu gọi tên chủ đề ở đầu, xem Hook trực diện): "setState chỉ ổn khi app có đúng một màn hình. Thêm màn kết quả cần người thắng và bàn cờ cuối, là dữ liệu đó bị kẹt trong một State private của màn game." Rồi một câu bắc cầu: "Truyền qua constructor hay giữ tham chiếu tới State chỉ là chữa cháy, vì vấn đề thật là code đang nằm sai chỗ." → vào MVVM.
 
 ## Code explainer / GIẢI THÍCH
 
