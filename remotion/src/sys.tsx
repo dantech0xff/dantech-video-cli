@@ -50,11 +50,16 @@ export const capStyle=(t:Theme)=>{const c=(t as any).caption||{};const font=c.fo
 type Wd={t:string;s:number;e:number};
 export const chunkWords=(words:Wd[],maxChars:number):number[][]=>{const out:number[][]=[];let sent:number[]=[];
  const len=(ix:number[])=>ix.reduce((a,k)=>a+words[k].t.length+1,0);
+ // no comma to split on: break at the most balanced point, preferring right before a connective word (của, và, khi…)
+ const CONN=/^(của|và|khi|vì|nhưng|mà|thì|là|với|cho|để|trong|từ|rồi|nên|hay|hoặc|nếu|còn|sau|trước)$/i;
+ const splitPhrase=(p:number[]):number[][]=>{if(len(p)<=maxChars||p.length<2)return [p];let best=1,bs=1e9;
+  for(let k=1;k<p.length;k++){const sc=Math.abs(len(p.slice(0,k))-len(p.slice(k)))-(CONN.test(words[p[k]].t)?18:0);if(sc<bs){bs=sc;best=k}}
+  return [...splitPhrase(p.slice(0,best)),...splitPhrase(p.slice(best))]};
  const flush=()=>{if(!sent.length)return;if(len(sent)<=maxChars){out.push(sent);sent=[];return}
   // split at commas / colons into whole phrases, merging small ones while they fit
   const parts:number[][]=[];let cur:number[]=[];sent.forEach(k=>{cur.push(k);if(/[,;:]$/.test(words[k].t)){parts.push(cur);cur=[]}});if(cur.length)parts.push(cur);
   let acc:number[]=[];for(const p of parts){if(acc.length&&len(acc)+len(p)>maxChars){out.push(acc);acc=[]}
-   if(len(p)>maxChars){const n=Math.ceil(len(p)/maxChars),per=Math.ceil(p.length/n);for(let q=0;q<p.length;q+=per)out.push(p.slice(q,q+per))}else acc=[...acc,...p]}
+   if(len(p)>maxChars){if(acc.length){out.push(acc);acc=[]}out.push(...splitPhrase(p))}else acc=[...acc,...p]}
   if(acc.length)out.push(acc);sent=[]};
  words.forEach((w,k)=>{sent.push(k);if(/[.!?…]["”»)]*$/.test(w.t))flush()});flush();return out};
 export const Captions:React.FC<{words:Wd[]}>=({words})=>{const {t}=useS();const f=useCurrentFrame();const tm=f/30;const c=capStyle(t);
