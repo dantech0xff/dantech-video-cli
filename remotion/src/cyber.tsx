@@ -95,9 +95,9 @@ export const BpChrome:React.FC<{section:string;page:string}>=({section,page})=>{
  <AbsoluteFill style={{backgroundImage:`linear-gradient(${BP.grid} 1px,transparent 1px),linear-gradient(90deg,${BP.grid} 1px,transparent 1px),linear-gradient(${BP.grid2} 1px,transparent 1px),linear-gradient(90deg,${BP.grid2} 1px,transparent 1px)`,backgroundSize:'24px 24px,24px 24px,120px 120px,120px 120px',backgroundPosition:'136px 0,136px 0,136px 0,136px 0'}}/>
  <AbsoluteFill style={{background:'radial-gradient(120% 80% at 50% 35%, transparent 55%, rgba(10,10,10,.55) 100%)'}}/>
  <div style={{position:'absolute',left:40,right:40,top:40,bottom:40,border:`1px solid ${BP.line}`}}/>
- <div style={{position:'absolute',left:136,right:50,top:86,display:'flex',justifyContent:'space-between',alignItems:'flex-end',paddingBottom:22,borderBottom:`1px solid ${BP.hair}`}}>
-  <div><div style={{fontFamily:'BVPX',fontSize:46,color:BP.ink,letterSpacing:1.5}}>DAN TECH</div></div>
-  <div style={{fontFamily:MONO,fontSize:26,color:BP.dim}}>{page}</div></div>
+ <div style={{position:'absolute',left:136,right:50,top:86,display:'flex',justifyContent:'space-between',alignItems:'baseline',paddingBottom:22,borderBottom:`1px solid ${BP.hair}`}}>
+  <div><div style={{fontFamily:'BVPX',fontSize:46,lineHeight:1,color:BP.ink,letterSpacing:1.5}}>DAN TECH</div></div>
+  <div style={{fontFamily:MONO,fontSize:26,lineHeight:1,color:BP.dim}}>{page}</div></div>
  
  <div style={{position:'absolute',left:64,top:300,bottom:330,width:30}}>{Array.from({length:27},(_,k)=><div key={k} style={{position:'absolute',top:k*48,right:0,width:k%5===0?22:10,height:1,background:k%5===0?BP.dim:BP.hair}}></div>)}</div></>};
 
