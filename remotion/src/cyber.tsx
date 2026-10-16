@@ -17,11 +17,11 @@ const Frame:React.FC<{children:React.ReactNode;style?:React.CSSProperties;p?:num
   {c({left:-2,top:-2,borderLeftWidth:2,borderTopWidth:2})}{c({right:-2,top:-2,borderRightWidth:2,borderTopWidth:2})}{c({left:-2,bottom:-2,borderLeftWidth:2,borderBottomWidth:2})}{c({right:-2,bottom:-2,borderRightWidth:2,borderBottomWidth:2})}
   {tag&&<div style={{position:'absolute',top:-13,left:24,background:BP.bg,padding:'0 10px',...lbl(20)}}>{tag}</div>}{children}</div>};
 /* kotlin highlight, restrained: keywords cyan, everything else ink/dim */
-const KW=/^(val|var|fun|class|private|by|object|return|this@\w+)$/;
+const KW=/^(val|var|fun|class|private|by|object|return|this@\w+|static|final|extends|void|int|bool|setState)$/;
 const kt=(line:string,A:string)=>line.trimStart().startsWith('//')?[<span key={0} style={{color:BP.dim,fontStyle:'italic'}}>{line}</span>]:line.split(/(\s+|[(){}<>,:=.]|"[^"]*")/).filter(x=>x!=='').map((w,k)=><span key={k} style={{color:KW.test(w)?A:/^[(){}<>,:=.]$/.test(w)?BP.dim:/^[A-Z]/.test(w)?'#FFFFFF':BP.ink}}>{w}</span>);
 
 /* 1. code with line numbers, a dimension bracket over a line range, and a callout */
-export const BpCode:React.FC<{n:string;cap:string;title:string;file:string;lines:{s:string;at:number}[];dim?:{from:number;to:number;label:string;sub?:string;at:number};callout?:{line:number;text:string;at:number};note?:{s:string;at:number}}>=({n,cap,title,file,lines,dim,callout,note})=>{const {f,t}=useS();const A=(t as any).accent as string,A2=((t as any).accent3||A) as string,ON=(t as any).onAccent as string;
+export const BpCode:React.FC<{n:string;cap:string;title:string;file:string;lines:{s:string;at:number}[];dim?:{from:number;to:number;label:string;sub?:string;at:number;x?:number};callout?:{line:number;text:string;at:number};note?:{s:string;at:number}}>=({n,cap,title,file,lines,dim,callout,note})=>{const {f,t}=useS();const A=(t as any).accent as string,A2=((t as any).accent3||A) as string,ON=(t as any).onAccent as string;
  const LH=60,TOP=74,FS=36;const fp=pr(f,0,26);
  return <div><Fig n={n} cap={cap} title={title}/>
   <div style={{...lbl(20),display:'flex',justifyContent:'space-between',marginBottom:14,opacity:fp}}><span>{file}</span><span style={{color:A}}>KOTLIN</span></div><Frame p={fp}><div style={{padding:`${TOP-44}px 0 30px`,position:'relative'}}>
@@ -29,7 +29,7 @@ export const BpCode:React.FC<{n:string;cap:string;title:string;file:string;lines
     return <div key={k} style={{display:'flex',height:LH,alignItems:'center',fontFamily:MONO,fontSize:FS,whiteSpace:'pre'}}>
      <span style={{width:70,textAlign:'right',paddingRight:22,color:p>0?BP.dim:'#4A4A4A',fontSize:24}}>{String(k+1).padStart(2,'0')}</span>
      <span style={{borderLeft:`1px solid ${BP.line}`,paddingLeft:22,height:'100%',display:'flex',alignItems:'center'}}>{kt(shown,A)}</span></div>})}
-   {dim&&(()=>{const p=pr(f,dim.at,26);const y1=TOP-44+dim.from*LH+10,y2=TOP-44+(dim.to+1)*LH-10,x=640;
+   {dim&&(()=>{const p=pr(f,dim.at,26);const y1=TOP-44+dim.from*LH+10,y2=TOP-44+(dim.to+1)*LH-10,x=dim.x??640;
     return <svg style={{position:'absolute',left:0,top:0,overflow:'visible'}} width={894} height={y2+40}>
      <path d={`M${x-18} ${y1} H${x} V${y2} H${x-18}`} fill="none" stroke={A} strokeWidth={2} pathLength={1} strokeDasharray={1} strokeDashoffset={1-p}/>
      <path d={`M${x} ${(y1+y2)/2} H${x+34}`} stroke={A} strokeWidth={2} pathLength={1} strokeDasharray={1} strokeDashoffset={1-pr(f,dim.at+18,12)}/>
@@ -116,3 +116,112 @@ export const BpEndCard:React.FC<{A?:string;dur?:number;handles?:{p:string;h:stri
   </div>
   <div style={{position:'absolute',left:136,right:110,bottom:110,display:'flex',justifyContent:'space-between',...lbl(18)}}><span>DAN TECH · 2026</span></div>
  </AbsoluteFill>};
+
+/* ---------- phase 2 scenes ---------- */
+const useA=()=>{const {f,t}=useS();return {f,t,A:(t as any).accent as string,A2:((t as any).accent3||(t as any).accent) as string,ON:(t as any).onAccent as string}};
+const Strike:React.FC<{p:number;c?:string}>=({p,c=BP.dim})=><span style={{position:'absolute',left:-4,top:'54%',height:2,width:`calc(${p*100}% + 8px)`,background:c}}/>;
+
+/* requirement card: new screen needs data locked in a private State */
+export const BpReq:React.FC<{n:string;cap:string;title:string;items:{s:string;at:number}[];from:string;to:string;lock:{s:string;at:number};flowAt?:number}>=({n,cap,title,items,from,to,lock,flowAt=0})=>{const {f,A,ON}=useA();const fp=pr(f,0,26);const lp=pr(f,lock.at,22);
+ const W=894;const bw=330,bh=150,y=60;
+ return <div><Fig n={n} cap={cap} title={title}/>
+  <Frame p={fp}><div style={{padding:'20px 30px',borderBottom:`1px solid ${BP.line}`,...lbl(20,A)}}>{to} · cần hiển thị</div>
+   <div style={{padding:'18px 30px 26px'}}>{items.map((it,k)=>{const p=pr(f,it.at,16);return <div key={k} style={{display:'flex',alignItems:'center',gap:24,padding:'16px 0',opacity:.35+.65*p}}>
+    <span style={{width:30,height:30,border:`2px solid ${p>0.5?A:BP.hair}`,background:p>0.5?A:'transparent',display:'flex',alignItems:'center',justifyContent:'center',color:ON,fontFamily:MONO,fontSize:22,fontWeight:700}}>{p>0.5?'✓':''}</span>
+    <span style={{fontFamily:SANS,fontSize:44,color:BP.ink}}>{it.s}</span></div>})}</div></Frame>
+  <svg width={W} height={340} style={{marginTop:60,overflow:'visible'}}>
+   <rect x={0} y={y} width={bw} height={bh} fill="none" stroke={BP.hair} strokeWidth={1.5}/>
+   <text x={bw/2} y={y+52} textAnchor="middle" style={{fontFamily:MONO,fontSize:30,fill:BP.ink}}>{from}</text>
+   <g opacity={lp}><rect x={22} y={y+78} width={bw-44} height={50} fill={A}/><text x={bw/2} y={y+111} textAnchor="middle" style={{fontFamily:MONO,fontSize:24,fill:ON,fontWeight:700}}>{lock.s}</text></g>
+   <rect x={W-bw} y={y} width={bw} height={bh} fill="none" stroke={BP.hair} strokeWidth={1.5} strokeDasharray="8 6"/>
+   <text x={W-bw/2} y={y+bh/2+11} textAnchor="middle" style={{fontFamily:MONO,fontSize:30,fill:BP.ink}}>{to}</text>
+   <path d={`M${bw+16} ${y+bh/2} H${W-bw-16}`} stroke={BP.dim} strokeWidth={1.5} strokeDasharray="6 8" opacity={pr(f,flowAt,20)}/>
+   <g opacity={lp}><circle cx={W/2} cy={y+bh/2} r={34} fill={BP.bg} stroke={A} strokeWidth={2}/><text x={W/2} y={y+bh/2+16} textAnchor="middle" style={{fontFamily:SANS,fontSize:46,fill:A}}>?</text></g>
+   <text x={0} y={y+bh+56} opacity={lp} style={{fontFamily:SANS,fontSize:34,fill:BP.dim}}>private · chỉ màn hình game thấy được</text>
+  </svg></div>};
+
+/* options that get struck out one by one */
+export const BpOptions:React.FC<{n:string;cap:string;title:string;opts:{k:string;why:string;at:number;strikeAt:number}[]}>=({n,cap,title,opts})=>{const {f,A}=useA();
+ return <div><Fig n={n} cap={cap} title={title}/>
+  <div style={{display:'flex',flexDirection:'column'}}>{opts.map((o,k)=>{const p=pr(f,o.at,22),s=pr(f,o.strikeAt,20);return <div key={k} style={{padding:'34px 0 38px',borderTop:`1px solid ${BP.line}`,opacity:p,transform:`translateY(${(1-p)*14}px)`}}>
+   <div style={{display:'flex',alignItems:'baseline',gap:24}}><span style={{fontFamily:SANS,fontSize:52,color:s>0.5?BP.dim:A,width:84}}>{String(k+1).padStart(2,'0')}</span>
+    <span style={{fontFamily:SANS,fontSize:50,color:s>0.5?BP.dim:BP.ink,position:'relative',lineHeight:1.2}}>{o.k}<Strike p={s} c={A}/></span></div>
+   <div style={{fontFamily:SANS,fontSize:36,color:BP.dim,lineHeight:1.35,marginTop:14,marginLeft:108,opacity:pr(f,o.at+10,20)}}>{o.why}</div></div>})}
+   <div style={{borderTop:`1px solid ${BP.line}`}}/></div></div>};
+
+/* checklist spec: rows k + v, then a verdict line */
+export const BpSpec:React.FC<{n:string;cap:string;title:string;head:string;rows:{k:string;v:string;at:number}[];verdict?:{s:string;at:number}}>=({n,cap,title,head,rows,verdict})=>{const {f,A}=useA();const fp=pr(f,0,26);
+ return <div><Fig n={n} cap={cap} title={title}/>
+  <Frame p={fp}><div style={{padding:'20px 30px',borderBottom:`1px solid ${BP.line}`,...lbl(20,A)}}>{head}</div>
+   {rows.map((r,k)=>{const p=pr(f,r.at,22);return <div key={k} style={{padding:'32px 30px 36px',borderBottom:k<rows.length-1?`1px solid ${BP.line}`:'none',opacity:.25+.75*p}}>
+    <div style={{display:'flex',alignItems:'baseline',gap:20}}><span style={{fontFamily:SANS,fontSize:50,color:A,width:80}}>{String(k+1).padStart(2,'0')}</span><span style={{fontFamily:SANS,fontSize:48,color:BP.ink}}>{r.k}</span></div>
+    <div style={{fontFamily:SANS,fontSize:34,color:BP.dim,lineHeight:1.35,marginTop:12,marginLeft:100}}>{r.v}</div></div>})}</Frame>
+  {verdict&&<div style={{marginTop:44,borderLeft:`4px solid ${A}`,paddingLeft:26,fontFamily:SANS,fontSize:42,color:BP.ink,lineHeight:1.3,opacity:pr(f,verdict.at,22)}}>{verdict.s}</div>}
+ </div>};
+
+/* layer diagram: one-way dependency, calls flow down */
+export const BpLayers:React.FC<{n:string;cap:string;title:string;layers:{k:string;role:string;path:string;at:number}[];depAt:number;noKnow:{s:string;at:number}}>=({n,cap,title,layers,depAt,noKnow})=>{const {f,A,ON}=useA();
+ const W=894,BW=620,BH=170,G=120,X=0;const ys=layers.map((_,k)=>20+k*(BH+G));
+ return <div><Fig n={n} cap={cap} title={title}/>
+  <svg width={W} height={ys[ys.length-1]+BH+40} style={{overflow:'visible'}}>
+   {layers.map((l,k)=>{const p=pr(f,l.at,26),y=ys[k],last=k===layers.length-1;return <g key={k}>
+    <path d={`M${X} ${y} H${X+BW} V${y+BH} H${X} Z`} fill="none" stroke={last?A:BP.hair} strokeWidth={last?2.5:1.5} pathLength={1} strokeDasharray={1} strokeDashoffset={1-p}/>
+    {last&&<rect x={X} y={y} width={BW} height={BH} fill={A} opacity={pr(f,l.at+14,20)}/>}
+    <g opacity={pr(f,l.at+10,20)}>
+     <text x={X+34} y={y+68} style={{fontFamily:'BVPX',fontSize:52,fill:last?ON:BP.ink}}>{l.k}</text>
+     <text x={X+34} y={y+116} style={{fontFamily:SANS,fontSize:32,fill:last?ON:BP.dim}}>{l.role}</text>
+     <text x={X+34} y={y+152} style={{fontFamily:MONO,fontSize:22,fill:last?ON:A,opacity:last?.75:1}}>{l.path}</text></g>
+    {!last&&(()=>{const q=pr(f,depAt+k*14,22),ax=X+BW/2,y1=y+BH+8,y2=y+BH+G-8;return <g>
+     <path d={`M${ax} ${y1} V${y2}`} stroke={A} strokeWidth={2.5} pathLength={1} strokeDasharray={1} strokeDashoffset={1-q}/>
+     <path d={`M${ax-12} ${y2-14} L${ax} ${y2} L${ax+12} ${y2-14}`} fill="none" stroke={A} strokeWidth={2.5} opacity={q}/>
+     <text x={ax+26} y={(y1+y2)/2+9} opacity={q} style={{fontFamily:MONO,fontSize:22,letterSpacing:3,fill:BP.dim}}>BIẾT</text>
+     {f>=depAt+30&&[0,1].map(j=>{const ph=((f-depAt-30)/45+j*.5+k*.25)%1;return <circle key={j} cx={ax} cy={y1+(y2-y1)*ph} r={6} fill={A} style={{filter:`drop-shadow(0 0 6px ${A})`}} opacity={Math.sin(Math.PI*ph)}/>})}</g>})()}
+   </g>})}
+   {(()=>{const q=pr(f,noKnow.at,24),x=X+BW+70,y1=ys[ys.length-1]+20,y2=ys[0]+BH-20;return <g opacity={q}>
+    <path d={`M${x} ${y1} V${y2}`} stroke={BP.dim} strokeWidth={1.5} strokeDasharray="6 8"/><path d={`M${x-10} ${y2+14} L${x} ${y2} L${x+10} ${y2+14}`} fill="none" stroke={BP.dim} strokeWidth={1.5}/>
+    <g transform={`translate(${x},${(y1+y2)/2})`}><circle r={30} fill={BP.bg} stroke={A} strokeWidth={2}/><path d="M-11 -11 L11 11 M11 -11 L-11 11" stroke={A} strokeWidth={3}/></g>
+    <text x={x+48} y={(y1+y2)/2-10} style={{fontFamily:SANS,fontSize:30,fill:BP.ink}}>{noKnow.s.split('|')[0]}</text>
+    <text x={x+48} y={(y1+y2)/2+30} style={{fontFamily:SANS,fontSize:30,fill:BP.ink}}>{noKnow.s.split('|')[1]||''}</text></g>})()}
+  </svg></div>};
+
+/* terminal: command typed, empty result, check */
+export const BpTerm:React.FC<{n:string;cap:string;title:string;cmd:string;cmdAt:number;resAt:number;empty:string;ok:string;note?:{s:string;at:number}}>=({n,cap,title,cmd,cmdAt,resAt,empty,ok,note})=>{const {f,A,ON}=useA();const fp=pr(f,0,26);
+ const ty=interpolate(f,[cmdAt,cmdAt+Math.max(20,cmd.length*1.1)],[0,cmd.length],cl);const shown=cmd.slice(0,Math.floor(ty));const done=ty>=cmd.length;const rp=pr(f,resAt,18),cp=pr(f,resAt+16,22);
+ return <div><Fig n={n} cap={cap} title={title}/>
+  <div style={{...lbl(20),display:'flex',justifyContent:'space-between',marginBottom:14,opacity:fp}}><span>terminal · mini_game/</span><span style={{color:A}}>ZSH</span></div>
+  <Frame p={fp}><div style={{padding:'36px 34px 44px',fontFamily:MONO,fontSize:29,lineHeight:1.5}}>
+   <div style={{whiteSpace:'pre-wrap',color:BP.ink}}><span style={{color:A}}>$ </span>{shown}{!done&&Math.floor(f/8)%2===0&&<span style={{background:A,color:A}}>_</span>}</div>
+   <div style={{color:BP.dim,marginTop:26,opacity:rp,fontSize:30}}>{empty}</div>
+   <div style={{display:'flex',alignItems:'center',gap:26,marginTop:44,opacity:cp,transform:`translateY(${(1-cp)*10}px)`}}>
+    <svg width={84} height={84}><rect x={2} y={2} width={80} height={80} fill={A}/><path d="M22 44 L37 59 L64 28" stroke={ON} strokeWidth={7} fill="none" strokeLinecap="square" pathLength={1} strokeDasharray={1} strokeDashoffset={1-pr(f,resAt+24,16)}/></svg>
+    <span style={{fontFamily:SANS,fontSize:44,color:BP.ink,lineHeight:1.25}}>{ok}</span></div></div></Frame>
+  {note&&<div style={{marginTop:44,fontFamily:SANS,fontSize:40,color:BP.dim,lineHeight:1.35,opacity:pr(f,note.at,22)}}>{note.s}</div>}
+ </div>};
+
+/* folder tree with layer tags */
+export const BpTree:React.FC<{n:string;cap:string;title:string;root:string;lines:{s:string;d:number;tag?:string;at:number;hl?:boolean}[];note?:{s:string;at:number}}>=({n,cap,title,root,lines,note})=>{const {f,A,ON}=useA();const fp=pr(f,0,26);
+ return <div><Fig n={n} cap={cap} title={title}/>
+  <Frame p={fp}><div style={{padding:'34px 34px 40px'}}>
+   <div style={{fontFamily:MONO,fontSize:34,color:BP.dim,marginBottom:10}}>{root}</div>
+   {lines.map((l,k)=>{const p=pr(f,l.at,18);const tp=pr(f,l.at+10,18);return <div key={k} style={{display:'flex',alignItems:'center',height:76,opacity:.2+.8*p}}>
+    <span style={{fontFamily:MONO,fontSize:34,color:BP.hair,whiteSpace:'pre'}}>{'   '.repeat(l.d)}{'└─ '}</span>
+    <span style={{fontFamily:MONO,fontSize:36,color:l.hl&&p>0.5?A:BP.ink}}>{l.s}</span>
+    <span style={{flex:1}}/>
+    {l.tag&&<span style={{fontFamily:MONO,fontSize:20,letterSpacing:3,padding:'6px 14px',opacity:tp,border:`1.5px solid ${l.tag==='MODEL'?A:l.tag==='VIEWMODEL'?A:BP.dim}`,background:l.tag==='MODEL'?A:'transparent',color:l.tag==='MODEL'?ON:l.tag==='VIEWMODEL'?A:BP.dim,fontWeight:700}}>{l.tag}</span>}</div>})}
+  </div></Frame>
+  {note&&<div style={{marginTop:44,fontFamily:SANS,fontSize:40,color:BP.dim,lineHeight:1.35,opacity:pr(f,note.at,22)}}>{note.s}</div>}
+ </div>};
+
+/* takeaway: wall between UI changes and business changes, then course line */
+export const BpTake:React.FC<{n:string;cap:string;title:string;cols:{k:string;items:string[];at:number}[];wallAt:number;rule:{s:string;at:number};course:{t1:string;t2:string;at:number}}>=({n,cap,title,cols,wallAt,rule,course})=>{const {f,A}=useA();const wp=pr(f,wallAt,30);
+ return <div><Fig n={n} cap={cap} title={title}/>
+  <div style={{position:'relative',display:'flex',gap:0,marginTop:10}}>
+   {cols.map((c,k)=>{const p=pr(f,c.at,22);return <div key={k} style={{flex:1,padding:k?'0 0 0 46px':'0 46px 0 0',opacity:p}}>
+    <div style={{...lbl(22,k?A:BP.dim)}}>{c.k}</div>
+    {c.items.map((s,j)=><div key={j} style={{fontFamily:SANS,fontSize:40,color:BP.ink,marginTop:26,lineHeight:1.25}}>{s}</div>)}</div>})}
+   <div style={{position:'absolute',left:'50%',top:-10,width:3,height:`${wp*100+6}%`,background:A}}/>
+  </div>
+  <div style={{marginTop:70,fontFamily:SANS,fontSize:48,color:BP.ink,lineHeight:1.3,borderLeft:`4px solid ${A}`,paddingLeft:28,opacity:pr(f,rule.at,22)}}>{rule.s}</div>
+  <div style={{marginTop:80,paddingTop:30,borderTop:`1px solid ${BP.hair}`,opacity:pr(f,course.at,22)}}>
+   <div style={lbl(20,A)}>{course.t1}</div><div style={{fontFamily:SANS,fontSize:44,color:BP.ink,marginTop:12}}>{course.t2}</div></div>
+ </div>};

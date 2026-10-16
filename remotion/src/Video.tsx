@@ -3,10 +3,10 @@
 import React from 'react';import {AbsoluteFill,Sequence} from 'remotion';import {Timeline,Scene} from './sys';import {THEMES} from './themes';
 import {Headline,Flow,Quote,Checklist,Evidence,CTA} from './scenes';import {MeoHook,MeoSearch,MeoFix,MeoSlowFast,MeoSave} from './meo';
 import {CmdHook,GitGraph,LogPanes,DocRule,CommitCTA,CodeBlock,DepGraph,Analogy,Inversions,KeyPoint} from './commit';
-import {BpCode,BpGraph,SpecCard,BpEndCard} from './cyber';
+import {BpCode,BpGraph,SpecCard,BpEndCard,BpReq,BpOptions,BpSpec,BpLayers,BpTerm,BpTree,BpTake} from './cyber';
 import {FollowCTA,FollowCTASfx,EndCard} from './outro';
 // scene "type" in script.json -> component
-const SCENES:Record<string,React.FC<any>>={Headline,Flow,Quote,Checklist,Evidence,CTA,MeoHook,MeoSearch,MeoFix,MeoSlowFast,MeoSave,CmdHook,GitGraph,LogPanes,DocRule,CommitCTA,CodeBlock,DepGraph,Analogy,Inversions,KeyPoint,BpCode,BpGraph,SpecCard};
+const SCENES:Record<string,React.FC<any>>={Headline,Flow,Quote,Checklist,Evidence,CTA,MeoHook,MeoSearch,MeoFix,MeoSlowFast,MeoSave,CmdHook,GitGraph,LogPanes,DocRule,CommitCTA,CodeBlock,DepGraph,Analogy,Inversions,KeyPoint,BpCode,BpGraph,SpecCard,BpReq,BpOptions,BpSpec,BpLayers,BpTerm,BpTree,BpTake};
 export type VideoProps={theme:string;look?:Record<string,any>;date:string;voice:string;durationInFrames:number;words:{t:string;s:number;e:number}[];
  scenes:{type:string;dur:number;section:string;out?:string;focus?:[number,number];morph?:any;props:any}[];
  sfx:{at:number;s:string;v?:number}[];

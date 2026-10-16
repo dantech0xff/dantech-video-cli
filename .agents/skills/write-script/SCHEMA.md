@@ -63,3 +63,17 @@ Chuyển cảnh thêm `scroll` (cuộn theo bậc như terminal), hợp nhất v
 
 `media` = file trong `assets/broll/` (chỉ clip không có người). Cấu trúc `code`/`Line`: copy y hệt mẫu.
 SFX có sẵn: xem `assets/sfx/SFX_LIST.md` (cta_click, tip_pop, key_click, tick_001, impactPlank_medium_000, whoosh_soft…).
+
+## Theme `tech-explain-cyber` (🧪 experimental) — scene types
+Tất cả có `n`, `cap` (nhãn ngắn có nghĩa), `title` (heading). `at` nhận `@word` anchor.
+- **BpCode** `{file, lines:[{s,at}], dim?:{from,to,label,sub?,at,x?}, callout?:{line,text,at}, note?:{s,at}}` — code + ngoặc kích thước + callout. Dòng ≤ ~28 ký tự.
+- **BpGraph** `{fw, deps[4], root, consumer, call, at, flowAt, callouts:[{text,at}]}` — sơ đồ blueprint, data flow.
+- **SpecCard** `{head, rows:[{k,from,to,at}], foot?}` — from (gạch) → to.
+- **BpSpec** `{head, rows:[{k,v,at}], verdict?:{s,at}}` — danh sách triệu chứng/đặc điểm + kết luận.
+- **BpReq** `{from, to, items:[{s,at}], lock:{s,at}, flowAt?}` — thẻ yêu cầu + 2 màn hình, dữ liệu bị khoá.
+- **BpOptions** `{opts:[{k,why,at,strikeAt}]}` — các phương án bị gạch lần lượt.
+- **BpLayers** `{layers:[{k,role,path,at}] (3), depAt, noKnow:{s:"dòng1|dòng2",at}}` — lớp trên→dưới, phụ thuộc một chiều; lớp cuối tô accent.
+- **BpTerm** `{cmd, cmdAt, resAt, empty, ok, note?}` — terminal gõ lệnh, kết quả + check.
+- **BpTree** `{root, lines:[{s,d,tag?:"MODEL|VIEWMODEL|VIEW",at,hl?}], note?}` — cây thư mục.
+- **BpTake** `{cols:[{k,items[],at}] (2), wallAt, rule:{s,at}, course:{t1,t2,at}}` — takeaway + nhắc khoá học (scene cuối, câu có "follow Dan Tech").
+Ví dụ: `videos/flutter-mvvm/script.json`. Không hiển thị tên theme; không thêm nhãn trang trí vô nghĩa.

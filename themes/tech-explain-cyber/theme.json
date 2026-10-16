@@ -36,7 +36,7 @@
  },
  "tail_hold": 40,
  "cta": {
-  "top": 1110,
+  "top": 1400,
   "in_offset": -6,
   "sub": "BẬT CHUÔNG ĐỂ KHÔNG LỠ BÀI"
  },
@@ -56,16 +56,20 @@
  "music": {
   "pool": [
    {
+    "id": "darknexal-welcome-to-the-cyberspace",
+    "start": 0
+   },
+   {
     "id": "alexi-action-ghost",
     "start": 0
    },
    {
-    "id": "raspberrymusic-technology-background-music",
+    "id": "sappheiros-perspective",
     "start": 0
    },
    {
-    "id": "sappheiros-perspective",
-    "start": 8
+    "id": "kuromaru-ft-hereafter-laxin",
+    "start": 0
    }
   ],
   "rel": -10

@@ -9,7 +9,7 @@ Có 3 theme:
 | `hot-news` | Tin nóng, drama công nghệ (phong cách báo in: giấy, đỏ, Anton) | ✅ Đã duyệt (khoá) |
 | `quick-tips` | Mẹo, tutorial, review tool AI, listicle (cobalt + vàng, keycap, mockup IDE) | ✅ Đã duyệt |
 | `tech-explain` | Dev explainer: git, code, terminal (thanh tab vàng, gutter số dòng, lệnh gõ chữ, git graph, git log, chuyển cảnh `scroll`) | 🧪 v1 chờ Dan duyệt |
-| `tech-explain-cyber` | GIẢI THÍCH CYBER | 🧪 experimental (phase 1: chỉ stills) — blueprint tối, 1 accent cyan, scene BpCode/BpGraph/SpecCard |
+| `tech-explain-cyber` | GIẢI THÍCH CYBER | 🧪 experimental — blueprint tối #1C1C1C, accent lime; ví dụ `videos/flutter-mvvm` |
 
 Id cũ `tin-nong`, `meo-nhanh`, `commit` vẫn được chấp nhận (alias, deprecated). Giao diện `~/commit` / `DAN/TECH.git` của GIẢI THÍCH là phong cách editor, không phải tên theme.
 

@@ -1,0 +1,384 @@
+{
+ "theme": "tech-explain-cyber",
+ "title": "MVVM trong Flutter: vì sao cần ba lớp",
+ "date": "16 · 10 · 2026",
+ "caption": "Vì sao Flutter app cần MVVM? Khi màn hình mới cần dữ liệu đang khoá trong một State private, cả ba cách chữa cháy đều tệ. MVVM chia code thành View, ViewModel, Model với phụ thuộc một chiều: thứ đổi vì giao diện tách khỏi thứ đổi vì nghiệp vụ. Bài đầy đủ trong khoá Flutter Mobile 101 trên dantech.academy. #DanTech #Flutter #MVVM #Dart",
+ "sources": [
+  "Dan Tech Academy, Flutter Mobile 101 · MVVM · Lesson 01 Why MVVM and three layers (nội dung bài học do Dan cung cấp): https://dantech.academy/courses/flutter-mobile-101/03-mvvm/lesson-01-why-mvvm-and-three-layers",
+  "Flutter docs, Guide to app architecture (MVVM, views, view models, data layer): https://docs.flutter.dev/app-architecture/guide"
+ ],
+ "voice": {
+  "style": "random"
+ },
+ "music": {
+  "track": "random"
+ },
+ "scenes": [
+  {
+   "say": "Thử tưởng tượng bạn đang làm một mini game cờ caro bằng Flutter. Toàn bộ bàn cờ và lượt chơi nằm trong một StatefulWidget tên là MiniGame, và mỗi lần bạn chạm vào một ô, hàm setState sẽ vẽ lại màn hình.",
+   "type": "BpCode",
+   "section": "mini_game.dart",
+   "out": "stack",
+   "props": {
+    "n": "01",
+    "cap": "lúc đầu · mọi thứ trong State",
+    "title": "Một widget ôm hết",
+    "file": "mini_game.dart",
+    "lines": [
+     {
+      "s": "class _MiniGameState",
+      "at": "@Toàn"
+     },
+     {
+      "s": "    extends State<MiniGame> {",
+      "at": "@bàn"
+     },
+     {
+      "s": "  List<int> cells = [];",
+      "at": "@cờ#2"
+     },
+     {
+      "s": "  int turn = 0;",
+      "at": "@lượt"
+     },
+     {
+      "s": "  void onTap(int i) {",
+      "at": "@chạm"
+     },
+     {
+      "s": "    setState(() { ... });",
+      "at": "@setState"
+     },
+     {
+      "s": "  }",
+      "at": "@vẽ"
+     },
+     {
+      "s": "}",
+      "at": "@vẽ+6"
+     }
+    ],
+    "dim": {
+     "from": 2,
+     "to": 3,
+     "label": "2",
+     "sub": "STATE",
+     "at": "@lượt+10",
+     "x": 720
+    },
+    "callout": {
+     "line": 6,
+     "text": "Chạm vào ô thì setState vẽ lại cả màn hình.",
+     "at": "@setState"
+    }
+   }
+  },
+  {
+   "say": "Rồi một ngày có yêu cầu mới: khi ván đấu kết thúc, app phải chuyển sang màn hình kết quả, hiện người thắng, kích thước bàn cờ, độ khó, và vẽ lại bàn cờ cuối cùng. Vấn đề là tất cả dữ liệu đó đang nằm trong class _MiniGameState, một class private, ở một màn hình khác.",
+   "type": "BpReq",
+   "section": "yêu cầu mới",
+   "out": "push",
+   "props": {
+    "n": "02",
+    "cap": "yêu cầu mới",
+    "title": "Màn hình kết quả",
+    "from": "GameScreen",
+    "to": "ResultScreen",
+    "items": [
+     {
+      "s": "Người thắng",
+      "at": "@người"
+     },
+     {
+      "s": "Kích thước bàn cờ",
+      "at": "@kích"
+     },
+     {
+      "s": "Độ khó",
+      "at": "@độ"
+     },
+     {
+      "s": "Vẽ lại bàn cờ cuối",
+      "at": "@cuối"
+     }
+    ],
+    "lock": {
+     "s": "_MiniGameState",
+     "at": "@Vấn"
+    },
+    "flowAt": "@chuyển"
+   }
+  },
+  {
+   "say": "Lúc này có ba cách chữa cháy quen thuộc, và cả ba đều tệ. Cách một là truyền hết qua constructor. Hôm nay bốn tham số, mai là bảy, và màn kết quả cần thêm gì là bạn lại phải sửa màn game. Cách hai là giữ tham chiếu tới _MiniGameState. Nhưng widget đó đã bị gỡ khỏi cây, nên bạn đang giữ một object đã chết. Cách ba là đẩy toàn bộ state lên một widget cha bọc cả hai màn. State sẽ phình ra, và widget cha biết hết mọi chuyện.",
+   "type": "BpOptions",
+   "section": "ba lối thoát",
+   "out": "stack",
+   "props": {
+    "n": "03",
+    "cap": "ba lối thoát · đều tệ",
+    "title": "Chữa cháy kiểu nào cũng dở",
+    "opts": [
+     {
+      "k": "Truyền hết qua constructor",
+      "why": "4 tham số hôm nay, 7 ngày mai. Màn kết quả cần gì là phải sửa màn game.",
+      "at": "@Cách#1",
+      "strikeAt": "@game"
+     },
+     {
+      "k": "Giữ tham chiếu tới State",
+      "why": "Hai màn dính chặt. Widget đã rời cây, bạn đang giữ một object chết.",
+      "at": "@Cách#2",
+      "strikeAt": "@chết"
+     },
+     {
+      "k": "Đẩy state lên widget cha",
+      "why": "State phình to, widget cha biết hết mọi chuyện.",
+      "at": "@Cách#3",
+      "strikeAt": "@chuyện"
+     }
+    ]
+   }
+  },
+  {
+   "say": "Cả ba cách đều chung một nguyên nhân, và nó lộ ra qua ba triệu chứng. Một, không test được: muốn kiểm tra luật thắng chéo bốn ô trên bàn năm nhân năm, bạn phải dựng widget rồi chạm tám lần. Hai, không tái sử dụng được, vì hàm kiểm tra thắng bị khoá trong State private. Ba, khó đọc, vì hàm build trộn giao diện với luật chơi. Không cái nào là lỗi giao diện. Đó là chuyện code nằm sai chỗ, nên lời giải là chia lại thư mục, chứ không phải thêm một widget mới.",
+   "type": "BpSpec",
+   "section": "ba triệu chứng",
+   "out": "push",
+   "props": {
+    "n": "04",
+    "cap": "một nguyên nhân · ba triệu chứng",
+    "title": "Code đang nằm sai chỗ",
+    "head": "triệu chứng",
+    "rows": [
+     {
+      "k": "Không test được",
+      "v": "Kiểm tra thắng chéo 4 ô trên bàn 5×5: dựng widget, chạm 8 lần.",
+      "at": "@Một#2"
+     },
+     {
+      "k": "Không tái sử dụng được",
+      "v": "Hàm kiểm tra thắng bị khoá trong State private.",
+      "at": "@Hai"
+     },
+     {
+      "k": "Khó đọc",
+      "v": "build() trộn giao diện với luật chơi.",
+      "at": "@Ba#3"
+     }
+    ],
+    "verdict": {
+     "s": "Không phải lỗi giao diện. Lời giải là chia lại thư mục, không phải thêm widget.",
+     "at": "@cái"
+    }
+   }
+  },
+  {
+   "say": "Đó chính là việc MVVM làm: chia code thành ba lớp. View là widget, và nó chỉ lo vẽ. ViewModel giữ state của màn hình và các hành động người dùng có thể làm. Model chứa dữ liệu và luật nghiệp vụ, tức là quy tắc của game. Quan trọng nhất, phụ thuộc chỉ đi một chiều: View biết ViewModel, ViewModel biết Model. Ngược lại thì không: Model không biết ViewModel tồn tại, và ViewModel không biết widget nào đang hiển thị nó.",
+   "type": "BpLayers",
+   "section": "MVVM",
+   "out": "stack",
+   "props": {
+    "n": "05",
+    "cap": "MVVM · phụ thuộc một chiều",
+    "title": "Ba lớp, một chiều",
+    "layers": [
+     {
+      "k": "View",
+      "role": "widget · chỉ lo vẽ",
+      "path": "lib/ui/game/widgets/",
+      "at": "@View"
+     },
+     {
+      "k": "ViewModel",
+      "role": "state màn hình + hành động",
+      "path": "lib/ui/game/view_model/",
+      "at": "@ViewModel"
+     },
+     {
+      "k": "Model",
+      "role": "dữ liệu + luật nghiệp vụ",
+      "path": "lib/domain/",
+      "at": "@Model"
+     }
+    ],
+    "depAt": "@Quan",
+    "noKnow": {
+     "s": "không biết|lớp trên",
+     "at": "@Ngược"
+    }
+   }
+  },
+  {
+   "say": "Vậy làm sao biết mình đã chia đúng? Bạn chạy lệnh rg này để tìm mọi dòng import Flutter trong thư mục domain. Kết quả trả về trống trơn, nghĩa là tầng domain không phụ thuộc gì vào Flutter cả.",
+   "type": "BpTerm",
+   "section": "kiểm chứng",
+   "out": "push",
+   "props": {
+    "n": "06",
+    "cap": "kiểm chứng",
+    "title": "Domain không import Flutter",
+    "cmd": "rg \"^import 'package:flutter\" lib/domain/",
+    "cmdAt": "@chạy",
+    "resAt": "@trống",
+    "empty": "(không có kết quả)",
+    "ok": "0 dòng import Flutter trong lib/domain",
+    "note": {
+     "s": "Tầng domain là Dart thuần, không biết Flutter tồn tại.",
+     "at": "@nghĩa"
+    }
+   }
+  },
+  {
+   "say": "Ví dụ là hàm checkWin trong class BoardRules. Nó nhận vào một danh sách các ô, kích thước bàn cờ và số ô cần để thắng, rồi trả về một object kết quả. Vì chỉ có dữ liệu vào và dữ liệu ra, bạn test nó mà không cần dựng widget nào, và cả màn hình game lẫn đối thủ máy đều dùng chung hàm này.",
+   "type": "BpCode",
+   "section": "board_rules.dart",
+   "out": "stack",
+   "props": {
+    "n": "07",
+    "cap": "model · luật chơi",
+    "title": "Luật thắng là Dart thuần",
+    "file": "lib/domain/board_rules.dart",
+    "lines": [
+     {
+      "s": "class BoardRules {",
+      "at": "@Ví"
+     },
+     {
+      "s": "  static WinResult",
+      "at": "@checkWin"
+     },
+     {
+      "s": "      checkWin(",
+      "at": "@checkWin+4"
+     },
+     {
+      "s": "    List<int> board,",
+      "at": "@danh"
+     },
+     {
+      "s": "    int size,",
+      "at": "@kích"
+     },
+     {
+      "s": "    int need,",
+      "at": "@số"
+     },
+     {
+      "s": "  ) { ... }",
+      "at": "@trả"
+     },
+     {
+      "s": "}",
+      "at": "@kết"
+     }
+    ],
+    "dim": {
+     "from": 3,
+     "to": 5,
+     "label": "in",
+     "sub": "CHỈ DỮ LIỆU",
+     "at": "@thắng+6"
+    },
+    "callout": {
+     "line": 2,
+     "text": "Trả về một object, không đụng tới widget.",
+     "at": "@object"
+    },
+    "note": {
+     "s": "Màn hình game và đối thủ máy dùng chung một hàm.",
+     "at": "@đối"
+    }
+   }
+  },
+  {
+   "say": "Trong project, cách chia này hiện ra ngay trên cây thư mục. Luật chơi nằm trong lib domain. ViewModel của màn hình game nằm trong ui game view_model. Còn các widget chỉ để vẽ thì nằm trong thư mục widgets ngay bên cạnh.",
+   "type": "BpTree",
+   "section": "lib/",
+   "out": "push",
+   "props": {
+    "n": "08",
+    "cap": "cấu trúc thư mục",
+    "title": "Chia theo lý do thay đổi",
+    "root": "lib/",
+    "lines": [
+     {
+      "s": "domain/",
+      "d": 0,
+      "tag": "MODEL",
+      "at": "@Luật",
+      "hl": true
+     },
+     {
+      "s": "board_rules.dart",
+      "d": 1,
+      "at": "@domain"
+     },
+     {
+      "s": "ui/game/",
+      "d": 0,
+      "at": "@ui"
+     },
+     {
+      "s": "view_model/",
+      "d": 1,
+      "tag": "VIEWMODEL",
+      "at": "@view_model",
+      "hl": true
+     },
+     {
+      "s": "widgets/",
+      "d": 1,
+      "tag": "VIEW",
+      "at": "@widgets",
+      "hl": true
+     }
+    ],
+    "note": {
+     "s": "Đổi giao diện: vào widgets/. Đổi luật: vào domain/.",
+     "at": "@cạnh"
+    }
+   }
+  },
+  {
+   "say": "Tóm lại, ý cốt lõi của MVVM là tách những thứ thay đổi vì giao diện khỏi những thứ thay đổi vì nghiệp vụ. Đổi màu một cái nút thì không bao giờ được chạm tới luật thắng. Nếu bạn muốn đi sâu hơn, bài đầy đủ nằm trong khoá Flutter Mobile 101 trên dantech chấm academy. Còn bây giờ, follow Dan Tech để xem thêm nhé!",
+   "type": "BpTake",
+   "section": "tóm lại",
+   "props": {
+    "n": "09",
+    "cap": "ý cốt lõi",
+    "title": "Tách lý do thay đổi",
+    "cols": [
+     {
+      "k": "đổi vì giao diện",
+      "items": [
+       "màu nút",
+       "layout",
+       "animation"
+      ],
+      "at": "@giao"
+     },
+     {
+      "k": "đổi vì nghiệp vụ",
+      "items": [
+       "luật thắng",
+       "độ khó",
+       "đối thủ máy"
+      ],
+      "at": "@nghiệp"
+     }
+    ],
+    "wallAt": "@nghiệp+8",
+    "rule": {
+     "s": "Đổi màu một cái nút không bao giờ được chạm tới luật thắng.",
+     "at": "@Đổi"
+    },
+    "course": {
+     "t1": "bài đầy đủ",
+     "t2": "Flutter Mobile 101 · dantech.academy",
+     "at": "@bài"
+    }
+   }
+  }
+ ]
+}
