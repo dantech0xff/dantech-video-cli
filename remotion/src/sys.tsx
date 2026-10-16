@@ -31,10 +31,10 @@ export const Stamp:React.FC<{at:number;text:string;sub?:string;style?:React.CSSP
  <div style={{...H(t,80,t.stamp??t.accent)}}>{text}</div>{sub&&<div style={{...Bd(t,24,t.stamp??t.accent),letterSpacing:3}}>{sub}</div>}</div>};
 /* ---------- brand chrome (shared device across themes) ---------- */
 export const Chrome:React.FC<{section:string;page:string;date:string}>=({section,page,date})=>{const {t}=useS();return <>
- <div style={{position:'absolute',left:0,top:0,bottom:0,width:96,background:t.accent,display:'flex',alignItems:'center',justifyContent:'center'}}><div style={{transform:'rotate(-90deg)',whiteSpace:'nowrap',fontFamily:'Anton',fontSize:62,color:t.onAccent,letterSpacing:6}}>DAN TECH ■ {t.label} ■ DAN TECH</div></div>
+ <div style={{position:'absolute',left:0,top:0,bottom:0,width:96,background:t.accent,display:'flex',alignItems:'center',justifyContent:'center'}}><div style={{transform:'rotate(-90deg)',whiteSpace:'nowrap',fontFamily:'Anton',fontSize:62,color:t.onAccent,letterSpacing:6}}>DAN TECH ■ DAN TECH ■ DAN TECH</div></div>
  <div style={{position:'absolute',left:136,right:50,top:70,borderBottom:`6px solid ${t.ink}`,paddingBottom:12,display:'flex',justifyContent:'space-between',alignItems:'flex-end'}}>
   <div style={{fontFamily:'Anton',fontSize:96,color:t.ink,lineHeight:1}}>DAN TECH<span style={{color:t.accent}}>■</span></div><div style={{...Bd(t,28),textAlign:'right',lineHeight:1.15}}>{page}<br/>{date}</div></div>
- <div style={{position:'absolute',left:136,right:50,top:208,...Bd(t,30),borderBottom:`2px solid ${t.rule}`,paddingBottom:8}}>{t.label} — {section}</div></>};
+ <div style={{position:'absolute',left:136,right:50,top:208,...Bd(t,30),borderBottom:`2px solid ${t.rule}`,paddingBottom:8}}>{section}</div></>};
 /* tech-explain chrome: editor tab bar + line-number gutter + prompt line */
 export const TermChrome:React.FC<{section:string;page:string;idx:number}>=({section,page,idx})=>{const {t}=useS();return <>
  <div style={{position:'absolute',left:0,right:0,top:0,height:110,background:t.accent,display:'flex',alignItems:'center',justifyContent:'space-between',padding:'0 50px 0 40px'}}>
