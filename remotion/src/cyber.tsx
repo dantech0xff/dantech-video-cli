@@ -4,7 +4,7 @@ import React from 'react';import {interpolate,Easing,useCurrentFrame,AbsoluteFil
 const ES=Easing.bezier(.25,.1,.25,1),EO=Easing.bezier(.22,.61,.36,1);const cl={extrapolateLeft:'clamp',extrapolateRight:'clamp'} as const;
 const MONO='JBM',SANS='BVPM';
 const pr=(f:number,at:number,d=24)=>interpolate(f,[at,at+d],[0,1],{...cl,easing:ES});
-export const BP={bg:'#070B12',grid:'rgba(92,214,232,0.045)',grid2:'rgba(92,214,232,0.085)',line:'#1E2C3D',hair:'#2A3B50',dim:'#6D7F93',ink:'#D9E4EF',cy:'#5CD6E8',cyDim:'rgba(92,214,232,0.14)',panel:'#0A111C',warm:'#C9A27A'};
+export const BP={bg:'#1C1C1C',grid:'rgba(255,255,255,0.028)',grid2:'rgba(255,255,255,0.055)',line:'#303030',hair:'#3E3E3E',dim:'#8C8C8C',ink:'#E6E6E6',cy:'#5CD6E8',cyDim:'rgba(92,214,232,0.14)',panel:'#222222',warm:'#C9A27A'};
 const lbl=(size=22,c=BP.dim):React.CSSProperties=>({fontFamily:MONO,fontSize:size,letterSpacing:3,textTransform:'uppercase',color:c,fontWeight:500});
 /* fig label + refined sans heading */
 const Fig:React.FC<{n:string;cap:string;title:string;at?:number}>=({n,cap,title,at=0})=>{const {f}=useS();const p=pr(f,at,20);
@@ -13,7 +13,7 @@ const Fig:React.FC<{n:string;cap:string;title:string;at?:number}>=({n,cap,title,
   <div style={{fontFamily:SANS,fontSize:68,lineHeight:1.12,color:BP.ink,marginTop:16,letterSpacing:-1}}>{title}</div></div>};
 /* frame with corner ticks */
 const Frame:React.FC<{children:React.ReactNode;style?:React.CSSProperties;p?:number;tag?:string}>=({children,style,p=1,tag})=>{const T=18;const c=(s:React.CSSProperties)=><div style={{position:'absolute',width:T,height:T,borderColor:BP.cy,borderStyle:'solid',borderWidth:0,...s}}/>;
- return <div style={{position:'relative',border:`1.5px solid ${BP.hair}`,background:'rgba(10,17,28,0.72)',clipPath:`inset(0 ${(1-p)*100}% 0 0)`,...style}}>
+ return <div style={{position:'relative',border:`1.5px solid ${BP.hair}`,background:'rgba(36,36,36,0.72)',clipPath:`inset(0 ${(1-p)*100}% 0 0)`,...style}}>
   {c({left:-2,top:-2,borderLeftWidth:2,borderTopWidth:2})}{c({right:-2,top:-2,borderRightWidth:2,borderTopWidth:2})}{c({left:-2,bottom:-2,borderLeftWidth:2,borderBottomWidth:2})}{c({right:-2,bottom:-2,borderRightWidth:2,borderBottomWidth:2})}
   {tag&&<div style={{position:'absolute',top:-13,left:24,background:BP.bg,padding:'0 10px',...lbl(20)}}>{tag}</div>}{children}</div>};
 /* kotlin highlight, restrained: keywords cyan, everything else ink/dim */
@@ -27,7 +27,7 @@ export const BpCode:React.FC<{n:string;cap:string;title:string;file:string;lines
   <div style={{...lbl(20),display:'flex',justifyContent:'space-between',marginBottom:14,opacity:fp}}><span>{file}</span><span style={{color:BP.cy}}>KOTLIN</span></div><Frame p={fp}><div style={{padding:`${TOP-44}px 0 30px`,position:'relative'}}>
    {lines.map((l,k)=>{const p=pr(f,l.at,14);const shown=l.s.slice(0,Math.floor(l.s.length*p));
     return <div key={k} style={{display:'flex',height:LH,alignItems:'center',fontFamily:MONO,fontSize:FS,whiteSpace:'pre'}}>
-     <span style={{width:70,textAlign:'right',paddingRight:22,color:p>0?BP.dim:'#253244',fontSize:24}}>{String(k+1).padStart(2,'0')}</span>
+     <span style={{width:70,textAlign:'right',paddingRight:22,color:p>0?BP.dim:'#4A4A4A',fontSize:24}}>{String(k+1).padStart(2,'0')}</span>
      <span style={{borderLeft:`1px solid ${BP.line}`,paddingLeft:22,height:'100%',display:'flex',alignItems:'center'}}>{kt(shown)}</span></div>})}
    {dim&&(()=>{const p=pr(f,dim.at,26);const y1=TOP-44+dim.from*LH+10,y2=TOP-44+(dim.to+1)*LH-10,x=640;
     return <svg style={{position:'absolute',left:0,top:0,overflow:'visible'}} width={894} height={y2+40}>
@@ -93,7 +93,7 @@ export const SpecCard:React.FC<{n:string;cap:string;title:string;head:string;row
 /* blueprint chrome: fine grid, ruler, title block */
 export const BpChrome:React.FC<{section:string;page:string}>=({section,page})=>{const {t}=useS();return <>
  <AbsoluteFill style={{backgroundImage:`linear-gradient(${BP.grid} 1px,transparent 1px),linear-gradient(90deg,${BP.grid} 1px,transparent 1px),linear-gradient(${BP.grid2} 1px,transparent 1px),linear-gradient(90deg,${BP.grid2} 1px,transparent 1px)`,backgroundSize:'24px 24px,24px 24px,120px 120px,120px 120px',backgroundPosition:'136px 0,136px 0,136px 0,136px 0'}}/>
- <AbsoluteFill style={{background:'radial-gradient(120% 80% at 50% 35%, transparent 55%, rgba(3,5,9,.75) 100%)'}}/>
+ <AbsoluteFill style={{background:'radial-gradient(120% 80% at 50% 35%, transparent 55%, rgba(10,10,10,.55) 100%)'}}/>
  <div style={{position:'absolute',left:40,right:40,top:40,bottom:40,border:`1px solid ${BP.line}`}}/>
  <div style={{position:'absolute',left:136,right:50,top:86,display:'flex',justifyContent:'space-between',alignItems:'flex-end',paddingBottom:22,borderBottom:`1px solid ${BP.hair}`}}>
   <div><div style={{fontFamily:'BVPX',fontSize:46,color:BP.ink,letterSpacing:1.5}}>DAN TECH</div><div style={{...lbl(19,BP.cy),marginTop:6}}>{t.label} · {t.subtitle}</div></div>
