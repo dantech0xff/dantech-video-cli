@@ -42,7 +42,7 @@ export GEMINI_API_KEY=...           # chỉ đặt trong env / .env (đã gitign
 | `render-video` | script → MP4 + QC, chạy lại bằng `--from` | `.agents/skills/render-video/SKILL.md` |
 | `theme` | tạo/chỉnh theme từ spec | `.agents/skills/theme/SKILL.md` |
 
-Bản copy cho Claude Code (`.claude/skills/`) và Grok CLI (`.grok/skills/`) do `scripts/sync_skills.sh` tạo. Chỉ sửa trong `.agents/skills/` rồi chạy lại script. Kiểm script: `python3 scripts/validate_script.py videos/<slug>/script.json`.
+`.claude/skills` (Claude Code) và `.grok/skills` (Grok CLI) là **symlink** tới `../.agents/skills`, nên chỉ có một bản để sửa. Trên Windows: bật Developer Mode và chạy `git config core.symlinks true` *trước khi* clone (hoặc `git clone -c core.symlinks=true …`), nếu không symlink sẽ thành file text. Kiểm script: `python3 scripts/validate_script.py videos/<slug>/script.json`.
 
 ## 3. Quy tắc bắt buộc
 
