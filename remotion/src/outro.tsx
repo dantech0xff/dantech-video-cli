@@ -46,7 +46,7 @@ export const EndCard:React.FC<{t:Theme;dur?:number;handles?:{p:string;h:string}[
      <span style={{...Bd(t,30,P.fg),letterSpacing:5,border:`3px solid ${P.fg}`,padding:'6px 14px',minWidth:200,textAlign:'center',borderRadius:r(t,10)}}>{x.p}</span>
      <span style={{...H(t,t.head==='Anton'?92:64,P.fg),textTransform:'none'}}>{x.h}</span></div>)}</div>
    </div>
-   <div style={{...it(30,4),position:'absolute',left:136,right:60,bottom:150,...Bd(t,28,P.fg),opacity:.6,letterSpacing:4,borderTop:`2px solid ${P.fg}`,paddingTop:14}}>■ {t.label} · DAN TECH · 2026</div>
+   <div style={{...it(30,4),position:'absolute',left:136,right:60,bottom:150,...Bd(t,28,P.fg),opacity:.6,letterSpacing:4,borderTop:`2px solid ${P.fg}`,paddingTop:14}}>■ DAN TECH · 2026</div>
   </AbsoluteFill>
   <AbsoluteFill style={{background:t.bg,clipPath:`inset(${100-out}% 0 0 0)`}}/>
   <Sequence from={4}><Audio src={staticFile(`sfx/${sting}.wav`)} volume={0.55}/></Sequence>
