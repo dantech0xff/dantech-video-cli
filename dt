@@ -3,11 +3,13 @@
 #   ./dt render videos/<slug>/script.json   full pipeline: TTS → align → props → Remotion → mix → description
 #   ./dt render <script> --from render      resume from a step (tts|align|props|render|mix|describe)
 #   ./dt fetch-music                        download the Commons music library
+#   ./dt doctor                             check this machine has everything needed
 set -e
 cd "$(dirname "$0")"; ROOT=$(pwd)
 cmd=$1; shift || true
 case "$cmd" in
  fetch-music) python3 scripts/fetch_music.py ;;
+ doctor) exec scripts/doctor.sh ;;
  render)
   SCRIPT=$1; FROM=${3:-tts}; [ -f "$SCRIPT" ] || { echo "script not found: $SCRIPT"; exit 1; }
   DIR=$(dirname "$SCRIPT"); OUT=$DIR/out; SLUG=$(basename "$DIR"); mkdir -p "$OUT"
@@ -28,5 +30,5 @@ case "$cmd" in
     describe) python3 scripts/describe.py "$SCRIPT" ;;
    esac; done
   echo "✓ $OUT/$SLUG.mp4" ;;
- *) sed -n 2,6p "$0"; exit 1 ;;
+ *) sed -n 2,7p "$0"; exit 1 ;;
 esac
