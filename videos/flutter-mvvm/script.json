@@ -11,7 +11,7 @@
   "style": "random"
  },
  "music": {
-  "track": "random"
+  "track": "sappheiros-perspective"
  },
  "scenes": [
   {
@@ -75,6 +75,20 @@
     "noKnow": {
      "s": "không biết|lớp trên",
      "at": "@còn"
+    },
+    "pre": {
+     "label": "chữa cháy",
+     "items": [
+      {
+       "s": "truyền qua constructor",
+       "at": "@Truyền"
+      },
+      {
+       "s": "giữ tham chiếu tới State",
+       "at": "@giữ"
+      }
+     ],
+     "strikeAt": "@chữa"
     }
    }
   },

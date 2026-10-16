@@ -160,7 +160,7 @@ export const BpSpec:React.FC<{n:string;cap:string;title:string;head:string;rows:
  </div>};
 
 /* layer diagram: one-way dependency, calls flow down */
-export const BpLayers:React.FC<{n:string;cap:string;title:string;layers:{k:string;role:string;path:string;at:number}[];depAt:number;noKnow:{s:string;at:number}}>=({n,cap,title,layers,depAt,noKnow})=>{const {f,A,ON}=useA();
+export const BpLayers:React.FC<{n:string;cap:string;title:string;layers:{k:string;role:string;path:string;at:number}[];depAt:number;noKnow:{s:string;at:number};pre?:{label:string;items:{s:string;at:number}[];strikeAt:number}}>=({n,cap,title,layers,depAt,noKnow,pre})=>{const {f,A,ON}=useA();
  const W=894,BW=620,BH=170,G=120,X=0;const ys=layers.map((_,k)=>20+k*(BH+G));
  return <div><Fig n={n} cap={cap} title={title}/>
   <svg width={W} height={ys[ys.length-1]+BH+40} style={{overflow:'visible'}}>
@@ -182,7 +182,11 @@ export const BpLayers:React.FC<{n:string;cap:string;title:string;layers:{k:strin
     <g transform={`translate(${x},${(y1+y2)/2})`}><circle r={30} fill={BP.bg} stroke={A} strokeWidth={2}/><path d="M-11 -11 L11 11 M11 -11 L-11 11" stroke={A} strokeWidth={3}/></g>
     <text x={x+48} y={(y1+y2)/2-10} style={{fontFamily:SANS,fontSize:30,fill:BP.ink}}>{noKnow.s.split('|')[0]}</text>
     <text x={x+48} y={(y1+y2)/2+30} style={{fontFamily:SANS,fontSize:30,fill:BP.ink}}>{noKnow.s.split('|')[1]||''}</text></g>})()}
-  </svg></div>};
+  </svg>
+  {pre&&<div style={{marginTop:40,paddingTop:26,borderTop:`1px solid ${BP.line}`,opacity:pr(f,pre.items[0].at,16)}}>
+   <div style={lbl(20)}>{pre.label}</div>
+   <div style={{display:'flex',gap:40,marginTop:16,flexWrap:'wrap'}}>{pre.items.map((it,k)=>{const sp=pr(f,pre.strikeAt,18);return <span key={k} style={{fontFamily:SANS,fontSize:38,color:sp>0.5?BP.dim:BP.ink,position:'relative',opacity:pr(f,it.at,16)}}>{it.s}<Strike p={sp} c={A}/></span>})}</div></div>}
+ </div>};
 
 /* terminal: command typed, empty result, check */
 export const BpTerm:React.FC<{n:string;cap:string;title:string;cmd:string;cmdAt:number;resAt:number;empty:string;ok:string;note?:{s:string;at:number}}>=({n,cap,title,cmd,cmdAt,resAt,empty,ok,note})=>{const {f,A,ON}=useA();const fp=pr(f,0,26);
