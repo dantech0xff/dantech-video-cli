@@ -38,7 +38,7 @@ export GEMINI_API_KEY=...                # chỉ đọc từ biến môi trườ
 ./dt doctor                              # (hoặc make doctor) kiểm tra máy: ✅/❌ kèm cách sửa
 ```
 
-**Dùng với AI CLI trên máy (Grok CLI, Claude Code, Codex…):** AI đọc [`AGENTS.md`](AGENTS.md) (CLAUDE.md, GROK.md trỏ về đó). AI chỉ viết `script.json` và chạy lệnh, còn lại là code cố định. Có sẵn skills `setup`, `write-script`, `render-video`, `theme` trong `.agents/skills/` (`.claude/skills`, `.grok/skills` là symlink tới đó; Windows cần `git config core.symlinks true` + Developer Mode). Kiểm script trước khi render: `python3 scripts/validate_script.py <script>`.
+**Dùng với AI CLI trên máy (Grok CLI, Claude Code, Codex…):** AI đọc [`AGENTS.md`](AGENTS.md) (CLAUDE.md, GROK.md trỏ về đó). AI chỉ viết `script.json` và chạy lệnh, còn lại là code cố định. Có sẵn skills `setup`, `write-script` (có bước `humanizer`, MIT, từ blader/humanizer), `render-video`, `theme` trong `.agents/skills/` (`.claude/skills`, `.grok/skills` là symlink tới đó; Windows cần `git config core.symlinks true` + Developer Mode). Kiểm script trước khi render: `python3 scripts/validate_script.py <script>`.
 
 ## Làm một video, từng bước
 
@@ -71,7 +71,7 @@ Nhờ vậy khi đổi giọng (thời lượng khác), keycap, popup, SFX vẫn
 | Chọn style cho một video | `script.json` → `"voice": {"style": "random" \| "hao-hung" \| "ke-chuyen" \| "tu-nhien"}` |
 | Dùng file ghi âm có sẵn (không gọi TTS) | `"voice": {"file": "voice_approved.mp3"}` (đường dẫn trong thư mục video) |
 | Danh sách nhạc xoay vòng của theme + đoạn bắt đầu | `themes/<theme>/theme.json` → `music.pool` |
-| Nhạc cho một video | `"music": {"track": "random" \| "<id trong tracks.json>", "start": 7}` |
+| Nhạc cho một video | `"music": {"track": "random" \| "<id trong tracks.json>", "start": 7}` (random = bài lâu chưa dùng nhất trong pool, theo log) |
 | Nhạc to/nhỏ dưới giọng | `theme.json` → `music.rel` (dB so với giọng trước khi duck; -9 TIN NÓNG, -11 MẸO). Chuỗi xử lý ở `scripts/mix_bgm.sh` |
 | SFX một khoảnh khắc | `script.json` → `scenes[].sfx`: `{"at": "@chữ", "s": "tên file trong assets/sfx", "v": 0.5}`, tick lặp: thêm `"every": 5, "count": 14` |
 | SFX chuyển cảnh của theme | `theme.json` → `look.sfx.trans` |

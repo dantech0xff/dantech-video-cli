@@ -19,9 +19,13 @@ v=S.get('voice',{})
 if T and v.get('style','random')!='random' and v['style'] not in T['voice']['styles']: err(f'voice.style "{v["style"]}" not in {list(T["voice"]["styles"])}')
 if v.get('file') and not os.path.isfile(os.path.join(os.path.dirname(os.path.abspath(p)),v['file'])): err(f'voice.file {v["file"]} not found')
 if v.get('file'): warn('voice.file is pinned: TTS is skipped (new videos should use style "random" without file)')
-tracks={t['id'] for t in json.load(open(os.path.join(ROOT,'assets/music/tracks.json')))}
+TR={t['id']:t for t in json.load(open(os.path.join(ROOT,'assets/music/tracks.json')))}; tracks=set(TR)
 tid=S.get('music',{}).get('track','random')
-if tid!='random' and tid not in tracks: err(f'music.track "{tid}" not in assets/music/tracks.json')
+if tid!='random' and tid not in tracks: err(f'music.track "{tid}" not in assets/music/tracks.json; valid: random, '+', '.join(sorted(tracks)))
+need=[tid] if tid in tracks else ([p['id'] for p in T['music']['pool']] if T and tid=='random' else [])
+for i in need:
+    if i not in TR: err(f'theme music.pool id "{i}" not in tracks.json')
+    elif not os.path.isfile(os.path.join(ROOT,TR[i]['file'])): err(f'music file missing: {TR[i]["file"]} (./dt fetch-music; Pixabay tải tay)')
 if tid!='random': warn(f'music.track pinned to {tid} (the rule is rotation: "random")')
 types=set(re.search(r'const SCENES[^{]*\{([^}]*)\}',open(os.path.join(ROOT,'remotion/src/Video.tsx')).read()).group(1).replace(' ','').split(','))
 sfx={os.path.splitext(f)[0] for f in os.listdir(os.path.join(ROOT,'assets/sfx'))}

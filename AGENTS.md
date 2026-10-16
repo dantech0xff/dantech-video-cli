@@ -41,6 +41,7 @@ export GEMINI_API_KEY=...           # chỉ đặt trong env / .env (đã gitign
 |---|---|---|
 | `setup` | máy mới: cài Node/Python(.venv)/ffmpeg, npm, model whisper, .env, nhạc → `./dt doctor` ✅ | `.agents/skills/setup/SKILL.md` (tự động: `./dt setup`) |
 | `write-script` | spec (chủ đề/link, theme, độ dài, góc nhìn) → `script.json` đã validate | `.agents/skills/write-script/SKILL.md` (+ `SCHEMA.md`, `template.json`) |
+| `humanizer` | bỏ "mùi AI" khỏi lời đọc (bước trong write-script) | `.agents/skills/humanizer/SKILL.md` (upstream blader/humanizer, MIT) + `VI.md` (áp dụng cho tiếng Việt) |
 | `render-video` | script → MP4 + QC, chạy lại bằng `--from` | `.agents/skills/render-video/SKILL.md` |
 | `theme` | tạo/chỉnh theme từ spec | `.agents/skills/theme/SKILL.md` |
 
@@ -50,7 +51,7 @@ export GEMINI_API_KEY=...           # chỉ đặt trong env / .env (đã gitign
 
 - **Không nhân vật hay khuôn mặt người AI.** Dùng infographics. B-roll (nếu có) không có người hoặc mặt người.
 - **Giọng:** Gemini TTS `gemini-3.8-flash-tts`, voice `vi-vn-concierge-2`. Style chọn ngẫu nhiên trong hào hứng / kể chuyện kịch tính / tự nhiên YouTuber (`tts.py` tự chọn khi `style: random`). Lựa chọn được ghi vào `logs/voice_log.md`, nên commit file log này.
-- **Nhạc TIN NÓNG:** xoay vòng 7 bài Pixabay trong `music.pool` (`track: random`). Không ghim một bài trừ khi Dan yêu cầu.
+- **Nhạc TIN NÓNG:** xoay vòng 7 bài Pixabay trong `music.pool` (`track: random`, `pick_music.py` ưu tiên bài lâu chưa dùng nhất theo `logs/voice_log.md`). Không ghim một bài trừ khi Dan yêu cầu.
 - **Mix:** nhạc ~21 dB dưới giọng (mục tiêu 18–22), master -14 LUFS, true peak -2 dBTP ở loudnorm (file AAC cuối ≤ -1 dBTP). **Không sửa chuỗi xử lý** (`scripts/mix_bgm.sh`, `loudnorm.sh`, `music.rel`) trừ khi Dan yêu cầu.
 - Không sửa theme đã duyệt (`tin-nong` khoá, `meo-nhanh` đã duyệt) nếu Dan không yêu cầu.
 

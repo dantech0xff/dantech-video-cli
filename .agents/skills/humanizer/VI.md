@@ -1,0 +1,20 @@
+# Humanizer cho lời đọc tiếng Việt (Dan Tech)
+
+`SKILL.md` viết cho văn bản tiếng Anh. Ở repo này, áp dụng **nguyên tắc** của nó cho `say` (lời voiceover tiếng Việt, đọc bằng Gemini TTS), không áp dụng máy móc các quy tắc về định dạng.
+
+## Cắt bỏ (dấu hiệu "mùi AI")
+- Sáo rỗng, mở bài dàn dựng: "trong thời đại số", "trong kỷ nguyên AI", "hãy cùng tìm hiểu", "bạn có biết", "không thể phủ nhận", "điều này cho thấy", "có thể nói".
+- Đối lập giả: "không chỉ… mà còn…", "không phải X, mà là Y" khi không có ý đối lập thật.
+- Bộ ba ép buộc ("nhanh, mạnh, hiệu quả") khi thực tế chỉ có 1–2 ý.
+- Thổi phồng, giọng bán hàng: "cực kỳ", "siêu", "đỉnh cao", "thay đổi cuộc chơi", "cách mạng" khi nguồn không nói vậy.
+- Câu chốt lặp lại ý ("Và đó chính là điều quan trọng nhất."), filler ("thực ra thì", "về cơ bản", "nói chung là").
+
+## Giữ / hướng tới
+- Văn nói, giọng YouTuber tự nhiên: câu ngắn (≤ 15–18 chữ), một ý một câu, xưng "anh em"/"mình" như các video mẫu.
+- Chi tiết cụ thể thay cho tính từ: con số, tên, hành động.
+- Hook cụ thể ở câu đầu, không mở bằng câu dàn dựng.
+
+## Không được đổi
+- Sự kiện, con số, tên riêng, trích dẫn, `sources`.
+- Câu kết có **"follow Dan Tech"**.
+- **Anchor `@chữ`**: nếu sửa/xoá một chữ đang được anchor dùng (trong `props` hoặc `sfx` của cảnh đó), cập nhật anchor sang chữ mới (kể cả `#n` nếu số lần xuất hiện thay đổi). Sau khi sửa luôn chạy `python3 scripts/validate_script.py <script>`.
