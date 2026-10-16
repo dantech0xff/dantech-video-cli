@@ -160,9 +160,9 @@ export const BpSpec:React.FC<{n:string;cap:string;title:string;head:string;rows:
  </div>};
 
 /* layer diagram: one-way dependency, calls flow down */
-export const BpLayers:React.FC<{n:string;cap:string;title:string;layers:{k:string;role:string;path:string;at:number}[];depAt:number;noKnow:{s:string;at:number};pre?:{label:string;items:{s:string;at:number}[];strikeAt:number}}>=({n,cap,title,layers,depAt,noKnow,pre})=>{const {f,A,ON}=useA();
+export const BpLayers:React.FC<{n:string;cap:string;title:string;layers:{k:string;role:string;path:string;at:number}[];depAt:number;noKnow:{s:string;at:number};pre?:{label:string;items:{s:string;at:number}[];strikeAt:number};titleAt?:number}>=({n,cap,title,layers,depAt,noKnow,pre,titleAt=0})=>{const {f,A,ON}=useA();
  const W=894,BW=620,BH=170,G=120,X=0;const ys=layers.map((_,k)=>20+k*(BH+G));
- return <div><Fig n={n} cap={cap} title={title}/>
+ return <div><Fig n={n} cap={cap} title={title} at={titleAt}/>
   <svg width={W} height={ys[ys.length-1]+BH+40} style={{overflow:'visible'}}>
    {layers.map((l,k)=>{const p=pr(f,l.at,26),y=ys[k],last=k===layers.length-1;return <g key={k}>
     <path d={`M${X} ${y} H${X+BW} V${y+BH} H${X} Z`} fill="none" stroke={last?A:BP.hair} strokeWidth={last?2.5:1.5} pathLength={1} strokeDasharray={1} strokeDashoffset={1-p}/>
