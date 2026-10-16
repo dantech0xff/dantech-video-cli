@@ -5,7 +5,7 @@ description: Viết videos/<slug>/script.json cho video Dan Tech từ một spec
 
 # write-script
 
-**Input (spec):** chủ đề hoặc link + ghi chú, theme (nếu có), độ dài mong muốn (tuỳ chọn, chỉ để tham khảo), góc nhìn.
+**Input (spec):** chủ đề hoặc link + ghi chú, theme (nếu có), góc nhìn.
 **Output:** `videos/<slug>/script.json` đã qua validate, kèm tóm tắt cho Dan duyệt. **Không render** (đó là skill `render-video`).
 
 ## Các bước
@@ -19,14 +19,14 @@ description: Viết videos/<slug>/script.json cho video Dan Tech từ một spec
    Schema đầy đủ và props từng scene: [SCHEMA.md](SCHEMA.md). Bản khởi đầu: [template.json](template.json).
 4. **Viết `say` từng cảnh** (tiếng Việt nói, câu ngắn):
    - **Hook trong 2 giây đầu:** cảnh 1 mở bằng xung đột, con số hoặc câu hỏi ("Vẫn click chuột lục menu…?", "OpenAI vừa xuống nước…").
-   - Độ dài: tốc độ phụ thuộc style giọng (đo từ các lần render): **hào hứng ~3.8**, **tự nhiên ~3.1**, **kể chuyện ~2.55** chữ (âm tiết)/giây. `validate_script.py` in ước lượng cho cả 3 style (chỉ để tham khảo). **Rõ ràng trước, độ dài theo nội dung.** Khoảng thường gặp (không phải giới hạn): TIN NÓNG/MẸO ~30–60 s, COMMIT ~50–90 s. Trần cứng duy nhất: 180 s (YouTube Shorts), tính theo style chậm nhất là kể chuyện. Chỉ cắt nội dung thừa hoặc lạc đề, không cắt ý cần để hiểu.
+   - Độ dài: **rõ ràng trước, độ dài theo nội dung.** Không có mục tiêu thời lượng. Chỉ bỏ câu thừa, lặp hoặc lạc đề. `validate_script.py` in ước lượng thời lượng theo từng style giọng, chỉ để biết.
    - Câu cuối phải có **"follow Dan Tech"** (nút Follow bật ở "follow", bấm ở "Dan"). Handle do outro lo, không viết vào props.
    - Số và tên riêng viết sao cho TTS đọc đúng.
 5. **Props + nhấn nhịp bằng `@chữ`:** chỉ dùng scene type và khoá props trong SCHEMA.md. Mọi mốc xuất hiện (keycap, popup, tick, stamp, sfx) đặt bằng `"@chữ"` của chính cảnh đó, không đếm frame tay. SFX chỉ đặt ở khoảnh khắc có nghĩa (click, pop, stamp), volume 0.35–0.5.
 6. **Hình ảnh:** chỉ infographics/UI mockup. **Không có người hay mặt người.** `media` chỉ dùng clip faceless trong `assets/broll/`.
 7. **Metadata:** `title`, `date` (ngày hôm nay, dạng `16 · 10 · 2026`), `caption` có hashtag (#DanTech + #TinNong/#MeoNhanh), `sources` đầy đủ (tên + URL + ngày). Credit nhạc do `describe.py` tự thêm. Giữ `"voice": {"style":"random"}`, `"music": {"track":"random"}` (không đặt `voice.file`).
 8. **Humanize lời đọc:** áp dụng skill `humanizer` (`.agents/skills/humanizer/SKILL.md`) theo hướng dẫn tiếng Việt ở `.agents/skills/humanizer/VI.md` cho mọi `say`: bỏ sáo rỗng, đối lập giả, bộ ba ép, thổi phồng, filler; giữ văn nói ngắn. Không đổi sự kiện, số, nguồn, câu "follow Dan Tech". Chữ nào bị đổi mà đang được `@anchor` dùng thì cập nhật anchor.
-9. **Validate:** `python3 scripts/validate_script.py videos/<slug>/script.json`. Chạy lại sau mỗi lần sửa (kể cả sau bước humanize), đến khi `✅ OK` (cảnh báo độ dài chỉ xuất hiện khi có thể vượt 180 s).
+9. **Validate:** `python3 scripts/validate_script.py videos/<slug>/script.json`. Chạy lại sau mỗi lần sửa (kể cả sau bước humanize), đến khi `✅ OK` (không có cảnh báo độ dài).
 10. **Báo Dan:** đường dẫn file, theme, số cảnh, số chữ/thời lượng ước tính, hook, danh sách nguồn, và những điểm chưa chắc chắn.
 
 ## Code explainer / COMMIT
@@ -47,7 +47,7 @@ Video giải thích code phải **dẫn chuyện** để người xem hiểu và
 - Định nghĩa mọi thuật ngữ ở lần đầu nhắc tới (IoC, DI, module, single…). Thuật ngữ nào hiện trên hình mà không giải thích được thì bỏ khỏi hình.
 - Một ý cho mỗi cảnh. Lời đọc **giải thích thứ đang hiện trên màn hình** (dòng code này làm gì), không chỉ đọc tên nó. Có thể dùng `notes` của `CodeBlock` để chú thích từng dòng.
 - Câu cuối của mỗi cảnh **bắc cầu** sang cảnh sau (câu hỏi, "lúc này…", "nói cách khác…").
-- Ưu tiên rõ ràng hơn ngắn gọn: độ dài theo nội dung (thường ~50–90 s, không phải giới hạn; trần 180 s). Chỉ cắt câu thừa, lặp ý hoặc lạc đề. **Không bao giờ** cắt từ nối, chủ ngữ hay một bước giải thích chỉ để video ngắn hơn.
+- Ưu tiên rõ ràng hơn ngắn gọn; độ dài theo nội dung. Chỉ cắt câu thừa, lặp ý hoặc lạc đề. **Không bao giờ** cắt từ nối, chủ ngữ hay một bước giải thích chỉ để video ngắn hơn. Sau khi render, giữ nguyên giọng đã rút: không viết lại hay gọi lại TTS vì độ dài.
 
 **Tự kiểm tra:** đọc to toàn bộ `say` liền mạch, không nhìn hình. Người chưa biết khái niệm có hiểu không? Có chỗ nào phải "nhìn hình mới hiểu" không? Có thuật ngữ nào chưa giải thích không?
 

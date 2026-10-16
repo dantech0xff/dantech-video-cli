@@ -18,7 +18,7 @@
 Không xoá từ nối và câu dẫn có chức năng giải thích: "vì vậy", "lúc này", "nói cách khác", "thử tưởng tượng", "tức là", "nghĩa là", "trước khi", "thay vì". Những từ này không phải filler: chúng giúp người nghe theo được mạch (đặc biệt ở video giải thích code). Văn kiểu ghi chú, liệt kê từ khoá ("tạo khi nào, ra sao, framework") cũng là dấu hiệu AI/thiếu tự nhiên: viết lại thành câu nói đầy đủ.
 
 ## Độ dài
-Không humanize để rút ngắn video. Độ dài theo nội dung; chỉ bỏ câu thừa, lặp hoặc lạc đề.
+Không humanize để rút ngắn video, và không viết lại sau khi đã có giọng chỉ vì độ dài. Độ dài theo nội dung; chỉ bỏ câu thừa, lặp hoặc lạc đề.
 
 ## Không được đổi
 - Sự kiện, con số, tên riêng, trích dẫn, `sources`.

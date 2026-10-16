@@ -15,14 +15,14 @@ description: Render một videos/<slug>/script.json thành MP4 hoàn chỉnh (TT
 3. Render: `make video SCRIPT=videos/<slug>/script.json` (= `./dt render <script>`). Các stage chạy lần lượt, mỗi stage ghi vào `videos/<slug>/out/`:
    | stage | script | ra |
    |---|---|---|
-   | tts | `scripts/tts.py` | `voice.mp3`. Gemini `vi-vn-concierge-2`, style chọn ngẫu nhiên từ `theme.json → voice.styles` khi `style: random`, rồi ghi vào `logs/voice_log.md` |
+   | tts | `scripts/tts.py` | `voice.mp3` + `voice_meta.json`. Lời không đổi thì dùng lại cache `.cache/tts/` (cùng style, không gọi API). Gemini `vi-vn-concierge-2`, style chọn ngẫu nhiên từ `theme.json → voice.styles` khi `style: random`, rồi ghi vào `logs/voice_log.md` |
    | align | `scripts/align.py` | `words.json` (faster-whisper, lần đầu tải ~1.5 GB) |
    | props | `scripts/build_props.py` | `props.json` (giải `@chữ` → frame, thời lượng cảnh, outro) |
    | render | Remotion + `loudnorm.sh` | `raw.mp4`, `voice_sfx.mp4` |
    | mix | `pick_music.py` + `mix_bgm.sh` + `measure_vm.py` | `<slug>.mp4`, `stems/`, `music.json`. Nhạc random từ `music.pool` (TIN NÓNG xoay 7 bài Pixabay), có ghi log |
    | describe | `scripts/describe.py` | `description.txt` (nguồn + credit nhạc) |
 4. **QC** (ghi kết quả vào báo cáo):
-   - Thời lượng: `ffprobe -v error -show_entries format=duration -of csv=p=0 videos/<slug>/out/<slug>.mp4` (chỉ cần ≤ 180 s, giới hạn YouTube Shorts; độ dài theo nội dung).
+   - Thời lượng: `ffprobe -v error -show_entries format=duration -of csv=p=0 videos/<slug>/out/<slug>.mp4` (thông tin để báo Dan; không render lại vì độ dài).
    - Mix: log có `voice/music while speaking: median ~21 dB` (chấp nhận 18–22).
    - Loudness: dòng `mix:` có I ≈ -14 LUFS, Peak ≤ -1 dBTP. Đo lại: `ffmpeg -i <mp4> -af ebur128=peak=true -f null - 2>&1 | tail -12`.
    - Frame check: trích vài still, ví dụ `ffmpeg -ss 1 -i <mp4> -frames:v 1 /tmp/f1.png` (1 s, giữa mỗi cảnh, outro). Xem: không có mặt người, chữ không tràn, Follow/end card có handle YouTube @dantech-0xff, Facebook @dantech0xff.
@@ -31,10 +31,13 @@ description: Render một videos/<slug>/script.json thành MP4 hoàn chỉnh (TT
    - `description.txt` có nguồn và credit CC BY (nhạc Commons); bài Pixabay 4–7 có cảnh báo Content ID.
 5. **Báo Dan:** đường dẫn mp4 + description, style giọng + bài nhạc (dòng mới trong `logs/voice_log.md`), số đo QC. Commit `logs/voice_log.md` (không commit `out/`, nhạc, key).
 
+## Giọng đọc: một lần cho mỗi video
+Style rút ngẫu nhiên lần đầu được giữ nguyên. **Không bao giờ gọi lại TTS (hay `--new-voice`) để video dài/ngắn hơn.** Chạy lại từ `tts` với lời không đổi sẽ dùng lại cache. Chỉ dùng `--new-voice` khi Dan yêu cầu rõ.
+
 ## Chạy lại một phần (`--from`)
 - Sửa props/sfx/section (không đổi `say`): `./dt render <script> --from props`
 - Chỉ trộn lại nhạc / đổi bài: `./dt render <script> --from mix`
-- Đổi `say` hoặc giọng: chạy lại từ đầu (tts).
+- Đổi `say`: chạy lại từ đầu (tts). Lời mới nghĩa là một lần TTS mới, rút style mới.
 - Chỉ viết lại description: `--from describe`
 
 ## Lỗi thường gặp

@@ -32,7 +32,7 @@ export GEMINI_API_KEY=...           # chỉ đặt trong env / .env (đã gitign
    - Hẹn giờ bằng `"@chữ"` (xem README), không đếm frame tay.
    - Câu cuối có "follow Dan Tech". Outro/CTA tự lo handle **YouTube @dantech-0xff, Facebook @dantech0xff**. Không tự làm outro.
    - Video mới **không** đặt `voice.file` (đó là giọng ghim của mẫu). Dùng `"voice": {"style": "random"}`, `"music": {"track": "random"}`.
-   - Giọng văn: tiếng Việt tự nhiên, ngắn, dễ đọc thành tiếng. Rõ ràng trước, độ dài theo nội dung (thường gặp: TIN NÓNG/MẸO ~30–60 s, COMMIT ~50–90 s, chỉ để tham khảo; trần cứng duy nhất là 180 s của YouTube Shorts).
+   - Giọng văn: tiếng Việt tự nhiên, ngắn, dễ đọc thành tiếng. Rõ ràng trước; độ dài theo nội dung.
 4. **Render:** `make video SCRIPT=videos/<slug>/script.json` (hoặc `./dt render …`). Sửa nhỏ: `./dt render <script> --from props` (bỏ qua TTS + align) hoặc `--from mix`.
 5. **Kiểm tra** (mục 4), rồi báo Dan: đường dẫn `out/<slug>.mp4`, `description.txt`, style giọng và bài nhạc đã chọn.
 
@@ -51,6 +51,7 @@ export GEMINI_API_KEY=...           # chỉ đặt trong env / .env (đã gitign
 ## 3. Quy tắc bắt buộc
 
 - **Không nhân vật hay khuôn mặt người AI.** Dùng infographics. B-roll (nếu có) không có người hoặc mặt người.
+- **TTS một lần cho mỗi video:** style rút ngẫu nhiên được giữ nguyên, dù video dài hay ngắn. **Không gọi lại TTS để chỉnh độ dài.** Lời đọc không đổi thì `tts.py` dùng lại audio + style đã rút từ `.cache/tts/`. Chỉ tạo giọng mới khi sửa lời, hoặc khi Dan yêu cầu (`./dt render <script> --new-voice`).
 - **Giọng:** Gemini TTS `gemini-3.8-flash-tts`, voice `vi-vn-concierge-2`. Style chọn ngẫu nhiên trong hào hứng / kể chuyện kịch tính / tự nhiên YouTuber (`tts.py` tự chọn khi `style: random`). Lựa chọn được ghi vào `logs/voice_log.md`, nên commit file log này.
 - **Nhạc TIN NÓNG:** xoay vòng 7 bài Pixabay trong `music.pool` (`track: random`, `pick_music.py` ưu tiên bài lâu chưa dùng nhất theo `logs/voice_log.md`). Không ghim một bài trừ khi Dan yêu cầu.
 - **Mix:** nhạc ~21 dB dưới giọng (mục tiêu 18–22), master -14 LUFS, true peak -2 dBTP ở loudnorm (file AAC cuối ≤ -1 dBTP). **Không sửa chuỗi xử lý** (`scripts/mix_bgm.sh`, `loudnorm.sh`, `music.rel`) trừ khi Dan yêu cầu.
@@ -58,7 +59,7 @@ export GEMINI_API_KEY=...           # chỉ đặt trong env / .env (đã gitign
 
 ## 4. Checklist trước khi xuất
 
-- [ ] Thời lượng ≤ 180 s (YouTube Shorts); không có giới hạn nào khác: `ffprobe -v error -show_entries format=duration -of csv=p=0 videos/<slug>/out/<slug>.mp4`
+- [ ] Ghi lại thời lượng (thông tin, không phải tiêu chí sửa): `ffprobe -v error -show_entries format=duration -of csv=p=0 videos/<slug>/out/<slug>.mp4`
 - [ ] Log render có `voice/music while speaking: median ~21 dB` (18–22), từ `scripts/measure_vm.py`.
 - [ ] Loudness: dòng `mix:` in I ≈ -14 LUFS, Peak ≤ -1 dBTP. Kiểm lại: `ffmpeg -i out/<slug>.mp4 -af ebur128=peak=true -f null - 2>&1 | tail -12`
 - [ ] Phụ đề khớp giọng; keycap, popup, SFX bật đúng chữ. Xem vài frame hoặc cả video (`scripts/compare.sh` nếu cần so sánh).

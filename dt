@@ -2,6 +2,7 @@
 # Dan Tech video tool.
 #   ./dt render videos/<slug>/script.json   full pipeline: TTS → align → props → Remotion → mix → description
 #   ./dt render <script> --from render      resume from a step (tts|align|props|render|mix|describe)
+#   ./dt render <script> --new-voice        force a fresh TTS take (otherwise unchanged narration reuses .cache/tts)
 #   ./dt fetch-music                        download the Commons music library
 #   ./dt doctor                             check this machine has everything needed
 #   ./dt setup                              install deps (venv, npm, whisper model, music); idempotent
@@ -17,7 +18,7 @@ case "$cmd" in
  doctor) exec scripts/doctor.sh ;;
  setup) exec scripts/setup.sh ;;
  render)
-  SCRIPT=$1; FROM=${3:-tts}; [ -f "$SCRIPT" ] || { echo "script not found: $SCRIPT"; exit 1; }
+  SCRIPT=$1; FROM=tts; for a in "$@"; do [ "$a" = --new-voice ] && export NEW_VOICE=1; done; [ "$2" = --from ] && FROM=$3; [ -f "$SCRIPT" ] || { echo "script not found: $SCRIPT"; exit 1; }
   DIR=$(dirname "$SCRIPT"); OUT=$DIR/out; SLUG=$(basename "$DIR"); mkdir -p "$OUT"
   THEME=$(python3 -c "import json;print(json.load(open('$SCRIPT'))['theme'])")
   steps=(tts align props render mix describe); run=0
@@ -36,5 +37,5 @@ case "$cmd" in
     describe) python3 scripts/describe.py "$SCRIPT" ;;
    esac; done
   echo "✓ $OUT/$SLUG.mp4" ;;
- *) sed -n 2,8p "$0"; exit 1 ;;
+ *) sed -n 2,9p "$0"; exit 1 ;;
 esac

@@ -42,3 +42,5 @@ Every TIN NÓNG render picks 1 of the 7 approved Pixabay tracks at random (tin_n
 - 2026-10-16 18:17 inversion-of-control: music **raspberrymusic-technology-background-music** from 0s (random LRU, Content ID: unknown)
 - 2026-10-16 18:19 inversion-of-control: music **raspberrymusic-technology-background-music** from 0s (pinned, Content ID: unknown)
 - 2026-10-16 18:20 inversion-of-control: music **raspberrymusic-technology-background-music** from 0s (pinned, Content ID: unknown)
+- 2026-10-16 18:31 inversion-of-control: voice reused from cache 29edd8001c357213f2d3 (style **tu-nhien**, drawn 2026-10-16 18:17), 65.1s, no TTS call
+- 2026-10-16 18:31 inversion-of-control: voice reused from cache 29edd8001c357213f2d3 (style **tu-nhien**, drawn 2026-10-16 18:17), 65.1s, no TTS call

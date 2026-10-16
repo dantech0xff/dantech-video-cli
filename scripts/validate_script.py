@@ -63,13 +63,10 @@ for i,sc in enumerate(sc_list,1):
         if words.count(norm(m.group(1)))<n: err(f'{tag}: anchor {a}: word "{m.group(1)}" (x{n}) not in this scene\'s say')
 allw=[norm(w) for sc in sc_list for w in sc.get('say','').split()]
 if 'follow' not in allw or 'dan' not in allw: err('script must say "follow Dan Tech" (the Follow button pops on "follow" and is pressed on "Dan")')
-# words/second per Gemini style, measured from logs/voice_log.md renders (16 Oct 2026)
+# info only (no warnings): rough voice length per Gemini style, words/second measured from past renders
 RATE={'hao-hung':3.8,'tu-nhien':3.1,'ke-chuyen':2.55}
-n=len(allw); sec=n/3.0; est={k:n/r for k,r in RATE.items()}
-# info only: length follows content. The one hard limit is YouTube Shorts (180 s), checked at the slowest style.
-TYP={'commit':'~50–90s'}.get(S.get('theme'),'~30–60s')
-print('⏱  voice estimate (info): '+', '.join(f'{k} ~{v:.0f}s' for k,v in est.items())+f' (+~2.5s outro; typical for this theme {TYP}, not a limit)')
-if est['ke-chuyen']+2.5>180: warn(f'{n} words → up to ~{est["ke-chuyen"]+2.5:.0f}s at ke-chuyen: over the 180s YouTube Shorts max')
+n=len(allw)
+print('⏱  voice estimate (info): '+', '.join(f'{k} ~{n/r:.0f}s' for k,r in RATE.items()))
 for m in W: print('⚠️ ',m)
 for m in E: print('❌',m)
 print(f'{"✅ OK" if not E else "❌ FAIL"}: {p} · {len(sc_list)} scenes · {n} words')
