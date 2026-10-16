@@ -55,3 +55,6 @@ Style rút ngẫu nhiên lần đầu được giữ nguyên. **Không bao giờ
 - Câu dài hơn 2 dòng được tách tại dấu phẩy / hai chấm thành các cụm trọn vẹn, mỗi cụm hiện nguyên; cụm vẫn quá dài thì chia đều theo từ.
 - Trong cụm, từng từ sáng lên theo timing whisper (từ đang đọc = accent + gạch chân, đã đọc = màu chữ, chưa đọc = mờ).
 - QC: chụp vài frame giữa câu, kiểm tra không quá 2 dòng và đúng font theme.
+
+## Safe zone (kiểm tra UI điện thoại)
+`python3 scripts/safezone.py <frame.png>... -o <dir>` vẽ vùng bị UI che (đỏ = organic: top 250, bottom 420, left 60, right 200 từ y 700; viền vàng = union template quảng cáo chính thức: top 288, bottom 672, left 120, right 192, rail TikTok x≥780 từ y 840). `--sheet out.png a_sz.png …` ghép sheet. % "busy" là heuristic (lưới/nền có thể báo nhầm); kết luận bằng mắt.
