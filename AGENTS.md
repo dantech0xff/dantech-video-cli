@@ -32,7 +32,7 @@ export GEMINI_API_KEY=...           # chỉ đặt trong env / .env (đã gitign
    - Hẹn giờ bằng `"@chữ"` (xem README), không đếm frame tay.
    - Câu cuối có "follow Dan Tech". Outro/CTA tự lo handle **YouTube @dantech-0xff, Facebook @dantech0xff**. Không tự làm outro.
    - Video mới **không** đặt `voice.file` (đó là giọng ghim của mẫu). Dùng `"voice": {"style": "random"}`, `"music": {"track": "random"}`.
-   - Giọng văn: tiếng Việt tự nhiên, ngắn, dễ đọc thành tiếng. Mục tiêu ~30–50 giây.
+   - Giọng văn: tiếng Việt tự nhiên, ngắn, dễ đọc thành tiếng. Rõ ràng trước, độ dài theo nội dung (thường gặp: TIN NÓNG/MẸO ~30–60 s, COMMIT ~50–90 s, chỉ để tham khảo; trần cứng duy nhất là 180 s của YouTube Shorts).
 4. **Render:** `make video SCRIPT=videos/<slug>/script.json` (hoặc `./dt render …`). Sửa nhỏ: `./dt render <script> --from props` (bỏ qua TTS + align) hoặc `--from mix`.
 5. **Kiểm tra** (mục 4), rồi báo Dan: đường dẫn `out/<slug>.mp4`, `description.txt`, style giọng và bài nhạc đã chọn.
 
@@ -58,7 +58,7 @@ export GEMINI_API_KEY=...           # chỉ đặt trong env / .env (đã gitign
 
 ## 4. Checklist trước khi xuất
 
-- [ ] Thời lượng hợp lý (~30–60 s): `ffprobe -v error -show_entries format=duration -of csv=p=0 videos/<slug>/out/<slug>.mp4`
+- [ ] Thời lượng ≤ 180 s (YouTube Shorts); không có giới hạn nào khác: `ffprobe -v error -show_entries format=duration -of csv=p=0 videos/<slug>/out/<slug>.mp4`
 - [ ] Log render có `voice/music while speaking: median ~21 dB` (18–22), từ `scripts/measure_vm.py`.
 - [ ] Loudness: dòng `mix:` in I ≈ -14 LUFS, Peak ≤ -1 dBTP. Kiểm lại: `ffmpeg -i out/<slug>.mp4 -af ebur128=peak=true -f null - 2>&1 | tail -12`
 - [ ] Phụ đề khớp giọng; keycap, popup, SFX bật đúng chữ. Xem vài frame hoặc cả video (`scripts/compare.sh` nếu cần so sánh).

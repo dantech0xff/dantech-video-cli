@@ -28,6 +28,8 @@
 
 Số trong `props`/`sfx` là frame tính từ đầu cảnh (30 fps). Anchor: `"@chữ"`, `"@chữ#2"`, `"@chữ+4"`, `"@chữ.end"`; chữ phải có trong `say` của **chính cảnh đó** (so khớp bỏ dấu câu, không phân biệt hoa thường).
 
+Độ dài không có giới hạn trong schema: theo nội dung, trần 180 s (YouTube Shorts).
+
 ## Scene templates (props, `?` = tuỳ chọn)
 
 TIN NÓNG / COMMIT (`remotion/src/scenes.tsx`), mẫu: `videos/openai-vs-apple/script.json`

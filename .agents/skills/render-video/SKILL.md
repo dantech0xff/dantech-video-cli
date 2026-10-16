@@ -22,7 +22,7 @@ description: Render một videos/<slug>/script.json thành MP4 hoàn chỉnh (TT
    | mix | `pick_music.py` + `mix_bgm.sh` + `measure_vm.py` | `<slug>.mp4`, `stems/`, `music.json`. Nhạc random từ `music.pool` (TIN NÓNG xoay 7 bài Pixabay), có ghi log |
    | describe | `scripts/describe.py` | `description.txt` (nguồn + credit nhạc) |
 4. **QC** (ghi kết quả vào báo cáo):
-   - Thời lượng: `ffprobe -v error -show_entries format=duration -of csv=p=0 videos/<slug>/out/<slug>.mp4` (~30–60 s).
+   - Thời lượng: `ffprobe -v error -show_entries format=duration -of csv=p=0 videos/<slug>/out/<slug>.mp4` (chỉ cần ≤ 180 s, giới hạn YouTube Shorts; độ dài theo nội dung).
    - Mix: log có `voice/music while speaking: median ~21 dB` (chấp nhận 18–22).
    - Loudness: dòng `mix:` có I ≈ -14 LUFS, Peak ≤ -1 dBTP. Đo lại: `ffmpeg -i <mp4> -af ebur128=peak=true -f null - 2>&1 | tail -12`.
    - Frame check: trích vài still, ví dụ `ffmpeg -ss 1 -i <mp4> -frames:v 1 /tmp/f1.png` (1 s, giữa mỗi cảnh, outro). Xem: không có mặt người, chữ không tràn, Follow/end card có handle YouTube @dantech-0xff, Facebook @dantech0xff.

@@ -80,6 +80,8 @@ Nhờ vậy khi đổi giọng (thời lượng khác), keycap, popup, SFX vẫn
 | Tagline end card, vị trí nút Follow, thời gian giữ cuối | `theme.json` → `outro`, `cta`, `tail_hold` |
 | Handle mạng xã hội | mặc định YouTube @dantech-0xff, Facebook @dantech0xff (ghi đè bằng `"handles"` trong script.json) |
 
+Độ dài: rõ ràng trước, độ dài theo nội dung. Thường gặp TIN NÓNG/MẸO ~30–60 s, COMMIT ~50–90 s (chỉ tham khảo); trần duy nhất 180 s (YouTube Shorts). `validate_script.py` in ước lượng theo từng style giọng.
+
 Kiểm tra mix: `./dt render` in ra "voice/music while speaking: median ~21 dB" (mục tiêu 18-22 dB). Loudness cuối: -14 LUFS, true peak ≤ -1 dBTP.
 
 ## Thêm theme mới
