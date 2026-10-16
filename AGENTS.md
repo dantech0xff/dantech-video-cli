@@ -17,26 +17,37 @@ export GEMINI_API_KEY=...           # chỉ đặt trong env / .env (đã gitign
 ./dt doctor                         # kiểm tra mọi thứ, phải toàn ✅ trước khi render
 ```
 
-## 2. Quy trình cho AI
+## 2. Quy trình end-to-end (agent mới, không có ngữ cảnh chat: đọc hết mục này)
 
-1. **Chọn chủ đề**, rồi chọn theme:
-   - `hot-news`: tin nóng, drama công nghệ (scene: Headline, Flow, Quote, Checklist, Evidence, CTA).
-   - `quick-tips`: mẹo, tutorial, review tool, listicle (scene: MeoHook, MeoSearch, MeoFix, MeoSlowFast, MeoSave).
-   - `tech-explain`: dev explainer (git, code, terminal; scene: CmdHook, GitGraph, LogPanes, DocRule, CommitCTA, CodeBlock, DepGraph, Analogy, Inversions, KeyPoint). Đã duyệt.
-   - `tech-explain-cyber` (GIẢI THÍCH CYBER): dev explainer blueprint tối (scene: BpCode, BpGraph, SpecCard, BpSpec, BpReq, BpOptions, BpLayers, BpTerm, BpTree, BpTake; xem SCHEMA). Ví dụ `videos/flutter-mvvm`.
-   - `hot-news-glitch` (TIN NÓNG GLITCH): tin nóng nền tối, glitch tín hiệu vỡ (scene: GlHeadline + Flow, Quote, Checklist, Evidence, CTA của hot-news; out `signal`). Ví dụ `videos/openai-vs-apple-glitch`.
-2. **Kiểm chứng nguồn.** Mọi sự kiện, con số, trích dẫn phải có nguồn thật mà bạn đã mở và đọc. Ghi vào `sources` (tên báo + URL + ngày). **Không bịa sự kiện, số liệu, trích dẫn hay URL.** Không chắc thì bỏ, hoặc hỏi Dan.
-3. **Viết `videos/<slug>/script.json`.** Copy mẫu, giữ đúng schema:
-   - TIN NÓNG: `videos/openai-vs-apple/script.json`
-   - MẸO NHANH: `videos/android-studio-shortcuts/script.json`
-   - GIẢI THÍCH: `videos/git-merge-vs-rebase/script.json`
-   - Khoá cấp trên: `theme, title, date, caption, sources, voice, music, scenes`. Mỗi scene có `say, type, section, out, props, sfx?`. Chỉ dùng `type` và các khoá `props` đã có trong mẫu (hoặc trong `remotion/src/scenes.tsx` / `meo.tsx`).
-   - Hẹn giờ bằng `"@chữ"` (xem README), không đếm frame tay.
-   - Câu cuối có "follow Dan Tech". Outro/CTA tự lo handle **YouTube @dantech-0xff, Facebook @dantech0xff**. Không tự làm outro.
-   - Video mới **không** đặt `voice.file` (đó là giọng ghim của mẫu). Dùng `"voice": {"style": "random"}`, `"music": {"track": "random"}`.
-   - Giọng văn: tiếng Việt tự nhiên, ngắn, dễ đọc thành tiếng. Rõ ràng trước; độ dài theo nội dung.
-4. **Render:** `make video SCRIPT=videos/<slug>/script.json` (hoặc `./dt render …`). Sửa nhỏ: `./dt render <script> --from props` (bỏ qua TTS + align) hoặc `--from mix`.
-5. **Kiểm tra** (mục 4), rồi báo Dan: đường dẫn `out/<slug>.mp4`, `description.txt`, style giọng và bài nhạc đã chọn.
+Nguồn chủ đề, lịch đăng, mức tự động đăng do **người điều khiển bot** quyết định. Repo không ràng buộc chuyện đó. Repo chỉ quy định **chất lượng video**.
+
+1. **Input:** chủ đề, link, bài học hoặc ghi chú. Bài học/link là **nguồn**, không phải dàn ý.
+2. **Chọn theme** (xem bảng dưới + `write-script`). Spec không ghi theme và có người trả lời được thì đề xuất rồi chờ. Chạy tự động thì tự chọn và ghi lý do.
+3. **Viết `videos/<slug>/script.json`** theo skill `write-script`:
+   - **Một ý lõi** cho mỗi video. Ý phụ để thành video khác.
+   - **Hook trực diện:** câu đầu cảnh 1 nêu thẳng chủ đề (≤10–12 chữ, ~3 s). Tiêu đề trên màn hình cảnh 1 cũng hiện chủ đề ngay. Khai báo `topic`.
+   - **Đặt vấn đề tối đa 2 câu**, rồi vào lõi luôn. Khung: hook → khái niệm lõi → một bằng chứng/ví dụ → takeaway + CTA.
+   - **Xoay quanh chủ đề** (topic-centric), không đi theo cấu trúc nguồn.
+   - **Câu nói đầy đủ, có từ nối** (vì vậy, lúc này, nói cách khác…). Không viết kiểu ghi chú. Cắt ý, không cắt từ nối. Thuật ngữ định nghĩa ở lần đầu.
+   - **Chỉ dùng code, lệnh, đường dẫn có thật trong nguồn.** Không bịa sự kiện, số, quote, URL. `sources` ghi đủ.
+   - Pass **humanizer** (`humanizer/VI.md`), rồi chạy validator.
+4. **Validate:** `python3 scripts/validate_script.py videos/<slug>/script.json` → `✅ OK`. Không có cảnh báo hook.
+5. **Render:** `./dt render videos/<slug>/script.json` (skill `render-video`).
+6. **QC** (mục 4), sửa layout bằng `--from props` (không tốn TTS).
+7. **Giao:** `videos/<slug>/out/<slug>.mp4`, contact sheet PNG, `description.txt`, cùng báo cáo: style giọng, bài nhạc, thời lượng, LUFS/peak, median voice/music, kết quả safe zone.
+
+Ví dụ đi từ đầu đến cuối: [docs/WALKTHROUGH.md](docs/WALKTHROUGH.md).
+
+**Mẫu theo theme** (copy script mẫu, giữ đúng schema; chi tiết trong [SCHEMA.md](.agents/skills/write-script/SCHEMA.md)):
+| Theme | Dùng cho | Mẫu |
+|---|---|---|
+| `hot-news` | tin, drama (báo in sáng) | `videos/openai-vs-apple` |
+| `hot-news-glitch` | tin, drama (nền tối, glitch tín hiệu vỡ, out `signal`) | `videos/openai-vs-apple-glitch` |
+| `quick-tips` | mẹo, tool, tutorial, listicle | `videos/android-studio-shortcuts` |
+| `tech-explain` | dev explainer (editor sáng/vàng) | `videos/git-merge-vs-rebase`, `videos/inversion-of-control` |
+| `tech-explain-cyber` | dev explainer (blueprint tối, lime) | `videos/flutter-mvvm` |
+
+Script mới dùng `"voice": {"style":"random"}`. Không đặt `voice.file`. Câu cuối có "follow Dan Tech". Outro tự lo handle.
 
 ## Theme ids
 `hot-news` (TIN NÓNG · hot news), `quick-tips` (MẸO NHANH · quick tips), `tech-explain` (GIẢI THÍCH · tech explain). Id cũ `tin-nong`, `meo-nhanh`, `commit` vẫn chạy (alias, deprecated, có cảnh báo); script mới dùng id mới. Hashtag như #TinNong, #MeoNhanh giữ nguyên.
@@ -55,25 +66,49 @@ export GEMINI_API_KEY=...           # chỉ đặt trong env / .env (đã gitign
 
 ## 3. Quy tắc bắt buộc
 
-- **Không nhân vật hay khuôn mặt người AI.** Dùng infographics. B-roll (nếu có) không có người hoặc mặt người.
-- **TTS một lần cho mỗi video:** style rút ngẫu nhiên được giữ nguyên, dù video dài hay ngắn. **Không gọi lại TTS để chỉnh độ dài.** Lời đọc không đổi thì `tts.py` dùng lại audio + style đã rút từ `.cache/tts/`. Chỉ tạo giọng mới khi sửa lời, hoặc khi Dan yêu cầu (`./dt render <script> --new-voice`).
-- **Giọng:** Gemini TTS `gemini-3.8-flash-tts`, voice `vi-vn-concierge-2`. Style chọn ngẫu nhiên trong hào hứng / kể chuyện kịch tính / tự nhiên YouTuber (`tts.py` tự chọn khi `style: random`). Lựa chọn được ghi vào `logs/voice_log.md`, nên commit file log này.
-- **Nhạc TIN NÓNG:** xoay vòng 7 bài Pixabay trong `music.pool` (`track: random`, `pick_music.py` ưu tiên bài lâu chưa dùng nhất theo `logs/voice_log.md`). Không ghim một bài trừ khi Dan yêu cầu.
-- **Mix:** nhạc ~21 dB dưới giọng (mục tiêu 18–22), master -14 LUFS, true peak -2 dBTP ở loudnorm (file AAC cuối ≤ -1 dBTP). **Không sửa chuỗi xử lý** (`scripts/mix_bgm.sh`, `loudnorm.sh`, `music.rel`) trừ khi Dan yêu cầu.
-- Không sửa theme đã duyệt (`hot-news` khoá, `quick-tips` đã duyệt) nếu Dan không yêu cầu.
+- **TTS (Gemini tier 1, 100 request/ngày, key dùng chung): đúng MỘT request cho mỗi video.**
+  - Nhận style rút được. **Không re-roll** vì độ dài hay giọng.
+  - **Không gọi TTS để thử, test hay benchmark.** Test thì dùng cache, mock hoặc `voice.file` có sẵn.
+  - Cache `.cache/tts/`: lời không đổi thì không gọi API.
+  - **Lỗi TTS (401/403/429/5xx) thì dừng, không retry**, báo lại người điều khiển.
+  - Giọng mới chỉ khi `say` đổi, hoặc khi có yêu cầu rõ (`--new-voice`).
+- **Giọng:** `gemini-3.8-flash-tts`, voice `vi-vn-concierge-2`, style ngẫu nhiên từ `voice.styles`, ghi vào `logs/voice_log.md` (commit file này).
+- **Nhạc:** `track: random` nghĩa là LRU theo pool của theme (`pick_music.py`). Có thể ghim bài bằng id trong `music.track` để re-render không đổi nhạc (vd. flutter-mvvm ghim `sappheiros-perspective`). Explainer nên dùng nhạc êm, tin nóng dùng nhạc căng.
+  - **Content ID (YouTube):** bài Pixabay có thể bị claim. `description.txt` có cảnh báo/credit. Bài Commons CC BY bắt buộc credit. Không dùng nhạc ngoài `assets/music/LIBRARY.md`.
+- **Mix:** -14 LUFS, true peak -2 dBTP (AAC cuối ≤ -1), giọng cao hơn nhạc ~21 dB (18–22). Không sửa chuỗi mix nếu không được yêu cầu.
+- **Caption:** karaoke phân trang (mọi theme). Hết câu thì xoá trang, hiện trọn câu mới, highlight từng chữ. Tối đa 2 dòng. Câu dài cắt ở dấu phẩy/ranh giới tự nhiên. Font lấy từ `theme.json → look.caption`. Không sửa thành chạy cuộn.
+- **Safe zone bắt buộc:** hằng số ở `remotion/src/safezone.ts`. Nội dung x 136–860, y 290–~1360. Caption y 1366–1500. Follow y 1150–1350. Trên y 250 chỉ để brand. Kiểm bằng `scripts/safezone.py`.
+- **Trên màn hình:** không tên theme, không meta label, không nhãn kỹ thuật giả (FIG./SHEET/§/"END OF SHEET"…). Brand "Dan Tech" thì giữ. **Không người, mặt người AI.** B-roll faceless.
+- **Outro/CTA:** có cả hai handle **YouTube @dantech-0xff** và **Facebook @dantech0xff**. Nút Follow do code lo.
+- Không sửa theme đã duyệt nếu không được yêu cầu. Theme mới/sửa theme: làm theo skill `theme`.
 
-## 4. Checklist trước khi xuất
+## 4. QC: Definition of done / quality bar
 
-- [ ] Ghi lại thời lượng (thông tin, không phải tiêu chí sửa): `ffprobe -v error -show_entries format=duration -of csv=p=0 videos/<slug>/out/<slug>.mp4`
-- [ ] Log render có `voice/music while speaking: median ~21 dB` (18–22), từ `scripts/measure_vm.py`.
-- [ ] Loudness: dòng `mix:` in I ≈ -14 LUFS, Peak ≤ -1 dBTP. Kiểm lại: `ffmpeg -i out/<slug>.mp4 -af ebur128=peak=true -f null - 2>&1 | tail -12`
-- [ ] Phụ đề khớp giọng; keycap, popup, SFX bật đúng chữ. Xem vài frame hoặc cả video (`scripts/compare.sh` nếu cần so sánh).
-- [ ] `description.txt` có nguồn, và có **credit cho nhạc CC BY (Wikimedia Commons)**. Bài Pixabay 4–7 có cảnh báo Content ID.
-- [ ] Không có mặt người trong hình.
+Video chỉ "xong" khi tất cả đều ✅:
+- [ ] Validator `✅ OK`. Câu đầu nêu chủ đề. Trong frame 0–3 s thấy tiêu đề chủ đề.
+- [ ] Đúng 1 lần gọi TTS (hoặc 0 nếu dùng cache). Style đã ghi log.
+- [ ] Log mix: I ≈ -14 LUFS, peak ≤ -1 dBTP, `voice/music while speaking: median` 18–22 dB. Đo lại: `ffmpeg -i <mp4> -af ebur128=peak=true -f null - 2>&1 | tail -12`.
+- [ ] **Contact sheet:** mỗi cảnh một still + outro, vd. `ffmpeg -i <mp4> -vf "fps=1/3,scale=270:-1,tile=6x2" -frames:v 1 sheet.png`. Phải mở ra xem bằng mắt.
+- [ ] **Frame inspection:** still ở 0.5 s, giữa mỗi cảnh, lúc bấm Follow, end card (`ffmpeg -ss <t> -i <mp4> -frames:v 1 f.png`). Chữ không tràn, không chồng, baseline top bar thẳng, code đọc được.
+- [ ] **Safe zone:** `python3 scripts/safezone.py f*.png -o qc/` + `--sheet`. Chữ, caption, nút, handle không nằm trong vùng đỏ. Nền, lưới, rail trang trí thì bỏ qua.
+- [ ] Caption khớp giọng, mỗi trang ≤ 2 dòng. Anchor `@chữ` bật đúng lúc.
+- [ ] Không mặt người, không tên theme, không label giả. End card có 2 handle.
+- [ ] `description.txt` có nguồn + credit nhạc. Không có số liệu nào thiếu nguồn.
+- [ ] Thời lượng chỉ ghi lại để báo, **không** là lý do render lại hay gọi lại TTS.
 
-## 5. Không được làm
+## Common mistakes (đã gặp thật)
+- Mở bằng câu dẫn dắt vòng vo. Đặt vấn đề 4 cảnh trong khi lõi chỉ nửa video. Kể lại mọi ví dụ trong bài học.
+- Viết kiểu ghi chú, thiếu từ nối, thuật ngữ không định nghĩa (ioc_v1 bị chê "thiếu chữ").
+- Đi theo thứ tự bài học thay vì theo chủ đề. Bịa code minh hoạ không có trong nguồn.
+- Gọi lại TTS cho vừa độ dài, hoặc "test thử" TTS, làm hết quota ngày. Retry khi 429.
+- In tên theme, "tech explain", "FIG. 01"… lên khung hình.
+- Để chữ, caption hay nút Follow dưới y 1500 hoặc sát mép phải (bị nút like/comment che).
+- Caption chạy cuộn liên tục, hoặc rớt 3 dòng.
+- Đổi nhạc giữa các lần re-render vì quên ghim `music.track`.
+- Commit `videos/*/out/`, nhạc mp3, `.env`. Commit sai identity.
 
-- Không commit nhạc (`assets/music/**/*.mp3`), output (`videos/*/out/`), `.env`, hay API key.
-- Không in `GEMINI_API_KEY` ra log hay chat.
-- Không bịa nguồn. Không dùng nhạc hay SFX ngoài thư viện có licence (`assets/music/LIBRARY.md`, `assets/sfx/SFX_LIST.md`).
-- Không force-push `main`.
+## 5. Git & không được làm
+
+- Commit với identity của repo: `git -c user.name="Dan Tech" -c user.email="dantech0xff@users.noreply.github.com" commit …` (nếu máy chưa cấu hình). Push lên `main` (hoặc branch `theme/<id>` cho theme mới, merge thường). **Không force-push `main`.**
+- Commit: `videos/<slug>/script.json`, `logs/voice_log.md`, code/theme/docs. **Không commit** `videos/*/out/`, `.cache/`, nhạc `assets/music/**/*.mp3`, `.env`, API key.
+- Không in `GEMINI_API_KEY` ra log hay chat. Không bịa nguồn. Không dùng nhạc/SFX ngoài thư viện có licence (`assets/music/LIBRARY.md`, `assets/sfx/SFX_LIST.md`).

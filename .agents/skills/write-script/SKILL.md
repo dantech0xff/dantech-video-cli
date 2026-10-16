@@ -20,7 +20,8 @@ description: Viết videos/<slug>/script.json cho video Dan Tech từ một spec
    - tech-explain-cyber: `videos/flutter-mvvm/script.json`
    Schema đầy đủ và props từng scene: [SCHEMA.md](SCHEMA.md). Bản khởi đầu: [template.json](template.json).
 4. **Viết `say` từng cảnh** (tiếng Việt nói, câu ngắn):
-   - **Hook trong 2 giây đầu:** cảnh 1 mở bằng xung đột, con số hoặc câu hỏi ("Vẫn click chuột lục menu…?", "OpenAI vừa xuống nước…").
+   - **Hook trực diện:** câu đầu cảnh 1 nêu thẳng chủ đề trong ~3 s (xem mục "Hook trực diện"), có thể kèm xung đột/con số. Đặt vấn đề tối đa 2 câu. Một ý lõi.
+   - Câu nói đầy đủ, có từ nối. Code/lệnh chỉ lấy từ nguồn.
    - Độ dài: **rõ ràng trước, độ dài theo nội dung.** Không có mục tiêu thời lượng. Chỉ bỏ câu thừa, lặp hoặc lạc đề. `validate_script.py` in ước lượng thời lượng theo từng style giọng, chỉ để biết.
    - Câu cuối phải có **"follow Dan Tech"** (nút Follow bật ở "follow", bấm ở "Dan"). Handle do outro lo, không viết vào props.
    - Số và tên riêng viết sao cho TTS đọc đúng.

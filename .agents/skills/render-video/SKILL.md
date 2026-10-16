@@ -25,14 +25,16 @@ description: Render một videos/<slug>/script.json thành MP4 hoàn chỉnh (TT
    - Thời lượng: `ffprobe -v error -show_entries format=duration -of csv=p=0 videos/<slug>/out/<slug>.mp4` (thông tin để báo Dan; không render lại vì độ dài).
    - Mix: log có `voice/music while speaking: median ~21 dB` (chấp nhận 18–22).
    - Loudness: dòng `mix:` có I ≈ -14 LUFS, Peak ≤ -1 dBTP. Đo lại: `ffmpeg -i <mp4> -af ebur128=peak=true -f null - 2>&1 | tail -12`.
+   - Contact sheet: `ffmpeg -i <mp4> -vf "fps=1/3,scale=270:-1,tile=6x2" -frames:v 1 <slug>_sheet.png`, mở ra xem.
    - Frame check: trích vài still, ví dụ `ffmpeg -ss 1 -i <mp4> -frames:v 1 /tmp/f1.png` (1 s, giữa mỗi cảnh, outro). Xem: không có mặt người, chữ không tràn, Follow/end card có handle YouTube @dantech-0xff, Facebook @dantech0xff.
    - Phụ đề và anchor khớp giọng: xem video, hoặc so `words.json` với still tại các mốc `@chữ`.
    - So với bản đã duyệt nếu cần: `scripts/compare.sh <new.mp4> <ref.mp4> sheet.png <frame> …`.
    - `description.txt` có nguồn và credit CC BY (nhạc Commons); bài Pixabay 4–7 có cảnh báo Content ID.
-5. **Báo Dan:** đường dẫn mp4 + description, style giọng + bài nhạc (dòng mới trong `logs/voice_log.md`), số đo QC. Commit `logs/voice_log.md` (không commit `out/`, nhạc, key).
+5. **Giao:** mp4 + `<slug>_sheet.png` + `description.txt`. Definition of done ở `AGENTS.md` mục 4.
+6. **Báo Dan:** đường dẫn mp4 + description, style giọng + bài nhạc (dòng mới trong `logs/voice_log.md`), số đo QC. Commit `logs/voice_log.md` (không commit `out/`, nhạc, key).
 
 ## Giọng đọc: một lần cho mỗi video
-Style rút ngẫu nhiên lần đầu được giữ nguyên. **Không bao giờ gọi lại TTS (hay `--new-voice`) để video dài/ngắn hơn.** Chạy lại từ `tts` với lời không đổi sẽ dùng lại cache. Chỉ dùng `--new-voice` khi Dan yêu cầu rõ.
+**Đúng một request TTS cho mỗi video. Không gọi TTS để test hay benchmark. Lỗi thì dừng, không retry.** Style rút ngẫu nhiên lần đầu được giữ nguyên. **Không bao giờ gọi lại TTS (hay `--new-voice`) để video dài/ngắn hơn.** Chạy lại từ `tts` với lời không đổi sẽ dùng lại cache. Chỉ dùng `--new-voice` khi Dan yêu cầu rõ.
 
 ## Chạy lại một phần (`--from`)
 - Sửa props/sfx/section (không đổi `say`): `./dt render <script> --from props`
@@ -46,7 +48,7 @@ Style rút ngẫu nhiên lần đầu được giữ nguyên. **Không bao giờ
 | `words.json does not match the script; re-run align` | đã sửa `say` sau align → chạy lại từ `tts` (hoặc `--from align` nếu dùng voice.file) |
 | `anchor @x: word not found in this scene` | chữ trong anchor không có trong `say` của cảnh, hoặc whisper nghe khác → đổi anchor sang chữ khác/`#n` |
 | `Unknown scene type` | sai `type`, xem `SCENES` trong `remotion/src/Video.tsx` |
-| Lỗi TTS 401/403/429 | kiểm `GEMINI_API_KEY`, billing/quota; thử lại sau |
+| Lỗi TTS 401/403/429/5xx | **dừng, không retry** (quota 100 req/ngày dùng chung). Báo lại người điều khiển, kiểm `GEMINI_API_KEY`/quota |
 | `music file not found` / mix lỗi | thiếu mp3: `./dt fetch-music` hoặc tải tay Pixabay vào `assets/music/pixabay/` |
 | Nhạc lấn giọng | **không sửa chuỗi mix**; báo Dan số đo median, chỉ đổi `music.rel` khi Dan đồng ý |
 

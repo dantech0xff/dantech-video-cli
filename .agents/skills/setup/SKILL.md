@@ -50,3 +50,5 @@ Vào https://pixabay.com/music/, tìm theo số id, tải MP3, đổi tên **đ�
 
 ## 6. Vòng sửa lỗi
 Chạy `./dt doctor`. Với mỗi ❌, làm theo gợi ý `→` rồi chạy lại, đến khi in `Tất cả OK.`. Cuối cùng thử nhanh: `python3 scripts/validate_script.py videos/openai-vs-apple/script.json`. Báo Dan những gì đã cài và những gì Dan cần tự làm (key, nhạc Pixabay).
+
+**Không gọi TTS để kiểm tra setup.** `./dt doctor` chỉ kiểm key có tồn tại. Quota Gemini là 100 request/ngày, key dùng chung, nên mỗi video chỉ được đúng 1 request.

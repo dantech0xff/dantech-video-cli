@@ -47,3 +47,10 @@ Khung 1080x1920 bị UI TikTok / Reels / Shorts / Facebook Reels che. Hằng s�
 - End card: chữ/handle canh trái, mép phải ≤ 860, không có footer dưới y 1480.
 - Trên y 250 chỉ để brand/trang trí (top bar, số trang); dải rail/trang trí ở mép trái/phải được phép.
 - **Trước khi coi theme là xong:** render still các khung chính (headline, cảnh nhiều nội dung, caption, nút follow, end card), chạy `python3 scripts/safezone.py <png>... -o <dir>` và `--sheet`, nhìn bằng mắt: không có chữ / nút quan trọng trong vùng đỏ. % "busy" do nền / lưới / rail trang trí thì bỏ qua.
+
+## Quality bar cho theme (bài học đã gặp)
+- Accent đậm, bão hoà, chỉ một accent. Nền tối dùng xám trung tính `#1C1C1C` (đỡ mỏi mắt). Không neon tím/hồng, không hologram, không bloom nặng.
+- Không in tên theme, meta label, nhãn kỹ thuật giả (FIG./SHEET/§). Brand "Dan Tech" đậm (ExtraBold).
+- Top bar: wordmark và số trang thẳng **baseline** (`align-items: baseline`), không căn giữa. Kiểm bằng crop phóng to.
+- Glitch/hiệu ứng chỉ ở beat hoặc chuyển cảnh, không chạy liên tục. Chuyển cảnh mượt.
+- Theme mới làm trên branch `theme/<id>`, stills trước, video sau, merge thường khi đã duyệt.
