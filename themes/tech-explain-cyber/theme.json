@@ -5,8 +5,8 @@
   "subtitle": "tech explain · blueprint",
   "bg": "#1C1C1C",
   "ink": "#E6E6E6",
-  "onAccent": "#0E1416",
-  "accent": "#5CD6E8",
+  "onAccent": "#111111",
+  "accent": "#B6FF3B",
   "accent2": "#B4B4B4",
   "muted": "#4A4A4A",
   "head": "BVPM",
@@ -83,10 +83,6 @@
    "accent": "#FF2E88",
    "onAccent": "#FFFFFF"
   },
-  "lime": {
-   "accent": "#B6FF3B",
-   "onAccent": "#111111"
-  },
   "amber": {
    "accent": "#FF8A00",
    "onAccent": "#111111"
@@ -95,6 +91,10 @@
    "accent": "#2F7BFF",
    "onAccent": "#FFFFFF",
    "accent3": "#FFB020"
+  },
+  "cyan": {
+   "accent": "#5CD6E8",
+   "onAccent": "#04131A"
   }
  },
  "experimental": true

@@ -9,16 +9,16 @@ const lbl=(size=22,c=BP.dim):React.CSSProperties=>({fontFamily:MONO,fontSize:siz
 /* fig label + refined sans heading */
 const Fig:React.FC<{n:string;cap:string;title:string;at?:number}>=({n,cap,title,at=0})=>{const {f,t}=useS();const A=(t as any).accent as string,A2=((t as any).accent3||A) as string,ON=(t as any).onAccent as string;const p=pr(f,at,20);
  return <div style={{marginBottom:40,opacity:p,transform:`translateY(${(1-p)*16}px)`}}>
-  <div style={{...lbl(22,A),display:'flex',gap:16,alignItems:'center'}}><span>FIG. {n}</span><span style={{width:60,height:1,background:A,opacity:.6}}/><span style={{color:BP.dim}}>{cap}</span></div>
+  <div style={{...lbl(22,A),display:'flex',gap:16,alignItems:'center'}}><span style={{width:40,height:2,background:A}}/><span>{cap}</span></div>
   <div style={{fontFamily:SANS,fontSize:68,lineHeight:1.12,color:BP.ink,marginTop:16,letterSpacing:-1}}>{title}</div></div>};
 /* frame with corner ticks */
-const Frame:React.FC<{children:React.ReactNode;style?:React.CSSProperties;p?:number;tag?:string}>=({children,style,p=1,tag})=>{const T=18;const c=(s:React.CSSProperties)=><div style={{position:'absolute',width:T,height:T,borderColor:A,borderStyle:'solid',borderWidth:0,...s}}/>;
+const Frame:React.FC<{children:React.ReactNode;style?:React.CSSProperties;p?:number;tag?:string}>=({children,style,p=1,tag})=>{const A=(useS().t as any).accent as string;const T=18;const c=(s:React.CSSProperties)=><div style={{position:'absolute',width:T,height:T,borderColor:A,borderStyle:'solid',borderWidth:0,...s}}/>;
  return <div style={{position:'relative',border:`1.5px solid ${BP.hair}`,background:'rgba(36,36,36,0.72)',clipPath:`inset(0 ${(1-p)*100}% 0 0)`,...style}}>
   {c({left:-2,top:-2,borderLeftWidth:2,borderTopWidth:2})}{c({right:-2,top:-2,borderRightWidth:2,borderTopWidth:2})}{c({left:-2,bottom:-2,borderLeftWidth:2,borderBottomWidth:2})}{c({right:-2,bottom:-2,borderRightWidth:2,borderBottomWidth:2})}
   {tag&&<div style={{position:'absolute',top:-13,left:24,background:BP.bg,padding:'0 10px',...lbl(20)}}>{tag}</div>}{children}</div>};
 /* kotlin highlight, restrained: keywords cyan, everything else ink/dim */
 const KW=/^(val|var|fun|class|private|by|object|return|this@\w+)$/;
-const kt=(line:string)=>line.trimStart().startsWith('//')?[<span key={0} style={{color:BP.dim,fontStyle:'italic'}}>{line}</span>]:line.split(/(\s+|[(){}<>,:=.]|"[^"]*")/).filter(x=>x!=='').map((w,k)=><span key={k} style={{color:KW.test(w)?A:/^[(){}<>,:=.]$/.test(w)?BP.dim:/^[A-Z]/.test(w)?'#FFFFFF':BP.ink}}>{w}</span>);
+const kt=(line:string,A:string)=>line.trimStart().startsWith('//')?[<span key={0} style={{color:BP.dim,fontStyle:'italic'}}>{line}</span>]:line.split(/(\s+|[(){}<>,:=.]|"[^"]*")/).filter(x=>x!=='').map((w,k)=><span key={k} style={{color:KW.test(w)?A:/^[(){}<>,:=.]$/.test(w)?BP.dim:/^[A-Z]/.test(w)?'#FFFFFF':BP.ink}}>{w}</span>);
 
 /* 1. code with line numbers, a dimension bracket over a line range, and a callout */
 export const BpCode:React.FC<{n:string;cap:string;title:string;file:string;lines:{s:string;at:number}[];dim?:{from:number;to:number;label:string;sub?:string;at:number};callout?:{line:number;text:string;at:number};note?:{s:string;at:number}}>=({n,cap,title,file,lines,dim,callout,note})=>{const {f,t}=useS();const A=(t as any).accent as string,A2=((t as any).accent3||A) as string,ON=(t as any).onAccent as string;
@@ -28,7 +28,7 @@ export const BpCode:React.FC<{n:string;cap:string;title:string;file:string;lines
    {lines.map((l,k)=>{const p=pr(f,l.at,14);const shown=l.s.slice(0,Math.floor(l.s.length*p));
     return <div key={k} style={{display:'flex',height:LH,alignItems:'center',fontFamily:MONO,fontSize:FS,whiteSpace:'pre'}}>
      <span style={{width:70,textAlign:'right',paddingRight:22,color:p>0?BP.dim:'#4A4A4A',fontSize:24}}>{String(k+1).padStart(2,'0')}</span>
-     <span style={{borderLeft:`1px solid ${BP.line}`,paddingLeft:22,height:'100%',display:'flex',alignItems:'center'}}>{kt(shown)}</span></div>})}
+     <span style={{borderLeft:`1px solid ${BP.line}`,paddingLeft:22,height:'100%',display:'flex',alignItems:'center'}}>{kt(shown,A)}</span></div>})}
    {dim&&(()=>{const p=pr(f,dim.at,26);const y1=TOP-44+dim.from*LH+10,y2=TOP-44+(dim.to+1)*LH-10,x=640;
     return <svg style={{position:'absolute',left:0,top:0,overflow:'visible'}} width={894} height={y2+40}>
      <path d={`M${x-18} ${y1} H${x} V${y2} H${x-18}`} fill="none" stroke={A} strokeWidth={2} pathLength={1} strokeDasharray={1} strokeDashoffset={1-p}/>
@@ -64,7 +64,7 @@ export const BpGraph:React.FC<{n:string;cap:string;title:string;deps:string[];ro
    {boxes.map((b,k)=><g key={k}>{rect(b.x,b.y,bw,bh,at+8+k*5)}{txt(b.x+bw/2,b.y+bh/2+11,b.d,at+20+k*5)}</g>)}
    {paths.map((p,k)=><g key={'p'+k}>{draw(poly(p),at+30+k*4,30)}</g>)}
    {rect(RX,RY,RW,RH,at+40,A,2.5)}<rect x={RX} y={RY} width={RW} height={RH} fill={A} opacity={pr(f,at+46,20)}/>{txt(W/2,RY+RH/2+13,root,at+50,{fontSize:38,fill:ON,fontWeight:700})}
-   <g opacity={pr(f,at+50,18)}><path d={`M${RX-14} ${RY} V${RY+RH} M${RX-20} ${RY} H${RX-8} M${RX-20} ${RY+RH} H${RX-8}`} stroke={BP.dim} strokeWidth={1}/><text x={RX-34} y={RY+RH/2-6} textAnchor="end" style={{fontFamily:MONO,fontSize:20,letterSpacing:3,fill:BP.dim}}>OBJECT</text><text x={RX-34} y={RY+RH/2+26} textAnchor="end" style={{fontFamily:MONO,fontSize:22,letterSpacing:3,fill:A2}}>8 THAM SỐ</text></g>
+   <g opacity={pr(f,at+50,18)}><path d={`M${RX-14} ${RY} V${RY+RH} M${RX-20} ${RY} H${RX-8} M${RX-20} ${RY+RH} H${RX-8}`} stroke={BP.dim} strokeWidth={1}/><text x={RX-34} y={RY+RH/2-6} textAnchor="end" style={{fontFamily:MONO,fontSize:20,letterSpacing:3,fill:BP.dim}}>OBJECT</text><text x={RX-34} y={RY+RH/2+26} textAnchor="end" style={{fontFamily:MONO,fontSize:22,letterSpacing:3,fill:BP.ink}}>8 THAM SỐ</text></g>
    {draw(poly(out),at+56,22,A,2)}
    <g opacity={pr(f,at+64,16)}><rect x={W/2+18} y={(RY+RH+CY)/2-22} width={call.length*19+24} height={40} fill={A2} stroke={A2} strokeWidth={1}/><text x={W/2+30} y={(RY+RH+CY)/2+7} style={{fontFamily:MONO,fontSize:28,fill:ON,fontWeight:700}}>{call}</text></g>
    {rect(CX,CY,CW,CH,at+60)}{txt(W/2,CY+CH/2+11,consumer,at+70)}
@@ -80,7 +80,7 @@ export const BpGraph:React.FC<{n:string;cap:string;title:string;deps:string[];ro
 /* 3. HUD spec card: from (struck, dim) -> to (cyan) */
 export const SpecCard:React.FC<{n:string;cap:string;title:string;head:string;rows:{k:string;from:string;to:string;at:number}[];foot?:string}>=({n,cap,title,head,rows,foot})=>{const {f,t}=useS();const A=(t as any).accent as string,A2=((t as any).accent3||A) as string,ON=(t as any).onAccent as string;const fp=pr(f,0,26);
  return <div><Fig n={n} cap={cap} title={title}/>
-  <Frame p={fp}><div style={{display:'flex',justifyContent:'space-between',padding:'20px 30px',borderBottom:`1px solid ${BP.line}`,...lbl(20)}}><span style={{color:A}}>{head}</span><span>REV 02</span></div>
+  <Frame p={fp}><div style={{display:'flex',justifyContent:'space-between',padding:'20px 30px',borderBottom:`1px solid ${BP.line}`,...lbl(20)}}><span style={{color:A}}>{head}</span></div>
    {rows.map((r,k)=>{const p=pr(f,r.at,22),s=pr(f,r.at+12,18),q=pr(f,r.at+22,20);return <div key={k} style={{padding:'44px 30px 48px',borderBottom:k<rows.length-1?`1px solid ${BP.line}`:'none',opacity:p}}>
     <div style={{display:'flex',alignItems:'baseline',gap:20}}><span style={{fontFamily:SANS,fontSize:54,color:A,width:80}}>{String(k+1).padStart(2,'0')}</span><span style={{fontFamily:SANS,fontSize:50,color:BP.ink}}>{r.k}</span></div>
     <div style={{display:'flex',alignItems:'center',gap:22,marginTop:24,marginLeft:100}}>
@@ -96,10 +96,10 @@ export const BpChrome:React.FC<{section:string;page:string}>=({section,page})=>{
  <AbsoluteFill style={{background:'radial-gradient(120% 80% at 50% 35%, transparent 55%, rgba(10,10,10,.55) 100%)'}}/>
  <div style={{position:'absolute',left:40,right:40,top:40,bottom:40,border:`1px solid ${BP.line}`}}/>
  <div style={{position:'absolute',left:136,right:50,top:86,display:'flex',justifyContent:'space-between',alignItems:'flex-end',paddingBottom:22,borderBottom:`1px solid ${BP.hair}`}}>
-  <div><div style={{fontFamily:'BVPX',fontSize:46,color:BP.ink,letterSpacing:1.5}}>DAN TECH</div><div style={{...lbl(19,A),marginTop:6}}>{t.label} · {t.subtitle}</div></div>
-  <div style={{textAlign:'right',...lbl(19)}}><div>SHEET</div><div style={{fontFamily:SANS,fontSize:40,color:BP.ink,letterSpacing:0,marginTop:4}}>{page}</div></div></div>
- <div style={{position:'absolute',left:136,right:50,top:222,...lbl(19),display:'flex',gap:14}}><span style={{color:A}}>§</span>{section}</div>
- <div style={{position:'absolute',left:64,top:300,bottom:330,width:30}}>{Array.from({length:27},(_,k)=><div key={k} style={{position:'absolute',top:k*48,right:0,width:k%5===0?22:10,height:1,background:k%5===0?BP.dim:BP.hair}}>{k%5===0&&<span style={{position:'absolute',right:28,top:-9,fontFamily:MONO,fontSize:14,color:BP.dim}}>{k*48}</span>}</div>)}</div></>};
+  <div><div style={{fontFamily:'BVPX',fontSize:46,color:BP.ink,letterSpacing:1.5}}>DAN TECH</div></div>
+  <div style={{fontFamily:MONO,fontSize:26,color:BP.dim}}>{page}</div></div>
+ 
+ <div style={{position:'absolute',left:64,top:300,bottom:330,width:30}}>{Array.from({length:27},(_,k)=><div key={k} style={{position:'absolute',top:k*48,right:0,width:k%5===0?22:10,height:1,background:k%5===0?BP.dim:BP.hair}}></div>)}</div></>};
 
 /* end card */
 export const BpEndCard:React.FC<{A?:string;dur?:number;handles?:{p:string;h:string}[];tagline?:string}>=({A='#5CD6E8',dur=75,handles=[{p:'YOUTUBE',h:'@dantech-0xff'},{p:'FACEBOOK',h:'@dantech0xff'}],tagline=''})=>{const f=useCurrentFrame();const p=(a:number,d=24)=>interpolate(f,[a,a+d],[0,1],{...cl,easing:EO});const out=interpolate(f,[dur-10,dur],[1,0],cl);
@@ -107,12 +107,12 @@ export const BpEndCard:React.FC<{A?:string;dur?:number;handles?:{p:string;h:stri
   <AbsoluteFill style={{backgroundImage:`linear-gradient(${BP.grid} 1px,transparent 1px),linear-gradient(90deg,${BP.grid} 1px,transparent 1px)`,backgroundSize:'24px 24px'}}/>
   <div style={{position:'absolute',left:40,right:40,top:40,bottom:40,border:`1px solid ${BP.line}`}}/>
   <div style={{position:'absolute',left:136,right:110,top:640}}>
-   <div style={{...lbl(22,A),opacity:p(4)}}>END OF SHEET</div>
+   
    <svg width={834} height={8} style={{marginTop:22}}><path d="M0 4 H834" stroke={A} strokeWidth={2} pathLength={1} strokeDasharray={1} strokeDashoffset={1-p(6,30)}/></svg>
    <div style={{fontFamily:'BVPX',fontSize:150,color:BP.ink,lineHeight:1.12,marginTop:30,letterSpacing:-3,opacity:p(10),transform:`translateY(${(1-p(10))*20}px)`}}>Dan Tech</div>
    <div style={{fontFamily:SANS,fontSize:46,color:BP.dim,marginTop:18,opacity:p(16)}}>{tagline}</div>
    <div style={{marginTop:70,display:'flex',flexDirection:'column',gap:0}}>{handles.map((h,k)=><div key={k} style={{display:'flex',justifyContent:'space-between',alignItems:'baseline',padding:'24px 0',borderTop:`1px solid ${BP.hair}`,borderBottom:k===handles.length-1?`1px solid ${BP.hair}`:'none',opacity:p(22+k*5)}}>
     <span style={lbl(22)}>{h.p}</span><span style={{fontFamily:MONO,fontSize:50,color:k===0?A:BP.ink}}>{h.h}</span></div>)}</div>
   </div>
-  <div style={{position:'absolute',left:136,right:110,bottom:110,display:'flex',justifyContent:'space-between',...lbl(18)}}><span>GIẢI THÍCH CYBER</span><span>DAN TECH · 2026</span></div>
+  <div style={{position:'absolute',left:136,right:110,bottom:110,display:'flex',justifyContent:'space-between',...lbl(18)}}><span>DAN TECH · 2026</span></div>
  </AbsoluteFill>};
