@@ -14,7 +14,7 @@ export const FollowCTA:React.FC<{t:Theme;inAt:number;pressAt:number;outAt:number
  const cOp=interpolate(f,[inAt+4,inAt+8,pressAt+14,pressAt+22],[0,1,1,0],cl);
  const wig=f>=pressAt+3?Math.sin((f-pressAt-3)*1.3)*22*Math.exp(-(f-pressAt-3)/9):0;
  const flip=interpolate(f,[pressAt,pressAt+4],[0,1],cl);
- const isCy=t.id==='tech-explain-cyber';
+ const isCy=t.id==='tech-explain-cyber'||t.id==='hot-news-glitch';
  if(isCy)return <AbsoluteFill style={{zIndex:30,pointerEvents:'none'}}>
   <div style={{position:'absolute',left:136,right:50,top,transform:`translateY(${(1-pin)*30-ex*40}px) scale(${1-0.02*dn})`,opacity:pin*(1-ex)}}>
    <div style={{display:'flex',border:`1.5px solid ${pressed?t.accent:'#4A4A4A'}`,background:'#222222',height:150,overflow:'hidden'}}>

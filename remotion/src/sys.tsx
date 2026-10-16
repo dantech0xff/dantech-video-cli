@@ -25,7 +25,7 @@ export const Media:React.FC<{src:string;h:number;pos?:string;label?:string}>=({s
  {t.video==='halftone'&&<><AbsoluteFill style={{backgroundImage:`radial-gradient(circle, transparent 2.2px, ${t.bg} 4.6px)`,backgroundSize:'11px 11px',mixBlendMode:'lighten',opacity:.5}}/><AbsoluteFill style={{background:t.bg,mixBlendMode:'multiply'}}/></>}
  {label&&<div style={{position:'absolute',bottom:0,left:0,background:t.ink,color:t.bg,...Bd(t,24,t.bg),padding:'4px 12px'}}>{label}</div>}</div>};
 export const AccentBar:React.FC<{children:React.ReactNode;size:number}>=({children,size})=>{const {t}=useS();return <span style={{...H(t,size,t.onAccent),background:t.accent,padding:t.head==='Anton'?'6px 22px 0':'4px 22px',display:'inline-block',whiteSpace:'nowrap',borderRadius:t.id==='quick-tips'?18:0}}>{children}</span>};
-export const Kicker:React.FC<{n:string;txt:string}>=({n,txt})=>{const {t}=useS();return <It i={0}><div style={{display:'flex',alignItems:'center',gap:16,borderBottom:`3px solid ${t.rule}`,paddingBottom:10,marginBottom:26}}><span style={{...H(t,38,t.bg),background:t.ink,padding:'4px 14px',borderRadius:t.id==='quick-tips'?10:0}}>{n}</span><span style={{...Bd(t,32),letterSpacing:2}}>{t.id==='tech-explain'?'// ':''}{txt}</span></div></It>};
+export const Kicker:React.FC<{n:string;txt:string}>=({n,txt})=>{const {t}=useS();if(t.id==='hot-news-glitch')return <It i={0}><div style={{display:'flex',alignItems:'center',gap:16,marginBottom:30}}><span style={{width:14,height:14,background:t.accent}}/><span style={{fontFamily:'BVPX',fontSize:30,letterSpacing:3,color:'#BDBDBD'}}>{txt}</span></div></It>;return <It i={0}><div style={{display:'flex',alignItems:'center',gap:16,borderBottom:`3px solid ${t.rule}`,paddingBottom:10,marginBottom:26}}><span style={{...H(t,38,t.bg),background:t.ink,padding:'4px 14px',borderRadius:t.id==='quick-tips'?10:0}}>{n}</span><span style={{...Bd(t,32),letterSpacing:2}}>{t.id==='tech-explain'?'// ':''}{txt}</span></div></It>};
 export const Stamp:React.FC<{at:number;text:string;sub?:string;style?:React.CSSProperties}>=({at,text,sub,style})=>{const {t,f,exit}=useS();if(f<at)return null;const p=interpolate(f-at,[0,6],[0,1],{...cl,easing:EO});
  return <div style={{position:'absolute',border:`8px solid ${t.stamp??t.accent}`,outline:`3px solid ${t.stamp??t.accent}`,outlineOffset:6,padding:'10px 26px 4px',color:t.stamp??t.accent,transform:`rotate(-10deg) scale(${1.8-0.8*p})`,opacity:p*(1-exit),mixBlendMode:t.id==='hot-news'?'multiply':'normal',textAlign:'center',borderRadius:t.id==='quick-tips'?20:0,...style}}>
  <div style={{...H(t,80,t.stamp??t.accent)}}>{text}</div>{sub&&<div style={{...Bd(t,24,t.stamp??t.accent),letterSpacing:3}}>{sub}</div>}</div>};
@@ -42,12 +42,18 @@ export const TermChrome:React.FC<{section:string;page:string;idx:number}>=({sect
   <div style={{fontFamily:'JBM',fontWeight:700,fontSize:32,color:t.onAccent}}>main ▸ {page}</div></div>
  <div style={{position:'absolute',left:0,top:110,bottom:0,width:96,borderRight:`3px solid ${t.rule}`}}>{Array.from({length:23},(_,k)=><div key={k} style={{position:'absolute',right:18,top:44+k*66,fontFamily:'JBM',fontSize:26,color:k===idx*3+3?t.accent:t.muted}}>{k+1}</div>)}</div>
  <div style={{position:'absolute',left:136,right:50,top:150,fontFamily:'JBM',fontSize:32,color:t.muted,borderBottom:`3px solid ${t.rule}`,paddingBottom:18,whiteSpace:'nowrap',overflow:'hidden'}}><span style={{color:t.accent2}}>~/commit</span> <span style={{color:t.ink}}>❯</span> {section}</div></>};
-export const Captions:React.FC<{words:{t:string;s:number;e:number}[]}>=({words})=>{const {t}=useS();if(t.id==='tech-explain-cyber')return <CyberCaptions words={words}/>;const f=useCurrentFrame();const tm=f/30;const i=words.findIndex(w=>tm<w.e+0.05);if(i<0||tm<words[i].s-0.3)return null;const g=Math.floor(i/3)*3;
+export const Captions:React.FC<{words:{t:string;s:number;e:number}[]}>=({words})=>{const {t}=useS();if(t.id==='tech-explain-cyber'||t.id==='hot-news-glitch')return <CyberCaptions words={words}/>;const f=useCurrentFrame();const tm=f/30;const i=words.findIndex(w=>tm<w.e+0.05);if(i<0||tm<words[i].s-0.3)return null;const g=Math.floor(i/3)*3;
  return <div style={{position:'absolute',left:136,right:50,top:1640,display:'flex',gap:12,flexWrap:'wrap'}}>{words.slice(g,g+3).map((w,k)=>{const a=g+k===i;const p=interpolate(tm,[w.s-0.05,w.s+0.08],[0,1],cl);
   return <span key={k} style={{...H(t,t.head==='Anton'?72:62,a?t.onAccent:t.bg),textTransform:'uppercase',background:a?t.accent:t.ink,padding:t.head==='Anton'?'6px 18px 0':'6px 18px',borderRadius:t.id==='quick-tips'?14:0,transform:`translateY(${a?-6*p:0}px)`}}>{w.t.replace(/[.,!?:]$/,'')}</span>})}</div>};
 const CyberCaptions:React.FC<{words:{t:string;s:number;e:number}[]}>=({words})=>{const f=useCurrentFrame();const A=(useS().t as any).accent;const tm=f/30;const i=words.findIndex(w=>tm<w.e+0.05);if(i<0||tm<words[i].s-0.3)return null;const g=Math.floor(i/4)*4;
  return <div style={{position:'absolute',left:136,right:50,top:1660,display:'flex',gap:18,flexWrap:'wrap',alignItems:'baseline'}}>{words.slice(g,g+4).map((w,k)=>{const a=g+k===i;const done=g+k<i;
   return <span key={k} style={{fontFamily:'BVPM',fontSize:60,color:a?A:done?'#E6E6E6':'#7A7A7A',borderBottom:`2px solid ${a?A:'transparent'}`,paddingBottom:4}}>{w.t.replace(/[.,!?:]$/,'')}</span>})}</div>};
+/* signal-break transition (hot-news-glitch): RGB fringes via drop-shadow, jitter, slice bars */
+const srnd=(n:number)=>{const x=Math.sin(n*91.7+13.3)*43758.5453;return x-Math.floor(x)};
+const sig=(g:number,f:number):React.CSSProperties=>({transform:`translateX(${(srnd(Math.floor(f/2))-.5)*g*70}px)`,filter:`drop-shadow(${-14*g}px 0 0 rgba(255,30,60,${.85*g})) drop-shadow(${14*g}px 0 0 rgba(30,140,255,${.85*g})) brightness(${1+.35*g})`});
+const SignalBreak:React.FC<{g:number;f:number;c:string}>=({g,f,c})=>{const fr=Math.floor(f/2);return <AbsoluteFill style={{zIndex:10,pointerEvents:'none',opacity:g}}>
+ {Array.from({length:7},(_,k)=>{const y=srnd(fr*7+k)*1920,h=4+srnd(fr*3+k)*46;const kind=k%3;return <div key={k} style={{position:'absolute',left:0,right:0,top:y,height:h,background:kind===0?c:kind===1?'#000':'repeating-linear-gradient(90deg, rgba(255,255,255,.6) 0 3px, transparent 3px 11px)',transform:`translateX(${(srnd(fr+k*5)-.5)*200}px)`,opacity:kind===1?.8:.9}}/>})}
+ <AbsoluteFill style={{backgroundImage:'repeating-linear-gradient(0deg, rgba(255,255,255,.06) 0 1px, transparent 1px 3px)'}}/></AbsoluteFill>};
 /* ---------- timeline with designed transitions ---------- */
 export type Scene={dur:number;el:React.ReactNode;section:string;out?:'page'|'bar'|'zoom'|'push'|'stack'|'morph'|'scroll';focus?:[number,number];morph?:{from:number[];to:number[];txt:string}};
 const T=16;
@@ -66,12 +72,14 @@ export const Timeline:React.FC<{t:Theme;scenes:Scene[];words:any[];voice:string;
    else if(kout==='push'){st={transform:`translateY(${-outP*1920}px)`,filter:blur(outP,18)}}
    else if(kout==='stack'){st={transform:`scale(${1-.1*outP})`,filter:`brightness(${1-.5*outP})`,borderRadius:40*outP,overflow:'hidden'}}
    else if(kout==='scroll'){st={transform:`translateY(${-Math.round(outP*9)/9*1920}px)`}}
+   else if(kout==='signal'){const g=Math.sin(Math.PI*outP);st={opacity:outP<.5?1:0,...sig(g,f)}}
    else if(kout==='bar'||kout==='morph'){st={opacity:outP<.5?1:0}}}
   if(i>0&&inP<1){ if(kin==='page'){st={...st,transform:`translateX(${(1-inP)*260}px)`,filter:`brightness(${.75+.25*inP})`};z=1}
    else if(kin==='zoom'){st={...st,transform:`scale(${.82+.18*inP})`,opacity:interpolate(inP,[.55,.8],[0,1],cl)};z=3}
    else if(kin==='push'){st={...st,transform:`translateY(${(1-inP)*1920}px)`,filter:blur(inP,18)}}
    else if(kin==='stack'){st={...st,transform:`translateY(${(1-inP)*1920}px) rotate(${(1-inP)*-4}deg)`,boxShadow:'0 -30px 80px rgba(0,0,0,.4)',borderRadius:40*(1-inP),overflow:'hidden'};z=3}
    else if(kin==='scroll'){st={...st,transform:`translateY(${(1-Math.round(inP*9)/9)*1920}px)`}}
+   else if(kin==='signal'){const g=Math.sin(Math.PI*inP);st={...st,opacity:inP>=.5?1:0,...sig(g,f+7)}}
    else if(kin==='bar'||kin==='morph'){st={...st,opacity:inP>=.5?1:0}}}
   const lf=f-starts[i];
   layers.push(<AbsoluteFill key={i} style={{zIndex:z,background:t.bg,backgroundImage:t.texture?`url(${staticFile(t.texture)})`:'none',...st}}>
@@ -79,6 +87,7 @@ export const Timeline:React.FC<{t:Theme;scenes:Scene[];words:any[];voice:string;
    <div style={{position:'absolute',left:136,right:50,top:290,height:1320}}>{s.el}</div></Ctx.Provider></AbsoluteFill>);
   if(i<scenes.length-1&&(kout==='bar')&&outP>0&&outP<1){const p=outP;const w=p<.5?interpolate(p,[0,.5],[96,1080]):1080;const x=p<.5?0:interpolate(p,[.5,1],[0,1080],{easing:EIO});
    overlay=<div style={{position:'absolute',top:0,bottom:0,left:x,width:w-(p<.5?0:0),background:t.accent,zIndex:10,display:'flex',alignItems:'center',justifyContent:'center',overflow:'hidden'}}><div style={{transform:`rotate(-90deg) translateY(${(p-.5)*400}px)`,fontFamily:t.id==='tech-explain'?'JBM':'Anton',fontWeight:t.id==='tech-explain'?800:400,fontSize:t.id==='tech-explain'?150:200,color:t.onAccent,whiteSpace:'nowrap'}}>{t.id==='tech-explain'?'git commit ▸':'DAN TECH ■'}</div></div>}
+  if(i<scenes.length-1&&kout==='signal'&&outP>0&&outP<1){const g=Math.sin(Math.PI*outP);overlay=<SignalBreak g={g} f={f} c={t.accent}/>}
   if(i<scenes.length-1&&kout==='zoom'&&outP>0&&outP<1){overlay=<AbsoluteFill style={{zIndex:2,background:t.accent,opacity:interpolate(outP,[.4,.6,.8],[0,1,0],cl)}}/>}
   if(i<scenes.length-1&&kout==='morph'&&s.morph&&outP>0&&outP<1){const m=s.morph;const p=outP;const L=(k:number)=>m.from[k]+(m.to[k]-m.from[k])*p;
    overlay=<div style={{position:'absolute',left:L(0),top:L(1),width:L(2),height:L(3),background:t.accent,zIndex:10,display:'flex',alignItems:'center',justifyContent:'center',...H(t,L(4),t.onAccent),transform:`rotate(${Math.sin(Math.PI*p)*-6}deg)`}}>{m.txt}</div>}

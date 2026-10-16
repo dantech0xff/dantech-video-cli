@@ -79,3 +79,6 @@ Tất cả có `n`, `cap` (nhãn ngắn có nghĩa), `title` (heading). `at` nh�
 - **BpTree** `{root, lines:[{s,d,tag?:"MODEL|VIEWMODEL|VIEW",at,hl?}], note?}` — cây thư mục.
 - **BpTake** `{cols:[{k,items[],at}] (2), wallAt, rule:{s,at}, course:{t1,t2,at}}` — takeaway + nhắc khoá học (scene cuối, câu có "follow Dan Tech").
 Ví dụ: `videos/flutter-mvvm/script.json`. Không hiển thị tên theme; không thêm nhãn trang trí vô nghĩa.
+
+## Theme `hot-news-glitch` (🧪 experimental)
+Dùng scene của hot-news (Flow, Quote, Checklist, Evidence, CTA); cảnh mở dùng **GlHeadline** `{kicker,l1,bar,l3,deck[],hits?:[frame|@word]}` (glitch RGB split + cắt lát tại các `hits`). `out: "signal"` = chuyển cảnh tín hiệu vỡ (ngắn). `kick` nên là nhãn có nghĩa (vd "TOÀ ÁN"), không nhãn kiểu báo/trang.
