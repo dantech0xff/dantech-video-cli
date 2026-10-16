@@ -1,0 +1,105 @@
+{
+ "look": {
+  "id": "tech-explain-cyber",
+  "label": "GIẢI THÍCH CYBER",
+  "subtitle": "tech explain · blueprint",
+  "bg": "#1C1C1C",
+  "ink": "#E6E6E6",
+  "onAccent": "#111111",
+  "accent": "#B6FF3B",
+  "accent2": "#B4B4B4",
+  "muted": "#4A4A4A",
+  "head": "BVPM",
+  "body": "JBM",
+  "upper": false,
+  "step": 1,
+  "video": "mono",
+  "entry": "rise",
+  "rule": "#303030",
+  "pal": {
+   "panel": "#222222",
+   "line": "#303030",
+   "dim": "#8C8C8C",
+   "red": "#C9A27A",
+   "blue": "#E6E6E6"
+  },
+  "sfx": {
+   "trans": "whoosh_soft",
+   "stamp": "select_003",
+   "tick": "tick_002",
+   "entry": "tick_002"
+  },
+  "trans": [
+   "stack",
+   "push"
+  ]
+ },
+ "tail_hold": 40,
+ "cta": {
+  "top": 1400,
+  "in_offset": -6,
+  "sub": "BẬT CHUÔNG ĐỂ KHÔNG LỠ BÀI"
+ },
+ "outro": {
+  "dur": 75,
+  "tagline": "Code & công nghệ mỗi ngày"
+ },
+ "voice": {
+  "voice": "vi-vn-concierge-2",
+  "model": "gemini-3.8-flash-tts",
+  "styles": {
+   "hao-hung": "hào hứng, tràn đầy năng lượng, nhịp nhanh như dẫn bản tin drama công nghệ nóng hổi",
+   "ke-chuyen": "kể chuyện kịch tính, hồi hộp, có ngắt nghỉ tạo căng thẳng",
+   "tu-nhien": "tự nhiên, thoải mái như đang nói chuyện với bạn bè, phong cách YouTuber"
+  }
+ },
+ "music": {
+  "pool": [
+   {
+    "id": "darknexal-welcome-to-the-cyberspace",
+    "start": 0
+   },
+   {
+    "id": "alexi-action-ghost",
+    "start": 0
+   },
+   {
+    "id": "sappheiros-perspective",
+    "start": 0
+   },
+   {
+    "id": "kuromaru-ft-hereafter-laxin",
+    "start": 0
+   }
+  ],
+  "rel": -10
+ },
+ "variants": {
+  "blue": {
+   "accent": "#2F7BFF",
+   "onAccent": "#FFFFFF"
+  },
+  "violet": {
+   "accent": "#7C5CFF",
+   "onAccent": "#FFFFFF"
+  },
+  "magenta": {
+   "accent": "#FF2E88",
+   "onAccent": "#FFFFFF"
+  },
+  "amber": {
+   "accent": "#FF8A00",
+   "onAccent": "#111111"
+  },
+  "blue-amber": {
+   "accent": "#2F7BFF",
+   "onAccent": "#FFFFFF",
+   "accent3": "#FFB020"
+  },
+  "cyan": {
+   "accent": "#5CD6E8",
+   "onAccent": "#04131A"
+  }
+ },
+ "experimental": true
+}

@@ -1,0 +1,197 @@
+{
+ "theme": "tech-explain-cyber",
+ "title": "MVVM trong Flutter",
+ "topic": [
+  "MVVM",
+  "Flutter"
+ ],
+ "date": "16 · 10 · 2026",
+ "caption": "MVVM trong Flutter: chia app thành View, ViewModel, Model với phụ thuộc một chiều. Model không import Flutter (kiểm chứng bằng rg), nên luật nghiệp vụ dễ test, dùng lại được và code dễ đọc. Bài đầy đủ trong khoá Flutter Mobile 101 trên dantech.academy. #DanTech #Flutter #MVVM #Dart",
+ "sources": [
+  "Dan Tech Academy, Flutter Mobile 101 · MVVM · Lesson 01 Why MVVM and three layers (nội dung bài học do Dan cung cấp): https://dantech.academy/courses/flutter-mobile-101/03-mvvm/lesson-01-why-mvvm-and-three-layers",
+  "Flutter docs, Guide to app architecture (MVVM, views, view models, data layer): https://docs.flutter.dev/app-architecture/guide"
+ ],
+ "voice": {
+  "style": "random"
+ },
+ "music": {
+  "track": "sappheiros-perspective"
+ },
+ "scenes": [
+  {
+   "say": "MVVM trong Flutter: chia app thành ba lớp, mỗi lớp một việc. View là widget, và nó chỉ lo vẽ. ViewModel giữ state của màn hình cùng các hành động người dùng làm được. Model chứa dữ liệu và luật nghiệp vụ. Điều làm nên sức mạnh của MVVM là phụ thuộc chỉ đi một chiều: View biết ViewModel, ViewModel biết Model, còn Model không hề biết hai lớp kia tồn tại.",
+   "type": "BpLayers",
+   "section": "mvvm",
+   "out": "push",
+   "props": {
+    "n": "01",
+    "cap": "ba lớp · phụ thuộc một chiều",
+    "title": "MVVM trong Flutter",
+    "layers": [
+     {
+      "k": "View",
+      "role": "widget · chỉ lo vẽ",
+      "path": "lib/ui/<screen>/widgets/",
+      "at": "@ba"
+     },
+     {
+      "k": "ViewModel",
+      "role": "state màn hình + hành động",
+      "path": "lib/ui/<screen>/view_model/",
+      "at": "@ViewModel"
+     },
+     {
+      "k": "Model",
+      "role": "dữ liệu + luật nghiệp vụ",
+      "path": "lib/domain/",
+      "at": "@Model"
+     }
+    ],
+    "depAt": "@phụ",
+    "noKnow": {
+     "s": "không biết|lớp trên",
+     "at": "@còn"
+    },
+    "titleAt": -20
+   }
+  },
+  {
+   "say": "Nhờ quy tắc một chiều đó, lớp Model không cần biết Flutter là gì. Bạn kiểm chứng bằng một lệnh rg tìm mọi dòng import Flutter trong thư mục domain, và kết quả trả về trống trơn.",
+   "type": "BpTerm",
+   "section": "kiểm chứng",
+   "out": "stack",
+   "props": {
+    "n": "02",
+    "cap": "kiểm chứng",
+    "title": "Model không import Flutter",
+    "cmd": "rg \"^import 'package:flutter\" lib/domain/",
+    "cmdAt": "@lệnh",
+    "resAt": "@trống",
+    "empty": "(không có kết quả)",
+    "ok": "0 dòng import Flutter trong lib/domain",
+    "note": {
+     "s": "Model là Dart thuần.",
+     "at": "@trơn"
+    }
+   }
+  },
+  {
+   "say": "Và chính điều đó mang lại ba lợi ích cho project. Một là dễ test: checkWin nhận vào một danh sách và trả về một object, nên bạn test nó mà không cần widget hay emulator. Hai là dùng lại được: cùng hàm checkWin đó, cả màn hình game lẫn đối thủ máy đều gọi. Ba là dễ đọc, vì mỗi file chỉ làm đúng một việc.",
+   "type": "BpSpec",
+   "section": "lợi ích",
+   "out": "push",
+   "props": {
+    "n": "03",
+    "cap": "lợi ích cho project",
+    "title": "Test được, dùng lại, dễ đọc",
+    "head": "lợi ích",
+    "rows": [
+     {
+      "k": "Dễ test",
+      "v": "BoardRules.checkWin(board, size, need): list vào, object ra. Không widget, không emulator.",
+      "at": "@Một"
+     },
+     {
+      "k": "Dùng lại được",
+      "v": "Màn hình game và đối thủ máy gọi chung checkWin.",
+      "at": "@Hai"
+     },
+     {
+      "k": "Dễ đọc",
+      "v": "Mỗi file chỉ làm một việc.",
+      "at": "@Ba#2"
+     }
+    ]
+   }
+  },
+  {
+   "say": "Trong project, bạn chia thư mục theo tính năng trước, rồi mới theo lớp. Luật nghiệp vụ nằm trong lib domain, còn màn hình game có thư mục view_model cho ViewModel và widgets cho phần vẽ.",
+   "type": "BpTree",
+   "section": "lib/",
+   "out": "stack",
+   "props": {
+    "n": "04",
+    "cap": "cấu trúc thư mục",
+    "title": "Theo tính năng, rồi theo lớp",
+    "root": "lib/",
+    "lines": [
+     {
+      "s": "domain/",
+      "d": 0,
+      "tag": "MODEL",
+      "at": "@domain",
+      "hl": true
+     },
+     {
+      "s": "ui/",
+      "d": 0,
+      "at": "@game"
+     },
+     {
+      "s": "game/",
+      "d": 1,
+      "at": "@game"
+     },
+     {
+      "s": "view_model/",
+      "d": 2,
+      "tag": "VIEWMODEL",
+      "at": "@view_model",
+      "hl": true
+     },
+     {
+      "s": "widgets/",
+      "d": 2,
+      "tag": "VIEW",
+      "at": "@widgets",
+      "hl": true
+     }
+    ],
+    "note": {
+     "s": "Tính năng trước, lớp sau.",
+     "at": "@tính"
+    }
+   }
+  },
+  {
+   "say": "Tóm lại, MVVM tách thứ thay đổi vì giao diện khỏi thứ thay đổi vì nghiệp vụ. Nên đổi màu một cái nút sẽ không bao giờ chạm tới luật thắng. Bài đầy đủ có trong khoá Flutter Mobile 101 trên dantech chấm academy. Follow Dan Tech để xem thêm nhé!",
+   "type": "BpTake",
+   "section": "tóm lại",
+   "props": {
+    "n": "05",
+    "cap": "ý cốt lõi",
+    "title": "Tách lý do thay đổi",
+    "cols": [
+     {
+      "k": "đổi vì giao diện",
+      "items": [
+       "màu nút",
+       "layout",
+       "animation"
+      ],
+      "at": "@giao"
+     },
+     {
+      "k": "đổi vì nghiệp vụ",
+      "items": [
+       "luật thắng",
+       "độ khó",
+       "đối thủ máy"
+      ],
+      "at": "@nghiệp"
+     }
+    ],
+    "wallAt": "@nghiệp+8",
+    "rule": {
+     "s": "Đổi màu một cái nút không bao giờ chạm tới luật thắng.",
+     "at": "@màu"
+    },
+    "course": {
+     "t1": "bài đầy đủ",
+     "t2": "Flutter Mobile 101 · dantech.academy",
+     "at": "@Bài"
+    }
+   }
+  }
+ ]
+}

@@ -17,6 +17,12 @@
 ## Không cắt từ nối
 Không xoá từ nối và câu dẫn có chức năng giải thích: "vì vậy", "lúc này", "nói cách khác", "thử tưởng tượng", "tức là", "nghĩa là", "trước khi", "thay vì". Những từ này không phải filler: chúng giúp người nghe theo được mạch (đặc biệt ở video giải thích code). Văn kiểu ghi chú, liệt kê từ khoá ("tạo khi nào, ra sao, framework") cũng là dấu hiệu AI/thiếu tự nhiên: viết lại thành câu nói đầy đủ.
 
+## Bài học = nguồn, không phải dàn ý
+Humanize xong vẫn phải cắt: câu nào bỏ đi mà người xem vẫn hiểu thì bỏ; không kể lại mọi ví dụ/phương án trong bài; hook tối đa 2 câu. Cắt **ý**, không cắt từ nối (ngắn gọn ≠ điện tín). Xem write-script.
+
+## Hook trực diện
+Không humanize câu đầu thành lời dẫn vòng. Câu đầu cảnh 1 phải gọi tên chủ đề (vd "Vì sao app Flutter cần MVVM?"), ≤ ~12 từ. Xem write-script.
+
 ## Độ dài
 Không humanize để rút ngắn video, và không viết lại sau khi đã có giọng chỉ vì độ dài. Độ dài theo nội dung; chỉ bỏ câu thừa, lặp hoặc lạc đề.
 
