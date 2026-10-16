@@ -34,6 +34,16 @@ export GEMINI_API_KEY=...           # chỉ đặt trong env / .env (đã gitign
 4. **Render:** `make video SCRIPT=videos/<slug>/script.json` (hoặc `./dt render …`). Sửa nhỏ: `./dt render <script> --from props` (bỏ qua TTS + align) hoặc `--from mix`.
 5. **Kiểm tra** (mục 4), rồi báo Dan: đường dẫn `out/<slug>.mp4`, `description.txt`, style giọng và bài nhạc đã chọn.
 
+## Skills (đọc SKILL.md tương ứng rồi làm theo)
+
+| Skill | Khi nào | File |
+|---|---|---|
+| `write-script` | spec (chủ đề/link, theme, độ dài, góc nhìn) → `script.json` đã validate | `.agents/skills/write-script/SKILL.md` (+ `SCHEMA.md`, `template.json`) |
+| `render-video` | script → MP4 + QC, chạy lại bằng `--from` | `.agents/skills/render-video/SKILL.md` |
+| `theme` | tạo/chỉnh theme từ spec | `.agents/skills/theme/SKILL.md` |
+
+Bản copy cho Claude Code (`.claude/skills/`) và Grok CLI (`.grok/skills/`) do `scripts/sync_skills.sh` tạo. Chỉ sửa trong `.agents/skills/` rồi chạy lại script. Kiểm script: `python3 scripts/validate_script.py videos/<slug>/script.json`.
+
 ## 3. Quy tắc bắt buộc
 
 - **Không nhân vật hay khuôn mặt người AI.** Dùng infographics. B-roll (nếu có) không có người hoặc mặt người.

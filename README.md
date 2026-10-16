@@ -37,7 +37,7 @@ export GEMINI_API_KEY=...                # chỉ đọc từ biến môi trườ
 ./dt doctor                              # (hoặc make doctor) kiểm tra máy: ✅/❌ kèm cách sửa
 ```
 
-**Dùng với AI CLI trên máy (Grok CLI, Claude Code, Codex…):** AI đọc [`AGENTS.md`](AGENTS.md) (CLAUDE.md, GROK.md trỏ về đó). AI chỉ viết `script.json` và chạy lệnh, còn lại là code cố định.
+**Dùng với AI CLI trên máy (Grok CLI, Claude Code, Codex…):** AI đọc [`AGENTS.md`](AGENTS.md) (CLAUDE.md, GROK.md trỏ về đó). AI chỉ viết `script.json` và chạy lệnh, còn lại là code cố định. Có sẵn skills `write-script`, `render-video`, `theme` trong `.agents/skills/` (copy ở `.claude/skills/`, `.grok/skills/` qua `scripts/sync_skills.sh`). Kiểm script trước khi render: `python3 scripts/validate_script.py <script>`.
 
 ## Làm một video, từng bước
 
