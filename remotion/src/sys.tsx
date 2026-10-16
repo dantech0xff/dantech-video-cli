@@ -45,9 +45,9 @@ export const TermChrome:React.FC<{section:string;page:string;idx:number}>=({sect
 export const Captions:React.FC<{words:{t:string;s:number;e:number}[]}>=({words})=>{const {t}=useS();if(t.id==='tech-explain-cyber')return <CyberCaptions words={words}/>;const f=useCurrentFrame();const tm=f/30;const i=words.findIndex(w=>tm<w.e+0.05);if(i<0||tm<words[i].s-0.3)return null;const g=Math.floor(i/3)*3;
  return <div style={{position:'absolute',left:136,right:50,top:1640,display:'flex',gap:12,flexWrap:'wrap'}}>{words.slice(g,g+3).map((w,k)=>{const a=g+k===i;const p=interpolate(tm,[w.s-0.05,w.s+0.08],[0,1],cl);
   return <span key={k} style={{...H(t,t.head==='Anton'?72:62,a?t.onAccent:t.bg),textTransform:'uppercase',background:a?t.accent:t.ink,padding:t.head==='Anton'?'6px 18px 0':'6px 18px',borderRadius:t.id==='quick-tips'?14:0,transform:`translateY(${a?-6*p:0}px)`}}>{w.t.replace(/[.,!?:]$/,'')}</span>})}</div>};
-const CyberCaptions:React.FC<{words:{t:string;s:number;e:number}[]}>=({words})=>{const f=useCurrentFrame();const tm=f/30;const i=words.findIndex(w=>tm<w.e+0.05);if(i<0||tm<words[i].s-0.3)return null;const g=Math.floor(i/4)*4;
+const CyberCaptions:React.FC<{words:{t:string;s:number;e:number}[]}>=({words})=>{const f=useCurrentFrame();const A=(useS().t as any).accent;const tm=f/30;const i=words.findIndex(w=>tm<w.e+0.05);if(i<0||tm<words[i].s-0.3)return null;const g=Math.floor(i/4)*4;
  return <div style={{position:'absolute',left:136,right:50,top:1660,display:'flex',gap:18,flexWrap:'wrap',alignItems:'baseline'}}>{words.slice(g,g+4).map((w,k)=>{const a=g+k===i;const done=g+k<i;
-  return <span key={k} style={{fontFamily:'BVPM',fontSize:60,color:a?'#5CD6E8':done?'#E6E6E6':'#7A7A7A',borderBottom:`2px solid ${a?'#5CD6E8':'transparent'}`,paddingBottom:4}}>{w.t.replace(/[.,!?:]$/,'')}</span>})}</div>};
+  return <span key={k} style={{fontFamily:'BVPM',fontSize:60,color:a?A:done?'#E6E6E6':'#7A7A7A',borderBottom:`2px solid ${a?A:'transparent'}`,paddingBottom:4}}>{w.t.replace(/[.,!?:]$/,'')}</span>})}</div>};
 /* ---------- timeline with designed transitions ---------- */
 export type Scene={dur:number;el:React.ReactNode;section:string;out?:'page'|'bar'|'zoom'|'push'|'stack'|'morph'|'scroll';focus?:[number,number];morph?:{from:number[];to:number[];txt:string}};
 const T=16;

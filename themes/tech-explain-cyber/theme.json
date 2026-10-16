@@ -70,6 +70,32 @@
   ],
   "rel": -10
  },
- "variants": {},
+ "variants": {
+  "blue": {
+   "accent": "#2F7BFF",
+   "onAccent": "#FFFFFF"
+  },
+  "violet": {
+   "accent": "#7C5CFF",
+   "onAccent": "#FFFFFF"
+  },
+  "magenta": {
+   "accent": "#FF2E88",
+   "onAccent": "#FFFFFF"
+  },
+  "lime": {
+   "accent": "#B6FF3B",
+   "onAccent": "#111111"
+  },
+  "amber": {
+   "accent": "#FF8A00",
+   "onAccent": "#111111"
+  },
+  "blue-amber": {
+   "accent": "#2F7BFF",
+   "onAccent": "#FFFFFF",
+   "accent3": "#FFB020"
+  }
+ },
  "experimental": true
 }

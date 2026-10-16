@@ -17,4 +17,4 @@ export const Video:React.FC<VideoProps>=(p)=>{const t={...THEMES[p.theme],...(p.
   return {dur:s.dur,section:s.section,out:s.out as any,focus:s.focus,morph:s.morph,el:<El {...s.props}/>}});
  return <AbsoluteFill><Timeline t={t} scenes={scenes} words={p.words} voice={p.voice} sfx={p.sfx} date={p.date}/>
   <FollowCTA t={t} inAt={p.cta.inAt} pressAt={p.cta.pressAt} outAt={p.cta.outAt} top={p.cta.top} sub={p.cta.sub}/><FollowCTASfx pressAt={p.cta.pressAt}/>
-  <Sequence from={p.outro.start} durationInFrames={p.outro.dur}>{t.id==='tech-explain-cyber'?<BpEndCard dur={p.outro.dur} tagline={p.outro.tagline} handles={p.outro.handles}/>:<EndCard t={t} dur={p.outro.dur} tagline={p.outro.tagline} pal={p.outro.pal} handles={p.outro.handles}/>}</Sequence></AbsoluteFill>};
+  <Sequence from={p.outro.start} durationInFrames={p.outro.dur}>{t.id==='tech-explain-cyber'?<BpEndCard A={t.accent} dur={p.outro.dur} tagline={p.outro.tagline} handles={p.outro.handles}/>:<EndCard t={t} dur={p.outro.dur} tagline={p.outro.tagline} pal={p.outro.pal} handles={p.outro.handles}/>}</Sequence></AbsoluteFill>};
