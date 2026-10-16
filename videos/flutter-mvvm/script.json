@@ -47,7 +47,7 @@
    }
   },
   {
-   "say": "Truyền qua constructor hay giữ tham chiếu tới State chỉ là chữa cháy, vì vấn đề thật là code đang nằm sai chỗ. MVVM giải quyết bằng cách chia code thành ba lớp. View là widget, và nó chỉ lo vẽ. ViewModel giữ state của màn hình và các hành động người dùng làm được. Model chứa dữ liệu và luật chơi. Phụ thuộc chỉ đi một chiều: View biết ViewModel, ViewModel biết Model, còn Model không hề biết hai lớp kia tồn tại.",
+   "say": "Vấn đề thật là code đang nằm sai chỗ, và MVVM giải quyết bằng cách chia code thành ba lớp. View là widget, và nó chỉ lo vẽ. ViewModel giữ state của màn hình và các hành động người dùng làm được. Model chứa dữ liệu và luật chơi. Phụ thuộc chỉ đi một chiều: View biết ViewModel, ViewModel biết Model, còn Model không hề biết hai lớp kia tồn tại.",
    "type": "BpLayers",
    "section": "MVVM",
    "out": "stack",
@@ -60,7 +60,7 @@
       "k": "View",
       "role": "widget · chỉ lo vẽ",
       "path": "lib/ui/game/widgets/",
-      "at": "@View"
+      "at": "@ba"
      },
      {
       "k": "ViewModel",
@@ -79,20 +79,6 @@
     "noKnow": {
      "s": "không biết|lớp trên",
      "at": "@còn"
-    },
-    "pre": {
-     "label": "chữa cháy",
-     "items": [
-      {
-       "s": "truyền qua constructor",
-       "at": "@Truyền"
-      },
-      {
-       "s": "giữ tham chiếu tới State",
-       "at": "@giữ"
-      }
-     ],
-     "strikeAt": "@chữa"
     }
    }
   },
