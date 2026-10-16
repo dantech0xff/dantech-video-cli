@@ -1,7 +1,7 @@
 import React from 'react';import {AbsoluteFill,Audio,Sequence,staticFile,useCurrentFrame,interpolate,Easing} from 'remotion';
 import {Theme} from './themes';import {H,Bd,FONTS} from './sys';
 const EO=Easing.bezier(.16,1,.3,1),EIO=Easing.bezier(.7,0,.2,1);const cl={extrapolateLeft:'clamp',extrapolateRight:'clamp'} as const;
-const r=(t:Theme,v:number)=>t.id==='meo'?v:0;
+const r=(t:Theme,v:number)=>t.id==='quick-tips'?v:0;
 const Bell:React.FC<{c:string;s:number;rot?:number}>=({c,s,rot=0})=><svg width={s} height={s} viewBox="0 0 24 24" style={{transform:`rotate(${rot}deg)`,transformOrigin:'50% 10%'}}><path d="M12 2.5c-.8 0-1.4.6-1.4 1.4v.6C7.9 5.2 6 7.6 6 10.5v4.2L4.2 17v1.2h15.6V17L18 14.7v-4.2c0-2.9-1.9-5.3-4.6-6v-.6c0-.8-.6-1.4-1.4-1.4z" fill={c}/><path d="M9.6 19.3a2.4 2.4 0 0 0 4.8 0z" fill={c}/></svg>;
 const Cursor:React.FC<{t:Theme}>=({t})=><svg width={86} height={104} viewBox="0 0 20 24"><path d="M2 1.5v18.2l4.7-4.4 3 6.9 3.2-1.4-3-6.8 6.5-.4z" fill={t.ink} stroke={t.bg} strokeWidth={1.4} strokeLinejoin="round"/></svg>;
 /* Follow/Subscribe CTA. inAt = frame the button appears, pressAt = frame the cursor presses (align to "Dan" in "follow Dan Tech"), outAt = exit */

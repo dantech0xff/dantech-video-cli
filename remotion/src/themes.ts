@@ -1,5 +1,7 @@
 // Themes live in /themes/<id>/theme.json so they can be edited without touching code.
-import tinNong from '../../themes/tin-nong/theme.json';import meoNhanh from '../../themes/meo-nhanh/theme.json';import commit from '../../themes/commit/theme.json';
-export type Theme={id:string;stamp?:string;label:string;bg:string;texture?:string;ink:string;onAccent:string;accent:string;accent2:string;muted:string;head:string;body:string;upper:boolean;step:number;video:'halftone'|'mono'|'clean';entry:'slam'|'type'|'rise';rule:string;
+import hotNews from '../../themes/hot-news/theme.json';import quickTips from '../../themes/quick-tips/theme.json';import techExplain from '../../themes/tech-explain/theme.json';
+export type Theme={id:string;subtitle?:string;stamp?:string;label:string;bg:string;texture?:string;ink:string;onAccent:string;accent:string;accent2:string;muted:string;head:string;body:string;upper:boolean;step:number;video:'halftone'|'mono'|'clean';entry:'slam'|'type'|'rise';rule:string;
  sfx:{trans:string;stamp:string;tick:string;entry:string};trans:string[]};
-export const THEMES:Record<string,Theme>={'tin-nong':tinNong.look as Theme,'meo-nhanh':meoNhanh.look as Theme,'commit':commit.look as Theme};
+const T:Record<string,Theme>={'hot-news':hotNews.look as Theme,'quick-tips':quickTips.look as Theme,'tech-explain':techExplain.look as Theme};
+// deprecated aliases (old ids, kept for old props files): tin-nong, meo-nhanh, commit
+export const THEMES:Record<string,Theme>={...T,'tin-nong':T['hot-news'],'meo-nhanh':T['quick-tips'],'commit':T['tech-explain']};

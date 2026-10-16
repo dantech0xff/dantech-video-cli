@@ -1,7 +1,7 @@
 {
  "look": {
-  "id": "commit",
-  "label": "COMMIT",
+  "id": "tech-explain",
+  "label": "GIẢI THÍCH",
   "bg": "#141414",
   "ink": "#EDEDE6",
   "onAccent": "#141414",
@@ -26,7 +26,8 @@
    "push",
    "bar",
    "stack"
-  ]
+  ],
+  "subtitle": "tech explain"
  },
  "tail_hold": 40,
  "cta": {

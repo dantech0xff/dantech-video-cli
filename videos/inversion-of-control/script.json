@@ -1,5 +1,5 @@
 {
- "theme": "commit",
+ "theme": "tech-explain",
  "title": "Inversion of Control (Koin)",
  "date": "16 · 10 · 2026",
  "caption": "Inversion of Control là gì? Thay vì tự new từng object, bạn khai báo và để framework (Koin) lo việc tạo, nối và quản lý vòng đời. Dependency Injection là một cách làm IoC. Bài đầy đủ trong khoá Mobile Action Pro trên dantech.academy. #DanTech #Kotlin #Android #Koin",

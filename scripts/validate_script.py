@@ -11,7 +11,9 @@ err=E.append; warn=W.append
 p=sys.argv[1]; S=json.load(open(p,encoding='utf-8'))
 for k in ['theme','title','date','caption','sources','voice','music','scenes']:
     if k not in S: err(f'missing top-level key "{k}"')
-tp=os.path.join(ROOT,'themes',S.get('theme',''),'theme.json')
+ALIASES={'tin-nong':'hot-news','meo-nhanh':'quick-tips','commit':'tech-explain'}
+if S.get('theme') in ALIASES: warn(f'theme "{S["theme"]}" is deprecated, use "{ALIASES[S["theme"]]}"')
+tp=os.path.join(ROOT,'themes',ALIASES.get(S.get('theme',''),S.get('theme','')),'theme.json')
 T=json.load(open(tp,encoding='utf-8')) if os.path.isfile(tp) else None
 if not T: err(f'theme "{S.get("theme")}" not found in themes/')
 if T and S.get('variant') and S['variant'] not in T.get('variants',{}): err(f'variant "{S["variant"]}" not in theme variants {list(T.get("variants",{}))}')

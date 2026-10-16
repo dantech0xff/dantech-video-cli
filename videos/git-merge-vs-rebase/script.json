@@ -1,5 +1,5 @@
 {
- "theme": "commit",
+ "theme": "tech-explain",
  "title": "git merge vs git rebase",
  "date": "16 · 10 · 2026",
  "caption": "Merge hay rebase? Merge giữ lịch sử + tạo merge commit, rebase chép commit lên đầu nhánh (hash mới, lịch sử thẳng). Đừng rebase commit đã push mà người khác đang dùng. #DanTech #Git #Commit",

@@ -8,7 +8,7 @@ description: Tạo theme mới hoặc chỉnh theme Dan Tech từ một spec (mo
 **Input (spec):** tên/id, dùng cho loại nội dung nào, mood, màu, font, nhạc, sfx, layout/motion mong muốn.
 **Output:** `themes/<id>/theme.json` (+ template scene mới nếu cần), video test, contact sheet still, cập nhật README/AGENTS.
 
-`tin-nong` đã khoá, `meo-nhanh` đã duyệt: **chỉ sửa khi Dan yêu cầu rõ**. Ưu tiên tạo theme mới.
+`hot-news` đã khoá, `quick-tips` đã duyệt: **chỉ sửa khi Dan yêu cầu rõ**. Ưu tiên tạo theme mới.
 
 ## Theme gồm những gì (trong code)
 - `themes/<id>/theme.json`:
@@ -19,7 +19,7 @@ description: Tạo theme mới hoặc chỉnh theme Dan Tech từ một spec (mo
 - Không có composition riêng cho từng theme: `remotion/src/Video.tsx` dùng chung, chọn scene qua bảng `SCENES`. `./dt` lấy theme từ `script.json → theme`, nên **không cần sửa dt hay build_props**.
 
 ## Các bước
-1. Chọn theme gần nhất (tin-nong: báo in; meo-nhanh: UI sáng, keycap; commit: dark mono). `cp -r themes/<gần nhất> themes/<id>`.
+1. Chọn theme gần nhất (hot-news: báo in; quick-tips: UI sáng, keycap; tech-explain: dark mono). `cp -r themes/<gần nhất> themes/<id>`.
 2. Sửa `theme.json` theo spec: màu (kiểm độ tương phản chữ/nền), font, `sfx` (chỉ file trong `assets/sfx`, ý nghĩa rõ, nhẹ), `trans` (motion mượt, có thiết kế), `music.pool` (track có licence trong tracks.json; thêm track mới thì ghi vào `tracks.json` + `LIBRARY.md`, không commit mp3), `outro.tagline`, `cta.sub`. Giữ `music.rel` gần theme gốc (-9…-11).
 3. Font mới: thêm file vào `assets/fonts/` (licence OFL/miễn phí) + `@font-face` trong `FONTS` ở `remotion/src/sys.tsx`.
 4. Đăng ký:

@@ -20,14 +20,14 @@ export const It:React.FC<{i?:number;at?:number;children:React.ReactNode;style?:R
  return <div style={{transform:tr,opacity:op,clipPath:clip,transformOrigin:origin,...style}}>{children}</div>};
 export const Media:React.FC<{src:string;h:number;pos?:string;label?:string}>=({src,h,pos='center',label})=>{const {t}=useS();
  const filt=t.video==='halftone'?'grayscale(1) contrast(1.9) brightness(1.3)':t.video==='mono'?'grayscale(1) contrast(1.25)':'saturate(1.1)';
- return <div style={{position:'relative',height:h,border:`6px solid ${t.ink}`,overflow:'hidden',borderRadius:t.id==='meo'?28:0}}>
+ return <div style={{position:'relative',height:h,border:`6px solid ${t.ink}`,overflow:'hidden',borderRadius:t.id==='quick-tips'?28:0}}>
  <OffthreadVideo src={staticFile(src)} muted style={{width:'100%',height:'100%',objectFit:'cover',objectPosition:pos,filter:filt}}/>
  {t.video==='halftone'&&<><AbsoluteFill style={{backgroundImage:`radial-gradient(circle, transparent 2.2px, ${t.bg} 4.6px)`,backgroundSize:'11px 11px',mixBlendMode:'lighten',opacity:.5}}/><AbsoluteFill style={{background:t.bg,mixBlendMode:'multiply'}}/></>}
  {label&&<div style={{position:'absolute',bottom:0,left:0,background:t.ink,color:t.bg,...Bd(t,24,t.bg),padding:'4px 12px'}}>{label}</div>}</div>};
-export const AccentBar:React.FC<{children:React.ReactNode;size:number}>=({children,size})=>{const {t}=useS();return <span style={{...H(t,size,t.onAccent),background:t.accent,padding:t.head==='Anton'?'6px 22px 0':'4px 22px',display:'inline-block',whiteSpace:'nowrap',borderRadius:t.id==='meo'?18:0}}>{children}</span>};
-export const Kicker:React.FC<{n:string;txt:string}>=({n,txt})=>{const {t}=useS();return <It i={0}><div style={{display:'flex',alignItems:'center',gap:16,borderBottom:`3px solid ${t.rule}`,paddingBottom:10,marginBottom:26}}><span style={{...H(t,38,t.bg),background:t.ink,padding:'4px 14px',borderRadius:t.id==='meo'?10:0}}>{n}</span><span style={{...Bd(t,32),letterSpacing:2}}>{t.id==='commit'?'// ':''}{txt}</span></div></It>};
+export const AccentBar:React.FC<{children:React.ReactNode;size:number}>=({children,size})=>{const {t}=useS();return <span style={{...H(t,size,t.onAccent),background:t.accent,padding:t.head==='Anton'?'6px 22px 0':'4px 22px',display:'inline-block',whiteSpace:'nowrap',borderRadius:t.id==='quick-tips'?18:0}}>{children}</span>};
+export const Kicker:React.FC<{n:string;txt:string}>=({n,txt})=>{const {t}=useS();return <It i={0}><div style={{display:'flex',alignItems:'center',gap:16,borderBottom:`3px solid ${t.rule}`,paddingBottom:10,marginBottom:26}}><span style={{...H(t,38,t.bg),background:t.ink,padding:'4px 14px',borderRadius:t.id==='quick-tips'?10:0}}>{n}</span><span style={{...Bd(t,32),letterSpacing:2}}>{t.id==='tech-explain'?'// ':''}{txt}</span></div></It>};
 export const Stamp:React.FC<{at:number;text:string;sub?:string;style?:React.CSSProperties}>=({at,text,sub,style})=>{const {t,f,exit}=useS();if(f<at)return null;const p=interpolate(f-at,[0,6],[0,1],{...cl,easing:EO});
- return <div style={{position:'absolute',border:`8px solid ${t.stamp??t.accent}`,outline:`3px solid ${t.stamp??t.accent}`,outlineOffset:6,padding:'10px 26px 4px',color:t.stamp??t.accent,transform:`rotate(-10deg) scale(${1.8-0.8*p})`,opacity:p*(1-exit),mixBlendMode:t.id==='tinnong'?'multiply':'normal',textAlign:'center',borderRadius:t.id==='meo'?20:0,...style}}>
+ return <div style={{position:'absolute',border:`8px solid ${t.stamp??t.accent}`,outline:`3px solid ${t.stamp??t.accent}`,outlineOffset:6,padding:'10px 26px 4px',color:t.stamp??t.accent,transform:`rotate(-10deg) scale(${1.8-0.8*p})`,opacity:p*(1-exit),mixBlendMode:t.id==='hot-news'?'multiply':'normal',textAlign:'center',borderRadius:t.id==='quick-tips'?20:0,...style}}>
  <div style={{...H(t,80,t.stamp??t.accent)}}>{text}</div>{sub&&<div style={{...Bd(t,24,t.stamp??t.accent),letterSpacing:3}}>{sub}</div>}</div>};
 /* ---------- brand chrome (shared device across themes) ---------- */
 export const Chrome:React.FC<{section:string;page:string;date:string}>=({section,page,date})=>{const {t}=useS();return <>
@@ -35,7 +35,7 @@ export const Chrome:React.FC<{section:string;page:string;date:string}>=({section
  <div style={{position:'absolute',left:136,right:50,top:70,borderBottom:`6px solid ${t.ink}`,paddingBottom:12,display:'flex',justifyContent:'space-between',alignItems:'flex-end'}}>
   <div style={{fontFamily:'Anton',fontSize:96,color:t.ink,lineHeight:1}}>DAN TECH<span style={{color:t.accent}}>■</span></div><div style={{...Bd(t,28),textAlign:'right',lineHeight:1.15}}>{page}<br/>{date}</div></div>
  <div style={{position:'absolute',left:136,right:50,top:208,...Bd(t,30),borderBottom:`2px solid ${t.rule}`,paddingBottom:8}}>{t.label} — {section}</div></>};
-/* COMMIT chrome: editor tab bar + line-number gutter + prompt line */
+/* tech-explain chrome: editor tab bar + line-number gutter + prompt line */
 export const TermChrome:React.FC<{section:string;page:string;idx:number}>=({section,page,idx})=>{const {t}=useS();return <>
  <div style={{position:'absolute',left:0,right:0,top:0,height:110,background:t.accent,display:'flex',alignItems:'center',justifyContent:'space-between',padding:'0 50px 0 40px'}}>
   <div style={{fontFamily:'JBM',fontWeight:800,fontSize:56,color:t.onAccent,letterSpacing:-1}}>DAN/TECH<span style={{opacity:.55}}>.git</span></div>
@@ -44,7 +44,7 @@ export const TermChrome:React.FC<{section:string;page:string;idx:number}>=({sect
  <div style={{position:'absolute',left:136,right:50,top:150,fontFamily:'JBM',fontSize:32,color:t.muted,borderBottom:`3px solid ${t.rule}`,paddingBottom:18,whiteSpace:'nowrap',overflow:'hidden'}}><span style={{color:t.accent2}}>~/commit</span> <span style={{color:t.ink}}>❯</span> {section}</div></>};
 export const Captions:React.FC<{words:{t:string;s:number;e:number}[]}>=({words})=>{const {t}=useS();const f=useCurrentFrame();const tm=f/30;const i=words.findIndex(w=>tm<w.e+0.05);if(i<0||tm<words[i].s-0.3)return null;const g=Math.floor(i/3)*3;
  return <div style={{position:'absolute',left:136,right:50,top:1640,display:'flex',gap:12,flexWrap:'wrap'}}>{words.slice(g,g+3).map((w,k)=>{const a=g+k===i;const p=interpolate(tm,[w.s-0.05,w.s+0.08],[0,1],cl);
-  return <span key={k} style={{...H(t,t.head==='Anton'?72:62,a?t.onAccent:t.bg),textTransform:'uppercase',background:a?t.accent:t.ink,padding:t.head==='Anton'?'6px 18px 0':'6px 18px',borderRadius:t.id==='meo'?14:0,transform:`translateY(${a?-6*p:0}px)`}}>{w.t.replace(/[.,!?:]$/,'')}</span>})}</div>};
+  return <span key={k} style={{...H(t,t.head==='Anton'?72:62,a?t.onAccent:t.bg),textTransform:'uppercase',background:a?t.accent:t.ink,padding:t.head==='Anton'?'6px 18px 0':'6px 18px',borderRadius:t.id==='quick-tips'?14:0,transform:`translateY(${a?-6*p:0}px)`}}>{w.t.replace(/[.,!?:]$/,'')}</span>})}</div>};
 /* ---------- timeline with designed transitions ---------- */
 export type Scene={dur:number;el:React.ReactNode;section:string;out?:'page'|'bar'|'zoom'|'push'|'stack'|'morph'|'scroll';focus?:[number,number];morph?:{from:number[];to:number[];txt:string}};
 const T=16;
@@ -72,10 +72,10 @@ export const Timeline:React.FC<{t:Theme;scenes:Scene[];words:any[];voice:string;
    else if(kin==='bar'||kin==='morph'){st={...st,opacity:inP>=.5?1:0}}}
   const lf=f-starts[i];
   layers.push(<AbsoluteFill key={i} style={{zIndex:z,background:t.bg,backgroundImage:t.texture?`url(${staticFile(t.texture)})`:'none',...st}}>
-   <Ctx.Provider value={{t,f:lf,exit:exitStag}}>{t.id==='commit'?<TermChrome section={s.section} page={`${i+1}/${scenes.length}`} idx={i}/>:<Chrome section={s.section} page={`TRANG ${i+1}/${scenes.length}`} date={date}/>}
+   <Ctx.Provider value={{t,f:lf,exit:exitStag}}>{t.id==='tech-explain'?<TermChrome section={s.section} page={`${i+1}/${scenes.length}`} idx={i}/>:<Chrome section={s.section} page={`TRANG ${i+1}/${scenes.length}`} date={date}/>}
    <div style={{position:'absolute',left:136,right:50,top:290,height:1320}}>{s.el}</div></Ctx.Provider></AbsoluteFill>);
   if(i<scenes.length-1&&(kout==='bar')&&outP>0&&outP<1){const p=outP;const w=p<.5?interpolate(p,[0,.5],[96,1080]):1080;const x=p<.5?0:interpolate(p,[.5,1],[0,1080],{easing:EIO});
-   overlay=<div style={{position:'absolute',top:0,bottom:0,left:x,width:w-(p<.5?0:0),background:t.accent,zIndex:10,display:'flex',alignItems:'center',justifyContent:'center',overflow:'hidden'}}><div style={{transform:`rotate(-90deg) translateY(${(p-.5)*400}px)`,fontFamily:t.id==='commit'?'JBM':'Anton',fontWeight:t.id==='commit'?800:400,fontSize:t.id==='commit'?150:200,color:t.onAccent,whiteSpace:'nowrap'}}>{t.id==='commit'?'git commit ▸':'DAN TECH ■'}</div></div>}
+   overlay=<div style={{position:'absolute',top:0,bottom:0,left:x,width:w-(p<.5?0:0),background:t.accent,zIndex:10,display:'flex',alignItems:'center',justifyContent:'center',overflow:'hidden'}}><div style={{transform:`rotate(-90deg) translateY(${(p-.5)*400}px)`,fontFamily:t.id==='tech-explain'?'JBM':'Anton',fontWeight:t.id==='tech-explain'?800:400,fontSize:t.id==='tech-explain'?150:200,color:t.onAccent,whiteSpace:'nowrap'}}>{t.id==='tech-explain'?'git commit ▸':'DAN TECH ■'}</div></div>}
   if(i<scenes.length-1&&kout==='zoom'&&outP>0&&outP<1){overlay=<AbsoluteFill style={{zIndex:2,background:t.accent,opacity:interpolate(outP,[.4,.6,.8],[0,1,0],cl)}}/>}
   if(i<scenes.length-1&&kout==='morph'&&s.morph&&outP>0&&outP<1){const m=s.morph;const p=outP;const L=(k:number)=>m.from[k]+(m.to[k]-m.from[k])*p;
    overlay=<div style={{position:'absolute',left:L(0),top:L(1),width:L(2),height:L(3),background:t.accent,zIndex:10,display:'flex',alignItems:'center',justifyContent:'center',...H(t,L(4),t.onAccent),transform:`rotate(${Math.sin(Math.PI*p)*-6}deg)`}}>{m.txt}</div>}

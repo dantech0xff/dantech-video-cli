@@ -11,11 +11,11 @@ description: Viết videos/<slug>/script.json cho video Dan Tech từ một spec
 ## Các bước
 
 1. **Nghiên cứu, kiểm chứng.** Mở và đọc nguồn thật (link Dan đưa, báo lớn, tài liệu chính thức). Mỗi sự kiện, con số, trích dẫn phải lấy từ một nguồn bạn đã đọc. **Không bịa** sự kiện, số liệu, quote hay URL. Thông tin chưa chắc thì bỏ, hoặc ghi rõ "chưa xác nhận" và hỏi Dan.
-2. **Chọn theme:** drama/tin → `tin-nong`; mẹo/tool/tutorial/listicle → `meo-nhanh`; code/dev explainer → `commit` (v1, mẫu `videos/git-merge-vs-rebase/`). Nếu spec **không ghi theme**: đề xuất một theme kèm lý do một câu và **chờ Dan xác nhận** trước khi viết. Chỉ khi chạy không tương tác (không ai trả lời được) mới tự chọn, và ghi rõ lý do trong phần tóm tắt.
+2. **Chọn theme:** drama/tin → `hot-news`; mẹo/tool/tutorial/listicle → `quick-tips`; code/dev explainer → `tech-explain` (v1, mẫu `videos/git-merge-vs-rebase/`). Nếu spec **không ghi theme**: đề xuất một theme kèm lý do một câu và **chờ Dan xác nhận** trước khi viết. Chỉ khi chạy không tương tác (không ai trả lời được) mới tự chọn, và ghi rõ lý do trong phần tóm tắt.
 3. **Tạo slug** dạng kebab-case không dấu (`openai-vs-apple`). Copy mẫu cùng theme:
-   - tin-nong: `videos/openai-vs-apple/script.json`
-   - meo-nhanh: `videos/android-studio-shortcuts/script.json`
-   - commit: `videos/git-merge-vs-rebase/script.json`
+   - hot-news: `videos/openai-vs-apple/script.json`
+   - quick-tips: `videos/android-studio-shortcuts/script.json`
+   - tech-explain: `videos/git-merge-vs-rebase/script.json`
    Schema đầy đủ và props từng scene: [SCHEMA.md](SCHEMA.md). Bản khởi đầu: [template.json](template.json).
 4. **Viết `say` từng cảnh** (tiếng Việt nói, câu ngắn):
    - **Hook trong 2 giây đầu:** cảnh 1 mở bằng xung đột, con số hoặc câu hỏi ("Vẫn click chuột lục menu…?", "OpenAI vừa xuống nước…").
@@ -29,7 +29,7 @@ description: Viết videos/<slug>/script.json cho video Dan Tech từ một spec
 9. **Validate:** `python3 scripts/validate_script.py videos/<slug>/script.json`. Chạy lại sau mỗi lần sửa (kể cả sau bước humanize), đến khi `✅ OK` (không có cảnh báo độ dài).
 10. **Báo Dan:** đường dẫn file, theme, số cảnh, số chữ/thời lượng ước tính, hook, danh sách nguồn, và những điểm chưa chắc chắn.
 
-## Code explainer / COMMIT
+## Code explainer / GIẢI THÍCH
 
 Video giải thích code phải **dẫn chuyện** để người xem hiểu và ở lại. Người xem chỉ nghe được một lần, nên lời đọc phải tự nó dễ hiểu.
 

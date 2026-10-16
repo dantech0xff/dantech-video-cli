@@ -2,14 +2,14 @@
 
 ```jsonc
 {
- "theme": "tin-nong" | "meo-nhanh" | "commit",   // = thư mục themes/<id>/
+ "theme": "hot-news" | "quick-tips" | "tech-explain",   // = thư mục themes/<id>/
  "title": "…",                 // tiêu đề nội bộ / description
  "date": "16 · 10 · 2026",     // hiện trên masthead
  "caption": "… #DanTech #TinNong",
  "sources": ["Tên báo, tiêu đề: https://… (ngày)"],   // bắt buộc, nguồn thật
  "voice": {"style": "random"},          // hoặc "hao-hung" | "ke-chuyen" | "tu-nhien"; "file" = ghim audio (bỏ qua TTS)
  "music": {"track": "random"},          // hoặc id trong assets/music/tracks.json, + "start": giây
- "variant": "red",                     // tuỳ chọn: biến thể trong theme.json → variants (COMMIT: "red" = accent YouTube đỏ)
+ "variant": "red",                     // tuỳ chọn: biến thể trong theme.json → variants (GIẢI THÍCH: "red" = accent YouTube đỏ)
  "look": {"accent": "#…"},             // tuỳ chọn: ghi đè màu look cho riêng video (sau variant)
  "handles": [{"p":"YOUTUBE","h":"@dantech-0xff"}, …],  // tuỳ chọn, mặc định đã đúng
  "cta": {"in": "@follow-6", "press": "@Dan", "sub": "…"}, // tuỳ chọn, mặc định từ theme.json → cta
@@ -32,7 +32,7 @@ Không có trường hay giới hạn độ dài: độ dài theo nội dung.
 
 ## Scene templates (props, `?` = tuỳ chọn)
 
-TIN NÓNG / COMMIT (`remotion/src/scenes.tsx`), mẫu: `videos/openai-vs-apple/script.json`
+TIN NÓNG / GIẢI THÍCH (`remotion/src/scenes.tsx`), mẫu: `videos/openai-vs-apple/script.json`
 - `Headline`: kicker, l1, bar, l3, deck?:[s,s], sizes?:[n,n,n]
 - `Flow`: n, kick, title, sub, from, to, count, unit
 - `Quote`: n, kick, media?, w1, w2, tr, who
@@ -47,7 +47,7 @@ MẸO NHANH (`remotion/src/meo.tsx`), mẫu: `videos/android-studio-shortcuts/sc
 - `MeoSlowFast`: tip, vsAt, slowLabel, fastLabel, path[], pathClicks[], keys, mac, fastTime, window, before, after, reflowAt, okAt, ok
 - `MeoSave`: kicker, title, lead, chips:[[a,b],…]
 
-COMMIT (`remotion/src/commit.tsx`), mẫu: `videos/git-merge-vs-rebase/script.json`
+GIẢI THÍCH (`remotion/src/commit.tsx`), mẫu: `videos/git-merge-vs-rebase/script.json`
 - `CmdHook`: cmds:[{s,at}], l1, l2, l3?, titleAt, deck?
 - `GitGraph`: mode:"merge"|"rebase", cmd, cmdAt, showAt?, actAt, notes?:[{s,at,mark?:"+"|"-"|"~"}], main?, branch?
 - `LogPanes`: n, kick, panes:[{title, cmd, at, lines:[[ [text, "hash"|"graph"|"dim"|"green"|"red"|"yellow"?], … ]], verdict?, good?}]
@@ -59,7 +59,7 @@ COMMIT (`remotion/src/commit.tsx`), mẫu: `videos/git-merge-vs-rebase/script.js
 - `Inversions`: n, kick, rows:[{k, from, to, at}]
 - `KeyPoint`: n, kick, l1, l2, at, chips:[{s,at}], course?:{t1,t2,at} (nằm trên nút Follow)
 Mẫu: `videos/inversion-of-control/script.json`.
-Chuyển cảnh thêm `scroll` (cuộn theo bậc như terminal), hợp nhất với COMMIT.
+Chuyển cảnh thêm `scroll` (cuộn theo bậc như terminal), hợp nhất với GIẢI THÍCH.
 
 `media` = file trong `assets/broll/` (chỉ clip không có người). Cấu trúc `code`/`Line`: copy y hệt mẫu.
 SFX có sẵn: xem `assets/sfx/SFX_LIST.md` (cta_click, tip_pop, key_click, tick_001, impactPlank_medium_000, whoosh_soft…).

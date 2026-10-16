@@ -5,7 +5,13 @@ def load(path): return json.load(open(path,encoding='utf-8'))
 def save(obj,path): os.makedirs(os.path.dirname(path),exist_ok=True); json.dump(obj,open(path,'w',encoding='utf-8'),ensure_ascii=False,indent=1)
 def video_paths(script_path):
     d=os.path.dirname(os.path.abspath(script_path)); return d,os.path.join(d,'out'),os.path.basename(d)
-def theme(name): return load(os.path.join(ROOT,'themes',name,'theme.json'))
+# old theme ids still accepted (deprecated, 16 Oct 2026): use the new ones in new scripts
+ALIASES={'tin-nong':'hot-news','meo-nhanh':'quick-tips','commit':'tech-explain'}
+def theme_id(name):
+    if name in ALIASES:
+        import sys; print(f"⚠️  theme '{name}' is deprecated, use '{ALIASES[name]}'",file=sys.stderr); return ALIASES[name]
+    return name
+def theme(name): return load(os.path.join(ROOT,'themes',theme_id(name),'theme.json'))
 def spoken_text(script): return '\n'.join(s['say'] for s in script['scenes'])
 def duration(path): return float(subprocess.check_output(['ffprobe','-v','error','-show_entries','format=duration','-of','csv=p=0',path]))
 def log(line):

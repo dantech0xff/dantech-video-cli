@@ -1,4 +1,4 @@
-// COMMIT scene templates: terminal prompts, git graphs, git log output, diff-style rules.
+// tech-explain (GIẢI THÍCH) scene templates: terminal prompts, git graphs, git log output, diff-style rules.
 // All frame props are scene-relative (script.json "@word" anchors are resolved by build_props.py).
 import React from 'react';import {interpolate,Easing} from 'remotion';import {useS,H,Bd,It,Stamp} from './sys';
 const EO=Easing.bezier(.16,1,.3,1),EIO=Easing.bezier(.7,0,.2,1);const cl={extrapolateLeft:'clamp',extrapolateRight:'clamp'} as const;

@@ -1,6 +1,6 @@
 {
  "look": {
-  "id": "tinnong",
+  "id": "hot-news",
   "label": "TIN NÓNG",
   "bg": "#EFE9DC",
   "texture": "textures/paper.png",
@@ -27,7 +27,8 @@
    "bar",
    "zoom",
    "morph"
-  ]
+  ],
+  "subtitle": "hot news"
  },
  "tail_hold": 47,
  "cta": {

@@ -21,7 +21,7 @@
   "orig": "cloth1.ogg",
   "license": "CC0 1.0",
   "url": "https://kenney.nl/assets/rpg-audio",
-  "use": "COMMIT transition"
+  "use": "GIẢI THÍCH transition"
  },
  "impactPlank_medium_000": {
   "source": "kenney",
@@ -37,7 +37,7 @@
   "orig": "impactSoft_heavy_000.ogg",
   "license": "CC0 1.0",
   "url": "https://kenney.nl/assets/impact-sounds",
-  "use": "COMMIT impact"
+  "use": "GIẢI THÍCH impact"
  },
  "tick_001": {
   "source": "kenney",

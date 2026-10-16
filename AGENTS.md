@@ -12,7 +12,7 @@ pip install -r requirements.txt     # faster-whisper; lần chạy đầu tải 
 export GEMINI_API_KEY=...           # chỉ đặt trong env / .env (đã gitignore). KHÔNG ghi vào file nào trong repo
 ./dt fetch-music                    # tải nhạc Wikimedia Commons vào assets/music/
 # 7 bài Pixabay (TIN NÓNG) phải tải tay từ pixabay.com, đặt đúng tên vào assets/music/pixabay/
-#   (tên file + id: assets/music/tracks.json, assets/music/LIBRARY.md, themes/tin-nong/theme.json → music.pool)
+#   (tên file + id: assets/music/tracks.json, assets/music/LIBRARY.md, themes/hot-news/theme.json → music.pool)
 ./dt setup                          # (macOS/Linux) tự làm các bước trên, chạy lại được; ưu tiên .venv
 ./dt doctor                         # kiểm tra mọi thứ, phải toàn ✅ trước khi render
 ```
@@ -20,14 +20,14 @@ export GEMINI_API_KEY=...           # chỉ đặt trong env / .env (đã gitign
 ## 2. Quy trình cho AI
 
 1. **Chọn chủ đề**, rồi chọn theme:
-   - `tin-nong`: tin nóng, drama công nghệ (scene: Headline, Flow, Quote, Checklist, Evidence, CTA).
-   - `meo-nhanh`: mẹo, tutorial, review tool, listicle (scene: MeoHook, MeoSearch, MeoFix, MeoSlowFast, MeoSave).
-   - `commit`: dev explainer (git, code, terminal; scene: CmdHook, GitGraph, LogPanes, DocRule, CommitCTA, CodeBlock, DepGraph, Analogy, Inversions, KeyPoint). v1 chờ Dan duyệt.
+   - `hot-news`: tin nóng, drama công nghệ (scene: Headline, Flow, Quote, Checklist, Evidence, CTA).
+   - `quick-tips`: mẹo, tutorial, review tool, listicle (scene: MeoHook, MeoSearch, MeoFix, MeoSlowFast, MeoSave).
+   - `tech-explain`: dev explainer (git, code, terminal; scene: CmdHook, GitGraph, LogPanes, DocRule, CommitCTA, CodeBlock, DepGraph, Analogy, Inversions, KeyPoint). v1 chờ Dan duyệt.
 2. **Kiểm chứng nguồn.** Mọi sự kiện, con số, trích dẫn phải có nguồn thật mà bạn đã mở và đọc. Ghi vào `sources` (tên báo + URL + ngày). **Không bịa sự kiện, số liệu, trích dẫn hay URL.** Không chắc thì bỏ, hoặc hỏi Dan.
 3. **Viết `videos/<slug>/script.json`.** Copy mẫu, giữ đúng schema:
    - TIN NÓNG: `videos/openai-vs-apple/script.json`
    - MẸO NHANH: `videos/android-studio-shortcuts/script.json`
-   - COMMIT: `videos/git-merge-vs-rebase/script.json`
+   - GIẢI THÍCH: `videos/git-merge-vs-rebase/script.json`
    - Khoá cấp trên: `theme, title, date, caption, sources, voice, music, scenes`. Mỗi scene có `say, type, section, out, props, sfx?`. Chỉ dùng `type` và các khoá `props` đã có trong mẫu (hoặc trong `remotion/src/scenes.tsx` / `meo.tsx`).
    - Hẹn giờ bằng `"@chữ"` (xem README), không đếm frame tay.
    - Câu cuối có "follow Dan Tech". Outro/CTA tự lo handle **YouTube @dantech-0xff, Facebook @dantech0xff**. Không tự làm outro.
@@ -35,6 +35,9 @@ export GEMINI_API_KEY=...           # chỉ đặt trong env / .env (đã gitign
    - Giọng văn: tiếng Việt tự nhiên, ngắn, dễ đọc thành tiếng. Rõ ràng trước; độ dài theo nội dung.
 4. **Render:** `make video SCRIPT=videos/<slug>/script.json` (hoặc `./dt render …`). Sửa nhỏ: `./dt render <script> --from props` (bỏ qua TTS + align) hoặc `--from mix`.
 5. **Kiểm tra** (mục 4), rồi báo Dan: đường dẫn `out/<slug>.mp4`, `description.txt`, style giọng và bài nhạc đã chọn.
+
+## Theme ids
+`hot-news` (TIN NÓNG · hot news), `quick-tips` (MẸO NHANH · quick tips), `tech-explain` (GIẢI THÍCH · tech explain). Id cũ `tin-nong`, `meo-nhanh`, `commit` vẫn chạy (alias, deprecated, có cảnh báo); script mới dùng id mới. Hashtag như #TinNong, #MeoNhanh giữ nguyên.
 
 ## Skills (đọc SKILL.md tương ứng rồi làm theo)
 
@@ -55,7 +58,7 @@ export GEMINI_API_KEY=...           # chỉ đặt trong env / .env (đã gitign
 - **Giọng:** Gemini TTS `gemini-3.8-flash-tts`, voice `vi-vn-concierge-2`. Style chọn ngẫu nhiên trong hào hứng / kể chuyện kịch tính / tự nhiên YouTuber (`tts.py` tự chọn khi `style: random`). Lựa chọn được ghi vào `logs/voice_log.md`, nên commit file log này.
 - **Nhạc TIN NÓNG:** xoay vòng 7 bài Pixabay trong `music.pool` (`track: random`, `pick_music.py` ưu tiên bài lâu chưa dùng nhất theo `logs/voice_log.md`). Không ghim một bài trừ khi Dan yêu cầu.
 - **Mix:** nhạc ~21 dB dưới giọng (mục tiêu 18–22), master -14 LUFS, true peak -2 dBTP ở loudnorm (file AAC cuối ≤ -1 dBTP). **Không sửa chuỗi xử lý** (`scripts/mix_bgm.sh`, `loudnorm.sh`, `music.rel`) trừ khi Dan yêu cầu.
-- Không sửa theme đã duyệt (`tin-nong` khoá, `meo-nhanh` đã duyệt) nếu Dan không yêu cầu.
+- Không sửa theme đã duyệt (`hot-news` khoá, `quick-tips` đã duyệt) nếu Dan không yêu cầu.
 
 ## 4. Checklist trước khi xuất
 

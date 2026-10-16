@@ -6,9 +6,11 @@ Có 3 theme:
 
 | Theme | Dùng cho | Trạng thái |
 |---|---|---|
-| `tin-nong` | Tin nóng, drama công nghệ (phong cách báo in: giấy, đỏ, Anton) | ✅ Đã duyệt (khoá) |
-| `meo-nhanh` | Mẹo, tutorial, review tool AI, listicle (cobalt + vàng, keycap, mockup IDE) | ✅ Đã duyệt |
-| `commit` | Dev explainer: git, code, terminal (thanh tab vàng, gutter số dòng, lệnh gõ chữ, git graph, git log, chuyển cảnh `scroll`) | 🧪 v1 chờ Dan duyệt |
+| `hot-news` | Tin nóng, drama công nghệ (phong cách báo in: giấy, đỏ, Anton) | ✅ Đã duyệt (khoá) |
+| `quick-tips` | Mẹo, tutorial, review tool AI, listicle (cobalt + vàng, keycap, mockup IDE) | ✅ Đã duyệt |
+| `tech-explain` | Dev explainer: git, code, terminal (thanh tab vàng, gutter số dòng, lệnh gõ chữ, git graph, git log, chuyển cảnh `scroll`) | 🧪 v1 chờ Dan duyệt |
+
+Id cũ `tin-nong`, `meo-nhanh`, `commit` vẫn được chấp nhận (alias, deprecated). Giao diện `~/commit` / `DAN/TECH.git` của GIẢI THÍCH là phong cách editor, không phải tên theme.
 
 ## Pipeline
 
@@ -42,7 +44,7 @@ export GEMINI_API_KEY=...                # chỉ đọc từ biến môi trườ
 
 ## Làm một video, từng bước
 
-1. Tạo thư mục `videos/<slug>/` và copy một `script.json` mẫu (`videos/openai-vs-apple/` cho TIN NÓNG, `videos/android-studio-shortcuts/` cho MẸO NHANH, `videos/git-merge-vs-rebase/` cho COMMIT).
+1. Tạo thư mục `videos/<slug>/` và copy một `script.json` mẫu (`videos/openai-vs-apple/` cho TIN NÓNG, `videos/android-studio-shortcuts/` cho MẸO NHANH, `videos/git-merge-vs-rebase/` cho GIẢI THÍCH).
 2. Sửa `script.json`:
    - `theme`, `title`, `date` (hiện trên masthead), `caption`, `sources` (đi vào description).
    - `scenes`: mỗi cảnh có `say` (câu giọng đọc nói trong cảnh đó), `type` (scene template), `section` (dòng nhỏ trên đầu trang), `out` (kiểu chuyển cảnh sang cảnh sau: `page`, `bar`, `zoom`, `push`, `stack`, `morph`, `scroll`), `props` (nội dung cảnh), `sfx` (tuỳ chọn).
@@ -76,7 +78,7 @@ Nhờ vậy khi đổi giọng (thời lượng khác), keycap, popup, SFX vẫn
 | SFX một khoảnh khắc | `script.json` → `scenes[].sfx`: `{"at": "@chữ", "s": "tên file trong assets/sfx", "v": 0.5}`, tick lặp: thêm `"every": 5, "count": 14` |
 | SFX chuyển cảnh của theme | `theme.json` → `look.sfx.trans` |
 | Màu, font, kiểu chữ | `theme.json` → `look` |
-| Biến thể màu (vd COMMIT đỏ) | `theme.json` → `variants.<tên>.look`; dùng: `"variant": "red"` trong script.json (hoặc `"look": {...}` ghi đè riêng 1 video) |
+| Biến thể màu (vd GIẢI THÍCH đỏ) | `theme.json` → `variants.<tên>.look`; dùng: `"variant": "red"` trong script.json (hoặc `"look": {...}` ghi đè riêng 1 video) |
 | Tagline end card, vị trí nút Follow, thời gian giữ cuối | `theme.json` → `outro`, `cta`, `tail_hold` |
 | Handle mạng xã hội | mặc định YouTube @dantech-0xff, Facebook @dantech0xff (ghi đè bằng `"handles"` trong script.json) |
 
@@ -86,7 +88,7 @@ Kiểm tra mix: `./dt render` in ra "voice/music while speaking: median ~21 dB" 
 
 ## Thêm theme mới
 
-1. Copy `themes/meo-nhanh/` thành `themes/<id>/`, sửa `theme.json` (màu, font, transition SFX, nhạc, tagline).
+1. Copy `themes/quick-tips/` thành `themes/<id>/`, sửa `theme.json` (màu, font, transition SFX, nhạc, tagline).
 2. Font mới: bỏ file vào `assets/fonts/` và thêm `@font-face` trong `FONTS` (`remotion/src/sys.tsx`).
 3. Đăng ký theme trong `remotion/src/themes.ts` (import JSON) và thêm id vào danh sách trong `remotion/src/Root.tsx`.
 4. Dùng scene template có sẵn hoặc viết template mới trong `remotion/src/` rồi thêm vào bảng `SCENES` ở `remotion/src/Video.tsx`.
@@ -100,8 +102,8 @@ remotion/src/
   Video.tsx             component chung cho mọi theme (đọc props.json)
   Root.tsx              1 composition / theme
   sys.tsx               captions, chuyển cảnh (Timeline), masthead, hiệu ứng vào/ra
-  scenes.tsx            scene templates TIN NÓNG/COMMIT: Headline, Flow, Quote, Checklist, Evidence, CTA
-  commit.tsx            scene templates COMMIT: CmdHook, GitGraph, LogPanes, DocRule, CommitCTA, CodeBlock, DepGraph, Analogy, Inversions, KeyPoint
+  scenes.tsx            scene templates TIN NÓNG/GIẢI THÍCH: Headline, Flow, Quote, Checklist, Evidence, CTA
+  commit.tsx            scene templates GIẢI THÍCH: CmdHook, GitGraph, LogPanes, DocRule, CommitCTA, CodeBlock, DepGraph, Analogy, Inversions, KeyPoint
   meo.tsx               scene templates MẸO NHANH: MeoHook, MeoSearch, MeoFix, MeoSlowFast, MeoSave, keycap, IDE mockup
   outro.tsx             nút Follow (bấm + chuông) và end card
 scripts/                tts.py, align.py, build_props.py, pick_music.py, mix_bgm.sh, loudnorm.sh, describe.py, measure_vm.py, compare.sh, fetch_music.py

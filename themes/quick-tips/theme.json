@@ -1,6 +1,6 @@
 {
  "look": {
-  "id": "meo",
+  "id": "quick-tips",
   "label": "MẸO NHANH",
   "bg": "#1D3BFF",
   "ink": "#FFFFFF",
@@ -26,7 +26,8 @@
    "stack",
    "push",
    "bar"
-  ]
+  ],
+  "subtitle": "quick tips"
  },
  "tail_hold": 32,
  "cta": {
