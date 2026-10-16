@@ -31,8 +31,14 @@
   "subtitle": "hot news",
   "caption": {
    "font": "Anton",
-   "size": 56,
-   "upper": true
+   "size": 50,
+   "upper": true,
+   "chipBg": "rgba(18,18,18,.88)",
+   "chipText": "#FFFFFF",
+   "upcomingText": "rgba(255,255,255,0.72)",
+   "activeBg": "#FF2A00",
+   "activeText": "#FFFFFF",
+   "radius": 2
   }
  },
  "tail_hold": 47,

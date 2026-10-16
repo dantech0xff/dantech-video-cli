@@ -1,5 +1,5 @@
 import React,{createContext,useContext} from 'react';
-import {AbsoluteFill,Audio,OffthreadVideo,Sequence,staticFile,useCurrentFrame,interpolate,Easing,random} from 'remotion';
+import {AbsoluteFill,Audio,OffthreadVideo,Sequence,staticFile,useCurrentFrame,interpolate,Easing,random,spring} from 'remotion';
 import {Theme} from './themes';import {BpChrome} from './cyber';import {SZ} from './safezone';import {GlChrome} from './glitch';
 export const FONTS=`@font-face{font-family:Anton;src:url(${staticFile('fonts/anton.ttf')})}@font-face{font-family:Barlow;src:url(${staticFile('fonts/barlow.ttf')})}@font-face{font-family:JBM;src:url(${staticFile('fonts/jbm.ttf')});font-weight:100 800}@font-face{font-family:BVPX;src:url(${staticFile('fonts/bvp_xb.ttf')})}@font-face{font-family:BVPM;src:url(${staticFile('fonts/bvp_md.ttf')})}`;
 export const Ctx=createContext<{t:Theme;f:number;exit:number}>(null as any);
@@ -46,7 +46,10 @@ export const TermChrome:React.FC<{section:string;page:string;idx:number}>=({sect
    Paged, never rolling: one complete sentence (or comma-phrase chunk if it would exceed 2 lines) is shown whole,
    then words light up one by one on the whisper timings. Font comes from theme look.caption (default: theme head font). */
 const CW:Record<string,number>={Anton:.46,BVPX:.6,BVPM:.58,JBM:.66,Barlow:.5}; // avg glyph width / font size, measured on renders
-export const capStyle=(t:Theme)=>{const c=(t as any).caption||{};const font=c.font??t.head;return {font,size:c.size??(font==='Anton'?56:font==='JBM'?42:50),upper:c.upper??(font==='Anton'),weight:c.weight??(font==='JBM'?700:400)}};
+export const capStyle=(t:Theme)=>{const c=(t as any).caption||{};const font=c.font??t.head;const size=c.size??(font==='Anton'?50:font==='JBM'?38:44);
+ return {font,size,upper:c.upper??(font==='Anton'),weight:c.weight??(font==='JBM'?700:400),
+  chipBg:c.chipBg??'rgba(16,16,16,.84)',chipText:c.chipText??'#FFFFFF',upText:c.upcomingText??'rgba(255,255,255,.62)',
+  activeBg:c.activeBg??t.accent,activeText:c.activeText??'#111111',radius:c.radius??4,padX:c.padX??Math.round(size*.2),padY:c.padY??4,gap:c.gap??8,pop:c.pop??1.06}};
 type Wd={t:string;s:number;e:number};
 export const chunkWords=(words:Wd[],maxChars:number):number[][]=>{const out:number[][]=[];let sent:number[]=[];
  const len=(ix:number[])=>ix.reduce((a,k)=>a+words[k].t.length+1,0);
@@ -63,12 +66,20 @@ export const chunkWords=(words:Wd[],maxChars:number):number[][]=>{const out:numb
   if(acc.length)out.push(acc);sent=[]};
  words.forEach((w,k)=>{sent.push(k);if(/[.!?…]["”»)]*$/.test(w.t))flush()});flush();return out};
 export const Captions:React.FC<{words:Wd[]}>=({words})=>{const {t}=useS();const f=useCurrentFrame();const tm=f/30;const c=capStyle(t);
- const W=SZ.captions.w;const chunks=React.useMemo(()=>chunkWords(words,Math.floor(2*W/(c.size*(CW[c.font]??.55)))),[words,c.size,c.font]);
+ // 2-line budget in characters, accounting for per-word chip padding + gap (avg word ~4 chars), with 6% safety
+ const W=SZ.captions.w;const g=c.size*(CW[c.font]??.55);const ovh=(2*c.padX+c.gap)/g;
+ const maxChars=Math.floor(.94*2*W/(g*(1+ovh/4)));
+ const chunks=React.useMemo(()=>chunkWords(words,maxChars),[words,maxChars]);
  const ci=chunks.findIndex((ch,k)=>{const a=words[ch[0]].s-0.12;const b=k+1<chunks.length?words[chunks[k+1][0]].s-0.12:words[ch[ch.length-1]].e+0.6;return tm>=a&&tm<b});
- if(ci<0)return null;const ch=chunks[ci];const cur=ch.findIndex(k=>tm<words[k].e);
- const light=t.bg.toLowerCase()>'#888888';const dim=light?'rgba(0,0,0,.35)':'rgba(255,255,255,.38)';
- return <div style={{position:'absolute',left:SZ.captions.x,width:SZ.captions.w,top:SZ.captions.top,display:'flex',flexWrap:'wrap',columnGap:c.size*.28,rowGap:6,alignItems:'baseline'}}>{ch.map((k,j)=>{const w=words[k];const a=j===cur&&tm>=w.s-0.05;const done=tm>=w.e||(cur<0);
-  return <span key={k} style={{fontFamily:c.font,fontWeight:c.weight,fontSize:c.size,lineHeight:1.12,textTransform:c.upper?'uppercase':'none',color:a?t.accent:done?t.ink:dim,borderBottom:`${Math.max(2,c.size/24)}px solid ${a?t.accent:'transparent'}`,paddingTop:c.font==='Anton'?6:0}}>{w.t}</span>})}</div>};
+ if(ci<0)return null;const ch=chunks[ci];
+ const lh=Math.round(c.size*1.12);
+ let cur=-1;ch.forEach((k,j)=>{if(tm>=words[k].s-0.05)cur=j});if(cur>=0&&tm>words[ch[cur]].e+0.25)cur=-1; // exactly one active chip
+ return <div style={{position:'absolute',left:SZ.captions.x,width:SZ.captions.w,top:SZ.captions.top,display:'flex',flexWrap:'wrap',columnGap:c.gap,rowGap:6,alignItems:'center'}}>{ch.map((k,j)=>{const w=words[k];
+  const on=spring({frame:f-Math.round((w.s-0.05)*30),fps:30,config:{damping:20,stiffness:260,mass:.6}});
+  const isA=j===cur;const act=isA?on:0;const up=tm<w.s-0.05;
+  return <span key={k} style={{fontFamily:c.font,fontWeight:c.weight,fontSize:c.size,lineHeight:`${lh}px`,textTransform:c.upper?'uppercase':'none',
+   background:isA?c.activeBg:c.chipBg,color:isA?c.activeText:up?c.upText:c.chipText,borderRadius:c.radius,padding:`${c.padY+(c.font==='Anton'?3:0)}px ${c.padX}px ${c.padY-(c.font==='Anton'?3:0)}px`,
+   transform:`scale(${1+(c.pop-1)*act})`,display:'inline-block'}}>{w.t}</span>})}</div>};
 /* signal-break transition (hot-news-glitch): RGB fringes via drop-shadow, jitter, slice bars */
 const srnd=(n:number)=>{const x=Math.sin(n*91.7+13.3)*43758.5453;return x-Math.floor(x)};
 const sig=(g:number,f:number):React.CSSProperties=>({transform:`translateX(${(srnd(Math.floor(f/2))-.5)*g*70}px)`,filter:`drop-shadow(${-14*g}px 0 0 rgba(255,30,60,${.85*g})) drop-shadow(${14*g}px 0 0 rgba(30,140,255,${.85*g})) brightness(${1+.35*g})`});

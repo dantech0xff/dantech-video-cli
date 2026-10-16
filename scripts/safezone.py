@@ -44,5 +44,5 @@ if __name__=='__main__':
     if a and a[0]=='--sheet': sheet(a[1],a[2:]);sys.exit()
     od='.' if '-o' not in a else a[a.index('-o')+1];fs=[x for i,x in enumerate(a) if x!='-o' and (i==0 or a[i-1]!='-o')]
     for f in fs:
-        out=os.path.join(od,os.path.splitext(os.path.basename(f))[0]+'_sz.png');r=overlay(f,out)
+        os.makedirs(od,exist_ok=True);out=os.path.join(od,os.path.splitext(os.path.basename(f))[0]+'_sz.png');r=overlay(f,out)
         print(os.path.basename(f),' '.join(f"{k}:{v*100:.0f}%" for k,v in r.items()),'⚠️' if max(r.values())>0.01 else '✅')

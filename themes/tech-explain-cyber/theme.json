@@ -35,8 +35,14 @@
   ],
   "caption": {
    "font": "BVPM",
-   "size": 50,
-   "upper": false
+   "size": 44,
+   "upper": false,
+   "chipBg": "rgba(38,38,38,.92)",
+   "chipText": "#EDEDE6",
+   "upcomingText": "rgba(237,237,230,0.6)",
+   "activeBg": "#B6FF3B",
+   "activeText": "#111111",
+   "radius": 3
   }
  },
  "tail_hold": 40,

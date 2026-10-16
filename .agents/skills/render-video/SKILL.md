@@ -53,9 +53,10 @@ description: Render một videos/<slug>/script.json thành MP4 hoàn chỉnh (TT
 | Nhạc lấn giọng | **không sửa chuỗi mix**; báo Dan số đo median, chỉ đổi `music.rel` khi Dan đồng ý |
 
 ## Caption (karaoke, phân trang)
+Caption = karaoke **chip** (mọi theme): mỗi chữ là một chip có nền (`chipBg`/`chipText`). Chữ sắp đọc thì text mờ hơn (`upcomingText`). Chữ đang đọc: nền đổi sang `activeBg`, text sang `activeText`, pop nhẹ (`pop` ~1.06, spring, không rung). Đọc xong thì về chip thường. **Không gạch chân.** Cấu hình ở `theme.json → look.caption`: `font,size,upper,weight,chipBg,chipText,upcomingText,activeBg,activeText,radius,padX,padY,gap,pop`. Size phải để 2 dòng chip lọt dải y 1366–1500 (Anton 50, BVPX/BVPM 44, JBM 38). Chip trên nền tối phải sáng hơn nền để còn thấy. Ước lượng 2 dòng trong `Captions` đã trừ padding + gap của chip.
 - Không cuộn liên tục. Mỗi lần hiện **trọn một câu** (theo dấu câu trong script, giữ trong words.json); hết câu thì xoá và hiện câu mới.
 - Câu dài hơn 2 dòng được tách tại dấu phẩy / hai chấm thành các cụm trọn vẹn, mỗi cụm hiện nguyên; cụm vẫn quá dài thì chia đều theo từ.
-- Trong cụm, từng từ sáng lên theo timing whisper (từ đang đọc = accent + gạch chân, đã đọc = màu chữ, chưa đọc = mờ).
+- Trong cụm, từng từ sáng lên theo timing whisper: chip đang đọc đổi sang nền accent + text tương phản, chip đã đọc về bình thường, chip chưa đọc thì text mờ hơn.
 - QC: chụp vài frame giữa câu, kiểm tra không quá 2 dòng và đúng font theme.
 
 ## Safe zone (kiểm tra UI điện thoại — bắt buộc trong QC)

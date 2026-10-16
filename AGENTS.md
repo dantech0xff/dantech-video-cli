@@ -76,7 +76,7 @@ Script mới dùng `"voice": {"style":"random"}`. Không đặt `voice.file`. C�
 - **Nhạc:** `track: random` nghĩa là LRU theo pool của theme (`pick_music.py`). Có thể ghim bài bằng id trong `music.track` để re-render không đổi nhạc (vd. flutter-mvvm ghim `sappheiros-perspective`). Explainer nên dùng nhạc êm, tin nóng dùng nhạc căng.
   - **Content ID (YouTube):** bài Pixabay có thể bị claim. `description.txt` có cảnh báo/credit. Bài Commons CC BY bắt buộc credit. Không dùng nhạc ngoài `assets/music/LIBRARY.md`.
 - **Mix:** -14 LUFS, true peak -2 dBTP (AAC cuối ≤ -1), giọng cao hơn nhạc ~21 dB (18–22). Không sửa chuỗi mix nếu không được yêu cầu.
-- **Caption:** karaoke phân trang (mọi theme). Hết câu thì xoá trang, hiện trọn câu mới, highlight từng chữ. Tối đa 2 dòng. Câu dài cắt ở dấu phẩy/ranh giới tự nhiên. Font lấy từ `theme.json → look.caption`. Không sửa thành chạy cuộn.
+- **Caption:** karaoke phân trang (mọi theme). Hết câu thì xoá trang, hiện trọn câu mới, highlight từng chữ. Tối đa 2 dòng. Câu dài cắt ở dấu phẩy/ranh giới tự nhiên. Mỗi chữ là một chip có nền. Chữ đang đọc đổi sang nền accent + text tương phản, pop nhẹ. Không gạch chân. Font và màu chip lấy từ `theme.json → look.caption`. Không sửa thành chạy cuộn.
 - **Safe zone bắt buộc:** hằng số ở `remotion/src/safezone.ts`. Nội dung x 136–860, y 290–~1360. Caption y 1366–1500. Follow y 1150–1350. Trên y 250 chỉ để brand. Kiểm bằng `scripts/safezone.py`.
 - **Trên màn hình:** không tên theme, không meta label, không nhãn kỹ thuật giả (FIG./SHEET/§/"END OF SHEET"…). Brand "Dan Tech" thì giữ. **Không người, mặt người AI.** B-roll faceless.
 - **Outro/CTA:** có cả hai handle **YouTube @dantech-0xff** và **Facebook @dantech0xff**. Nút Follow do code lo.

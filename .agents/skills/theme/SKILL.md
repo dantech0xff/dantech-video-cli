@@ -34,6 +34,7 @@ description: Tạo theme mới hoặc chỉnh theme Dan Tech từ một spec (mo
 - **Không hiển thị tên theme trên khung hình** (TIN NÓNG / MẸO NHANH / GIẢI THÍCH…): tên theme chỉ dùng nội bộ. Chỉ giữ brand DAN TECH. Không thêm nhãn giả-kỹ-thuật trang trí (FIG./SHEET/§/REV…) nếu không mang nghĩa thật.
 
 ## Caption karaoke (mọi theme)
+Caption = karaoke **chip** (mọi theme): mỗi chữ là một chip có nền (`chipBg`/`chipText`). Chữ sắp đọc thì text mờ hơn (`upcomingText`). Chữ đang đọc: nền đổi sang `activeBg`, text sang `activeText`, pop nhẹ (`pop` ~1.06, spring, không rung). Đọc xong thì về chip thường. **Không gạch chân.** Cấu hình ở `theme.json → look.caption`: `font,size,upper,weight,chipBg,chipText,upcomingText,activeBg,activeText,radius,padX,padY,gap,pop`. Size phải để 2 dòng chip lọt dải y 1366–1500 (Anton 50, BVPX/BVPM 44, JBM 38). Chip trên nền tối phải sáng hơn nền để còn thấy. Ước lượng 2 dòng trong `Captions` đã trừ padding + gap của chip.
 - Font caption khai báo trong `theme.json` → `look.caption` `{font, size, upper, weight?}`; mặc định = font chính (`head`) của theme. Caption phải cùng font với video.
 - Hiện tại: hot-news Anton 72 (in hoa) · quick-tips BVPX 62 · tech-explain JBM 52 (700) · tech-explain-cyber BVPM 60 · hot-news-glitch Anton 72 (in hoa).
 - Component `Captions` (remotion/src/sys.tsx) dùng chung, không viết caption riêng cho theme mới.

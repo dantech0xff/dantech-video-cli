@@ -30,8 +30,14 @@
   "subtitle": "quick tips",
   "caption": {
    "font": "BVPX",
-   "size": 50,
-   "upper": false
+   "size": 44,
+   "upper": false,
+   "chipBg": "rgba(12,12,24,.80)",
+   "chipText": "#FFFFFF",
+   "upcomingText": "rgba(255,255,255,0.72)",
+   "activeBg": "#FFE14D",
+   "activeText": "#111111",
+   "radius": 10
   }
  },
  "tail_hold": 32,

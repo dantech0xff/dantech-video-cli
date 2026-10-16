@@ -29,8 +29,14 @@
   "dir": "signal",
   "caption": {
    "font": "Anton",
-   "size": 56,
-   "upper": true
+   "size": 50,
+   "upper": true,
+   "chipBg": "rgba(8,8,8,.85)",
+   "chipText": "#FFFFFF",
+   "upcomingText": "rgba(255,255,255,0.7)",
+   "activeBg": "#FF2D2D",
+   "activeText": "#FFFFFF",
+   "radius": 0
   }
  },
  "tail_hold": 47,

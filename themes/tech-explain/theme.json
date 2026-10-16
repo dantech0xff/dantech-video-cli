@@ -30,9 +30,15 @@
   "subtitle": "tech explain",
   "caption": {
    "font": "JBM",
-   "size": 42,
+   "size": 38,
    "upper": false,
-   "weight": 700
+   "weight": 700,
+   "chipBg": "#2C2C2C",
+   "chipText": "#FFFFFF",
+   "upcomingText": "rgba(255,255,255,0.62)",
+   "activeBg": "#FFD60A",
+   "activeText": "#111111",
+   "radius": 4
   }
  },
  "tail_hold": 40,
