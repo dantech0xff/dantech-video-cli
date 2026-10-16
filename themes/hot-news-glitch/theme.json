@@ -1,0 +1,98 @@
+{
+ "look": {
+  "id": "hot-news-glitch",
+  "label": "TIN NÓNG GLITCH",
+  "bg": "#1C1C1C",
+  "texture": null,
+  "ink": "#F2F2F2",
+  "onAccent": "#FFFFFF",
+  "accent": "#FF2D2D",
+  "accent2": "#F2F2F2",
+  "muted": "#8A8A8A",
+  "head": "Anton",
+  "body": "Barlow",
+  "upper": true,
+  "step": 2.5,
+  "video": "mono",
+  "entry": "slam",
+  "rule": "#333333",
+  "sfx": {
+   "trans": "click_002",
+   "stamp": "impactPlank_medium_000",
+   "tick": "tick_001",
+   "entry": "bookFlip2"
+  },
+  "trans": [
+   "signal"
+  ],
+  "subtitle": "hot news · glitch",
+  "dir": "signal",
+  "caption": {
+   "font": "Anton",
+   "size": 72,
+   "upper": true
+  }
+ },
+ "tail_hold": 47,
+ "cta": {
+  "top": 1040,
+  "in_offset": -6,
+  "sub": "BẬT CHUÔNG ĐỂ KHÔNG LỠ TIN"
+ },
+ "outro": {
+  "dur": 75,
+  "tagline": "Tin công nghệ mỗi ngày",
+  "pal": {
+   "panel": "#141414",
+   "fg": "#F2F2F2",
+   "tagBg": "#FF2D2D",
+   "tagFg": "#FFFFFF",
+   "mark": "#FF2D2D",
+   "rail": "#FF2D2D"
+  }
+ },
+ "voice": {
+  "voice": "vi-vn-concierge-2",
+  "model": "gemini-3.8-flash-tts",
+  "styles": {
+   "hao-hung": "hào hứng, tràn đầy năng lượng, nhịp nhanh như dẫn bản tin drama công nghệ nóng hổi",
+   "ke-chuyen": "kể chuyện kịch tính, hồi hộp, có ngắt nghỉ tạo căng thẳng",
+   "tu-nhien": "tự nhiên, thoải mái như đang nói chuyện với bạn bè, phong cách YouTuber"
+  }
+ },
+ "music": {
+  "pool": [
+   {
+    "id": "the_mountain-epic-cinematic-576567",
+    "start": 15
+   },
+   {
+    "id": "the_mountain-epic-trailer-576568",
+    "start": 0
+   },
+   {
+    "id": "the_mountain-cinematic-epic-576562",
+    "start": 7
+   },
+   {
+    "id": "nastelbom-epic-trailer-602514",
+    "start": 10
+   },
+   {
+    "id": "nastelbom-epic-cinematic-602522",
+    "start": 20
+   },
+   {
+    "id": "echoes_of_lumen-epic-background-music-595722",
+    "start": 3
+   },
+   {
+    "id": "pink_sound-storm-zone-epic-background-instrumental-music-for-video-short-1-587216",
+    "start": 0
+   }
+  ],
+  "rel": -9
+ },
+ "variants": {},
+ "experimental": true
+}

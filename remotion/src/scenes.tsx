@@ -14,7 +14,7 @@ export const Flow:React.FC<{n:string;kick:string;title:string;sub:string;from:st
  <It i={1}><div style={{...H(t,118),whiteSpace:'nowrap'}}>{title}</div></It>
  <It i={3}><div style={{...Bd(t,40),marginTop:16}}>Cáo buộc: <span style={{background:t.ink,color:t.bg,padding:'0 10px'}}>{sub}</span></div></It>
  <It i={5} style={{position:'relative',height:880,marginTop:40,borderTop:`2px solid ${t.rule}`,borderBottom:`2px solid ${t.rule}`,backgroundImage:`repeating-linear-gradient(0deg, transparent 0 59px, ${t.muted}44 59px 60px)`}}>
-  <div style={{...Bd(t,26,t.muted),position:'absolute',top:20}}>HÌNH 1 — DÒNG NHÂN SỰ</div>
+  {t.id!=='hot-news-glitch'&&<div style={{...Bd(t,26,t.muted),position:'absolute',top:20}}>HÌNH 1 — DÒNG NHÂN SỰ</div>}
   <Box s={from} x={0}/><Box s={to} x={564}/>
   <div style={{position:'absolute',left:330,top:169,height:12,width:234*arrow,background:t.accent}}/>
   {arrow>.95&&<div style={{position:'absolute',left:540,top:151,borderTop:'24px solid transparent',borderBottom:'24px solid transparent',borderLeft:`30px solid ${t.accent}`}}/>}

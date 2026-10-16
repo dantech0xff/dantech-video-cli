@@ -1,0 +1,185 @@
+{
+ "theme": "hot-news-glitch",
+ "title": "OpenAI xuống nước trước Apple",
+ "date": "16 · 10 · 2026",
+ "caption": "OpenAI nhượng bộ trong vụ Apple kiện đánh cắp bí mật thương mại. Anh em nghĩ ai đúng? #DanTech #TinNong",
+ "sources": [
+  "The Verge, Bloomberg (15.10.2026)"
+ ],
+ "voice": {
+  "style": "random",
+  "file": "voice_approved.mp3"
+ },
+ "music": {
+  "track": "pink_sound-storm-zone-epic-background-instrumental-music-for-video-short-1-587216",
+  "start": 0
+ },
+ "scenes": [
+  {
+   "say": "OpenAI vừa phải xuống nước trước Apple!",
+   "type": "GlHeadline",
+   "section": "TRANG NHẤT",
+   "out": "signal",
+   "props": {
+    "kicker": "ĐỘC QUYỀN · CẬP NHẬT 15.10.2026",
+    "l1": "OPENAI",
+    "bar": "XUỐNG NƯỚC",
+    "l3": "TRƯỚC APPLE",
+    "deck": [
+     "Toà án sắp ra lệnh cấm. OpenAI chọn nhượng bộ trước.",
+     "14 nhân viên cũ của Apple ở tâm bão."
+    ],
+    "hits": [
+     0,
+     "@xuống"
+    ]
+   }
+  },
+  {
+   "say": "Apple kiện OpenAI, cáo buộc đánh cắp bí mật thương mại, khi mười bốn nhân viên nhảy việc từ Apple sang.",
+   "type": "Flow",
+   "section": "VỤ KIỆN BÍ MẬT THƯƠNG MẠI",
+   "out": "signal",
+   "props": {
+    "n": "2",
+    "kick": "VỤ KIỆN",
+    "title": "APPLE KIỆN OPENAI",
+    "sub": "đánh cắp bí mật thương mại",
+    "from": "APPLE",
+    "to": "OPENAI",
+    "count": 14,
+    "unit": "NHÂN VIÊN RỜI APPLE"
+   },
+   "sfx": [
+    {
+     "at": 44,
+     "every": 5,
+     "count": 14,
+     "s": "tick_001",
+     "v": 0.35
+    }
+   ]
+  },
+  {
+   "say": "Thẩm phán Edward Davila nói ông rất có khả năng sẽ chấp thuận lệnh cấm mà Apple yêu cầu.",
+   "type": "Quote",
+   "section": "PHÁN QUYẾT",
+   "out": "signal",
+   "props": {
+    "n": "3",
+    "kick": "TOÀ ÁN",
+    "media": "broll/broll-gavel.mp4",
+    "w1": "HIGHLY",
+    "w2": "LIKELY",
+    "tr": "“Rất có khả năng” chấp thuận lệnh cấm Apple yêu cầu.",
+    "who": "Thẩm phán Edward Davila"
+   }
+  },
+  {
+   "say": "Ngay sau đó, OpenAI tự nguyện nhượng bộ: cam kết không dùng thông tin độc quyền của Apple để phát triển sản phẩm, trong lúc vụ kiện còn tiếp diễn.",
+   "type": "Checklist",
+   "section": "NHƯỢNG BỘ",
+   "out": "signal",
+   "props": {
+    "n": "4",
+    "kick": "OPENAI CAM KẾT",
+    "t1": "OPENAI",
+    "t2": "CAM KẾT:",
+    "stamp": {
+     "at": "@tự",
+     "text": "NHƯỢNG BỘ",
+     "sub": "TỰ NGUYỆN · 15.10.2026"
+    },
+    "items": [
+     {
+      "s": "Không dùng thông tin độc quyền của Apple để phát triển sản phẩm",
+      "at": 18
+     },
+     {
+      "s": "Áp dụng trong suốt thời gian vụ kiện",
+      "at": 64
+     },
+     {
+      "s": "Giao bản sao pháp lý ổ cứng của 14 nhân viên",
+      "at": 175
+     }
+    ]
+   },
+   "sfx": [
+    {
+     "at": "@tự",
+     "s": "impactPlank_medium_000",
+     "v": 0.6
+    },
+    {
+     "at": 28,
+     "s": "tick_001",
+     "v": 0.4
+    },
+    {
+     "at": 74,
+     "s": "tick_001",
+     "v": 0.4
+    },
+    {
+     "at": 185,
+     "s": "tick_001",
+     "v": 0.4
+    }
+   ]
+  },
+  {
+   "say": "Không chỉ vậy, OpenAI còn phải giao bản sao pháp lý ổ cứng của cả mười bốn nhân viên này.",
+   "type": "Evidence",
+   "section": "BẰNG CHỨNG",
+   "out": "signal",
+   "props": {
+    "n": "5",
+    "kick": "BẰNG CHỨNG",
+    "media": "broll/broll-drives.mp4",
+    "pos": "center 18%",
+    "big": "14",
+    "unit": "Ổ CỨNG",
+    "count": 14,
+    "label": "TANG VẬT",
+    "tag": "ĐÃ GIAO",
+    "start": 14
+   },
+   "sfx": [
+    {
+     "at": 14,
+     "every": 5,
+     "count": 14,
+     "s": "tick_001",
+     "v": 0.3
+    }
+   ]
+  },
+  {
+   "say": "Cuộc chiến nhân tài AI đang ngày càng căng. Anh em nghĩ ai đúng? Comment bên dưới, và follow Dan Tech nhé!",
+   "type": "CTA",
+   "section": "TRANG CUỐI",
+   "props": {
+    "n": "6",
+    "kick": "BẠN NGHĨ SAO?",
+    "lead": "Cuộc chiến nhân tài AI ngày càng căng.",
+    "big": "AI ĐÚNG?",
+    "opts": [
+     "APPLE",
+     "OPENAI"
+    ],
+    "hint": "↓ Bình chọn ở phần COMMENT",
+    "ctaAt": "@Comment-40",
+    "noFollow": true,
+    "src": "Nguồn: The Verge, Bloomberg · 15.10.2026"
+   },
+   "sfx": [
+    {
+     "at": "@Comment-40",
+     "s": "impactPlank_medium_000",
+     "v": 0.5
+    }
+   ]
+  }
+ ]
+}
