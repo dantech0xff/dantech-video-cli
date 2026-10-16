@@ -51,6 +51,12 @@ COMMIT (`remotion/src/commit.tsx`), mẫu: `videos/git-merge-vs-rebase/script.js
 - `LogPanes`: n, kick, panes:[{title, cmd, at, lines:[[ [text, "hash"|"graph"|"dim"|"green"|"red"|"yellow"?], … ]], verdict?, good?}]
 - `DocRule`: n, kick, src, quote, quoteAt, tr, trAt, bad, badAt, stamp?:{at,text,sub}
 - `CommitCTA`: n, kick, rows:[{k,v,at}] (tối đa 2), cmd, cmdAt (nội dung phải ở trên nút Follow, y≈1110)
+- `CodeBlock`: n, kick, file, lines:[{s,at}] (Kotlin highlight; ≤ ~36 ký tự/dòng ở size 40), tone?:"bad"|"good", badge?:{text,at}, size?
+- `DepGraph`: n, kick, root, deps[] (≤5), depsAt, you, fw, flipAt, q?:[{s,at}]
+- `Analogy`: n, kick, cards:[{title, tag, at, steps:[{icon:"basket"|"pan"|"plate"|"menu"|"bell"|"check", label, at}]}] (2 thẻ, icon không mặt người)
+- `Inversions`: n, kick, rows:[{k, from, to, at}]
+- `KeyPoint`: n, kick, l1, l2, at, chips:[{s,at}], course?:{t1,t2,at} (nằm trên nút Follow)
+Mẫu: `videos/inversion-of-control/script.json`.
 Chuyển cảnh thêm `scroll` (cuộn theo bậc như terminal), hợp nhất với COMMIT.
 
 `media` = file trong `assets/broll/` (chỉ clip không có người). Cấu trúc `code`/`Line`: copy y hệt mẫu.

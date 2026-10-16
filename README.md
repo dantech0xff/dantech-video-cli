@@ -99,7 +99,7 @@ remotion/src/
   Root.tsx              1 composition / theme
   sys.tsx               captions, chuyển cảnh (Timeline), masthead, hiệu ứng vào/ra
   scenes.tsx            scene templates TIN NÓNG/COMMIT: Headline, Flow, Quote, Checklist, Evidence, CTA
-  commit.tsx            scene templates COMMIT: CmdHook, GitGraph, LogPanes, DocRule, CommitCTA
+  commit.tsx            scene templates COMMIT: CmdHook, GitGraph, LogPanes, DocRule, CommitCTA, CodeBlock, DepGraph, Analogy, Inversions, KeyPoint
   meo.tsx               scene templates MẸO NHANH: MeoHook, MeoSearch, MeoFix, MeoSlowFast, MeoSave, keycap, IDE mockup
   outro.tsx             nút Follow (bấm + chuông) và end card
 scripts/                tts.py, align.py, build_props.py, pick_music.py, mix_bgm.sh, loudnorm.sh, describe.py, measure_vm.py, compare.sh, fetch_music.py

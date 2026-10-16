@@ -22,7 +22,7 @@ export GEMINI_API_KEY=...           # chỉ đặt trong env / .env (đã gitign
 1. **Chọn chủ đề**, rồi chọn theme:
    - `tin-nong`: tin nóng, drama công nghệ (scene: Headline, Flow, Quote, Checklist, Evidence, CTA).
    - `meo-nhanh`: mẹo, tutorial, review tool, listicle (scene: MeoHook, MeoSearch, MeoFix, MeoSlowFast, MeoSave).
-   - `commit`: dev explainer (git, code, terminal; scene: CmdHook, GitGraph, LogPanes, DocRule, CommitCTA). v1 chờ Dan duyệt.
+   - `commit`: dev explainer (git, code, terminal; scene: CmdHook, GitGraph, LogPanes, DocRule, CommitCTA, CodeBlock, DepGraph, Analogy, Inversions, KeyPoint). v1 chờ Dan duyệt.
 2. **Kiểm chứng nguồn.** Mọi sự kiện, con số, trích dẫn phải có nguồn thật mà bạn đã mở và đọc. Ghi vào `sources` (tên báo + URL + ngày). **Không bịa sự kiện, số liệu, trích dẫn hay URL.** Không chắc thì bỏ, hoặc hỏi Dan.
 3. **Viết `videos/<slug>/script.json`.** Copy mẫu, giữ đúng schema:
    - TIN NÓNG: `videos/openai-vs-apple/script.json`

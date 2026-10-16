@@ -90,3 +90,64 @@ export const CommitCTA:React.FC<{n:string;kick:string;rows:{k:string;v:string;at
   <div style={{display:'flex',flexDirection:'column',gap:22}}>{rows.map((r,k)=>f<r.at?null:<It key={k} at={r.at}><div style={{display:'flex',alignItems:'center',gap:24,border:`5px solid ${t.ink}`,padding:'18px 26px'}}>
    <span style={{...Bd(t,52),fontWeight:700,flex:1}}>{r.k}</span><span style={{...Bd(t,40,C.dim)}}>→</span><span style={{...H(t,84,k===0?t.onAccent:DARK),background:k===0?t.accent:t.accent2,padding:'0 18px'}}>{r.v}</span></div></It>)}</div>
   <div style={{marginTop:56}}><Cmd s={cmd} at={cmdAt} size={44}/></div></div>};
+
+/* ---------- IoC / code explainer scenes ---------- */
+/* tiny Kotlin highlighter: keywords yellow, Types blue, calls green, strings green, comments dim */
+const KW=/^(val|var|fun|class|private|by|override|object|return|this@\w+)$/;
+const kt=(line:string,t:any):React.ReactNode[]=>{if(line.trimStart().startsWith('//'))return [<span key={0} style={{color:C.dim}}>{line}</span>];
+ return line.split(/(\s+|[(){}<>,:=.]|"[^"]*")/).filter(x=>x!=='').map((w,k)=>{const c=w.startsWith('"')?t.accent2:KW.test(w)?t.accent:/^[A-Z]/.test(w)?C.blue:/^(get|inject|single|factory|scoped|module|startKoin|androidContext|modules)$/.test(w)?t.accent2:/^[(){}<>,:=.]$/.test(w)?C.dim:t.ink;return <span key={k} style={{color:c}}>{w}</span>})};
+export const CodeBlock:React.FC<{n:string;kick:string;file:string;lines:{s:string;at:number}[];tone?:'bad'|'good';badge?:{text:string;at:number};size?:number}>=({n,kick,file,lines,tone,badge,size=40})=>{const {t,f}=useS();
+ const bar=tone==='bad'?C.red:tone==='good'?t.accent2:C.line;
+ return <div><Head n={n} txt={kick}/><div style={{background:C.panel,border:`3px solid ${C.line}`,borderTop:`8px solid ${bar}`,position:'relative'}}>
+  <div style={{...Bd(t,30,C.dim),padding:'12px 24px',borderBottom:`3px solid ${C.line}`}}>● ● ●  {file}</div>
+  <div style={{padding:'18px 24px 22px'}}>{lines.map((l,k)=>{if(f<l.at)return null;const shown=l.s.slice(0,Math.max(0,Math.floor((f-l.at)*2.4)));
+   return <div key={k} style={{...Bd(t,size),fontWeight:600,whiteSpace:'pre',lineHeight:1.42,overflow:'hidden'}}>{kt(shown,t)}{shown.length<l.s.length&&<Caret h={size*.9}/>}</div>})}</div>
+  {badge&&f>=badge.at&&<div style={{position:'absolute',right:-14,bottom:-84,transform:`rotate(-4deg) scale(${1.4-0.4*pop(f,badge.at,8)})`,opacity:pop(f,badge.at,5),...H(t,64,tone==='bad'?'#FFFFFF':t.onAccent),background:tone==='bad'?C.red:t.accent,padding:'6px 22px'}}>{badge.text}</div>}
+ </div></div>};
+
+/* dependency graph: root in the middle, deps around; "builder" node creating them flips from your code to the framework */
+export const DepGraph:React.FC<{n:string;kick:string;root:string;deps:string[];depsAt:number;you:string;fw:string;flipAt:number;q?:{s:string;at:number}[]}>=({n,kick,root,deps,depsAt,you,fw,flipAt,q=[]})=>{const {t,f}=useS();
+ const W=894,cx=W/2,cy=290;const fl=interpolate(f,[flipAt,flipAt+16],[0,1],{...cl,easing:EIO});
+ const pos=deps.map((_,k)=>{const a=-Math.PI/2+Math.PI*2*k/deps.length;return [cx+Math.cos(a)*285,cy+Math.sin(a)*195]});
+ const box=(x:number,y:number,s:string,fill:string,fg:string,fs=30,p=1)=><g transform={`translate(${x} ${y}) scale(${p})`}><rect x={-(s.length*fs*.31+20)} y={-30} width={s.length*fs*.62+40} height={60} fill={fill} stroke={t.ink} strokeWidth={4}/><text y={fs*.36} textAnchor="middle" style={{fontFamily:'JBM',fontWeight:800,fontSize:fs,fill:fg}}>{s}</text></g>;
+ const bx=fl<.5?you:fw;
+ return <div><Head n={n} txt={kick}/>
+  <div style={{background:C.panel,border:`3px solid ${C.line}`}}><svg width={W} height={700} viewBox={`0 0 ${W} 700`}>
+   {pos.map(([x,y],k)=>{const p=pop(f,depsAt+k*4,10);return <line key={'l'+k} x1={cx} y1={cy} x2={cx+(x-cx)*p} y2={cy+(y-cy)*p} stroke={C.dim} strokeWidth={4}/>})}
+   {pos.map(([x,y],k)=>f>=depsAt+k*4&&<g key={'d'+k}>{box(x,y,deps[k],t.bg,t.ink,30,pop(f,depsAt+k*4,10))}</g>)}
+   {box(cx,cy,root,t.accent,t.onAccent,40)}
+   <g transform={`translate(${cx} ${630})`}><g transform={`scale(1 ${Math.abs(1-2*fl)||0.01})`}>{box(0,0,bx,fl<.5?C.red:t.accent2,fl<.5?'#FFFFFF':DARK,38)}</g></g>
+   <text x={cx} y={568} textAnchor="middle" style={{fontFamily:'JBM',fontWeight:700,fontSize:30,fill:C.dim}}>↓ ai tạo object? ↓</text>
+  </svg></div>
+  <div style={{display:'flex',gap:20,marginTop:28}}>{q.map((s,k)=>f<s.at?null:<It key={k} at={s.at}><span style={{...H(t,56,t.onAccent),background:t.accent,padding:'4px 20px',display:'inline-block'}}>{s.s}</span></It>)}</div></div>};
+
+/* restaurant analogy, faceless icons only */
+const Icon:React.FC<{k:string;c:string;s?:number}>=({k,c,s=120})=>{const sw=7;const P:any={
+ basket:<><path d="M20 45h80l-10 50H30z" fill="none" stroke={c} strokeWidth={sw} strokeLinejoin="round"/><path d="M40 45l15-25M80 45L65 20" stroke={c} strokeWidth={sw} strokeLinecap="round"/></>,
+ pan:<><circle cx="50" cy="60" r="30" fill="none" stroke={c} strokeWidth={sw}/><path d="M80 60h32" stroke={c} strokeWidth={sw+3} strokeLinecap="round"/><path d="M40 20q5-8 0-14M55 22q5-8 0-14" stroke={c} strokeWidth={4} fill="none"/></>,
+ plate:<><path d="M15 80h90" stroke={c} strokeWidth={sw} strokeLinecap="round"/><path d="M25 78a35 35 0 0 1 70 0" fill="none" stroke={c} strokeWidth={sw}/><circle cx="60" cy="38" r="5" fill={c}/></>,
+ menu:<><rect x="25" y="12" width="70" height="96" fill="none" stroke={c} strokeWidth={sw}/><path d="M40 38h40M40 58h40M40 78h26" stroke={c} strokeWidth={sw} strokeLinecap="round"/></>,
+ bell:<><path d="M20 85h80M28 85a32 32 0 0 1 64 0" fill="none" stroke={c} strokeWidth={sw}/><circle cx="60" cy="46" r="6" fill={c}/></>,
+ check:<path d="M22 62l24 24 52-56" fill="none" stroke={c} strokeWidth={sw+3} strokeLinecap="round" strokeLinejoin="round"/>};
+ return <svg width={s} height={s} viewBox="0 0 120 120">{P[k]}</svg>};
+export const Analogy:React.FC<{n:string;kick:string;cards:{title:string;tag:string;at:number;steps:{icon:string;label:string;at:number}[]}[]}>=({n,kick,cards})=>{const {t,f}=useS();
+ return <div><Head n={n} txt={kick}/>{cards.map((c,k)=>{if(f<c.at)return null;const good=k===1;const col=good?t.accent2:C.red;
+  return <It key={k} at={c.at}><div style={{border:`5px solid ${col}`,background:C.panel,padding:'26px 28px',marginBottom:40}}>
+   <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:18}}><span style={{...H(t,68)}}>{c.title}</span><span style={{...Bd(t,30,good?DARK:'#FFFFFF'),fontWeight:800,background:col,padding:'4px 14px'}}>{c.tag}</span></div>
+   <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>{c.steps.map((s,j)=><React.Fragment key={j}>{j>0&&<span style={{...Bd(t,44,C.dim)}}>→</span>}
+    <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:6,opacity:pop(f,s.at,8),transform:`translateY(${(1-pop(f,s.at,8))*30}px)`}}><Icon s={150} k={s.icon} c={good&&j===c.steps.length-1?t.accent:t.ink}/><span style={{...Bd(t,38),fontWeight:700}}>{s.label}</span></div></React.Fragment>)}</div></div></It>})}</div>};
+
+/* N inversions: from (struck) -> to */
+export const Inversions:React.FC<{n:string;kick:string;rows:{k:string;from:string;to:string;at:number}[]}>=({n,kick,rows})=>{const {t,f}=useS();
+ return <div><Head n={n} txt={kick}/><div style={{display:'flex',flexDirection:'column',gap:26}}>{rows.map((r,k)=>{if(f<r.at)return null;const s=interpolate(f,[r.at+8,r.at+16],[0,100],cl);
+  return <It key={k} at={r.at}><div style={{borderLeft:`10px solid ${t.accent}`,background:C.panel,padding:'18px 26px'}}>
+   <div style={{...Bd(t,34,C.dim),marginBottom:8}}><span style={{color:t.accent,fontWeight:800}}>{k+1}.</span> {r.k}</div>
+   <div style={{display:'flex',alignItems:'center',gap:20,flexWrap:'wrap'}}><span style={{...Bd(t,46),fontWeight:700,color:C.red,backgroundImage:`linear-gradient(${C.red},${C.red})`,backgroundSize:`${s}% 5px`,backgroundRepeat:'no-repeat',backgroundPosition:'0 55%'}}>{r.from}</span>
+    <span style={{...Bd(t,46,C.dim)}}>→</span><span style={{...H(t,52,DARK),background:t.accent2,padding:'2px 16px',opacity:pop(f,r.at+14,8)}}>{r.to}</span></div></div></It>})}</div></div>};
+
+/* takeaway + soft course mention (keep above the Follow button, y≈1110) */
+export const KeyPoint:React.FC<{n:string;kick:string;l1:string;l2:string;at:number;chips:{s:string;at:number}[];course?:{t1:string;t2:string;at:number}}>=({n,kick,l1,l2,at,chips,course})=>{const {t,f}=useS();
+ return <div><Head n={n} txt={kick}/>
+  {f>=at&&<It at={at}><Big s={l1} size={110}/></It>}{f>=at+5&&<It at={at+5}><div style={{marginTop:8}}><Big s={l2} size={110} hl/></div></It>}
+  <div style={{display:'flex',gap:18,marginTop:34,flexWrap:'wrap'}}>{chips.map((c,k)=>f<c.at?null:<It key={k} at={c.at}><span style={{...Bd(t,40),fontWeight:700,border:`4px solid ${k===0?t.accent:t.ink}`,color:k===0?t.accent:t.ink,padding:'6px 18px',display:'inline-block'}}>{c.s}</span></It>)}</div>
+  {course&&f>=course.at&&<It at={course.at}><div style={{marginTop:40,...Bd(t,34,C.dim),borderLeft:`6px solid ${t.accent2}`,paddingLeft:22,lineHeight:1.4}}>{course.t1}<br/><span style={{color:t.ink,fontWeight:700}}>{course.t2}</span></div></It>}</div>};

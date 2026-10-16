@@ -1,0 +1,328 @@
+{
+ "theme": "commit",
+ "title": "Inversion of Control (Koin)",
+ "date": "16 · 10 · 2026",
+ "caption": "Inversion of Control: thay vì tự new từng object, anh em khai báo, framework (Koin) lo tạo, nối và quản lý vòng đời. DI là một cách làm IoC. Bài đầy đủ trong khoá Mobile Action Pro trên dantech.academy. #DanTech #Kotlin #Android #Koin",
+ "sources": [
+  "Dan Tech Academy, Mobile Action Pro · Dependency Injection · Lesson 02 Inversion of Control: https://dantech.academy/courses/kotlin-accelerator/engineer-builder/07-dependency-injection/lesson-02-inversion-of-control",
+  "Martin Fowler, Inversion of Control Containers and the Dependency Injection pattern: https://martinfowler.com/articles/injection.html",
+  "Koin docs, Starting Koin on Android (startKoin, androidContext, modules): https://insert-koin.io/docs/reference/koin-android/start",
+  "Koin docs, Definitions (single, factory, scoped): https://insert-koin.io/docs/reference/koin-core/definitions",
+  "Koin docs, Injection (get, by inject): https://insert-koin.io/docs/reference/koin-core/injection"
+ ],
+ "voice": {
+  "style": "random"
+ },
+ "music": {
+  "track": "random"
+ },
+ "scenes": [
+  {
+   "say": "Màn hình game của mình từng tự new năm object, rồi nhét hết vào một constructor tám tham số. Mệt thật sự.",
+   "type": "CodeBlock",
+   "section": "GameScreen.kt --before",
+   "out": "scroll",
+   "props": {
+    "n": "01",
+    "kick": "trước: tự new",
+    "file": "GameScreen.kt · onCreate()",
+    "tone": "bad",
+    "lines": [
+     {
+      "s": "val disp = QzDispatchersImpl()",
+      "at": "@Màn"
+     },
+     {
+      "s": "val timer = GameTimer(disp)",
+      "at": "@game"
+     },
+     {
+      "s": "val help = DefaultLifelineHelper()",
+      "at": "@tự"
+     },
+     {
+      "s": "val repo = QuestionRepositoryImpl()",
+      "at": "@năm"
+     },
+     {
+      "s": "val gm = GameManagerImpl(",
+      "at": "@rồi"
+     },
+     {
+      "s": "  repo, help, timer,",
+      "at": "@nhét"
+     },
+     {
+      "s": "  // + 5 tham số nữa",
+      "at": "@constructor"
+     },
+     {
+      "s": ")",
+      "at": "@tham"
+     }
+    ],
+    "badge": {
+     "text": "8 tham số",
+     "at": "@tám"
+    }
+   },
+   "sfx": [
+    {
+     "at": "@tám",
+     "s": "impactSoft_heavy_000",
+     "v": 0.4
+    }
+   ]
+  },
+  {
+   "say": "Inversion of Control đảo ngược chuyện đó: tạo object khi nào, ra sao, giờ do framework quyết định.",
+   "type": "DepGraph",
+   "section": "inversion-of-control",
+   "out": "push",
+   "props": {
+    "n": "02",
+    "kick": "IoC là gì",
+    "root": "GameManager",
+    "deps": [
+     "Dispatchers",
+     "GameTimer",
+     "LifelineHelper",
+     "QuestionRepo",
+     "+5"
+    ],
+    "depsAt": "@Inversion",
+    "you": "code của bạn",
+    "fw": "framework (Koin)",
+    "flipAt": "@framework",
+    "q": [
+     {
+      "s": "khi nào?",
+      "at": "@khi"
+     },
+     {
+      "s": "ra sao?",
+      "at": "@sao,"
+     }
+    ]
+   },
+   "sfx": [
+    {
+     "at": "@framework+8",
+     "s": "tick_002",
+     "v": 0.4
+    }
+   ]
+  },
+  {
+   "say": "Không IoC, anh em là đầu bếp: tự đi chợ, nấu, bưng ra. Có IoC, anh em là khách: gọi món trong menu, nhà hàng lo hết.",
+   "type": "Analogy",
+   "section": "nhà-hàng --analogy",
+   "out": "scroll",
+   "props": {
+    "n": "03",
+    "kick": "ví dụ nhà hàng",
+    "cards": [
+     {
+      "title": "đầu bếp",
+      "tag": "không IoC",
+      "at": "@Không",
+      "steps": [
+       {
+        "icon": "basket",
+        "label": "đi chợ",
+        "at": "@chợ"
+       },
+       {
+        "icon": "pan",
+        "label": "nấu",
+        "at": "@nấu"
+       },
+       {
+        "icon": "plate",
+        "label": "bưng ra",
+        "at": "@bưng"
+       }
+      ]
+     },
+     {
+      "title": "khách",
+      "tag": "có IoC",
+      "at": "@Có",
+      "steps": [
+       {
+        "icon": "menu",
+        "label": "gọi món",
+        "at": "@gọi"
+       },
+       {
+        "icon": "bell",
+        "label": "nhà hàng lo",
+        "at": "@nhà"
+       },
+       {
+        "icon": "check",
+        "label": "xong",
+        "at": "@hết."
+       }
+      ]
+     }
+    ]
+   },
+   "sfx": [
+    {
+     "at": "@Có",
+     "s": "select_003",
+     "v": 0.35
+    }
+   ]
+  },
+  {
+   "say": "Với Koin, anh em khai báo module, gọi startKoin trong App. Màn hình chỉ cần get hoặc by inject. Anh em khai báo, Koin điều khiển.",
+   "type": "CodeBlock",
+   "section": "App.kt --after",
+   "out": "bar",
+   "props": {
+    "n": "04",
+    "kick": "sau: Koin",
+    "file": "App.kt · GameScreen.kt",
+    "tone": "good",
+    "size": 38,
+    "lines": [
+     {
+      "s": "val appModule = module {",
+      "at": "@Với"
+     },
+     {
+      "s": "  single<AudioManager> {",
+      "at": "@khai"
+     },
+     {
+      "s": "    AudioManagerImpl(get()) }",
+      "at": "@module,"
+     },
+     {
+      "s": "}",
+      "at": "@gọi"
+     },
+     {
+      "s": "startKoin {",
+      "at": "@startKoin"
+     },
+     {
+      "s": "  androidContext(this@App)",
+      "at": "@startKoin+8"
+     },
+     {
+      "s": "  modules(coreModule, dataModule)",
+      "at": "@App."
+     },
+     {
+      "s": "}",
+      "at": "@Màn"
+     },
+     {
+      "s": "val gm: GameManager = get()",
+      "at": "@get"
+     },
+     {
+      "s": "val audio: AudioManager",
+      "at": "@inject."
+     },
+     {
+      "s": "    by inject()",
+      "at": "@inject.+6"
+     }
+    ],
+    "badge": {
+     "text": "Koin điều khiển",
+     "at": "@điều"
+    }
+   },
+   "sfx": [
+    {
+     "at": "@điều",
+     "s": "tick_002",
+     "v": 0.4
+    }
+   ]
+  },
+  {
+   "say": "Ba thứ bị đảo ngược: thời điểm tạo, cách khởi tạo, và vòng đời, giờ do single, factory, scoped quản lý.",
+   "type": "Inversions",
+   "section": "3-inversions",
+   "out": "stack",
+   "props": {
+    "n": "05",
+    "kick": "3 lần đảo ngược",
+    "rows": [
+     {
+      "k": "thời điểm tạo",
+      "from": "code của bạn",
+      "to": "framework",
+      "at": "@thời"
+     },
+     {
+      "k": "cách khởi tạo",
+      "from": "tự new",
+      "to": "khai báo",
+      "at": "@cách"
+     },
+     {
+      "k": "vòng đời",
+      "from": "tự giải phóng",
+      "to": "single · factory · scoped",
+      "at": "@vòng"
+     }
+    ]
+   },
+   "sfx": [
+    {
+     "at": "@thời+14",
+     "s": "tick_002",
+     "v": 0.3
+    },
+    {
+     "at": "@cách+14",
+     "s": "tick_002",
+     "v": 0.3
+    },
+    {
+     "at": "@vòng+14",
+     "s": "tick_002",
+     "v": 0.3
+    }
+   ]
+  },
+  {
+   "say": "DI chỉ là một cách làm IoC, callback hay event listener cũng vậy. Bài đầy đủ có trong khoá Mobile Action Pro trên dantech chấm academy. Follow Dan Tech nhé!",
+   "type": "KeyPoint",
+   "section": "key --takeaway",
+   "props": {
+    "n": "06",
+    "kick": "điểm chính",
+    "l1": "DI là một",
+    "l2": "cách làm IoC",
+    "at": "@DI",
+    "chips": [
+     {
+      "s": "DI",
+      "at": "@DI"
+     },
+     {
+      "s": "callback",
+      "at": "@callback"
+     },
+     {
+      "s": "event listener",
+      "at": "@event"
+     }
+    ],
+    "course": {
+     "t1": "Bài đầy đủ: Inversion of Control",
+     "t2": "Mobile Action Pro · dantech.academy",
+     "at": "@Bài"
+    }
+   }
+  }
+ ]
+}
