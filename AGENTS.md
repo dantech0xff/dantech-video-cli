@@ -22,7 +22,7 @@ export GEMINI_API_KEY=...           # chỉ đặt trong env / .env (đã gitign
 1. **Chọn chủ đề**, rồi chọn theme:
    - `hot-news`: tin nóng, drama công nghệ (scene: Headline, Flow, Quote, Checklist, Evidence, CTA).
    - `quick-tips`: mẹo, tutorial, review tool, listicle (scene: MeoHook, MeoSearch, MeoFix, MeoSlowFast, MeoSave).
-   - `tech-explain`: dev explainer (git, code, terminal; scene: CmdHook, GitGraph, LogPanes, DocRule, CommitCTA, CodeBlock, DepGraph, Analogy, Inversions, KeyPoint). v1 chờ Dan duyệt.
+   - `tech-explain`: dev explainer (git, code, terminal; scene: CmdHook, GitGraph, LogPanes, DocRule, CommitCTA, CodeBlock, DepGraph, Analogy, Inversions, KeyPoint). Đã duyệt.
    - `tech-explain-cyber` (GIẢI THÍCH CYBER): dev explainer blueprint tối (scene: BpCode, BpGraph, SpecCard, BpSpec, BpReq, BpOptions, BpLayers, BpTerm, BpTree, BpTake; xem SCHEMA). Ví dụ `videos/flutter-mvvm`.
    - `hot-news-glitch` (TIN NÓNG GLITCH): tin nóng nền tối, glitch tín hiệu vỡ (scene: GlHeadline + Flow, Quote, Checklist, Evidence, CTA của hot-news; out `signal`). Ví dụ `videos/openai-vs-apple-glitch`.
 2. **Kiểm chứng nguồn.** Mọi sự kiện, con số, trích dẫn phải có nguồn thật mà bạn đã mở và đọc. Ghi vào `sources` (tên báo + URL + ngày). **Không bịa sự kiện, số liệu, trích dẫn hay URL.** Không chắc thì bỏ, hoặc hỏi Dan.
