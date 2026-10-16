@@ -9,6 +9,8 @@
  "sources": ["Tên báo, tiêu đề: https://… (ngày)"],   // bắt buộc, nguồn thật
  "voice": {"style": "random"},          // hoặc "hao-hung" | "ke-chuyen" | "tu-nhien"; "file" = ghim audio (bỏ qua TTS)
  "music": {"track": "random"},          // hoặc id trong assets/music/tracks.json, + "start": giây
+ "variant": "red",                     // tuỳ chọn: biến thể trong theme.json → variants (COMMIT: "red" = accent YouTube đỏ)
+ "look": {"accent": "#…"},             // tuỳ chọn: ghi đè màu look cho riêng video (sau variant)
  "handles": [{"p":"YOUTUBE","h":"@dantech-0xff"}, …],  // tuỳ chọn, mặc định đã đúng
  "cta": {"in": "@follow-6", "press": "@Dan", "sub": "…"}, // tuỳ chọn, mặc định từ theme.json → cta
  "scenes": [{

@@ -63,5 +63,15 @@
    }
   ],
   "rel": -10
+ },
+ "variants": {
+  "red": {
+   "note": "YouTube red thử nghiệm; mặc định vẫn là vàng",
+   "look": {
+    "accent": "#FF0000",
+    "onAccent": "#FFFFFF",
+    "stamp": "#EDEDE6"
+   }
+  }
  }
 }

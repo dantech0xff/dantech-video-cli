@@ -76,6 +76,7 @@ Nhờ vậy khi đổi giọng (thời lượng khác), keycap, popup, SFX vẫn
 | SFX một khoảnh khắc | `script.json` → `scenes[].sfx`: `{"at": "@chữ", "s": "tên file trong assets/sfx", "v": 0.5}`, tick lặp: thêm `"every": 5, "count": 14` |
 | SFX chuyển cảnh của theme | `theme.json` → `look.sfx.trans` |
 | Màu, font, kiểu chữ | `theme.json` → `look` |
+| Biến thể màu (vd COMMIT đỏ) | `theme.json` → `variants.<tên>.look`; dùng: `"variant": "red"` trong script.json (hoặc `"look": {...}` ghi đè riêng 1 video) |
 | Tagline end card, vị trí nút Follow, thời gian giữ cuối | `theme.json` → `outro`, `cta`, `tail_hold` |
 | Handle mạng xã hội | mặc định YouTube @dantech-0xff, Facebook @dantech0xff (ghi đè bằng `"handles"` trong script.json) |
 

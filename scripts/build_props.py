@@ -33,7 +33,10 @@ for k,sc in enumerate(S['scenes']):
         at=resolve(x['at'],lo,hi,st)
         for r in range(x.get('count',1)): sfx.append({'at':st+at+r*x.get('every',0),'s':x['s'],'v':x.get('v',0.5)})
 cta=S.get('cta',{}); C=T['cta']
-props={'theme':S['theme'],'date':S['date'],'voice':f'render/{slug}.mp3','words':W,'scenes':scenes,'sfx':sfx,
+# look override: theme.json "variants"[script.variant], then script "look" (colours etc.); default theme look otherwise
+look={**T.get('variants',{}).get(S['variant'],{}).get('look',{}),**S.get('look',{})} if S.get('variant') else S.get('look',{})
+if S.get('variant') and S['variant'] not in T.get('variants',{}): sys.exit(f"variant {S['variant']} not in theme {S['theme']} (have: {list(T.get('variants',{}))})")
+props={'theme':S['theme'],'look':look,'date':S['date'],'voice':f'render/{slug}.mp3','words':W,'scenes':scenes,'sfx':sfx,
  'cta':{'inAt':resolve(cta.get('in',f"@follow{C['in_offset']:+d}"),0,len(W),0),'pressAt':resolve(cta.get('press','@Dan'),0,len(W),0),'outAt':end-6,'top':C['top'],'sub':cta.get('sub',C['sub'])},
  'outro':{'start':end,'dur':T['outro']['dur'],'tagline':T['outro']['tagline'],'pal':T['outro'].get('pal'),'handles':S.get('handles',[{'p':'YOUTUBE','h':'@dantech-0xff'},{'p':'FACEBOOK','h':'@dantech0xff'}])},
  'durationInFrames':end+T['outro']['dur']}

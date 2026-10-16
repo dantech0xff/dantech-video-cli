@@ -2,6 +2,7 @@
 // All frame props are scene-relative (script.json "@word" anchors are resolved by build_props.py).
 import React from 'react';import {interpolate,Easing} from 'remotion';import {useS,H,Bd,It,Stamp} from './sys';
 const EO=Easing.bezier(.16,1,.3,1),EIO=Easing.bezier(.7,0,.2,1);const cl={extrapolateLeft:'clamp',extrapolateRight:'clamp'} as const;
+const DARK='#141414'; // text on green / light fills (accent fills use t.onAccent)
 export const C={red:'#FF5F56',dim:'#8A8A82',panel:'#1C1C1C',line:'#2A2A2A',blue:'#7FB2FF'};
 const pop=(f:number,at:number,d=8)=>interpolate(f,[at,at+d],[0,1],{...cl,easing:EO});
 const CPS=1.6; // typed characters per frame
@@ -33,7 +34,7 @@ export const CmdHook:React.FC<{cmds:{s:string;at:number}[];l1:string;l2:string;l
 /* 2. git graph: mode "merge" adds a merge commit with two parents; "rebase" replays the branch commits on top of main */
 type Note={s:string;at:number;mark?:'+'|'-'|'~'};
 const Notes:React.FC<{notes:Note[]}>=({notes})=>{const {t,f}=useS();return <div style={{display:'flex',flexDirection:'column',gap:14,marginTop:30}}>{notes.map((n,k)=>{if(f<n.at)return null;const m=n.mark??'+';const c=m==='+'?t.accent2:m==='-'?C.red:t.accent;
- return <It key={k} at={n.at}><div style={{...Bd(t,52),fontWeight:700,background:m==='+'?'#3DDC6B1F':m==='-'?'#FF5F561F':'#FFD60A1A',borderLeft:`8px solid ${c}`,padding:'12px 22px',display:'flex',gap:20}}><span style={{color:c,fontWeight:800}}>{m}</span><span style={{textDecoration:m==='-'?'line-through':'none',textDecorationColor:C.red}}>{n.s}</span></div></It>})}</div>};
+ return <It key={k} at={n.at}><div style={{...Bd(t,52),fontWeight:700,background:m==='+'?'#3DDC6B1F':m==='-'?'#FF5F561F':t.accent+'1F',borderLeft:`8px solid ${c}`,padding:'12px 22px',display:'flex',gap:20}}><span style={{color:c,fontWeight:800}}>{m}</span><span style={{textDecoration:m==='-'?'line-through':'none',textDecorationColor:C.red}}>{n.s}</span></div></It>})}</div>};
 export const GitGraph:React.FC<{mode:'merge'|'rebase';cmd:string;cmdAt:number;showAt?:number;actAt:number;notes?:Note[];main?:string;branch?:string}>=({mode,cmd,cmdAt,showAt=0,actAt,notes=[],main='main',branch='feature'})=>{const {t,f}=useS();
  const W=894,Y1=170,Y2=450,R=52,X=[70,250,430,610,800];
  const g=pop(f,showAt,12);const a=interpolate(f,[actAt,actAt+22],[0,1],{...cl,easing:EIO});
@@ -41,7 +42,7 @@ export const GitGraph:React.FC<{mode:'merge'|'rebase';cmd:string;cmdAt:number;sh
   <circle r={R} fill={o.fill??t.bg} stroke={o.fill?o.fill:t.ink} strokeWidth={7} strokeDasharray={o.ghost?'10 9':undefined}/>
   <text y={14} textAnchor="middle" style={{fontFamily:'JBM',fontWeight:800,fontSize:lab.length>2?34:40,fill:o.fill?t.onAccent:t.ink}}>{lab}</text></g>};
  const edge=(x1:number,y1:number,x2:number,y2:number,p:number,c?:string,dash?:boolean)=>{const L=Math.hypot(x2-x1,y2-y1);return <line key={`${x1}${y1}${x2}${y2}`} x1={x1} y1={y1} x2={x2} y2={y2} stroke={c??t.ink} strokeWidth={7} strokeDasharray={dash?'12 10':`${L} ${L}`} strokeDashoffset={dash?0:L*(1-p)} opacity={dash?.28:1}/>};
- const tag=(x:number,y:number,s:string,c:string,dy=-R-58)=><g key={s} transform={`translate(${x} ${y+dy})`}><rect x={-s.length*11-16} y={0} width={s.length*22+32} height={44} fill={c}/><text y={33} textAnchor="middle" style={{fontFamily:'JBM',fontWeight:800,fontSize:30,fill:t.onAccent}}>{s}</text></g>;
+ const tag=(x:number,y:number,s:string,c:string,dy=-R-58)=><g key={s} transform={`translate(${x} ${y+dy})`}><rect x={-s.length*11-16} y={0} width={s.length*22+32} height={44} fill={c}/><text y={33} textAnchor="middle" style={{fontFamily:'JBM',fontWeight:800,fontSize:30,fill:c===t.accent?t.onAccent:DARK}}>{s}</text></g>;
  const base=[edge(X[0],Y1,X[1],Y1,g),edge(X[1],Y1,X[2],Y1,g)];
  let body:React.ReactNode;
  if(mode==='merge'){const mp=pop(f,actAt+14,10);
@@ -69,7 +70,7 @@ type Seg=[string,string?];
 export const LogPanes:React.FC<{n:string;kick:string;panes:{title:string;cmd:string;at:number;lines:Seg[][];verdict?:string;good?:boolean}[]}>=({n,kick,panes})=>{const {t,f}=useS();
  const col=(k?:string)=>({hash:t.accent,graph:C.dim,dim:C.dim,green:t.accent2,red:C.red,yellow:t.accent} as any)[k??'']??t.ink;
  return <div><Head n={n} txt={kick}/>{panes.map((p,k)=>{const d=doneAt(p.cmd,p.at);return f<p.at-2?null:<It key={k} at={p.at-2}><div style={{background:C.panel,border:`3px solid ${C.line}`,marginBottom:34}}>
-  <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',background:C.line,padding:'10px 22px'}}><span style={{...Bd(t,30,C.dim)}}>● ● ●  {p.title}</span>{p.verdict&&f>=d+p.lines.length*2+4&&<span style={{...Bd(t,30,t.onAccent),fontWeight:800,background:p.good?t.accent2:t.accent,padding:'2px 14px'}}>{p.verdict}</span>}</div>
+  <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',background:C.line,padding:'10px 22px'}}><span style={{...Bd(t,30,C.dim)}}>● ● ●  {p.title}</span>{p.verdict&&f>=d+p.lines.length*2+4&&<span style={{...Bd(t,30,p.good?DARK:t.onAccent),fontWeight:800,background:p.good?t.accent2:t.accent,padding:'2px 14px'}}>{p.verdict}</span>}</div>
   <div style={{padding:'20px 26px 24px'}}><Cmd s={p.cmd} at={p.at} size={38} caret={false}/>
    {p.lines.map((l,j)=>f<d+j*2?null:<div key={j} style={{...Bd(t,42),fontWeight:600,whiteSpace:'pre',lineHeight:1.35,opacity:pop(f,d+j*2,4)}}>{l.map((s,m)=><span key={m} style={{color:col(s[1])}}>{s[0]}</span>)}</div>)}</div></div></It>})}</div>};
 
@@ -87,5 +88,5 @@ export const DocRule:React.FC<{n:string;kick:string;src:string;quote:string;quot
 export const CommitCTA:React.FC<{n:string;kick:string;rows:{k:string;v:string;at:number}[];cmd:string;cmdAt:number}>=({n,kick,rows,cmd,cmdAt})=>{const {t,f}=useS();
  return <div><Head n={n} txt={kick}/>
   <div style={{display:'flex',flexDirection:'column',gap:22}}>{rows.map((r,k)=>f<r.at?null:<It key={k} at={r.at}><div style={{display:'flex',alignItems:'center',gap:24,border:`5px solid ${t.ink}`,padding:'18px 26px'}}>
-   <span style={{...Bd(t,52),fontWeight:700,flex:1}}>{r.k}</span><span style={{...Bd(t,40,C.dim)}}>→</span><span style={{...H(t,84,t.onAccent),background:k===0?t.accent:t.accent2,padding:'0 18px'}}>{r.v}</span></div></It>)}</div>
+   <span style={{...Bd(t,52),fontWeight:700,flex:1}}>{r.k}</span><span style={{...Bd(t,40,C.dim)}}>→</span><span style={{...H(t,84,k===0?t.onAccent:DARK),background:k===0?t.accent:t.accent2,padding:'0 18px'}}>{r.v}</span></div></It>)}</div>
   <div style={{marginTop:56}}><Cmd s={cmd} at={cmdAt} size={44}/></div></div>};

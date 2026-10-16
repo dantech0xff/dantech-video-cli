@@ -14,6 +14,7 @@ for k in ['theme','title','date','caption','sources','voice','music','scenes']:
 tp=os.path.join(ROOT,'themes',S.get('theme',''),'theme.json')
 T=json.load(open(tp,encoding='utf-8')) if os.path.isfile(tp) else None
 if not T: err(f'theme "{S.get("theme")}" not found in themes/')
+if T and S.get('variant') and S['variant'] not in T.get('variants',{}): err(f'variant "{S["variant"]}" not in theme variants {list(T.get("variants",{}))}')
 if not S.get('sources'): err('sources is empty: every fact needs a real source')
 v=S.get('voice',{})
 if T and v.get('style','random')!='random' and v['style'] not in T['voice']['styles']: err(f'voice.style "{v["style"]}" not in {list(T["voice"]["styles"])}')
