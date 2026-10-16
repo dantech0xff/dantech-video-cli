@@ -1,0 +1,75 @@
+{
+ "look": {
+  "id": "tech-explain-cyber",
+  "label": "GIẢI THÍCH CYBER",
+  "subtitle": "tech explain · blueprint",
+  "bg": "#070B12",
+  "ink": "#D9E4EF",
+  "onAccent": "#04131A",
+  "accent": "#5CD6E8",
+  "accent2": "#A9BBCC",
+  "muted": "#3E4C5E",
+  "head": "BVPM",
+  "body": "JBM",
+  "upper": false,
+  "step": 1,
+  "video": "mono",
+  "entry": "rise",
+  "rule": "#16212F",
+  "pal": {
+   "panel": "#0A111C",
+   "line": "#1B2838",
+   "dim": "#6D7F93",
+   "red": "#C9A27A",
+   "blue": "#D9E4EF"
+  },
+  "sfx": {
+   "trans": "whoosh_soft",
+   "stamp": "select_003",
+   "tick": "tick_002",
+   "entry": "tick_002"
+  },
+  "trans": [
+   "stack",
+   "push"
+  ]
+ },
+ "tail_hold": 40,
+ "cta": {
+  "top": 1110,
+  "in_offset": -6,
+  "sub": "BẬT CHUÔNG ĐỂ KHÔNG LỠ BÀI"
+ },
+ "outro": {
+  "dur": 75,
+  "tagline": "Code & công nghệ mỗi ngày"
+ },
+ "voice": {
+  "voice": "vi-vn-concierge-2",
+  "model": "gemini-3.8-flash-tts",
+  "styles": {
+   "hao-hung": "hào hứng, tràn đầy năng lượng, nhịp nhanh như dẫn bản tin drama công nghệ nóng hổi",
+   "ke-chuyen": "kể chuyện kịch tính, hồi hộp, có ngắt nghỉ tạo căng thẳng",
+   "tu-nhien": "tự nhiên, thoải mái như đang nói chuyện với bạn bè, phong cách YouTuber"
+  }
+ },
+ "music": {
+  "pool": [
+   {
+    "id": "alexi-action-ghost",
+    "start": 0
+   },
+   {
+    "id": "raspberrymusic-technology-background-music",
+    "start": 0
+   },
+   {
+    "id": "sappheiros-perspective",
+    "start": 8
+   }
+  ],
+  "rel": -10
+ },
+ "variants": {},
+ "experimental": true
+}

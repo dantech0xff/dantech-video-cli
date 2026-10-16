@@ -1,6 +1,6 @@
 import React,{createContext,useContext} from 'react';
 import {AbsoluteFill,Audio,OffthreadVideo,Sequence,staticFile,useCurrentFrame,interpolate,Easing,random} from 'remotion';
-import {Theme} from './themes';
+import {Theme} from './themes';import {BpChrome} from './cyber';
 export const FONTS=`@font-face{font-family:Anton;src:url(${staticFile('fonts/anton.ttf')})}@font-face{font-family:Barlow;src:url(${staticFile('fonts/barlow.ttf')})}@font-face{font-family:JBM;src:url(${staticFile('fonts/jbm.ttf')});font-weight:100 800}@font-face{font-family:BVPX;src:url(${staticFile('fonts/bvp_xb.ttf')})}@font-face{font-family:BVPM;src:url(${staticFile('fonts/bvp_md.ttf')})}`;
 export const Ctx=createContext<{t:Theme;f:number;exit:number}>(null as any);
 export const useS=()=>useContext(Ctx);
@@ -42,9 +42,12 @@ export const TermChrome:React.FC<{section:string;page:string;idx:number}>=({sect
   <div style={{fontFamily:'JBM',fontWeight:700,fontSize:32,color:t.onAccent}}>main ▸ {page}</div></div>
  <div style={{position:'absolute',left:0,top:110,bottom:0,width:96,borderRight:`3px solid ${t.rule}`}}>{Array.from({length:23},(_,k)=><div key={k} style={{position:'absolute',right:18,top:44+k*66,fontFamily:'JBM',fontSize:26,color:k===idx*3+3?t.accent:t.muted}}>{k+1}</div>)}</div>
  <div style={{position:'absolute',left:136,right:50,top:150,fontFamily:'JBM',fontSize:32,color:t.muted,borderBottom:`3px solid ${t.rule}`,paddingBottom:18,whiteSpace:'nowrap',overflow:'hidden'}}><span style={{color:t.accent2}}>~/commit</span> <span style={{color:t.ink}}>❯</span> {section}</div></>};
-export const Captions:React.FC<{words:{t:string;s:number;e:number}[]}>=({words})=>{const {t}=useS();const f=useCurrentFrame();const tm=f/30;const i=words.findIndex(w=>tm<w.e+0.05);if(i<0||tm<words[i].s-0.3)return null;const g=Math.floor(i/3)*3;
+export const Captions:React.FC<{words:{t:string;s:number;e:number}[]}>=({words})=>{const {t}=useS();if(t.id==='tech-explain-cyber')return <CyberCaptions words={words}/>;const f=useCurrentFrame();const tm=f/30;const i=words.findIndex(w=>tm<w.e+0.05);if(i<0||tm<words[i].s-0.3)return null;const g=Math.floor(i/3)*3;
  return <div style={{position:'absolute',left:136,right:50,top:1640,display:'flex',gap:12,flexWrap:'wrap'}}>{words.slice(g,g+3).map((w,k)=>{const a=g+k===i;const p=interpolate(tm,[w.s-0.05,w.s+0.08],[0,1],cl);
   return <span key={k} style={{...H(t,t.head==='Anton'?72:62,a?t.onAccent:t.bg),textTransform:'uppercase',background:a?t.accent:t.ink,padding:t.head==='Anton'?'6px 18px 0':'6px 18px',borderRadius:t.id==='quick-tips'?14:0,transform:`translateY(${a?-6*p:0}px)`}}>{w.t.replace(/[.,!?:]$/,'')}</span>})}</div>};
+const CyberCaptions:React.FC<{words:{t:string;s:number;e:number}[]}>=({words})=>{const f=useCurrentFrame();const tm=f/30;const i=words.findIndex(w=>tm<w.e+0.05);if(i<0||tm<words[i].s-0.3)return null;const g=Math.floor(i/4)*4;
+ return <div style={{position:'absolute',left:136,right:50,top:1660,display:'flex',gap:18,flexWrap:'wrap',alignItems:'baseline'}}>{words.slice(g,g+4).map((w,k)=>{const a=g+k===i;const done=g+k<i;
+  return <span key={k} style={{fontFamily:'BVPM',fontSize:60,color:a?'#5CD6E8':done?'#D9E4EF':'#5D6E82',borderBottom:`2px solid ${a?'#5CD6E8':'transparent'}`,paddingBottom:4}}>{w.t.replace(/[.,!?:]$/,'')}</span>})}</div>};
 /* ---------- timeline with designed transitions ---------- */
 export type Scene={dur:number;el:React.ReactNode;section:string;out?:'page'|'bar'|'zoom'|'push'|'stack'|'morph'|'scroll';focus?:[number,number];morph?:{from:number[];to:number[];txt:string}};
 const T=16;
@@ -72,7 +75,7 @@ export const Timeline:React.FC<{t:Theme;scenes:Scene[];words:any[];voice:string;
    else if(kin==='bar'||kin==='morph'){st={...st,opacity:inP>=.5?1:0}}}
   const lf=f-starts[i];
   layers.push(<AbsoluteFill key={i} style={{zIndex:z,background:t.bg,backgroundImage:t.texture?`url(${staticFile(t.texture)})`:'none',...st}}>
-   <Ctx.Provider value={{t,f:lf,exit:exitStag}}>{t.id==='tech-explain'?<TermChrome section={s.section} page={`${i+1}/${scenes.length}`} idx={i}/>:<Chrome section={s.section} page={`TRANG ${i+1}/${scenes.length}`} date={date}/>}
+   <Ctx.Provider value={{t,f:lf,exit:exitStag}}>{t.id==='tech-explain-cyber'?<BpChrome section={s.section} page={`${String(i+1).padStart(2,'0')} / ${String(scenes.length).padStart(2,'0')}`}/>:t.id==='tech-explain'?<TermChrome section={s.section} page={`${i+1}/${scenes.length}`} idx={i}/>:<Chrome section={s.section} page={`TRANG ${i+1}/${scenes.length}`} date={date}/>}
    <div style={{position:'absolute',left:136,right:50,top:290,height:1320}}>{s.el}</div></Ctx.Provider></AbsoluteFill>);
   if(i<scenes.length-1&&(kout==='bar')&&outP>0&&outP<1){const p=outP;const w=p<.5?interpolate(p,[0,.5],[96,1080]):1080;const x=p<.5?0:interpolate(p,[.5,1],[0,1080],{easing:EIO});
    overlay=<div style={{position:'absolute',top:0,bottom:0,left:x,width:w-(p<.5?0:0),background:t.accent,zIndex:10,display:'flex',alignItems:'center',justifyContent:'center',overflow:'hidden'}}><div style={{transform:`rotate(-90deg) translateY(${(p-.5)*400}px)`,fontFamily:t.id==='tech-explain'?'JBM':'Anton',fontWeight:t.id==='tech-explain'?800:400,fontSize:t.id==='tech-explain'?150:200,color:t.onAccent,whiteSpace:'nowrap'}}>{t.id==='tech-explain'?'git commit ▸':'DAN TECH ■'}</div></div>}
