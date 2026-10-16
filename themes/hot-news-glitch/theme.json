@@ -26,7 +26,12 @@
    "signal"
   ],
   "subtitle": "hot news · glitch",
-  "dir": "signal"
+  "dir": "signal",
+  "caption": {
+   "font": "Anton",
+   "size": 72,
+   "upper": true
+  }
  },
  "tail_hold": 47,
  "cta": {

@@ -32,3 +32,8 @@ description: Tạo theme mới hoặc chỉnh theme Dan Tech từ một spec (mo
 9. Cập nhật bảng theme trong `README.md` và `AGENTS.md` (trạng thái 🧪 cho đến khi Dan duyệt). Gửi Dan video test + sheet. Không commit `out/`.
 
 - **Không hiển thị tên theme trên khung hình** (TIN NÓNG / MẸO NHANH / GIẢI THÍCH…): tên theme chỉ dùng nội bộ. Chỉ giữ brand DAN TECH. Không thêm nhãn giả-kỹ-thuật trang trí (FIG./SHEET/§/REV…) nếu không mang nghĩa thật.
+
+## Caption karaoke (mọi theme)
+- Font caption khai báo trong `theme.json` → `look.caption` `{font, size, upper, weight?}`; mặc định = font chính (`head`) của theme. Caption phải cùng font với video.
+- Hiện tại: hot-news Anton 72 (in hoa) · quick-tips BVPX 62 · tech-explain JBM 52 (700) · tech-explain-cyber BVPM 60 · hot-news-glitch Anton 72 (in hoa).
+- Component `Captions` (remotion/src/sys.tsx) dùng chung, không viết caption riêng cho theme mới.

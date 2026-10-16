@@ -27,7 +27,12 @@
    "push",
    "bar"
   ],
-  "subtitle": "quick tips"
+  "subtitle": "quick tips",
+  "caption": {
+   "font": "BVPX",
+   "size": 62,
+   "upper": false
+  }
  },
  "tail_hold": 32,
  "cta": {
