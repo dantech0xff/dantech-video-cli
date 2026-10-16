@@ -13,6 +13,7 @@ export GEMINI_API_KEY=...           # chỉ đặt trong env / .env (đã gitign
 ./dt fetch-music                    # tải nhạc Wikimedia Commons vào assets/music/
 # 7 bài Pixabay (TIN NÓNG) phải tải tay từ pixabay.com, đặt đúng tên vào assets/music/pixabay/
 #   (tên file + id: assets/music/tracks.json, assets/music/LIBRARY.md, themes/tin-nong/theme.json → music.pool)
+./dt setup                          # (macOS/Linux) tự làm các bước trên, chạy lại được; ưu tiên .venv
 ./dt doctor                         # kiểm tra mọi thứ, phải toàn ✅ trước khi render
 ```
 
@@ -38,6 +39,7 @@ export GEMINI_API_KEY=...           # chỉ đặt trong env / .env (đã gitign
 
 | Skill | Khi nào | File |
 |---|---|---|
+| `setup` | máy mới: cài Node/Python(.venv)/ffmpeg, npm, model whisper, .env, nhạc → `./dt doctor` ✅ | `.agents/skills/setup/SKILL.md` (tự động: `./dt setup`) |
 | `write-script` | spec (chủ đề/link, theme, độ dài, góc nhìn) → `script.json` đã validate | `.agents/skills/write-script/SKILL.md` (+ `SCHEMA.md`, `template.json`) |
 | `render-video` | script → MP4 + QC, chạy lại bằng `--from` | `.agents/skills/render-video/SKILL.md` |
 | `theme` | tạo/chỉnh theme từ spec | `.agents/skills/theme/SKILL.md` |

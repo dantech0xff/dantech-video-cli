@@ -1,13 +1,14 @@
 #!/bin/bash
 # Kiểm tra máy có đủ để chạy pipeline. usage: ./dt doctor
 cd "$(dirname "$0")/.."; F=0
+[ -x .venv/bin/python3 ] && export PATH="$PWD/.venv/bin:$PATH"
 ok(){ echo "✅ $1"; }; bad(){ echo "❌ $1"; echo "   → $2"; F=1; }
 has(){ command -v "$1" >/dev/null 2>&1; }
 if has node && [ "$(node -p 'process.versions.node.split(".")[0]')" -ge 18 ]; then ok "node $(node -v)"; else bad "node 18+" "cài Node 18+ (https://nodejs.org)"; fi
 has npm && ok "npm $(npm -v)" || bad "npm" "cài npm (đi kèm Node)"
-if has python3; then ok "$(python3 --version)"
- python3 -c "import faster_whisper" 2>/dev/null && ok "faster_whisper import được" || bad "faster_whisper" "pip install -r requirements.txt"
-else bad "python3" "cài Python 3.10+"; fi
+if has python3 && python3 -c "import sys;sys.exit(sys.version_info<(3,10))"; then ok "$(python3 --version) ($(command -v python3))"
+ python3 -c "import faster_whisper" 2>/dev/null && ok "faster_whisper import được" || bad "faster_whisper" "./dt setup (tạo .venv + pip install -r requirements.txt)"
+else bad "python3 3.10+" "cài Python 3.10+, rồi ./dt setup"; fi
 for b in ffmpeg ffprobe; do has $b && ok "$b" || bad "$b" "cài ffmpeg (brew install ffmpeg / apt install ffmpeg / winget install ffmpeg)"; done
 [ -d remotion/node_modules/remotion ] && [ -d remotion/node_modules/@remotion/cli ] && ok "remotion node_modules" || bad "remotion node_modules" "cd remotion && npm install"
 [ -z "$GEMINI_API_KEY" ] && [ -f .env ] && set -a && . ./.env && set +a

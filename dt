@@ -4,12 +4,18 @@
 #   ./dt render <script> --from render      resume from a step (tts|align|props|render|mix|describe)
 #   ./dt fetch-music                        download the Commons music library
 #   ./dt doctor                             check this machine has everything needed
+#   ./dt setup                              install deps (venv, npm, whisper model, music); idempotent
 set -e
 cd "$(dirname "$0")"; ROOT=$(pwd)
+# prefer the project venv (created by scripts/setup.sh) for every python3 call, including in child scripts
+[ -x "$ROOT/.venv/bin/python3" ] && export PATH="$ROOT/.venv/bin:$PATH" && export VIRTUAL_ENV="$ROOT/.venv"
+# load .env (GEMINI_API_KEY) without overriding variables already set in the shell
+[ -f .env ] && [ -z "$GEMINI_API_KEY" ] && { set -a; . ./.env; set +a; }
 cmd=$1; shift || true
 case "$cmd" in
  fetch-music) python3 scripts/fetch_music.py ;;
  doctor) exec scripts/doctor.sh ;;
+ setup) exec scripts/setup.sh ;;
  render)
   SCRIPT=$1; FROM=${3:-tts}; [ -f "$SCRIPT" ] || { echo "script not found: $SCRIPT"; exit 1; }
   DIR=$(dirname "$SCRIPT"); OUT=$DIR/out; SLUG=$(basename "$DIR"); mkdir -p "$OUT"
@@ -30,5 +36,5 @@ case "$cmd" in
     describe) python3 scripts/describe.py "$SCRIPT" ;;
    esac; done
   echo "✓ $OUT/$SLUG.mp4" ;;
- *) sed -n 2,7p "$0"; exit 1 ;;
+ *) sed -n 2,8p "$0"; exit 1 ;;
 esac

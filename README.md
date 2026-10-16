@@ -34,10 +34,11 @@ pip install -r requirements.txt          # faster-whisper (tải model "medium" 
 ./dt fetch-music                         # tải nhạc Wikimedia Commons về assets/music/
 # Nhạc Pixabay (7 bài TIN NÓNG) phải tải tay từ pixabay.com vào assets/music/pixabay/ (xem assets/music/LIBRARY.md)
 export GEMINI_API_KEY=...                # chỉ đọc từ biến môi trường, KHÔNG bao giờ ghi vào repo
+./dt setup                               # (hoặc make setup) tự cài phần còn lại: .venv, npm, model whisper, .env, nhạc
 ./dt doctor                              # (hoặc make doctor) kiểm tra máy: ✅/❌ kèm cách sửa
 ```
 
-**Dùng với AI CLI trên máy (Grok CLI, Claude Code, Codex…):** AI đọc [`AGENTS.md`](AGENTS.md) (CLAUDE.md, GROK.md trỏ về đó). AI chỉ viết `script.json` và chạy lệnh, còn lại là code cố định. Có sẵn skills `write-script`, `render-video`, `theme` trong `.agents/skills/` (`.claude/skills`, `.grok/skills` là symlink tới đó; Windows cần `git config core.symlinks true` + Developer Mode). Kiểm script trước khi render: `python3 scripts/validate_script.py <script>`.
+**Dùng với AI CLI trên máy (Grok CLI, Claude Code, Codex…):** AI đọc [`AGENTS.md`](AGENTS.md) (CLAUDE.md, GROK.md trỏ về đó). AI chỉ viết `script.json` và chạy lệnh, còn lại là code cố định. Có sẵn skills `setup`, `write-script`, `render-video`, `theme` trong `.agents/skills/` (`.claude/skills`, `.grok/skills` là symlink tới đó; Windows cần `git config core.symlinks true` + Developer Mode). Kiểm script trước khi render: `python3 scripts/validate_script.py <script>`.
 
 ## Làm một video, từng bước
 
