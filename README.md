@@ -8,7 +8,7 @@ Có 3 theme:
 |---|---|---|
 | `tin-nong` | Tin nóng, drama công nghệ (phong cách báo in: giấy, đỏ, Anton) | ✅ Đã duyệt (khoá) |
 | `meo-nhanh` | Mẹo, tutorial, review tool AI, listicle (cobalt + vàng, keycap, mockup IDE) | ✅ Đã duyệt |
-| `commit` | Code / dev log (nền tối, JetBrains Mono) | 🧪 Thử nghiệm |
+| `commit` | Dev explainer: git, code, terminal (thanh tab vàng, gutter số dòng, lệnh gõ chữ, git graph, git log, chuyển cảnh `scroll`) | 🧪 v1 chờ Dan duyệt |
 
 ## Pipeline
 
@@ -42,10 +42,10 @@ export GEMINI_API_KEY=...                # chỉ đọc từ biến môi trườ
 
 ## Làm một video, từng bước
 
-1. Tạo thư mục `videos/<slug>/` và copy một `script.json` mẫu (`videos/openai-vs-apple/` cho TIN NÓNG, `videos/android-studio-shortcuts/` cho MẸO NHANH).
+1. Tạo thư mục `videos/<slug>/` và copy một `script.json` mẫu (`videos/openai-vs-apple/` cho TIN NÓNG, `videos/android-studio-shortcuts/` cho MẸO NHANH, `videos/git-merge-vs-rebase/` cho COMMIT).
 2. Sửa `script.json`:
    - `theme`, `title`, `date` (hiện trên masthead), `caption`, `sources` (đi vào description).
-   - `scenes`: mỗi cảnh có `say` (câu giọng đọc nói trong cảnh đó), `type` (scene template), `section` (dòng nhỏ trên đầu trang), `out` (kiểu chuyển cảnh sang cảnh sau: `page`, `bar`, `zoom`, `push`, `stack`, `morph`), `props` (nội dung cảnh), `sfx` (tuỳ chọn).
+   - `scenes`: mỗi cảnh có `say` (câu giọng đọc nói trong cảnh đó), `type` (scene template), `section` (dòng nhỏ trên đầu trang), `out` (kiểu chuyển cảnh sang cảnh sau: `page`, `bar`, `zoom`, `push`, `stack`, `morph`, `scroll`), `props` (nội dung cảnh), `sfx` (tuỳ chọn).
    - Câu cuối nên có "follow Dan Tech": nút Follow tự bật lên ở chữ "follow" và được bấm đúng chữ "Dan".
 3. Chạy:
    ```bash
@@ -98,6 +98,7 @@ remotion/src/
   Root.tsx              1 composition / theme
   sys.tsx               captions, chuyển cảnh (Timeline), masthead, hiệu ứng vào/ra
   scenes.tsx            scene templates TIN NÓNG/COMMIT: Headline, Flow, Quote, Checklist, Evidence, CTA
+  commit.tsx            scene templates COMMIT: CmdHook, GitGraph, LogPanes, DocRule, CommitCTA
   meo.tsx               scene templates MẸO NHANH: MeoHook, MeoSearch, MeoFix, MeoSlowFast, MeoSave, keycap, IDE mockup
   outro.tsx             nút Follow (bấm + chuông) và end card
 scripts/                tts.py, align.py, build_props.py, pick_music.py, mix_bgm.sh, loudnorm.sh, describe.py, measure_vm.py, compare.sh, fetch_music.py

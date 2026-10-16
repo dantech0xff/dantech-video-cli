@@ -26,3 +26,7 @@ Every TIN NÓNG render picks 1 of the 7 approved Pixabay tracks at random (tin_n
 - 2026-10-16 16:51 openai-vs-apple: music **the_mountain-cinematic-epic-576562** from 7s (pinned, Content ID: none)
 - 2026-10-16 16:51 tts-test: voice vi-vn-concierge-2 style **tu-nhien** (random), 33.1s
 - 2026-10-16 16:52 tts-test: music **the_mountain-epic-cinematic-576567** from 15s (random, Content ID: none)
+- 2026-10-16 17:44 git-merge-vs-rebase: voice vi-vn-concierge-2 style **hao-hung** (random), 36.3s
+- 2026-10-16 17:45 git-merge-vs-rebase: music **sappheiros-perspective** from 8s (random LRU, Content ID: unknown)
+- 2026-10-16 17:47 git-merge-vs-rebase: music **sappheiros-perspective** from 8s (pinned, Content ID: unknown)
+- 2026-10-16 17:48 git-merge-vs-rebase: music **sappheiros-perspective** from 8s (pinned, Content ID: unknown)

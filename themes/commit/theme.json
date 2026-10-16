@@ -1,5 +1,4 @@
 {
- "experimental": true,
  "look": {
   "id": "commit",
   "label": "COMMIT",
@@ -8,7 +7,7 @@
   "onAccent": "#141414",
   "accent": "#FFD60A",
   "accent2": "#3DDC6B",
-  "muted": "#5A5A55",
+  "muted": "#4A4A46",
   "head": "JBM",
   "body": "JBM",
   "upper": false,
@@ -17,19 +16,21 @@
   "entry": "type",
   "rule": "#2A2A2A",
   "sfx": {
-   "trans": "cloth1",
+   "trans": "key_click",
    "stamp": "impactSoft_heavy_000",
    "tick": "tick_002",
-   "entry": "click_002"
+   "entry": "key_click"
   },
   "trans": [
+   "scroll",
    "push",
-   "bar"
+   "bar",
+   "stack"
   ]
  },
  "tail_hold": 40,
  "cta": {
-  "top": 1100,
+  "top": 1110,
   "in_offset": -6,
   "sub": "BẬT CHUÔNG ĐỂ KHÔNG LỠ BÀI"
  },
@@ -49,8 +50,16 @@
  "music": {
   "pool": [
    {
-    "id": "alexi-action-lifelike",
+    "id": "alexi-action-ghost",
     "start": 0
+   },
+   {
+    "id": "raspberrymusic-technology-background-music",
+    "start": 0
+   },
+   {
+    "id": "sappheiros-perspective",
+    "start": 8
    }
   ],
   "rel": -10

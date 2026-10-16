@@ -11,10 +11,11 @@ description: Viết videos/<slug>/script.json cho video Dan Tech từ một spec
 ## Các bước
 
 1. **Nghiên cứu, kiểm chứng.** Mở và đọc nguồn thật (link Dan đưa, báo lớn, tài liệu chính thức). Mỗi sự kiện, con số, trích dẫn phải lấy từ một nguồn bạn đã đọc. **Không bịa** sự kiện, số liệu, quote hay URL. Thông tin chưa chắc thì bỏ, hoặc ghi rõ "chưa xác nhận" và hỏi Dan.
-2. **Chọn theme:** drama/tin → `tin-nong`; mẹo/tool/tutorial/listicle → `meo-nhanh`; code/dev log → `commit` (thử nghiệm, chỉ khi Dan yêu cầu). Nếu spec **không ghi theme**: đề xuất một theme kèm lý do một câu và **chờ Dan xác nhận** trước khi viết. Chỉ khi chạy không tương tác (không ai trả lời được) mới tự chọn, và ghi rõ lý do trong phần tóm tắt.
+2. **Chọn theme:** drama/tin → `tin-nong`; mẹo/tool/tutorial/listicle → `meo-nhanh`; code/dev explainer → `commit` (v1, mẫu `videos/git-merge-vs-rebase/`). Nếu spec **không ghi theme**: đề xuất một theme kèm lý do một câu và **chờ Dan xác nhận** trước khi viết. Chỉ khi chạy không tương tác (không ai trả lời được) mới tự chọn, và ghi rõ lý do trong phần tóm tắt.
 3. **Tạo slug** dạng kebab-case không dấu (`openai-vs-apple`). Copy mẫu cùng theme:
    - tin-nong: `videos/openai-vs-apple/script.json`
    - meo-nhanh: `videos/android-studio-shortcuts/script.json`
+   - commit: `videos/git-merge-vs-rebase/script.json`
    Schema đầy đủ và props từng scene: [SCHEMA.md](SCHEMA.md). Bản khởi đầu: [template.json](template.json).
 4. **Viết `say` từng cảnh** (tiếng Việt nói, câu ngắn):
    - **Hook trong 2 giây đầu:** cảnh 1 mở bằng xung đột, con số hoặc câu hỏi ("Vẫn click chuột lục menu…?", "OpenAI vừa xuống nước…").

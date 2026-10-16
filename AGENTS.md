@@ -22,11 +22,12 @@ export GEMINI_API_KEY=...           # chỉ đặt trong env / .env (đã gitign
 1. **Chọn chủ đề**, rồi chọn theme:
    - `tin-nong`: tin nóng, drama công nghệ (scene: Headline, Flow, Quote, Checklist, Evidence, CTA).
    - `meo-nhanh`: mẹo, tutorial, review tool, listicle (scene: MeoHook, MeoSearch, MeoFix, MeoSlowFast, MeoSave).
-   - `commit`: code/dev log. **Thử nghiệm**, chỉ dùng khi Dan yêu cầu.
+   - `commit`: dev explainer (git, code, terminal; scene: CmdHook, GitGraph, LogPanes, DocRule, CommitCTA). v1 chờ Dan duyệt.
 2. **Kiểm chứng nguồn.** Mọi sự kiện, con số, trích dẫn phải có nguồn thật mà bạn đã mở và đọc. Ghi vào `sources` (tên báo + URL + ngày). **Không bịa sự kiện, số liệu, trích dẫn hay URL.** Không chắc thì bỏ, hoặc hỏi Dan.
 3. **Viết `videos/<slug>/script.json`.** Copy mẫu, giữ đúng schema:
    - TIN NÓNG: `videos/openai-vs-apple/script.json`
    - MẸO NHANH: `videos/android-studio-shortcuts/script.json`
+   - COMMIT: `videos/git-merge-vs-rebase/script.json`
    - Khoá cấp trên: `theme, title, date, caption, sources, voice, music, scenes`. Mỗi scene có `say, type, section, out, props, sfx?`. Chỉ dùng `type` và các khoá `props` đã có trong mẫu (hoặc trong `remotion/src/scenes.tsx` / `meo.tsx`).
    - Hẹn giờ bằng `"@chữ"` (xem README), không đếm frame tay.
    - Câu cuối có "follow Dan Tech". Outro/CTA tự lo handle **YouTube @dantech-0xff, Facebook @dantech0xff**. Không tự làm outro.

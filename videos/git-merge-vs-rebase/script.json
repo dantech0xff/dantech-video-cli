@@ -1,0 +1,341 @@
+{
+ "theme": "commit",
+ "title": "git merge vs git rebase",
+ "date": "16 · 10 · 2026",
+ "caption": "Merge hay rebase? Merge giữ lịch sử + tạo merge commit, rebase chép commit lên đầu nhánh (hash mới, lịch sử thẳng). Đừng rebase commit đã push mà người khác đang dùng. #DanTech #Git #Commit",
+ "sources": [
+  "git-merge documentation (TRUE MERGE, FAST-FORWARD MERGE): https://git-scm.com/docs/git-merge",
+  "git-rebase documentation: https://git-scm.com/docs/git-rebase",
+  "Pro Git, 3.6 Git Branching - Rebasing (The Perils of Rebasing): https://git-scm.com/book/en/v2/Git-Branching-Rebasing"
+ ],
+ "voice": {
+  "style": "random"
+ },
+ "music": {
+  "track": "random"
+ },
+ "scenes": [
+  {
+   "say": "Merge hay rebase? Hai lệnh cùng gộp code từ nhánh này sang nhánh kia, nhưng để lại lịch sử khác hẳn nhau.",
+   "type": "CmdHook",
+   "section": "merge-vs-rebase",
+   "out": "scroll",
+   "props": {
+    "cmds": [
+     {
+      "s": "git merge feature",
+      "at": "@Merge"
+     },
+     {
+      "s": "git rebase main",
+      "at": "@rebase?"
+     }
+    ],
+    "l1": "merge",
+    "l2": "hay rebase?",
+    "titleAt": "@Hai",
+    "deck": "Cùng gộp code. Lịch sử khác hẳn."
+   },
+   "sfx": [
+    {
+     "at": "@Merge+12",
+     "s": "key_click",
+     "v": 0.3
+    },
+    {
+     "at": "@rebase?+11",
+     "s": "key_click",
+     "v": 0.3
+    },
+    {
+     "at": "@Hai",
+     "s": "select_003",
+     "v": 0.35
+    }
+   ]
+  },
+  {
+   "say": "Khi hai nhánh đã rẽ ra, git merge giữ nguyên mọi commit cũ, rồi tạo thêm một merge commit có hai commit cha.",
+   "type": "GitGraph",
+   "section": "git merge",
+   "out": "push",
+   "props": {
+    "mode": "merge",
+    "cmd": "git merge feature",
+    "cmdAt": "@git",
+    "showAt": 0,
+    "actAt": "@tạo",
+    "notes": [
+     {
+      "s": "giữ nguyên lịch sử",
+      "at": "@giữ"
+     },
+     {
+      "s": "thêm 1 merge commit, 2 cha",
+      "at": "@hai#2"
+     }
+    ]
+   },
+   "sfx": [
+    {
+     "at": "@tạo+14",
+     "s": "tick_002",
+     "v": 0.4
+    }
+   ]
+  },
+  {
+   "say": "Còn git rebase chép từng commit của nhánh feature lên đầu main. Commit mới có hash mới, lịch sử thành một đường thẳng.",
+   "type": "GitGraph",
+   "section": "git rebase",
+   "out": "scroll",
+   "props": {
+    "mode": "rebase",
+    "cmd": "git rebase main",
+    "cmdAt": "@git",
+    "showAt": 0,
+    "actAt": "@chép",
+    "notes": [
+     {
+      "s": "commit mới = hash mới",
+      "at": "@hash",
+      "mark": "~"
+     },
+     {
+      "s": "lịch sử thẳng một đường",
+      "at": "@đường"
+     }
+    ]
+   },
+   "sfx": [
+    {
+     "at": "@chép+18",
+     "s": "tick_002",
+     "v": 0.3
+    },
+    {
+     "at": "@chép+24",
+     "s": "tick_002",
+     "v": 0.3
+    }
+   ]
+  },
+  {
+   "say": "Mở git log là thấy ngay: merge có nhánh rẽ, rebase thẳng tắp, dễ đọc hơn.",
+   "type": "LogPanes",
+   "section": "git log --graph",
+   "out": "bar",
+   "props": {
+    "n": "03",
+    "kick": "git log",
+    "panes": [
+     {
+      "title": "sau merge",
+      "cmd": "git log --oneline --graph",
+      "at": "@Mở",
+      "lines": [
+       [
+        [
+         "*   ",
+         "graph"
+        ],
+        [
+         "M ",
+         "hash"
+        ],
+        [
+         "Merge branch 'feature'"
+        ]
+       ],
+       [
+        [
+         "|\\",
+         "graph"
+        ]
+       ],
+       [
+        [
+         "| * ",
+         "graph"
+        ],
+        [
+         "C5 ",
+         "hash"
+        ],
+        [
+         "fix: validate form"
+        ]
+       ],
+       [
+        [
+         "| * ",
+         "graph"
+        ],
+        [
+         "C4 ",
+         "hash"
+        ],
+        [
+         "feat: login form"
+        ]
+       ],
+       [
+        [
+         "* | ",
+         "graph"
+        ],
+        [
+         "C3 ",
+         "hash"
+        ],
+        [
+         "docs: README"
+        ]
+       ],
+       [
+        [
+         "|/",
+         "graph"
+        ]
+       ],
+       [
+        [
+         "* ",
+         "graph"
+        ],
+        [
+         "C2 ",
+         "hash"
+        ],
+        [
+         "init api"
+        ]
+       ]
+      ],
+      "verdict": "rẽ nhánh"
+     },
+     {
+      "title": "sau rebase",
+      "cmd": "git log --oneline --graph",
+      "at": "@merge",
+      "lines": [
+       [
+        [
+         "* ",
+         "graph"
+        ],
+        [
+         "C5' ",
+         "hash"
+        ],
+        [
+         "fix: validate form"
+        ]
+       ],
+       [
+        [
+         "* ",
+         "graph"
+        ],
+        [
+         "C4' ",
+         "hash"
+        ],
+        [
+         "feat: login form"
+        ]
+       ],
+       [
+        [
+         "* ",
+         "graph"
+        ],
+        [
+         "C3 ",
+         "hash"
+        ],
+        [
+         "docs: README"
+        ]
+       ],
+       [
+        [
+         "* ",
+         "graph"
+        ],
+        [
+         "C2 ",
+         "hash"
+        ],
+        [
+         "init api"
+        ]
+       ]
+      ],
+      "verdict": "thẳng tắp",
+      "good": true
+     }
+    ]
+   }
+  },
+  {
+   "say": "Nhưng nhớ luật trong sách Pro Git: đừng rebase commit đã đẩy ra ngoài, khi người khác có thể đang dựa vào chúng.",
+   "type": "DocRule",
+   "section": "pro-git --rule",
+   "out": "stack",
+   "props": {
+    "n": "04",
+    "kick": "luật vàng",
+    "src": "Pro Git · 3.6 Rebasing · git-scm.com",
+    "quote": "Do not rebase commits that exist outside your repository and that people may have based work on.",
+    "quoteAt": "@luật",
+    "tr": "Đừng rebase commit đã push",
+    "trAt": "@đừng",
+    "bad": "rebase + push --force nhánh chung",
+    "badAt": "@đẩy",
+    "stamp": {
+     "at": "@người",
+     "text": "CẤM",
+     "sub": "NHÁNH CHUNG"
+    }
+   },
+   "sfx": [
+    {
+     "at": "@người",
+     "s": "impactSoft_heavy_000",
+     "v": 0.45
+    }
+   ]
+  },
+  {
+   "say": "Tóm lại: nhánh riêng chưa push thì rebase cho gọn, nhánh chung thì merge. Lưu lại và follow Dan Tech nhé!",
+   "type": "CommitCTA",
+   "section": "tóm tắt",
+   "props": {
+    "n": "05",
+    "kick": "chọn sao?",
+    "rows": [
+     {
+      "k": "nhánh riêng, chưa push",
+      "v": "rebase",
+      "at": "@riêng"
+     },
+     {
+      "k": "nhánh chung",
+      "v": "merge",
+      "at": "@chung"
+     }
+    ],
+    "cmd": "git commit -m \"follow Dan Tech\"",
+    "cmdAt": "@Lưu"
+   },
+   "sfx": [
+    {
+     "at": "@Lưu+22",
+     "s": "key_click",
+     "v": 0.3
+    }
+   ]
+  }
+ ]
+}

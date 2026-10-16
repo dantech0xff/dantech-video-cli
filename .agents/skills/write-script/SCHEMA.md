@@ -15,7 +15,7 @@
    "say": "Câu giọng đọc nói trong cảnh này.",   // cảnh bắt đầu ở chữ đầu tiên của say
    "type": "<scene template>",
    "section": "DÒNG NHỎ TRÊN ĐẦU",
-   "out": "page|bar|zoom|push|stack|morph",      // chuyển cảnh sang cảnh sau (cảnh cuối bỏ trống)
+   "out": "page|bar|zoom|push|stack|morph|scroll",      // chuyển cảnh sang cảnh sau (cảnh cuối bỏ trống)
    "focus": [x, y],                               // tâm zoom khi out = zoom
    "morph": {"from":[x,y,w,h,font],"to":[…],"txt":"14"},  // bắt buộc khi out = morph
    "props": {…},                                  // theo template bên dưới
@@ -42,6 +42,14 @@ MẸO NHANH (`remotion/src/meo.tsx`), mẫu: `videos/android-studio-shortcuts/sc
 - `MeoFix`: tip, keys, mac, window, code, insert{line,code}, squig{line,tok}, redAt, popAt, popup[], fixAt, okAt, ok
 - `MeoSlowFast`: tip, vsAt, slowLabel, fastLabel, path[], pathClicks[], keys, mac, fastTime, window, before, after, reflowAt, okAt, ok
 - `MeoSave`: kicker, title, lead, chips:[[a,b],…]
+
+COMMIT (`remotion/src/commit.tsx`), mẫu: `videos/git-merge-vs-rebase/script.json`
+- `CmdHook`: cmds:[{s,at}], l1, l2, l3?, titleAt, deck?
+- `GitGraph`: mode:"merge"|"rebase", cmd, cmdAt, showAt?, actAt, notes?:[{s,at,mark?:"+"|"-"|"~"}], main?, branch?
+- `LogPanes`: n, kick, panes:[{title, cmd, at, lines:[[ [text, "hash"|"graph"|"dim"|"green"|"red"|"yellow"?], … ]], verdict?, good?}]
+- `DocRule`: n, kick, src, quote, quoteAt, tr, trAt, bad, badAt, stamp?:{at,text,sub}
+- `CommitCTA`: n, kick, rows:[{k,v,at}] (tối đa 2), cmd, cmdAt (nội dung phải ở trên nút Follow, y≈1110)
+Chuyển cảnh thêm `scroll` (cuộn theo bậc như terminal), hợp nhất với COMMIT.
 
 `media` = file trong `assets/broll/` (chỉ clip không có người). Cấu trúc `code`/`Line`: copy y hệt mẫu.
 SFX có sẵn: xem `assets/sfx/SFX_LIST.md` (cta_click, tip_pop, key_click, tick_001, impactPlank_medium_000, whoosh_soft…).

@@ -35,11 +35,18 @@ export const Chrome:React.FC<{section:string;page:string;date:string}>=({section
  <div style={{position:'absolute',left:136,right:50,top:70,borderBottom:`6px solid ${t.ink}`,paddingBottom:12,display:'flex',justifyContent:'space-between',alignItems:'flex-end'}}>
   <div style={{fontFamily:'Anton',fontSize:96,color:t.ink,lineHeight:1}}>DAN TECH<span style={{color:t.accent}}>■</span></div><div style={{...Bd(t,28),textAlign:'right',lineHeight:1.15}}>{page}<br/>{date}</div></div>
  <div style={{position:'absolute',left:136,right:50,top:208,...Bd(t,30),borderBottom:`2px solid ${t.rule}`,paddingBottom:8}}>{t.label} — {section}</div></>};
+/* COMMIT chrome: editor tab bar + line-number gutter + prompt line */
+export const TermChrome:React.FC<{section:string;page:string;idx:number}>=({section,page,idx})=>{const {t}=useS();return <>
+ <div style={{position:'absolute',left:0,right:0,top:0,height:110,background:t.accent,display:'flex',alignItems:'center',justifyContent:'space-between',padding:'0 50px 0 40px'}}>
+  <div style={{fontFamily:'JBM',fontWeight:800,fontSize:56,color:t.onAccent,letterSpacing:-1}}>DAN/TECH<span style={{opacity:.55}}>.git</span></div>
+  <div style={{fontFamily:'JBM',fontWeight:700,fontSize:32,color:t.onAccent}}>main ▸ {page}</div></div>
+ <div style={{position:'absolute',left:0,top:110,bottom:0,width:96,borderRight:`3px solid ${t.rule}`}}>{Array.from({length:23},(_,k)=><div key={k} style={{position:'absolute',right:18,top:44+k*66,fontFamily:'JBM',fontSize:26,color:k===idx*3+3?t.accent:t.muted}}>{k+1}</div>)}</div>
+ <div style={{position:'absolute',left:136,right:50,top:150,fontFamily:'JBM',fontSize:32,color:t.muted,borderBottom:`3px solid ${t.rule}`,paddingBottom:18,whiteSpace:'nowrap',overflow:'hidden'}}><span style={{color:t.accent2}}>~/commit</span> <span style={{color:t.ink}}>❯</span> {section}</div></>};
 export const Captions:React.FC<{words:{t:string;s:number;e:number}[]}>=({words})=>{const {t}=useS();const f=useCurrentFrame();const tm=f/30;const i=words.findIndex(w=>tm<w.e+0.05);if(i<0||tm<words[i].s-0.3)return null;const g=Math.floor(i/3)*3;
  return <div style={{position:'absolute',left:136,right:50,top:1640,display:'flex',gap:12,flexWrap:'wrap'}}>{words.slice(g,g+3).map((w,k)=>{const a=g+k===i;const p=interpolate(tm,[w.s-0.05,w.s+0.08],[0,1],cl);
   return <span key={k} style={{...H(t,t.head==='Anton'?72:62,a?t.onAccent:t.bg),textTransform:'uppercase',background:a?t.accent:t.ink,padding:t.head==='Anton'?'6px 18px 0':'6px 18px',borderRadius:t.id==='meo'?14:0,transform:`translateY(${a?-6*p:0}px)`}}>{w.t.replace(/[.,!?:]$/,'')}</span>})}</div>};
 /* ---------- timeline with designed transitions ---------- */
-export type Scene={dur:number;el:React.ReactNode;section:string;out?:'page'|'bar'|'zoom'|'push'|'stack'|'morph';focus?:[number,number];morph?:{from:number[];to:number[];txt:string}};
+export type Scene={dur:number;el:React.ReactNode;section:string;out?:'page'|'bar'|'zoom'|'push'|'stack'|'morph'|'scroll';focus?:[number,number];morph?:{from:number[];to:number[];txt:string}};
 const T=16;
 export const Timeline:React.FC<{t:Theme;scenes:Scene[];words:any[];voice:string;sfx:{at:number;s:string;v?:number}[];date:string}>=({t,scenes,words,voice,sfx,date})=>{const f=useCurrentFrame();
  const starts=scenes.reduce<number[]>((a,s,i)=>[...a,(a[i]??0)+s.dur],[0]);
@@ -55,18 +62,20 @@ export const Timeline:React.FC<{t:Theme;scenes:Scene[];words:any[];voice:string;
    else if(kout==='zoom'){const [fx,fy]=s.focus??[540,900];st={transform:`scale(${1+Math.pow(outP,2.2)*14})`,transformOrigin:`${fx}px ${fy}px`,filter:blur(outP,6),opacity:outP>.75?interpolate(outP,[.75,.9],[1,0],cl):1};z=2}
    else if(kout==='push'){st={transform:`translateY(${-outP*1920}px)`,filter:blur(outP,18)}}
    else if(kout==='stack'){st={transform:`scale(${1-.1*outP})`,filter:`brightness(${1-.5*outP})`,borderRadius:40*outP,overflow:'hidden'}}
+   else if(kout==='scroll'){st={transform:`translateY(${-Math.round(outP*9)/9*1920}px)`}}
    else if(kout==='bar'||kout==='morph'){st={opacity:outP<.5?1:0}}}
   if(i>0&&inP<1){ if(kin==='page'){st={...st,transform:`translateX(${(1-inP)*260}px)`,filter:`brightness(${.75+.25*inP})`};z=1}
    else if(kin==='zoom'){st={...st,transform:`scale(${.82+.18*inP})`,opacity:interpolate(inP,[.55,.8],[0,1],cl)};z=3}
    else if(kin==='push'){st={...st,transform:`translateY(${(1-inP)*1920}px)`,filter:blur(inP,18)}}
    else if(kin==='stack'){st={...st,transform:`translateY(${(1-inP)*1920}px) rotate(${(1-inP)*-4}deg)`,boxShadow:'0 -30px 80px rgba(0,0,0,.4)',borderRadius:40*(1-inP),overflow:'hidden'};z=3}
+   else if(kin==='scroll'){st={...st,transform:`translateY(${(1-Math.round(inP*9)/9)*1920}px)`}}
    else if(kin==='bar'||kin==='morph'){st={...st,opacity:inP>=.5?1:0}}}
   const lf=f-starts[i];
   layers.push(<AbsoluteFill key={i} style={{zIndex:z,background:t.bg,backgroundImage:t.texture?`url(${staticFile(t.texture)})`:'none',...st}}>
-   <Ctx.Provider value={{t,f:lf,exit:exitStag}}><Chrome section={s.section} page={`TRANG ${i+1}/${scenes.length}`} date={date}/>
+   <Ctx.Provider value={{t,f:lf,exit:exitStag}}>{t.id==='commit'?<TermChrome section={s.section} page={`${i+1}/${scenes.length}`} idx={i}/>:<Chrome section={s.section} page={`TRANG ${i+1}/${scenes.length}`} date={date}/>}
    <div style={{position:'absolute',left:136,right:50,top:290,height:1320}}>{s.el}</div></Ctx.Provider></AbsoluteFill>);
   if(i<scenes.length-1&&(kout==='bar')&&outP>0&&outP<1){const p=outP;const w=p<.5?interpolate(p,[0,.5],[96,1080]):1080;const x=p<.5?0:interpolate(p,[.5,1],[0,1080],{easing:EIO});
-   overlay=<div style={{position:'absolute',top:0,bottom:0,left:x,width:w-(p<.5?0:0),background:t.accent,zIndex:10,display:'flex',alignItems:'center',justifyContent:'center',overflow:'hidden'}}><div style={{transform:`rotate(-90deg) translateY(${(p-.5)*400}px)`,fontFamily:'Anton',fontSize:200,color:t.onAccent,whiteSpace:'nowrap'}}>DAN TECH ■</div></div>}
+   overlay=<div style={{position:'absolute',top:0,bottom:0,left:x,width:w-(p<.5?0:0),background:t.accent,zIndex:10,display:'flex',alignItems:'center',justifyContent:'center',overflow:'hidden'}}><div style={{transform:`rotate(-90deg) translateY(${(p-.5)*400}px)`,fontFamily:t.id==='commit'?'JBM':'Anton',fontWeight:t.id==='commit'?800:400,fontSize:t.id==='commit'?150:200,color:t.onAccent,whiteSpace:'nowrap'}}>{t.id==='commit'?'git commit ▸':'DAN TECH ■'}</div></div>}
   if(i<scenes.length-1&&kout==='zoom'&&outP>0&&outP<1){overlay=<AbsoluteFill style={{zIndex:2,background:t.accent,opacity:interpolate(outP,[.4,.6,.8],[0,1,0],cl)}}/>}
   if(i<scenes.length-1&&kout==='morph'&&s.morph&&outP>0&&outP<1){const m=s.morph;const p=outP;const L=(k:number)=>m.from[k]+(m.to[k]-m.from[k])*p;
    overlay=<div style={{position:'absolute',left:L(0),top:L(1),width:L(2),height:L(3),background:t.accent,zIndex:10,display:'flex',alignItems:'center',justifyContent:'center',...H(t,L(4),t.onAccent),transform:`rotate(${Math.sin(Math.PI*p)*-6}deg)`}}>{m.txt}</div>}
