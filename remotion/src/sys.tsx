@@ -45,7 +45,7 @@ export const TermChrome:React.FC<{section:string;page:string;idx:number}>=({sect
 /* ---------- karaoke captions (all themes) ----------
    Paged, never rolling: one complete sentence (or comma-phrase chunk if it would exceed 2 lines) is shown whole,
    then words light up one by one on the whisper timings. Font comes from theme look.caption (default: theme head font). */
-const CW:Record<string,number>={Anton:.36,BVPX:.46,BVPM:.43,JBM:.61,Barlow:.42}; // avg glyph width / font size, measured on renders
+const CW:Record<string,number>={Anton:.46,BVPX:.6,BVPM:.58,JBM:.66,Barlow:.5}; // avg glyph width / font size, measured on renders
 export const capStyle=(t:Theme)=>{const c=(t as any).caption||{};const font=c.font??t.head;return {font,size:c.size??(font==='Anton'?72:font==='JBM'?52:60),upper:c.upper??(font==='Anton'),weight:c.weight??(font==='JBM'?700:400)}};
 type Wd={t:string;s:number;e:number};
 export const chunkWords=(words:Wd[],maxChars:number):number[][]=>{const out:number[][]=[];let sent:number[]=[];
