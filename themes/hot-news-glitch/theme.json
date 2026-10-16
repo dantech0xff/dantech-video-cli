@@ -29,13 +29,13 @@
   "dir": "signal",
   "caption": {
    "font": "Anton",
-   "size": 72,
+   "size": 56,
    "upper": true
   }
  },
  "tail_hold": 47,
  "cta": {
-  "top": 1040,
+  "top": 1150,
   "in_offset": -6,
   "sub": "BẬT CHUÔNG ĐỂ KHÔNG LỠ TIN"
  },

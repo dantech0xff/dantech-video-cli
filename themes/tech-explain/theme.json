@@ -30,20 +30,28 @@
   "subtitle": "tech explain",
   "caption": {
    "font": "JBM",
-   "size": 52,
+   "size": 42,
    "upper": false,
    "weight": 700
   }
  },
  "tail_hold": 40,
  "cta": {
-  "top": 1110,
+  "top": 1150,
   "in_offset": -6,
   "sub": "BẬT CHUÔNG ĐỂ KHÔNG LỠ BÀI"
  },
  "outro": {
   "dur": 75,
-  "tagline": "Code & công nghệ mỗi ngày"
+  "tagline": "Code & công nghệ mỗi ngày",
+  "pal": {
+   "panel": "#141414",
+   "fg": "#EDEDE6",
+   "tagBg": "#FFD60A",
+   "tagFg": "#141414",
+   "mark": "#FFD60A",
+   "rail": "#FFD60A"
+  }
  },
  "voice": {
   "voice": "vi-vn-concierge-2",

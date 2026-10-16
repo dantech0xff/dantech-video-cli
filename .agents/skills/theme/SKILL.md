@@ -37,3 +37,13 @@ description: Tạo theme mới hoặc chỉnh theme Dan Tech từ một spec (mo
 - Font caption khai báo trong `theme.json` → `look.caption` `{font, size, upper, weight?}`; mặc định = font chính (`head`) của theme. Caption phải cùng font với video.
 - Hiện tại: hot-news Anton 72 (in hoa) · quick-tips BVPX 62 · tech-explain JBM 52 (700) · tech-explain-cyber BVPM 60 · hot-news-glitch Anton 72 (in hoa).
 - Component `Captions` (remotion/src/sys.tsx) dùng chung, không viết caption riêng cho theme mới.
+
+## Safe zone (BẮT BUỘC — tạo / sửa / cập nhật theme)
+Khung 1080x1920 bị UI TikTok / Reels / Shorts / Facebook Reels che. Hằng số dùng chung nằm ở `remotion/src/safezone.ts` (`ZONE`, `SZ`) — theme **import từ đây, không hardcode toạ độ**.
+- Vùng che (organic): top 250, bottom 420, left 60, right 200 (cột nút từ y 700 trở xuống). Strict (template quảng cáo): top 288, bottom 672, left 120, right 192.
+- Nội dung chính: x 136–860, y 290–~1360. Scene vẫn thiết kế trên canvas 894x1320, `Timeline` tự scale vào hộp `SZ.content` — không đặt chữ ngoài canvas đó.
+- Caption: `SZ.captions` (y 1366, rộng 724), tối đa 2 dòng, phải kết thúc trước y 1500.
+- Nút Follow: `cta.top` = 1150 trong theme.json, hộp phải ở x ≤ 860, y ~1150–1350.
+- End card: chữ/handle canh trái, mép phải ≤ 860, không có footer dưới y 1480.
+- Trên y 250 chỉ để brand/trang trí (top bar, số trang); dải rail/trang trí ở mép trái/phải được phép.
+- **Trước khi coi theme là xong:** render still các khung chính (headline, cảnh nhiều nội dung, caption, nút follow, end card), chạy `python3 scripts/safezone.py <png>... -o <dir>` và `--sheet`, nhìn bằng mắt: không có chữ / nút quan trọng trong vùng đỏ. % "busy" do nền / lưới / rail trang trí thì bỏ qua.

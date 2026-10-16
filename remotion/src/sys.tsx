@@ -1,6 +1,6 @@
 import React,{createContext,useContext} from 'react';
 import {AbsoluteFill,Audio,OffthreadVideo,Sequence,staticFile,useCurrentFrame,interpolate,Easing,random} from 'remotion';
-import {Theme} from './themes';import {BpChrome} from './cyber';import {GlChrome} from './glitch';
+import {Theme} from './themes';import {BpChrome} from './cyber';import {SZ} from './safezone';import {GlChrome} from './glitch';
 export const FONTS=`@font-face{font-family:Anton;src:url(${staticFile('fonts/anton.ttf')})}@font-face{font-family:Barlow;src:url(${staticFile('fonts/barlow.ttf')})}@font-face{font-family:JBM;src:url(${staticFile('fonts/jbm.ttf')});font-weight:100 800}@font-face{font-family:BVPX;src:url(${staticFile('fonts/bvp_xb.ttf')})}@font-face{font-family:BVPM;src:url(${staticFile('fonts/bvp_md.ttf')})}`;
 export const Ctx=createContext<{t:Theme;f:number;exit:number}>(null as any);
 export const useS=()=>useContext(Ctx);
@@ -46,7 +46,7 @@ export const TermChrome:React.FC<{section:string;page:string;idx:number}>=({sect
    Paged, never rolling: one complete sentence (or comma-phrase chunk if it would exceed 2 lines) is shown whole,
    then words light up one by one on the whisper timings. Font comes from theme look.caption (default: theme head font). */
 const CW:Record<string,number>={Anton:.46,BVPX:.6,BVPM:.58,JBM:.66,Barlow:.5}; // avg glyph width / font size, measured on renders
-export const capStyle=(t:Theme)=>{const c=(t as any).caption||{};const font=c.font??t.head;return {font,size:c.size??(font==='Anton'?72:font==='JBM'?52:60),upper:c.upper??(font==='Anton'),weight:c.weight??(font==='JBM'?700:400)}};
+export const capStyle=(t:Theme)=>{const c=(t as any).caption||{};const font=c.font??t.head;return {font,size:c.size??(font==='Anton'?56:font==='JBM'?42:50),upper:c.upper??(font==='Anton'),weight:c.weight??(font==='JBM'?700:400)}};
 type Wd={t:string;s:number;e:number};
 export const chunkWords=(words:Wd[],maxChars:number):number[][]=>{const out:number[][]=[];let sent:number[]=[];
  const len=(ix:number[])=>ix.reduce((a,k)=>a+words[k].t.length+1,0);
@@ -63,11 +63,11 @@ export const chunkWords=(words:Wd[],maxChars:number):number[][]=>{const out:numb
   if(acc.length)out.push(acc);sent=[]};
  words.forEach((w,k)=>{sent.push(k);if(/[.!?…]["”»)]*$/.test(w.t))flush()});flush();return out};
 export const Captions:React.FC<{words:Wd[]}>=({words})=>{const {t}=useS();const f=useCurrentFrame();const tm=f/30;const c=capStyle(t);
- const W=894;const chunks=React.useMemo(()=>chunkWords(words,Math.floor(2*W/(c.size*(CW[c.font]??.55)))),[words,c.size,c.font]);
+ const W=SZ.captions.w;const chunks=React.useMemo(()=>chunkWords(words,Math.floor(2*W/(c.size*(CW[c.font]??.55)))),[words,c.size,c.font]);
  const ci=chunks.findIndex((ch,k)=>{const a=words[ch[0]].s-0.12;const b=k+1<chunks.length?words[chunks[k+1][0]].s-0.12:words[ch[ch.length-1]].e+0.6;return tm>=a&&tm<b});
  if(ci<0)return null;const ch=chunks[ci];const cur=ch.findIndex(k=>tm<words[k].e);
  const light=t.bg.toLowerCase()>'#888888';const dim=light?'rgba(0,0,0,.35)':'rgba(255,255,255,.38)';
- return <div style={{position:'absolute',left:136,right:50,top:1630,display:'flex',flexWrap:'wrap',columnGap:c.size*.28,rowGap:6,alignItems:'baseline'}}>{ch.map((k,j)=>{const w=words[k];const a=j===cur&&tm>=w.s-0.05;const done=tm>=w.e||(cur<0);
+ return <div style={{position:'absolute',left:SZ.captions.x,width:SZ.captions.w,top:SZ.captions.top,display:'flex',flexWrap:'wrap',columnGap:c.size*.28,rowGap:6,alignItems:'baseline'}}>{ch.map((k,j)=>{const w=words[k];const a=j===cur&&tm>=w.s-0.05;const done=tm>=w.e||(cur<0);
   return <span key={k} style={{fontFamily:c.font,fontWeight:c.weight,fontSize:c.size,lineHeight:1.12,textTransform:c.upper?'uppercase':'none',color:a?t.accent:done?t.ink:dim,borderBottom:`${Math.max(2,c.size/24)}px solid ${a?t.accent:'transparent'}`,paddingTop:c.font==='Anton'?6:0}}>{w.t}</span>})}</div>};
 /* signal-break transition (hot-news-glitch): RGB fringes via drop-shadow, jitter, slice bars */
 const srnd=(n:number)=>{const x=Math.sin(n*91.7+13.3)*43758.5453;return x-Math.floor(x)};
@@ -105,7 +105,7 @@ export const Timeline:React.FC<{t:Theme;scenes:Scene[];words:any[];voice:string;
   const lf=f-starts[i];
   layers.push(<AbsoluteFill key={i} style={{zIndex:z,background:t.bg,backgroundImage:t.texture?`url(${staticFile(t.texture)})`:'none',...st}}>
    <Ctx.Provider value={{t,f:lf,exit:exitStag}}>{t.id==='hot-news-glitch'?<GlChrome date={date}/>:t.id==='tech-explain-cyber'?<BpChrome section={s.section} page={`${String(i+1).padStart(2,'0')} / ${String(scenes.length).padStart(2,'0')}`}/>:t.id==='tech-explain'?<TermChrome section={s.section} page={`${i+1}/${scenes.length}`} idx={i}/>:<Chrome section={s.section} page={`TRANG ${i+1}/${scenes.length}`} date={date}/>}
-   <div style={{position:'absolute',left:136,right:50,top:290,height:1320}}>{s.el}</div></Ctx.Provider></AbsoluteFill>);
+   <div style={{position:'absolute',left:SZ.content.x,top:SZ.content.y,width:SZ.content.w,height:SZ.content.h,transform:`scale(${SZ.content.scale})`,transformOrigin:'top left'}}>{s.el}</div></Ctx.Provider></AbsoluteFill>);
   if(i<scenes.length-1&&(kout==='bar')&&outP>0&&outP<1){const p=outP;const w=p<.5?interpolate(p,[0,.5],[96,1080]):1080;const x=p<.5?0:interpolate(p,[.5,1],[0,1080],{easing:EIO});
    overlay=<div style={{position:'absolute',top:0,bottom:0,left:x,width:w-(p<.5?0:0),background:t.accent,zIndex:10,display:'flex',alignItems:'center',justifyContent:'center',overflow:'hidden'}}><div style={{transform:`rotate(-90deg) translateY(${(p-.5)*400}px)`,fontFamily:t.id==='tech-explain'?'JBM':'Anton',fontWeight:t.id==='tech-explain'?800:400,fontSize:t.id==='tech-explain'?150:200,color:t.onAccent,whiteSpace:'nowrap'}}>{t.id==='tech-explain'?'git commit ▸':'DAN TECH ■'}</div></div>}
   if(i<scenes.length-1&&kout==='signal'&&outP>0&&outP<1){const g=Math.sin(Math.PI*outP);overlay=<SignalBreak g={g} f={f} c={t.accent}/>}

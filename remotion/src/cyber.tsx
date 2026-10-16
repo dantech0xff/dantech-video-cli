@@ -106,7 +106,7 @@ export const BpEndCard:React.FC<{A?:string;dur?:number;handles?:{p:string;h:stri
  return <AbsoluteFill style={{zIndex:40,background:BP.bg,opacity:Math.min(1,p(0,10))*out}}><style>{FONTS}</style>
   <AbsoluteFill style={{backgroundImage:`linear-gradient(${BP.grid} 1px,transparent 1px),linear-gradient(90deg,${BP.grid} 1px,transparent 1px)`,backgroundSize:'24px 24px'}}/>
   <div style={{position:'absolute',left:40,right:40,top:40,bottom:40,border:`1px solid ${BP.line}`}}/>
-  <div style={{position:'absolute',left:136,right:110,top:640}}>
+  <div style={{position:'absolute',left:136,right:220,top:640}}>
    
    <svg width={834} height={8} style={{marginTop:22}}><path d="M0 4 H834" stroke={A} strokeWidth={2} pathLength={1} strokeDasharray={1} strokeDashoffset={1-p(6,30)}/></svg>
    <div style={{fontFamily:'BVPX',fontSize:150,color:BP.ink,lineHeight:1.12,marginTop:30,letterSpacing:-3,opacity:p(10),transform:`translateY(${(1-p(10))*20}px)`}}>Dan Tech</div>
@@ -114,7 +114,7 @@ export const BpEndCard:React.FC<{A?:string;dur?:number;handles?:{p:string;h:stri
    <div style={{marginTop:70,display:'flex',flexDirection:'column',gap:0}}>{handles.map((h,k)=><div key={k} style={{display:'flex',justifyContent:'space-between',alignItems:'baseline',padding:'24px 0',borderTop:`1px solid ${BP.hair}`,borderBottom:k===handles.length-1?`1px solid ${BP.hair}`:'none',opacity:p(22+k*5)}}>
     <span style={lbl(22)}>{h.p}</span><span style={{fontFamily:MONO,fontSize:50,color:k===0?A:BP.ink}}>{h.h}</span></div>)}</div>
   </div>
-  <div style={{position:'absolute',left:136,right:110,bottom:110,display:'flex',justifyContent:'space-between',...lbl(18)}}><span>DAN TECH · 2026</span></div>
+  {/* footer dropped (bottom UI zone) */}
  </AbsoluteFill>};
 
 /* ---------- phase 2 scenes ---------- */

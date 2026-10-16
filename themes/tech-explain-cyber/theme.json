@@ -35,13 +35,13 @@
   ],
   "caption": {
    "font": "BVPM",
-   "size": 60,
+   "size": 50,
    "upper": false
   }
  },
  "tail_hold": 40,
  "cta": {
-  "top": 1400,
+  "top": 1150,
   "in_offset": -6,
   "sub": "BẬT CHUÔNG ĐỂ KHÔNG LỠ BÀI"
  },

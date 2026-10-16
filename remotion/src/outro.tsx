@@ -1,5 +1,5 @@
 import React from 'react';import {AbsoluteFill,Audio,Sequence,staticFile,useCurrentFrame,interpolate,Easing} from 'remotion';
-import {Theme} from './themes';import {H,Bd,FONTS} from './sys';
+import {Theme} from './themes';import {H,Bd,FONTS} from './sys';import {SZ} from './safezone';
 const EO=Easing.bezier(.16,1,.3,1),EIO=Easing.bezier(.7,0,.2,1);const cl={extrapolateLeft:'clamp',extrapolateRight:'clamp'} as const;
 const r=(t:Theme,v:number)=>t.id==='quick-tips'?v:0;
 const Bell:React.FC<{c:string;s:number;rot?:number}>=({c,s,rot=0})=><svg width={s} height={s} viewBox="0 0 24 24" style={{transform:`rotate(${rot}deg)`,transformOrigin:'50% 10%'}}><path d="M12 2.5c-.8 0-1.4.6-1.4 1.4v.6C7.9 5.2 6 7.6 6 10.5v4.2L4.2 17v1.2h15.6V17L18 14.7v-4.2c0-2.9-1.9-5.3-4.6-6v-.6c0-.8-.6-1.4-1.4-1.4z" fill={c}/><path d="M9.6 19.3a2.4 2.4 0 0 0 4.8 0z" fill={c}/></svg>;
@@ -16,7 +16,7 @@ export const FollowCTA:React.FC<{t:Theme;inAt:number;pressAt:number;outAt:number
  const flip=interpolate(f,[pressAt,pressAt+4],[0,1],cl);
  const isCy=t.id==='tech-explain-cyber'||t.id==='hot-news-glitch';
  if(isCy)return <AbsoluteFill style={{zIndex:30,pointerEvents:'none'}}>
-  <div style={{position:'absolute',left:136,right:50,top,transform:`translateY(${(1-pin)*30-ex*40}px) scale(${1-0.02*dn})`,opacity:pin*(1-ex)}}>
+  <div style={{position:'absolute',left:136,right:SZ.cta.right,top,transform:`translateY(${(1-pin)*30-ex*40}px) scale(${1-0.02*dn})`,opacity:pin*(1-ex)}}>
    <div style={{display:'flex',border:`1.5px solid ${pressed?t.accent:'#4A4A4A'}`,background:'#222222',height:150,overflow:'hidden'}}>
     <div style={{width:150,display:'flex',alignItems:'center',justifyContent:'center',borderRight:`1.5px solid ${pressed?t.accent:'#4A4A4A'}`,background:pressed?t.accent:'transparent'}}><Bell c={pressed?t.onAccent:t.accent} s={74} rot={wig}/></div>
     <div style={{flex:1,position:'relative',overflow:'hidden'}}>
@@ -28,7 +28,7 @@ export const FollowCTA:React.FC<{t:Theme;inAt:number;pressAt:number;outAt:number
   <div style={{position:'absolute',left:cx,top:cy-20,opacity:cOp*(1-ex),transform:`scale(${0.8-0.12*dn})`,transformOrigin:'10% 5%'}}><Cursor t={t}/></div>
  </AbsoluteFill>;
  return <AbsoluteFill style={{zIndex:30,pointerEvents:'none'}}>
-  <div style={{position:'absolute',left:136,right:50,top,transform:`translate(${sh/2*0+dn*8}px,${dn*8+(1-pin)*60-ex*80}px) scale(${1.15-0.15*pin}) rotate(${-1.5*pin}deg)`,opacity:pin*(1-ex),transformOrigin:'left center'}}>
+  <div style={{position:'absolute',left:136,right:SZ.cta.right,top,transform:`translate(${sh/2*0+dn*8}px,${dn*8+(1-pin)*60-ex*80}px) scale(${1.15-0.15*pin}) rotate(${-1.5*pin}deg)`,opacity:pin*(1-ex),transformOrigin:'left center'}}>
    <div style={{display:'flex',border:`6px solid ${t.ink}`,boxShadow:`${sh}px ${sh}px 0 ${t.ink}`,borderRadius:r(t,26),overflow:'hidden',height:190}}>
     <div style={{width:190,background:pressed?t.accent:t.ink,display:'flex',alignItems:'center',justifyContent:'center',borderRight:`6px solid ${t.ink}`}}><Bell c={pressed?t.onAccent:t.bg} s={110} rot={wig}/></div>
     <div style={{flex:1,position:'relative',background:t.accent,overflow:'hidden'}}>
@@ -51,15 +51,15 @@ export const EndCard:React.FC<{t:Theme;dur?:number;handles?:{p:string;h:string}[
  return <AbsoluteFill style={{zIndex:40}}><style>{FONTS}</style>
   <AbsoluteFill style={{background:P.panel,clipPath:`inset(${wipe}% 0 0 0)`}}>
    <div style={{position:'absolute',left:0,top:0,bottom:0,width:96,background:P.rail,transform:`translateY(${-out}%)`}}/>
-   <div style={{position:'absolute',left:136,right:60,top:560}}>
-    <div style={{...it(5,0),fontFamily:'Anton',fontSize:196,color:P.fg,lineHeight:.95,whiteSpace:'nowrap'}}>DAN TECH<span style={{color:P.mark}}>■</span></div>
+   <div style={{position:'absolute',left:SZ.end.x,right:SZ.end.right,top:560}}>
+    <div style={{...it(5,0),fontFamily:'Anton',fontSize:168,color:P.fg,lineHeight:.95,whiteSpace:'nowrap'}}>DAN TECH<span style={{color:P.mark}}>■</span></div>
     <div style={{height:8,background:P.fg,marginTop:18,width:`${interpolate(f,[9,20],[0,100],{...cl,easing:EO})*(1-interpolate(f,[O,O+8],[0,1],cl))}%`}}/>
-    <div style={{...it(13,1),marginTop:34}}><span style={{...H(t,t.head==='Anton'?84:60,P.tagFg),background:P.tagBg,padding:t.head==='Anton'?'6px 22px 0':'4px 22px',borderRadius:r(t,16),display:'inline-block'}}>{tagline}</span></div>
+    <div style={{...it(13,1),marginTop:34}}><span style={{...H(t,t.head==='Anton'?62:50,P.tagFg),background:P.tagBg,padding:t.head==='Anton'?'6px 22px 0':'4px 22px',borderRadius:r(t,16),display:'inline-block'}}>{tagline}</span></div>
     <div style={{marginTop:70,display:'flex',flexDirection:'column',gap:26}}>{handles.map((x,k)=><div key={x.p} style={{...it(20+k*5,2+k),display:'flex',alignItems:'center',gap:26}}>
-     <span style={{...Bd(t,30,P.fg),letterSpacing:5,border:`3px solid ${P.fg}`,padding:'6px 14px',minWidth:200,textAlign:'center',borderRadius:r(t,10)}}>{x.p}</span>
-     <span style={{...H(t,t.head==='Anton'?92:64,P.fg),textTransform:'none'}}>{x.h}</span></div>)}</div>
+     <span style={{...Bd(t,30,P.fg),letterSpacing:5,border:`3px solid ${P.fg}`,padding:'6px 14px',minWidth:180,textAlign:'center',borderRadius:r(t,10)}}>{x.p}</span>
+     <span style={{...H(t,t.head==='Anton'?74:56,P.fg),textTransform:'none'}}>{x.h}</span></div>)}</div>
    </div>
-   <div style={{...it(30,4),position:'absolute',left:136,right:60,bottom:150,...Bd(t,28,P.fg),opacity:.6,letterSpacing:4,borderTop:`2px solid ${P.fg}`,paddingTop:14}}>■ DAN TECH · 2026</div>
+   {/* footer dropped: it sat in the bottom UI zone */}
   </AbsoluteFill>
   <AbsoluteFill style={{background:t.bg,clipPath:`inset(${100-out}% 0 0 0)`}}/>
   <Sequence from={4}><Audio src={staticFile(`sfx/${sting}.wav`)} volume={0.55}/></Sequence>
