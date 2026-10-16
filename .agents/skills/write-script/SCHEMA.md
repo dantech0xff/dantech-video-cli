@@ -66,7 +66,7 @@ Chuyển cảnh thêm `scroll` (cuộn theo bậc như terminal), hợp nhất v
 `media` = file trong `assets/broll/` (chỉ clip không có người). Cấu trúc `code`/`Line`: copy y hệt mẫu.
 SFX có sẵn: xem `assets/sfx/SFX_LIST.md` (cta_click, tip_pop, key_click, tick_001, impactPlank_medium_000, whoosh_soft…).
 
-## Theme `tech-explain-cyber` (🧪 experimental) — scene types
+## Theme `tech-explain-cyber` (GIẢI THÍCH CYBER) — scene types
 Tất cả có `n`, `cap` (nhãn ngắn có nghĩa), `title` (heading). `at` nhận `@word` anchor.
 - **BpCode** `{file, lines:[{s,at}], dim?:{from,to,label,sub?,at,x?}, callout?:{line,text,at}, note?:{s,at}}` — code + ngoặc kích thước + callout. Dòng ≤ ~28 ký tự.
 - **BpGraph** `{fw, deps[4], root, consumer, call, at, flowAt, callouts:[{text,at}]}` — sơ đồ blueprint, data flow.

@@ -1,4 +1,4 @@
-// tech-explain-cyber (GIẢI THÍCH CYBER, experimental): "dark blueprint" scenes.
+// tech-explain-cyber (GIẢI THÍCH CYBER): "dark blueprint" scenes.
 // One cold cyan accent, hairlines, self-drawing strokes, dimension lines, callouts, slow precise easing.
 import React from 'react';import {interpolate,Easing,useCurrentFrame,AbsoluteFill} from 'remotion';import {useS,FONTS} from './sys';
 const ES=Easing.bezier(.25,.1,.25,1),EO=Easing.bezier(.22,.61,.36,1);const cl={extrapolateLeft:'clamp',extrapolateRight:'clamp'} as const;
