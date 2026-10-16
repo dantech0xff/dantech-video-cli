@@ -1,0 +1,138 @@
+{
+ "bookFlip1": {
+  "source": "kenney",
+  "pack": "RPG Audio",
+  "orig": "bookFlip1.ogg",
+  "license": "CC0 1.0",
+  "url": "https://kenney.nl/assets/rpg-audio",
+  "use": "TIN NÓNG transition"
+ },
+ "bookFlip2": {
+  "source": "kenney",
+  "pack": "RPG Audio",
+  "orig": "bookFlip2.ogg",
+  "license": "CC0 1.0",
+  "url": "https://kenney.nl/assets/rpg-audio",
+  "use": "spare page flip"
+ },
+ "cloth1": {
+  "source": "kenney",
+  "pack": "RPG Audio",
+  "orig": "cloth1.ogg",
+  "license": "CC0 1.0",
+  "url": "https://kenney.nl/assets/rpg-audio",
+  "use": "COMMIT transition"
+ },
+ "impactPlank_medium_000": {
+  "source": "kenney",
+  "pack": "Impact Sounds",
+  "orig": "impactPlank_medium_000.ogg",
+  "license": "CC0 1.0",
+  "url": "https://kenney.nl/assets/impact-sounds",
+  "use": "TIN NÓNG stamp / final hit"
+ },
+ "impactSoft_heavy_000": {
+  "source": "kenney",
+  "pack": "Impact Sounds",
+  "orig": "impactSoft_heavy_000.ogg",
+  "license": "CC0 1.0",
+  "url": "https://kenney.nl/assets/impact-sounds",
+  "use": "COMMIT impact"
+ },
+ "tick_001": {
+  "source": "kenney",
+  "pack": "Interface Sounds",
+  "orig": "tick_001.ogg",
+  "license": "CC0 1.0",
+  "url": "https://kenney.nl/assets/interface-sounds",
+  "use": "counter / checklist tick"
+ },
+ "tick_002": {
+  "source": "kenney",
+  "pack": "Interface Sounds",
+  "orig": "tick_002.ogg",
+  "license": "CC0 1.0",
+  "url": "https://kenney.nl/assets/interface-sounds",
+  "use": "spare tick"
+ },
+ "maximize_003": {
+  "source": "kenney",
+  "pack": "Interface Sounds",
+  "orig": "maximize_003.ogg",
+  "license": "CC0 1.0",
+  "url": "https://kenney.nl/assets/interface-sounds",
+  "use": "spare transition"
+ },
+ "select_003": {
+  "source": "kenney",
+  "pack": "Interface Sounds",
+  "orig": "select_003.ogg",
+  "license": "CC0 1.0",
+  "url": "https://kenney.nl/assets/interface-sounds",
+  "use": "spare pop"
+ },
+ "click_002": {
+  "source": "kenney",
+  "pack": "Interface Sounds",
+  "orig": "click_002.ogg",
+  "license": "CC0 1.0",
+  "url": "https://kenney.nl/assets/interface-sounds",
+  "use": "spare click"
+ },
+ "cta_click": {
+  "source": "kenney",
+  "pack": "UI Audio",
+  "orig": "mouseclick1.ogg",
+  "license": "CC0 1.0",
+  "url": "https://kenney.nl/assets/ui-audio",
+  "use": "Follow button press, menu clicks"
+ },
+ "cta_bell": {
+  "source": "kenney",
+  "pack": "Interface Sounds",
+  "orig": "glass_004.ogg",
+  "license": "CC0 1.0",
+  "url": "https://kenney.nl/assets/interface-sounds",
+  "use": "Follow bell"
+ },
+ "key_click": {
+  "source": "kenney",
+  "pack": "UI Audio",
+  "orig": "click2.ogg",
+  "license": "CC0 1.0",
+  "url": "https://kenney.nl/assets/ui-audio",
+  "use": "MẸO keycap press"
+ },
+ "card_swish": {
+  "source": "kenney",
+  "pack": "Casino Audio",
+  "orig": "card-slide-3.ogg",
+  "license": "CC0 1.0",
+  "url": "https://kenney.nl/assets/casino-audio",
+  "use": "MẸO transition"
+ },
+ "tip_pop": {
+  "source": "kenney",
+  "pack": "Interface Sounds",
+  "orig": "pluck_001.ogg",
+  "license": "CC0 1.0",
+  "url": "https://kenney.nl/assets/interface-sounds",
+  "use": "MẸO tip reveal / badge"
+ },
+ "whoosh_soft": {
+  "source": "own",
+  "pack": "",
+  "orig": "synthesised with ffmpeg",
+  "license": "own work",
+  "url": "",
+  "use": "MẸO code reflow"
+ },
+ "outro_sting": {
+  "source": "own",
+  "pack": "",
+  "orig": "synthesised with ffmpeg",
+  "license": "own work",
+  "url": "",
+  "use": "end card sting"
+ }
+}

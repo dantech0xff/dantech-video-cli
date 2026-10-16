@@ -1,0 +1,67 @@
+{
+ "look": {
+  "id": "meo",
+  "label": "MẸO NHANH",
+  "bg": "#1D3BFF",
+  "ink": "#FFFFFF",
+  "onAccent": "#111111",
+  "accent": "#FFE14D",
+  "accent2": "#FF7AB6",
+  "muted": "#AFC0FF",
+  "head": "BVPX",
+  "body": "BVPM",
+  "upper": false,
+  "step": 1,
+  "video": "clean",
+  "entry": "rise",
+  "rule": "#FFFFFF55",
+  "sfx": {
+   "trans": "card_swish",
+   "stamp": "select_003",
+   "tick": "tick_001",
+   "entry": "tick_002"
+  },
+  "trans": [
+   "zoom",
+   "stack",
+   "push",
+   "bar"
+  ]
+ },
+ "tail_hold": 32,
+ "cta": {
+  "top": 1100,
+  "in_offset": -8,
+  "sub": "BẬT CHUÔNG ĐỂ NHẬN MẸO MỚI"
+ },
+ "outro": {
+  "dur": 75,
+  "tagline": "MẸO CÔNG NGHỆ MỖI NGÀY",
+  "pal": {
+   "panel": "#FFE14D",
+   "fg": "#111111",
+   "tagBg": "#1D3BFF",
+   "tagFg": "#FFFFFF",
+   "mark": "#1D3BFF",
+   "rail": "#1D3BFF"
+  }
+ },
+ "voice": {
+  "voice": "vi-vn-concierge-2",
+  "model": "gemini-3.8-flash-tts",
+  "styles": {
+   "hao-hung": "hào hứng, tràn đầy năng lượng, nhịp nhanh như dẫn bản tin drama công nghệ nóng hổi",
+   "ke-chuyen": "kể chuyện kịch tính, hồi hộp, có ngắt nghỉ tạo căng thẳng",
+   "tu-nhien": "tự nhiên, thoải mái như đang nói chuyện với bạn bè, phong cách YouTuber"
+  }
+ },
+ "music": {
+  "pool": [
+   {
+    "id": "raspberrymusic-lofi-hip-hop-upbeat",
+    "start": 0
+   }
+  ],
+  "rel": -11
+ }
+}

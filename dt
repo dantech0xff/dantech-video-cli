@@ -1,0 +1,32 @@
+#!/bin/bash
+# Dan Tech video tool.
+#   ./dt render videos/<slug>/script.json   full pipeline: TTS → align → props → Remotion → mix → description
+#   ./dt render <script> --from render      resume from a step (tts|align|props|render|mix|describe)
+#   ./dt fetch-music                        download the Commons music library
+set -e
+cd "$(dirname "$0")"; ROOT=$(pwd)
+cmd=$1; shift || true
+case "$cmd" in
+ fetch-music) python3 scripts/fetch_music.py ;;
+ render)
+  SCRIPT=$1; FROM=${3:-tts}; [ -f "$SCRIPT" ] || { echo "script not found: $SCRIPT"; exit 1; }
+  DIR=$(dirname "$SCRIPT"); OUT=$DIR/out; SLUG=$(basename "$DIR"); mkdir -p "$OUT"
+  THEME=$(python3 -c "import json;print(json.load(open('$SCRIPT'))['theme'])")
+  steps=(tts align props render mix describe); run=0
+  for s in "${steps[@]}"; do [ "$s" = "$FROM" ] && run=1; [ $run = 1 ] || continue; echo "── $s"
+   case $s in
+    tts)    python3 scripts/tts.py "$SCRIPT" ;;
+    align)  python3 scripts/align.py "$SCRIPT" ;;
+    props)  python3 scripts/build_props.py "$SCRIPT" ;;
+    render) (cd remotion && npx remotion render src/index.ts "$THEME" "$ROOT/$OUT/raw.mp4" --props="$ROOT/$OUT/props.json" --log=error)
+            scripts/loudnorm.sh "$OUT/raw.mp4" "$OUT/voice_sfx.mp4" ;;
+    mix)    python3 scripts/pick_music.py "$SCRIPT"
+            eval "$(python3 -c "import json;m=json.load(open('$OUT/music.json'));p=json.load(open('$OUT/props.json'));print(f\"MF='{m['file']}';MS={m['start']};REL={m['rel']};FS={p['outro']['start']/30:.2f}\")")"
+            REL=$REL FS=$FS scripts/mix_bgm.sh "$OUT/voice_sfx.mp4" "$MF" "$MS" "$OUT/$SLUG.mp4" "$OUT/stems"
+            ffmpeg -v error -y -i "$OUT/voice_sfx.mp4" -vn -c:a pcm_s16le "$OUT/stems/voice_sfx.wav"
+            python3 scripts/measure_vm.py "$OUT/stems/voice_sfx.wav" "$OUT/stems/music_ducked.wav" "$OUT/words.json" ;;
+    describe) python3 scripts/describe.py "$SCRIPT" ;;
+   esac; done
+  echo "✓ $OUT/$SLUG.mp4" ;;
+ *) sed -n 2,6p "$0"; exit 1 ;;
+esac

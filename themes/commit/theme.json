@@ -1,0 +1,58 @@
+{
+ "experimental": true,
+ "look": {
+  "id": "commit",
+  "label": "COMMIT",
+  "bg": "#141414",
+  "ink": "#EDEDE6",
+  "onAccent": "#141414",
+  "accent": "#FFD60A",
+  "accent2": "#3DDC6B",
+  "muted": "#5A5A55",
+  "head": "JBM",
+  "body": "JBM",
+  "upper": false,
+  "step": 1,
+  "video": "mono",
+  "entry": "type",
+  "rule": "#2A2A2A",
+  "sfx": {
+   "trans": "cloth1",
+   "stamp": "impactSoft_heavy_000",
+   "tick": "tick_002",
+   "entry": "click_002"
+  },
+  "trans": [
+   "push",
+   "bar"
+  ]
+ },
+ "tail_hold": 40,
+ "cta": {
+  "top": 1100,
+  "in_offset": -6,
+  "sub": "BẬT CHUÔNG ĐỂ KHÔNG LỠ BÀI"
+ },
+ "outro": {
+  "dur": 75,
+  "tagline": "Code & công nghệ mỗi ngày"
+ },
+ "voice": {
+  "voice": "vi-vn-concierge-2",
+  "model": "gemini-3.8-flash-tts",
+  "styles": {
+   "hao-hung": "hào hứng, tràn đầy năng lượng, nhịp nhanh như dẫn bản tin drama công nghệ nóng hổi",
+   "ke-chuyen": "kể chuyện kịch tính, hồi hộp, có ngắt nghỉ tạo căng thẳng",
+   "tu-nhien": "tự nhiên, thoải mái như đang nói chuyện với bạn bè, phong cách YouTuber"
+  }
+ },
+ "music": {
+  "pool": [
+   {
+    "id": "alexi-action-lifelike",
+    "start": 0
+   }
+  ],
+  "rel": -10
+ }
+}

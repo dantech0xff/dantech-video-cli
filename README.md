@@ -1,0 +1,112 @@
+# Dan Tech Video
+
+Repo dựng video dọc ngắn (1080×1920, 30 fps) cho kênh Dan Tech. Anh viết **một file `script.json`**, chạy **một lệnh**, nhận video hoàn chỉnh: giọng đọc AI, phụ đề theo từng chữ, chuyển cảnh, SFX, nhạc nền, nút Follow và end card, cộng thêm `description.txt` có sẵn dòng credit và nguồn.
+
+Có 3 theme:
+
+| Theme | Dùng cho | Trạng thái |
+|---|---|---|
+| `tin-nong` | Tin nóng, drama công nghệ (phong cách báo in: giấy, đỏ, Anton) | ✅ Đã duyệt (khoá) |
+| `meo-nhanh` | Mẹo, tutorial, review tool AI, listicle (cobalt + vàng, keycap, mockup IDE) | ✅ Đã duyệt |
+| `commit` | Code / dev log (nền tối, JetBrains Mono) | 🧪 Thử nghiệm |
+
+## Pipeline
+
+```mermaid
+flowchart LR
+  S[videos/slug/script.json] --> T[1. tts.py<br/>Gemini TTS, chọn style ngẫu nhiên]
+  T --> A[2. align.py<br/>faster-whisper → thời gian từng chữ]
+  A --> P[3. build_props.py<br/>tính thời lượng cảnh, giải '@chữ' → frame]
+  P --> R[4. Remotion render<br/>theme + scene templates]
+  R --> M[5. mix_bgm.sh<br/>nhạc ngẫu nhiên, ducking, -14 LUFS]
+  M --> D[6. describe.py<br/>description.txt + credit]
+  D --> F[out/slug.mp4]
+```
+
+Mọi bước ghi kết quả vào `videos/<slug>/out/` (không commit). Voice và nhạc đã chọn được ghi vào `logs/voice_log.md`.
+
+## Cài đặt (một lần)
+
+```bash
+# cần: Node 18+, Python 3.10+, ffmpeg
+cd remotion && npm install && cd ..
+pip install -r requirements.txt          # faster-whisper (tải model "medium" ~1.5 GB lần đầu)
+./dt fetch-music                         # tải nhạc Wikimedia Commons về assets/music/
+# Nhạc Pixabay (7 bài TIN NÓNG) phải tải tay từ pixabay.com vào assets/music/pixabay/ (xem assets/music/LIBRARY.md)
+export GEMINI_API_KEY=...                # chỉ đọc từ biến môi trường, KHÔNG bao giờ ghi vào repo
+```
+
+## Làm một video, từng bước
+
+1. Tạo thư mục `videos/<slug>/` và copy một `script.json` mẫu (`videos/openai-vs-apple/` cho TIN NÓNG, `videos/android-studio-shortcuts/` cho MẸO NHANH).
+2. Sửa `script.json`:
+   - `theme`, `title`, `date` (hiện trên masthead), `caption`, `sources` (đi vào description).
+   - `scenes`: mỗi cảnh có `say` (câu giọng đọc nói trong cảnh đó), `type` (scene template), `section` (dòng nhỏ trên đầu trang), `out` (kiểu chuyển cảnh sang cảnh sau: `page`, `bar`, `zoom`, `push`, `stack`, `morph`), `props` (nội dung cảnh), `sfx` (tuỳ chọn).
+   - Câu cuối nên có "follow Dan Tech": nút Follow tự bật lên ở chữ "follow" và được bấm đúng chữ "Dan".
+3. Chạy:
+   ```bash
+   make video SCRIPT=videos/<slug>/script.json      # hoặc: ./dt render videos/<slug>/script.json
+   ```
+4. Lấy `videos/<slug>/out/<slug>.mp4` và `description.txt`.
+5. Sửa một chỗ rồi muốn chạy lại nhanh: `./dt render <script> --from props` (bỏ qua TTS + align), hoặc `--from mix` (chỉ trộn lại nhạc).
+
+### Hẹn giờ theo chữ: `@chữ`
+Trong `props` và `sfx`, số là frame tính từ đầu cảnh (30 frame = 1 giây). Thay vì đếm frame, viết `"@chữ"`:
+- `"@Shift"`: lúc giọng đọc bắt đầu nói "Shift" (lần đầu tiên trong cảnh)
+- `"@Enter#2"`: lần thứ 2 chữ "Enter" xuất hiện trong cảnh
+- `"@L+4"`, `"@follow-6"`: lệch thêm/bớt vài frame
+- `"@nhé.end"`: lúc chữ kết thúc
+
+Nhờ vậy khi đổi giọng (thời lượng khác), keycap, popup, SFX vẫn khớp giọng nói. Vài cue trong ví dụ TIN NÓNG (thứ tự checklist, tick đếm) là số frame cố định vì đó là nhịp hình ảnh, không phải theo chữ.
+
+## Chỉnh giọng / nhạc / SFX ở đâu
+
+| Muốn đổi | Sửa ở |
+|---|---|
+| Giọng (voice id, model, danh sách style) | `themes/<theme>/theme.json` → `voice` |
+| Chọn style cho một video | `script.json` → `"voice": {"style": "random" \| "hao-hung" \| "ke-chuyen" \| "tu-nhien"}` |
+| Dùng file ghi âm có sẵn (không gọi TTS) | `"voice": {"file": "voice_approved.mp3"}` (đường dẫn trong thư mục video) |
+| Danh sách nhạc xoay vòng của theme + đoạn bắt đầu | `themes/<theme>/theme.json` → `music.pool` |
+| Nhạc cho một video | `"music": {"track": "random" \| "<id trong tracks.json>", "start": 7}` |
+| Nhạc to/nhỏ dưới giọng | `theme.json` → `music.rel` (dB so với giọng trước khi duck; -9 TIN NÓNG, -11 MẸO). Chuỗi xử lý ở `scripts/mix_bgm.sh` |
+| SFX một khoảnh khắc | `script.json` → `scenes[].sfx`: `{"at": "@chữ", "s": "tên file trong assets/sfx", "v": 0.5}`, tick lặp: thêm `"every": 5, "count": 14` |
+| SFX chuyển cảnh của theme | `theme.json` → `look.sfx.trans` |
+| Màu, font, kiểu chữ | `theme.json` → `look` |
+| Tagline end card, vị trí nút Follow, thời gian giữ cuối | `theme.json` → `outro`, `cta`, `tail_hold` |
+| Handle mạng xã hội | mặc định YouTube @dantech-0xff, Facebook @dantech0xff (ghi đè bằng `"handles"` trong script.json) |
+
+Kiểm tra mix: `./dt render` in ra "voice/music while speaking: median ~21 dB" (mục tiêu 18-22 dB). Loudness cuối: -14 LUFS, true peak ≤ -1 dBTP.
+
+## Thêm theme mới
+
+1. Copy `themes/meo-nhanh/` thành `themes/<id>/`, sửa `theme.json` (màu, font, transition SFX, nhạc, tagline).
+2. Font mới: bỏ file vào `assets/fonts/` và thêm `@font-face` trong `FONTS` (`remotion/src/sys.tsx`).
+3. Đăng ký theme trong `remotion/src/themes.ts` (import JSON) và thêm id vào danh sách trong `remotion/src/Root.tsx`.
+4. Dùng scene template có sẵn hoặc viết template mới trong `remotion/src/` rồi thêm vào bảng `SCENES` ở `remotion/src/Video.tsx`.
+
+## Cấu trúc repo
+
+```
+dt, Makefile            lệnh chính
+themes/<id>/theme.json  màu/font/transition/giọng/nhạc/outro của từng theme
+remotion/src/
+  Video.tsx             component chung cho mọi theme (đọc props.json)
+  Root.tsx              1 composition / theme
+  sys.tsx               captions, chuyển cảnh (Timeline), masthead, hiệu ứng vào/ra
+  scenes.tsx            scene templates TIN NÓNG/COMMIT: Headline, Flow, Quote, Checklist, Evidence, CTA
+  meo.tsx               scene templates MẸO NHANH: MeoHook, MeoSearch, MeoFix, MeoSlowFast, MeoSave, keycap, IDE mockup
+  outro.tsx             nút Follow (bấm + chuông) và end card
+scripts/                tts.py, align.py, build_props.py, pick_music.py, mix_bgm.sh, loudnorm.sh, describe.py, measure_vm.py, compare.sh, fetch_music.py
+assets/                 fonts/, sfx/ (+SFX_LIST.md), music/ (LIBRARY.md, tracks.json), broll/, textures/
+videos/<slug>/          script.json (+ voice_approved.mp3 nếu ghim giọng); out/ là output
+logs/voice_log.md       nhật ký giọng + nhạc
+```
+
+## Bản quyền & credit
+
+- **Nhạc Wikimedia Commons** (CC BY 3.0/4.0): bắt buộc ghi credit trong description, `describe.py` tự thêm. Content ID chưa kiểm tra (`unknown`).
+- **Nhạc Pixabay** (Pixabay Content License): không bắt buộc credit (vẫn ghi). Bài 4-7 trong rotation TIN NÓNG đã đăng ký Content ID, có thể bị claim; description sẽ cảnh báo.
+- **SFX Kenney**: CC0 1.0, không bắt buộc credit. `whoosh_soft`, `outro_sting`: tự tổng hợp bằng ffmpeg. Chi tiết: `assets/sfx/SFX_LIST.md`.
+- **B-roll** (`assets/broll/`: búa toà án, ổ cứng): clip AI, không có người/khuôn mặt. Quy tắc kênh: không dùng người hay khuôn mặt AI.
+- **Fonts**: Anton, Barlow, Be Vietnam Pro, JetBrains Mono (SIL Open Font License).
+- **Giọng đọc**: Gemini TTS (`vi-vn-concierge-2`).
