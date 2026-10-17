@@ -1,0 +1,174 @@
+{
+ "theme": "flutter-tutor",
+ "title": "Teaser: Cài Flutter SDK và flutter doctor (Flutter Mobile 101, bài 1)",
+ "topic": [
+  "Flutter SDK",
+  "flutter doctor"
+ ],
+ "date": "18 · 10 · 2026",
+ "caption": "Ngày đầu học Flutter chỉ có một mục tiêu: flutter doctor báo xanh. Bài 1 khóa Flutter Mobile 101 gỡ sẵn các bẫy setup hay gặp, đọc miễn phí ~8 phút trên dantech.academy. #DanTech #Flutter #Dart",
+ "sources": [
+  "Dan Tech Academy, Flutter Mobile 101 — bài 01: Cài Flutter SDK và flutter doctor (đọc ngày 18/10/2026): https://dantech.academy/courses/flutter-mobile-101/00-foundations-setup/lesson-01-install-flutter-sdk"
+ ],
+ "glossary": {
+  "flutter doctor": "lệnh khám máy, in từng hạng mục ổn, thiếu hoặc chưa có",
+  "PATH": "danh sách thư mục mà terminal tìm lệnh để chạy",
+  "Program Files": "thư mục cài app của Windows, cần quyền admin"
+ },
+ "voice": {
+  "style": "random"
+ },
+ "music": {
+  "track": "random"
+ },
+ "tts": {
+  "engine": "edge"
+ },
+ "hook": {
+  "kind": "tips",
+  "claim": "Ngày đầu cài Flutter SDK chỉ có một mục tiêu đo được: flutter doctor báo xanh",
+  "promise": "Bài 1 gỡ sẵn các bẫy setup khiến nhiều người bỏ cuộc"
+ },
+ "scenes": [
+  {
+   "say": "Ngày đầu cài Flutter SDK, mục tiêu là flutter doctor báo xanh. Đó cũng là ngày nhiều người bỏ cuộc nhất.",
+   "type": "Steps",
+   "section": "Setup",
+   "out": "hero",
+   "props": {
+    "title": "Cài Flutter SDK",
+    "steps": [
+     {
+      "s": "flutter doctor báo xanh",
+      "at": 0,
+      "ok": "@xanh"
+     },
+     {
+      "s": "Ngày dễ bỏ cuộc nhất",
+      "at": "@Đó",
+      "warn": "@bỏ"
+     }
+    ]
+   },
+   "sfx": [
+    {
+     "s": "tick_002",
+     "at": "@xanh",
+     "v": 0.4
+    }
+   ]
+  },
+  {
+   "say": "Lần đầu chạy, doctor hay báo đủ ba kiểu: tick, chấm than, và dấu nhân.",
+   "type": "Terminal",
+   "section": "flutter doctor",
+   "out": "hero",
+   "props": {
+    "title": "Lần đầu chạy flutter doctor",
+    "dir": "~",
+    "lines": [
+     {
+      "s": "flutter doctor",
+      "at": 0
+     },
+     {
+      "s": "[✓] Flutter",
+      "at": "@tick",
+      "out": true
+     },
+     {
+      "s": "[!] Android toolchain",
+      "at": "@chấm",
+      "out": true
+     },
+     {
+      "s": "[✗] Connected device",
+      "at": "@nhân",
+      "out": true
+     }
+    ]
+   }
+  },
+  {
+   "say": "Tin vui là không cần xanh hết, chỉ cần các dòng khóa học dùng.",
+   "type": "Steps",
+   "section": "flutter doctor",
+   "out": "hero",
+   "props": {
+    "title": "Không cần xanh hết",
+    "steps": [
+     {
+      "s": "Flutter · bắt buộc",
+      "at": "@hết",
+      "ok": "@hết+8"
+     },
+     {
+      "s": "Android toolchain · bắt buộc",
+      "at": "@chỉ",
+      "ok": "@chỉ+8"
+     },
+     {
+      "s": "Chrome · bỏ qua",
+      "at": "@các"
+     }
+    ]
+   }
+  },
+  {
+   "say": "Bài học gỡ sẵn ba bẫy: quên thêm PATH, cài vào Program Files, và cáp chỉ sạc không truyền data.",
+   "type": "Steps",
+   "section": "Bẫy setup",
+   "out": "hero",
+   "props": {
+    "title": "3 bẫy hay gặp",
+    "steps": [
+     {
+      "s": "Quên thêm flutter/bin vào PATH",
+      "at": "@quên",
+      "warn": "@PATH"
+     },
+     {
+      "s": "Cài vào Program Files",
+      "at": "@cài",
+      "warn": "@Program"
+     },
+     {
+      "s": "Cáp chỉ sạc, không truyền data",
+      "at": "@cáp",
+      "warn": "@cáp+6"
+     }
+    ]
+   }
+  },
+  {
+   "say": "Bài một khóa Flutter Mobile một không một, đọc miễn phí tám phút trên dantech chấm academy. Follow Dan Tech để học Flutter mỗi ngày nhé!",
+   "type": "FlTake",
+   "section": "dantech.academy",
+   "props": {
+    "hero": "dantech.academy",
+    "title": "Đọc bài 1 miễn phí",
+    "rows": [
+     {
+      "k": "Flutter Mobile 101",
+      "v": "Bài 1",
+      "at": "@Bài"
+     },
+     {
+      "k": "Đọc toàn bài",
+      "v": "Miễn phí",
+      "at": "@miễn"
+     },
+     {
+      "k": "Thời lượng",
+      "v": "8 phút",
+      "at": "@tám"
+     }
+    ],
+    "rule": {
+     "s": "dantech.academy",
+     "at": "@dantech"
+    }
+   }
+  }
+ ]
+}

@@ -1,6 +1,6 @@
 ---
 name: write-script
-description: Viết videos/<slug>/script.json cho video Dan Tech từ một spec (chủ đề/link/ghi chú, theme, độ dài, góc nhìn). Dùng khi Dan muốn làm video mới; nghiên cứu nguồn thật, viết kịch bản tiếng Việt, validate.
+description: Viết videos/<slug>/script.json cho video Dan Tech từ một spec (chủ đề/link/ghi chú, theme, góc nhìn); mặc định một ý, 30–45 s lời đọc, nguồn dài thì dừng hỏi cách cắt. Dùng khi Dan muốn làm video mới; nghiên cứu nguồn thật, viết kịch bản tiếng Việt, validate.
 ---
 
 # write-script
@@ -10,6 +10,7 @@ description: Viết videos/<slug>/script.json cho video Dan Tech từ một spec
 
 ## Các bước
 
+0. **Ngân sách độ dài (làm TRƯỚC khi viết).** Xem mục "Một clip = một ý, 30–45 s". Ước lượng lời đọc cần cho nguồn (≈ 3 chữ/giây, tức 90–135 chữ cho 30–45 s). Nguồn cần nhiều hơn → **dừng, đưa 2–3 phương án cắt cho người yêu cầu chọn**, không nhồi.
 1. **Nghiên cứu, kiểm chứng.** Mở và đọc nguồn thật (link Dan đưa, báo lớn, tài liệu chính thức). Mỗi sự kiện, con số, trích dẫn phải lấy từ một nguồn bạn đã đọc. **Không bịa** sự kiện, số liệu, quote hay URL. Thông tin chưa chắc thì bỏ, hoặc ghi rõ "chưa xác nhận" và hỏi Dan.
 2. **Chọn theme:** drama/tin → `hot-news` (báo in sáng) hoặc `hot-news-glitch` (nền tối, glitch tín hiệu vỡ, mẫu `videos/openai-vs-apple-glitch/`); mẹo/tool/tutorial/listicle → `quick-tips`; code/dev explainer → `tech-explain` (editor sáng/vàng, mẫu `videos/git-merge-vs-rebase/`) hoặc `tech-explain-cyber` (blueprint tối, lime, mẫu `videos/flutter-mvvm/`); video chỉ cho dev Android (Kotlin, Compose, lifecycle, Android API) → `android-tutor` (mẫu `videos/compose-remember-saveable/`); video chỉ cho dev Flutter (widget, state, Dart, API Flutter) → `flutter-tutor` (🧪 chờ duyệt, mẫu `videos/flutter-setstate-valuenotifier/`). Flutter kiến trúc/sơ đồ tổng quát vẫn có thể dùng `tech-explain-cyber`. Nếu spec **không ghi theme**: đề xuất một theme kèm lý do một câu và **chờ Dan xác nhận** trước khi viết. Chỉ khi chạy không tương tác (không ai trả lời được) mới tự chọn, và ghi rõ lý do trong phần tóm tắt.
 3. **Tạo slug** dạng kebab-case không dấu (`openai-vs-apple`). Copy mẫu cùng theme:
@@ -24,7 +25,7 @@ description: Viết videos/<slug>/script.json cho video Dan Tech từ một spec
 4. **Viết `say` từng cảnh** (tiếng Việt nói, câu ngắn):
    - **Hook trực diện:** câu đầu cảnh 1 nêu thẳng chủ đề trong ~3 s (xem mục "Hook trực diện"), có thể kèm xung đột/con số. Đặt vấn đề tối đa 2 câu. Một ý lõi.
    - Câu nói đầy đủ, có từ nối. Code/lệnh chỉ lấy từ nguồn.
-   - Độ dài: **rõ ràng trước, độ dài theo nội dung.** Không có mục tiêu thời lượng. Chỉ bỏ câu thừa, lặp hoặc lạc đề. `validate_script.py` in ước lượng thời lượng theo từng style giọng, chỉ để biết.
+   - Độ dài: **ngân sách mặc định 30–45 s lời đọc** (≈ 90–135 chữ, ≤ 6–8 cảnh). Trong ngân sách đó, rõ ràng trước: cắt ý, không cắt từ nối. `validate_script.py` in ước lượng theo từng giọng và **⚠️ khi ước lượng > 45 s hoặc > 8 cảnh**; video cố ý dài (Dan đã đồng ý) thì đặt `"long_ok": true` ở top-level và ghi lý do trong báo cáo.
    - Câu cuối phải có **`ctaPhrase` của kênh** (`channels/<id>.json`, mặc định `dantech`: "follow Dan Tech"; nút Follow bật ở `ctaInWord`, bấm ở `ctaPressWord`). Kênh khác thì đặt `"channel": "<id>"`. Handle do outro lo, không viết vào props.
    - Số và tên riêng viết sao cho TTS đọc đúng.
 5. **Props + nhấn nhịp bằng `@chữ`:** chỉ dùng scene type và khoá props trong SCHEMA.md. Mọi mốc xuất hiện (keycap, popup, tick, stamp, sfx) đặt bằng `"@chữ"` của chính cảnh đó, không đếm frame tay. SFX chỉ đặt ở khoảnh khắc có nghĩa (click, pop, stamp), volume 0.35–0.5.
@@ -46,8 +47,24 @@ description: Viết videos/<slug>/script.json cho video Dan Tech từ một spec
 6. **Hình ảnh:** chỉ infographics/UI mockup. **Không có người hay mặt người.** `media` chỉ dùng clip faceless trong `assets/broll/`.
 7. **Metadata:** `title`, `date` (ngày hôm nay, dạng `16 · 10 · 2026`), `caption` có hashtag (#DanTech + #TinNong/#MeoNhanh), `sources` đầy đủ (tên + URL + ngày). Credit nhạc do `describe.py` tự thêm. Giữ `"voice": {"style":"random"}`, `"music": {"track":"random"}` (không đặt `voice.file`).
 8. **Humanize lời đọc:** áp dụng skill `humanizer` (`.agents/skills/humanizer/SKILL.md`) theo hướng dẫn tiếng Việt ở `.agents/skills/humanizer/VI.md` cho mọi `say`: bỏ sáo rỗng, đối lập giả, bộ ba ép, thổi phồng, filler; giữ văn nói ngắn. Không đổi sự kiện, số, nguồn, câu "follow Dan Tech". Chữ nào bị đổi mà đang được `@anchor` dùng thì cập nhật anchor.
-9. **Validate:** `python3 scripts/validate_script.py videos/<slug>/script.json`. Chạy lại sau mỗi lần sửa (kể cả sau bước humanize), đến khi `✅ OK` (không có cảnh báo độ dài).
+9. **Validate:** `python3 scripts/validate_script.py videos/<slug>/script.json`. Chạy lại sau mỗi lần sửa (kể cả sau bước humanize), đến khi `✅ OK`, không còn cảnh báo độ dài (> 45 s / > 8 cảnh) trừ khi `long_ok: true` đã được duyệt.
 10. **Báo Dan:** đường dẫn file, theme, số cảnh, số chữ/thời lượng ước tính, hook, danh sách nguồn, và những điểm chưa chắc chắn.
+
+## Một clip = một ý, 30–45 s (retention trước, độ dài sau)
+
+Tỉ lệ xem hết quan trọng hơn độ dài: clip 30 s được xem tới cuối thắng clip 60 s bị lướt qua ở giữa. Video Flutter SDK đầu tiên (117 s, 12 cảnh, nhồi cả bài học) có layout tốt nhưng quá dài; bản teaser ~30 s mới là mặc định.
+
+- **Ước lượng trước khi viết.** Tốc độ đo từ render thật (`logs/voice_log.md` + `out/words.json`): Edge NamMinh +10% ≈ **3.0 chữ/giây** (341 chữ → 113.5 s), Gemini `tu-nhien` ≈ 3.1, `hao-hung` ≈ 3.8, `ke-chuyen` ≈ 2.55 (chữ = từ tách bằng dấu cách). **Ngân sách mặc định: 30–45 s lời đọc ≈ 90–135 chữ**, cộng end card. Validator ước lượng ở 3.0 chữ/giây và ⚠️ khi > 45 s.
+- **Nguồn quá dài → DỪNG và hỏi.** Nếu muốn giữ hết ý chính của nguồn mà cần > 45 s, không viết bản nhồi. Gửi người yêu cầu 2–3 phương án, mỗi phương án 1 dòng promise + ước lượng giây, rồi chờ chọn:
+  1. **Một ý mạnh nhất** (vd "đọc flutter doctor: ✓ ! ✗, không cần xanh hết"),
+  2. **Teaser của bài học** (promise + 2–3 nhịp hé lộ + CTA đọc bài trên dantech.academy),
+  3. **Chia series** (liệt kê 3–5 tập, mỗi tập một ý, ~30–45 s).
+  Chỉ khi chạy không tương tác (không ai trả lời được) mới tự chọn — mặc định **teaser** cho bài học, **một ý mạnh nhất** cho chủ đề khác — và ghi lý do trong báo cáo.
+- **Đúng một promise trong hook.** Hook hứa một điều; mọi câu sau phải phục vụ điều đó. Câu nào bỏ đi mà promise vẫn được giao → cắt.
+- **Payoff sớm:** giao điều đã hứa trước khoảng 2/3 clip, không để dành tới cuối.
+- **Không liệt kê dài:** tối đa 3 mục mỗi danh sách trong lời đọc; hình có thể hiện tới 3–4 hàng. Danh sách dài hơn là dấu hiệu cần chia series.
+- **≤ 6–8 cảnh** (validator ⚠️ khi > 8). Mỗi cảnh ~3–7 s.
+- Video dài có chủ đích (Dan duyệt) → `"long_ok": true` ở top-level script, validator không cảnh báo độ dài.
 
 ## Xoay quanh chủ đề (topic-centric)
 
@@ -122,7 +139,7 @@ Khi spec là một bài học (khoá học của Dan, doc, bài blog), đó là 
 - **Cắt mọi câu mà bỏ đi người xem vẫn hiểu.** Không kể lại hết mọi ví dụ, mọi phương án, mọi triệu chứng trong bài; chọn một cái mạnh nhất hoặc gói thành một câu.
 - Vẫn giữ câu đầy đủ và từ nối. **Ngắn gọn ≠ điện tín.**
 - **Khung gợi ý cho explainer:** hook 1–2 câu → khái niệm cốt lõi → một bằng chứng / ví dụ cụ thể → takeaway + CTA.
-- Không giới hạn độ dài, nhưng độ dài phải đến từ **nội dung thật**, không phải từ phần dẫn dắt.
+- Ngân sách 30–45 s (mục "Một clip = một ý"); độ dài phải đến từ **nội dung thật** của một ý, không phải từ phần dẫn dắt hay từ việc kể lại cả bài.
 
 **Tự kiểm tra:** người đang lướt feed có ở lại quá giây thứ 3 không, và tới giây thứ 8 đã biết vì sao mình đang xem chưa?
 
@@ -148,7 +165,7 @@ Video giải thích code phải **dẫn chuyện** để người xem hiểu và
 - Định nghĩa mọi thuật ngữ ở lần đầu nhắc tới (IoC, DI, module, single…). Thuật ngữ nào hiện trên hình mà không giải thích được thì bỏ khỏi hình.
 - Một ý cho mỗi cảnh. Lời đọc **giải thích thứ đang hiện trên màn hình** (dòng code này làm gì), không chỉ đọc tên nó. Có thể dùng `notes` của `CodeBlock` để chú thích từng dòng.
 - Câu cuối của mỗi cảnh **bắc cầu** sang cảnh sau (câu hỏi, "lúc này…", "nói cách khác…").
-- Ưu tiên rõ ràng hơn ngắn gọn; độ dài theo nội dung. Chỉ cắt câu thừa, lặp ý hoặc lạc đề. **Không bao giờ** cắt từ nối, chủ ngữ hay một bước giải thích chỉ để video ngắn hơn. Sau khi render, giữ nguyên giọng đã rút: không viết lại hay gọi lại TTS vì độ dài.
+- Ưu tiên rõ ràng hơn ngắn gọn **trong ngân sách 30–45 s**: thiếu chỗ thì cắt ý (hoặc chia series), không cắt chữ. Chỉ cắt câu thừa, lặp ý hoặc lạc đề. **Không bao giờ** cắt từ nối, chủ ngữ hay một bước giải thích chỉ để video ngắn hơn. Sau khi render, giữ nguyên giọng đã rút: không viết lại hay gọi lại TTS vì độ dài.
 
 **Tự kiểm tra:** đọc to toàn bộ `say` liền mạch, không nhìn hình. Người chưa biết khái niệm có hiểu không? Có chỗ nào phải "nhìn hình mới hiểu" không? Có thuật ngữ nào chưa giải thích không?
 

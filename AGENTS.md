@@ -26,6 +26,7 @@ Nguồn chủ đề, lịch đăng, mức tự động đăng do **người đi�
 2. **Chọn theme** (xem bảng dưới + `write-script`). Spec không ghi theme và có người trả lời được thì đề xuất rồi chờ. Chạy tự động thì tự chọn và ghi lý do.
 3. **Viết `videos/<slug>/script.json`** theo skill `write-script`:
    - **Một ý lõi** cho mỗi video. Ý phụ để thành video khác.
+   - **Ngân sách 30–45 s lời đọc** (≈ 90–135 chữ, ≤ 6–8 cảnh), ước lượng TRƯỚC khi viết. Tỉ lệ xem hết quan trọng hơn độ dài. Nguồn cần nhiều hơn → **dừng, đưa 2–3 phương án** (một ý mạnh nhất / teaser bài học / chia series) cho người yêu cầu chọn; không nhồi. Một promise trong hook, payoff sớm, không liệt kê dài. Cố ý dài: `"long_ok": true`.
    - **Hook theo nội dung** (`hook.kind`: controversy/news → claim cụ thể + 2 phe + payoff; explainer → nêu chủ đề + why; tips → promise). Áp dụng cho mọi theme.
    - **Hook trực diện:** câu đầu cảnh 1 nêu thẳng chủ đề (≤10–12 chữ, ~3 s). Tiêu đề trên màn hình cảnh 1 cũng hiện chủ đề ngay. Khai báo `topic`.
    - **Đặt vấn đề tối đa 2 câu**, rồi vào lõi luôn. Khung: hook → khái niệm lõi → một bằng chứng/ví dụ → takeaway + CTA.
@@ -75,7 +76,7 @@ Mọi chữ thương hiệu trên màn hình lấy từ file kênh, không hardc
 | Skill | Khi nào | File |
 |---|---|---|
 | `setup` | máy mới: cài Node/Python(.venv)/ffmpeg, npm, model whisper, .env, nhạc → `./dt doctor` ✅ | `.agents/skills/setup/SKILL.md` (tự động: `./dt setup`) |
-| `write-script` | spec (chủ đề/link, theme, độ dài, góc nhìn) → `script.json` đã validate | `.agents/skills/write-script/SKILL.md` (+ `SCHEMA.md`, `template.json`) |
+| `write-script` | spec (chủ đề/link, theme, góc nhìn; mặc định 30–45 s) → `script.json` đã validate | `.agents/skills/write-script/SKILL.md` (+ `SCHEMA.md`, `template.json`) |
 | `humanizer` | bỏ "mùi AI" khỏi lời đọc (bước trong write-script) | `.agents/skills/humanizer/SKILL.md` (upstream blader/humanizer, MIT) + `VI.md` (áp dụng cho tiếng Việt) |
 | `render-video` | script → MP4 + QC, chạy lại bằng `--from` | `.agents/skills/render-video/SKILL.md` |
 | `theme` | tạo/chỉnh theme từ spec | `.agents/skills/theme/SKILL.md` |
