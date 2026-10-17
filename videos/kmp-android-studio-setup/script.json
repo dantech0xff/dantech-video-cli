@@ -15,7 +15,7 @@
   "style": "random"
  },
  "music": {
-  "track": "random"
+  "track": "sappheiros-perspective"
  },
  "hook": {
   "kind": "tips",
@@ -99,39 +99,45 @@
   },
   {
    "say": "Giờ cần một nơi để chạy app. Điện thoại Android thật bật USB debugging là ngon nhất, không thì tạo một emulator Pixel. Trên Mac thì cài thêm Xcode cho phần iOS. Xong thì đừng đoán máy đã sẵn sàng chưa — chạy adb devices, hoặc kdoctor trên macOS, để kiểm chắc chắn.",
-   "type": "AtCode",
-   "section": "Terminal",
+   "type": "AtSteps",
+   "section": "Chạy app",
    "out": "sharedx",
    "props": {
     "title": "Nơi chạy, cách kiểm tra",
-    "file": "Terminal",
-    "lines": [
+    "steps": [
      {
-      "s": "$ adb devices",
-      "at": "@adb"
+      "s": "Máy Android thật: bật USB debugging",
+      "at": "@Điện",
+      "ok": "@adb"
      },
      {
-      "s": "RF8N30XXXXX   device",
-      "at": "@devices"
+      "s": "Hoặc một emulator Pixel",
+      "at": "@emulator",
+      "ok": "@devices"
      },
      {
-      "s": "$ kdoctor",
-      "at": "@kdoctor"
-     },
-     {
-      "s": "[✓] Operating System  [✓] Java",
-      "at": "@macOS"
-     },
-     {
-      "s": "[✓] Android Studio  [✓] Xcode",
-      "at": "@macOS+15"
+      "s": "Xcode cho phần iOS — chỉ trên Mac",
+      "at": "@Xcode",
+      "ok": "@kdoctor"
      }
     ],
     "note": {
      "s": "Windows và Linux chưa có kdoctor, kiểm bằng adb devices.",
      "at": "@chắc"
     }
-   }
+   },
+   "sfx": [
+    {
+     "s": "tick_001",
+     "at": "@adb",
+     "v": 0.4
+    },
+    {
+     "s": "tick_002",
+     "at": "@kdoctor",
+     "v": 0.4
+    }
+   ]
   },
   {
    "say": "Tóm lại, cần JDK mười bảy cộng, Android Studio stable, SDK Platform ba mươi sáu, plugin Kotlin Multiplatform và một chỗ chạy app. Dùng Windows hay Linux vẫn học được bình thường, chỉ thiếu phần bấm chạy iOS trên macOS thôi. Follow Dan Tech để học Android mỗi ngày nhé!",
