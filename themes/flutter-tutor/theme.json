@@ -48,7 +48,30 @@
    "radius": 18,
    "pop": 1.06
   },
-  "defaultOut": "hero"
+  "defaultOut": "hero",
+  "pack": {
+   "card": "#0A1424",
+   "card2": "#0F1B30",
+   "panel": "#081120",
+   "line": "#1A2B47",
+   "dim": "#8FA3BF",
+   "sub": "#C9D6E8",
+   "out": "#A9B8CF",
+   "term": "#060D1A",
+   "hl": "accent",
+   "onHl": "#FFFFFF",
+   "good": "#3DD68C",
+   "onGood": "#032414",
+   "bad": "#FF6B7A",
+   "badBg": "rgba(255,107,122,.10)",
+   "badInk": "#A9B8CF",
+   "badRow": "#FF96A1",
+   "warn": "#FFC857",
+   "warnBg": "rgba(255,200,87,.08)",
+   "onWarn": "#231800",
+   "tint": "accent",
+   "tintK": 1
+  }
  },
  "tail_hold": 40,
  "cta": {
