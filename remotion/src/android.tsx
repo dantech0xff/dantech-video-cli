@@ -130,78 +130,100 @@ export const AtTake:React.FC<{title:string;head?:[string,string];rows:{k:string;
   {rule&&f>=rule.at&&(()=>{const q=m3(f,rule.at,'def');return <div {...bb('rule')} style={{marginTop:44,background:'rgba(61,220,132,.12)',border:`2px solid ${AT.green}`,borderRadius:32,padding:'28px 32px',display:'flex',gap:22,alignItems:'center',transform:`scale(${.9+.1*q})`,opacity:Math.min(1,m3(f,rule.at,'fx')),transformOrigin:'left center'}}>
    <svg width={64} height={64} style={{flex:'none'}} viewBox="0 0 64 64"><path d={cookiePath(32,32,28,.1*(1-Math.min(1,q))+.04,9,f*.01)} fill={AT.green}/></svg>
    <span style={{fontFamily:SANS,fontWeight:800,fontSize:50,lineHeight:1.25,color:AT.ink}}>{rule.s}</span></div>})()}</div>};
-/* 6. steps/checklist: numbered rows slide in at `at`; circle turns green + check pops at `ok` (optional, else stays pending) */
-export const AtSteps:React.FC<{title:string;steps:{s:string;at:number;ok?:number}[];note?:{s:string;at:number}}>=({title,steps,note})=>{const {f}=useS();
- return <div><Title s={title} one/>
-  <div style={{display:'flex',flexDirection:'column',gap:20}}>{steps.map((st,k)=>{if(f<st.at)return null;const q=m3(f,st.at,'def');
-   const done=st.ok!=null&&f>=st.ok;const dq=done?m3(f,st.ok!,'fast'):0;
-   return <div key={k} {...bb('step')} style={{display:'flex',alignItems:'center',gap:24,background:done?'rgba(61,220,132,.10)':AT.card,border:`1.5px solid ${done?AT.green:AT.line}`,borderRadius:26,padding:'22px 28px',opacity:Math.min(1,m3(f,st.at,'fx')),transform:`translateX(${(1-q)*70}px)`}}>
-    <span style={{flex:'none',width:60,height:60,borderRadius:30,background:done?AT.green:AT.card2,border:`2px solid ${done?AT.green:AT.line}`,display:'flex',alignItems:'center',justifyContent:'center',transform:done?`scale(${.7+.3*Math.min(1.3,dq)})`:'none'}}>
-     {done?<svg width={30} height={30} viewBox="0 0 24 24"><path d="M4.5 12.5 10 18 19.5 6.5" stroke={AT.onPrim} strokeWidth={3.4} fill="none" strokeLinecap="round" strokeLinejoin="round"/></svg>
-      :<span style={{fontFamily:MONO,fontWeight:800,fontSize:30,color:AT.dim}}>{k+1}</span>}</span>
-    <span style={{flex:1,fontFamily:SANS,fontWeight:600,fontSize:42,color:AT.ink,lineHeight:1.25}}>{st.s}</span></div>})}</div>
-  {note&&f>=note.at&&(()=>{const q=m3(f,note.at,'def');return <div {...bb('note')} style={{marginTop:44,fontFamily:SANS,fontWeight:500,fontSize:48,lineHeight:1.3,color:AT.ink,opacity:Math.min(1,m3(f,note.at,'fx')),transform:`translateY(${(1-q)*40}px)`,borderLeft:`8px solid ${AT.green}`,paddingLeft:26}}>{note.s}</div>})()}</div>};
+/* ── info-graphic scenes for procedural / setup narration (AtSteps, AtTerm, AtPackages, AtDevice, AtSpec) ──
+   Reel-size readability floor (canvas px; ×0.795 on the 1080 frame): body ≥ 46, mono ≥ 40, labels ≥ 30.
+   The newest unfinished row is "active" (green outline); older unfinished rows step back (opacity .62)
+   so the eye always lands on what is being said right now. */
+const Tick:React.FC<{s?:number;c?:string}>=({s=34,c=AT.onPrim})=><svg width={s} height={s} viewBox="0 0 24 24"><path d="M4.5 12.5 10 18 19.5 6.5" stroke={c} strokeWidth={3.4} fill="none" strokeLinecap="round" strokeLinejoin="round"/></svg>;
+// focus state of row k: act 0..1 = is the newest shown row and not yet done; back 0..1 = a newer row has arrived and this one is not done
+const focus=(f:number,ats:number[],k:number,done:boolean)=>{const nx=ats.slice(k+1).filter(a=>f>=a).sort((a,b)=>a-b)[0];
+ const back=nx!=null&&!done?Math.min(1,m3(f,nx,'fx')):0;return {act:done?0:Math.min(1,m3(f,ats[k],'fx'))*(1-back),back}};
 const Note:React.FC<{s:string;at:number;size?:number}>=({s,at,size=50})=>{const {f}=useS();if(f<at)return null;const q=m3(f,at,'def');
- return <div {...bb('note')} style={{marginTop:48,fontFamily:SANS,fontWeight:500,fontSize:size,lineHeight:1.3,color:AT.ink,opacity:Math.min(1,m3(f,at,'fx')),transform:`translateY(${(1-q)*40}px)`,borderLeft:`8px solid ${AT.green}`,paddingLeft:26}}>{s}</div>};
-/* 7. real terminal: "$" prompt lines type in, output lines (out:true) fade in dimmed, optional green ✓ at `ok`.
-   No file tab / line numbers — a shell, not an editor. */
-export const AtTerm:React.FC<{title:string;lines:{s:string;at:number;out?:boolean;ok?:number}[];note?:{s:string;at:number}}>=({title,lines,note})=>{const {f}=useS();const p=m3(f,4,'def');
- return <div><Title s={title}/>
+ return <div {...bb('note')} style={{marginTop:44,fontFamily:SANS,fontWeight:500,fontSize:size,lineHeight:1.3,color:AT.ink,opacity:Math.min(1,m3(f,at,'fx')),transform:`translateY(${(1-q)*40}px)`,borderLeft:`8px solid ${AT.green}`,paddingLeft:26}}>{s}</div>};
+/* 6. stepper: numbered rows slide in at `at`, joined by a rail that turns green below finished steps.
+   ok → green circle + tick pop; warn → amber "!" (a branch / "if not" case); no ok/warn = listed item. */
+export const AtSteps:React.FC<{title:string;steps:{s:string;at:number;ok?:number;warn?:number}[];note?:{s:string;at:number}}>=({title,steps,note})=>{const {f}=useS();const ats=steps.map(s=>s.at);
+ return <div><Title s={title} one={steps.length>4||(!!note&&steps.length>3)}/>
+  <div style={{display:'flex',flexDirection:'column'}}>{steps.map((st,k)=>{if(f<st.at)return null;const q=m3(f,st.at,'def');
+   const done=st.ok!=null&&f>=st.ok;const dq=done?m3(f,st.ok!,'fast'):0;const wn=!done&&st.warn!=null&&f>=st.warn;const wq=wn?m3(f,st.warn!,'fast'):0;
+   const {act,back}=focus(f,ats,k,done||wn);const col=done?AT.green:wn?AT.warn:AT.green;
+   const rail=k>0&&f>=st.at;const prevDone=k>0&&steps[k-1].ok!=null&&f>=steps[k-1].ok!;
+   return <div key={k} style={{opacity:Math.min(1,m3(f,st.at,'fx'))*(1-.32*back),transform:`translateX(${(1-q)*70}px)`}}>
+    {rail&&<div style={{marginLeft:30+38,width:4,height:28,borderRadius:2,background:prevDone?AT.green:AT.line}}/>}
+    <div {...bb('step')} style={{display:'flex',alignItems:'center',gap:26,background:done?'rgba(61,220,132,.11)':wn?'rgba(229,192,123,.08)':`rgba(61,220,132,${.05*act})`,
+     border:`${2+1*act}px solid ${done?AT.green:wn?AT.warn:act>.5?AT.green:AT.line}`,borderRadius:28,padding:'28px 30px',boxShadow:act>0?`0 0 0 ${6*act}px rgba(61,220,132,.10)`:'none'}}>
+     <span style={{flex:'none',width:80,height:80,borderRadius:40,background:done?AT.green:wn?AT.warn:AT.card2,border:`3px solid ${done||wn?col:act>.5?AT.green:AT.line}`,display:'flex',alignItems:'center',justifyContent:'center',
+      transform:done?`scale(${.7+.3*Math.min(1.3,dq)})`:wn?`scale(${.7+.3*Math.min(1.3,wq)})`:'none'}}>
+      {done?<Tick s={38}/>:wn?<span style={{fontFamily:SANS,fontWeight:900,fontSize:44,color:'#2A2000'}}>!</span>
+       :<span style={{fontFamily:MONO,fontWeight:800,fontSize:36,color:act>.5?AT.green:AT.dim}}>{k+1}</span>}</span>
+     <span style={{flex:1,fontFamily:SANS,fontWeight:700,fontSize:fitSize(st.s,1300,54,.5),color:AT.ink,lineHeight:1.22}}>{st.s}</span></div></div>})}</div>
+  {note&&<Note s={note.s} at={note.at}/>}</div>};
+/* 7. real terminal: "$" lines type in with a block cursor, output lines (out:true) fade in dimmed ("#…" = comment),
+   ok → green ✓ at line end, hl → output row tinted green (the result that matters). No file tab / gutter: a shell, not an editor. */
+export const AtTerm:React.FC<{title:string;dir?:string;shell?:string;lines:{s:string;at:number;out?:boolean;ok?:number;hl?:number}[];note?:{s:string;at:number}}>=({title,dir='~/app',shell='zsh',lines,note})=>{const {f}=useS();const p=m3(f,4,'def');
+ const shown=lines.filter(l=>f>=l.at);const last=shown[shown.length-1];
+ return <div><Title s={title} one/>
   <div {...bb('term')} style={{background:'#0D0F12',borderRadius:28,border:`1.5px solid ${AT.line}`,overflow:'hidden',opacity:Math.min(1,m3(f,4,'fx')),transform:`translateY(${(1-p)*60}px)`}}>
-   <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'18px 28px',background:AT.card2,borderBottom:`1.5px solid ${AT.line}`}}>
-    <span style={lbl(32,AT.ink)}>Terminal</span><span style={{...lbl(26,AT.dim),border:`1.5px solid ${AT.line}`,borderRadius:999,padding:'4px 16px'}}>zsh · ~/app</span></div>
-   <div style={{padding:'24px 30px 28px',display:'flex',flexDirection:'column',gap:16}}>
+   <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'20px 30px',background:AT.card2,borderBottom:`1.5px solid ${AT.line}`}}>
+    <span style={lbl(32,AT.ink)}>Terminal</span><span style={{...lbl(28,AT.dim),border:`1.5px solid ${AT.line}`,borderRadius:999,padding:'4px 18px'}}>{shell} · {dir}</span></div>
+   <div style={{padding:'26px 0 30px',display:'flex',flexDirection:'column',gap:10,minHeight:200}}>
    {lines.map((l,k)=>{if(f<l.at)return null;const done=l.ok!=null&&f>=l.ok;const dq=done?m3(f,l.ok!,'fast'):0;
-    if(l.out){const q=m3(f,l.at,'fx');return <div key={k} style={{display:'flex',alignItems:'center',gap:16,fontFamily:MONO,fontWeight:500,fontSize:38,color:done?AT.ink:AT.dim,opacity:Math.min(1,q),transform:`translateX(${(1-q)*-30}px)`}}>
-     <span style={{width:36,flex:'none'}}/><span style={{whiteSpace:'pre'}}>{l.s}</span>
-     {done&&<span style={{color:AT.green,fontWeight:800,display:'inline-block',transform:`scale(${dq})`,transformOrigin:'left center'}}>✓</span>}</div>}
-    const q=interpolate(f,[l.at,l.at+10],[0,1],cl);const shown=l.s.slice(0,Math.ceil(l.s.length*q));
-    return <div key={k} style={{display:'flex',alignItems:'center',gap:16,fontFamily:MONO,fontWeight:500,fontSize:40,opacity:Math.min(1,m3(f,l.at,'fx'))}}>
-     <span style={{width:36,flex:'none',textAlign:'center',color:AT.green,fontWeight:800}}>$</span><span style={{color:AT.ink,whiteSpace:'pre'}}>{shown}</span>
-     {done&&<span style={{color:AT.green,fontWeight:800,display:'inline-block',transform:`scale(${dq})`,transformOrigin:'left center'}}>✓</span>}</div>})}</div></div>
+    const tick=done&&<span style={{marginLeft:18,color:AT.green,fontWeight:800,display:'inline-block',transform:`scale(${Math.min(1.2,dq)})`,transformOrigin:'left center'}}>✓</span>;
+    if(l.out){const q=m3(f,l.at,'fx');const cm=l.s.startsWith('#');const h=l.hl!=null&&f>=l.hl?m3(f,l.hl,'fast'):0;
+     return <div key={k} style={{position:'relative',display:'flex',alignItems:'center',padding:'8px 30px 8px 82px',fontFamily:MONO,fontWeight:500,fontSize:42,color:cm?AT.cmt:done||h?AT.ink:'#A9ADB4',opacity:Math.min(1,q),transform:`translateX(${(1-q)*-30}px)`}}>
+      {h>0&&<span style={{position:'absolute',inset:0,background:'rgba(61,220,132,.13)',borderLeft:`6px solid ${AT.green}`,transform:`scaleX(${.6+.4*Math.min(1,h)})`,transformOrigin:'left center'}}/>}
+      <span style={{position:'relative',whiteSpace:'pre'}}>{/^\[✓\]/.test(l.s)?<><span style={{color:AT.green,fontWeight:800}}>[✓]</span>{l.s.slice(3)}</>:l.s}</span>{tick}</div>}
+    const q=interpolate(f,[l.at,l.at+12],[0,1],cl);const txt=l.s.slice(0,Math.ceil(l.s.length*q));const cur=l===last&&(q<1||Math.floor(f/16)%2===0);
+    return <div key={k} style={{display:'flex',alignItems:'center',padding:'8px 30px',fontFamily:MONO,fontWeight:600,fontSize:46,opacity:Math.min(1,m3(f,l.at,'fx'))}}>
+     <span style={{width:52,flex:'none',color:AT.green,fontWeight:800}}>$</span><span style={{color:AT.ink,whiteSpace:'pre'}}>{txt}</span>
+     {cur&&<span style={{display:'inline-block',width:22,height:46,marginLeft:4,background:AT.green,opacity:.85}}/>}{tick}</div>})}</div></div>
   {note&&<Note s={note.s} at={note.at}/>}</div>};
-/* 8. package/settings list: checkbox rows slide in at `at`, box fills green at `ok` (falls back to `at`).
-   Header pill counts confirmed rows as they fire. */
+/* 8. package/settings window: checkbox rows slide in at `at`, box fills green at `ok` (falls back to `at`), meta on its own line.
+   Header pill counts ticked rows n/m. */
 export const AtPackages:React.FC<{title:string;head?:string;rows:{s:string;meta?:string;at:number;ok?:number}[];note?:{s:string;at:number}}>=({title,head='SDK Manager',rows,note})=>{const {f}=useS();const p=m3(f,4,'def');
- const n=rows.filter(r=>f>=(r.ok??r.at)).length;
- return <div><Title s={title}/>
+ const n=rows.filter(r=>f>=(r.ok??r.at)).length;const ats=rows.map(r=>r.at);
+ return <div><Title s={title} one/>
   <div {...bb('pkg')} style={{background:AT.panel,borderRadius:28,border:`1.5px solid ${AT.line}`,overflow:'hidden',opacity:Math.min(1,m3(f,4,'fx')),transform:`translateY(${(1-p)*60}px)`}}>
-   <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'18px 28px',background:AT.card2,borderBottom:`1.5px solid ${AT.line}`}}>
-    <span style={lbl(32,AT.ink)}>{head}</span><span style={{...lbl(26,AT.green),border:`1.5px solid ${AT.green}`,borderRadius:999,padding:'4px 16px'}}>{n}/{rows.length}</span></div>
-   <div style={{padding:'10px 0 18px'}}>{rows.map((r,k)=>{if(f<r.at)return null;const q=m3(f,r.at,'def');const ck=r.ok??r.at;const done=f>=ck;const dq=done?m3(f,ck,'fast'):0;
-    return <div key={k} style={{display:'flex',alignItems:'center',gap:22,padding:'20px 28px',opacity:Math.min(1,m3(f,r.at,'fx')),transform:`translateX(${(1-q)*-50}px)`}}>
-     <span style={{flex:'none',width:48,height:48,borderRadius:12,border:`3px solid ${done?AT.green:AT.dim}`,background:done?AT.green:'transparent',display:'flex',alignItems:'center',justifyContent:'center',transform:done?`scale(${.8+.25*Math.min(1.25,dq)})`:'none'}}>
-      {done&&<svg width={26} height={26} viewBox="0 0 24 24"><path d="M4.5 12.5 10 18 19.5 6.5" stroke={AT.onPrim} strokeWidth={3.4} fill="none" strokeLinecap="round" strokeLinejoin="round"/></svg>}</span>
-     <span style={{flex:1,fontFamily:SANS,fontWeight:600,fontSize:40,color:AT.ink}}>{r.s}</span>
-     {r.meta&&<span style={lbl(26,AT.dim)}>{r.meta}</span>}</div>})}</div></div>
+   <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'20px 30px',background:AT.card2,borderBottom:`1.5px solid ${AT.line}`}}>
+    <span style={lbl(32,AT.ink)}>{head}</span><span style={{...lbl(30,n===rows.length?AT.onPrim:AT.green),background:n===rows.length?AT.green:'transparent',border:`1.5px solid ${AT.green}`,borderRadius:999,padding:'4px 18px',fontWeight:800}}>{n}/{rows.length}</span></div>
+   <div style={{padding:'8px 0 12px',minHeight:150}}>{rows.map((r,k)=>{if(f<r.at)return null;const q=m3(f,r.at,'def');const ck=r.ok??r.at;const done=f>=ck;const dq=done?m3(f,ck,'fast'):0;const {act}=focus(f,ats,k,done);
+    return <div key={k} style={{display:'flex',alignItems:'center',gap:26,padding:'28px 30px',borderTop:k?`1.5px solid ${AT.line}`:'none',background:`rgba(61,220,132,${.06*act})`,opacity:Math.min(1,m3(f,r.at,'fx')),transform:`translateX(${(1-q)*-50}px)`}}>
+     <span style={{flex:'none',width:58,height:58,borderRadius:14,border:`3px solid ${done?AT.green:act>.5?AT.green:AT.dim}`,background:done?AT.green:'transparent',display:'flex',alignItems:'center',justifyContent:'center',transform:done?`scale(${.8+.25*Math.min(1.25,dq)})`:'none'}}>
+      {done&&<Tick s={34}/>}</span>
+     <div style={{flex:1}}><div style={{fontFamily:SANS,fontWeight:700,fontSize:fitSize(r.s,1250,52,.5),color:AT.ink,lineHeight:1.2}}>{r.s}</div>
+      {r.meta&&<div style={{...lbl(32,AT.dim),marginTop:6}}>{r.meta}</div>}</div></div>})}</div></div>
   {note&&<Note s={note.s} at={note.at}/>}</div>};
-/* 9. device mock: phone (kind:"phone", default) or laptop (kind:"mac") frames; inner screen rows slide at `at`,
-   "on":true rows get a green ON pill. Whole device gets a green ✓ chip at `ok` (e.g. confirmed/ready). */
-export const AtDevice:React.FC<{title:string;devices:{kind?:'phone'|'mac';name:string;badge?:string;at:number;ok?:number;screen?:{s:string;at:number;on?:boolean}[]}[];note?:{s:string;at:number}}>=({title,devices,note})=>{const {f}=useS();
- return <div><Title s={title}/>
-  <div {...bb('devs')} style={{display:'flex',gap:30,alignItems:'flex-end',justifyContent:'center'}}>
-  {devices.map((d,k)=>{if(f<d.at)return null;const q=m3(f,d.at,'def');const done=d.ok!=null&&f>=d.ok;const dq=done?m3(f,d.ok!,'fast'):0;
-   const scr=(w:number,h:number)=><div style={{position:'relative',width:w,height:h,borderRadius:26,background:'#0D1510',border:`3px solid ${done?AT.green:AT.line}`,overflow:'hidden',padding:'18px 20px'}}>
-    <div style={{fontFamily:SANS,fontWeight:800,fontSize:fitSize(d.name,w-40-(d.badge?d.badge.length*13+40:0),26,.58),color:AT.ink,marginBottom:6,whiteSpace:'nowrap'}}>{d.name}</div>
-    {(d.screen??[]).map((r,j)=>{if(f<r.at)return null;const rq=m3(f,r.at,'fast');
-     return <div key={j} style={{display:'flex',alignItems:'center',justifyContent:'space-between',gap:10,padding:'10px 0',borderTop:`1.5px solid ${AT.line}`,opacity:Math.min(1,m3(f,r.at,'fx')),transform:`translateX(${(1-rq)*-24}px)`}}>
-      <span style={{fontFamily:MONO,fontSize:24,color:r.on?AT.ink:AT.dim}}>{r.s}</span>
-      {r.on&&<span style={{fontFamily:MONO,fontWeight:800,fontSize:20,color:AT.onPrim,background:AT.green,borderRadius:999,padding:'3px 12px',display:'inline-block',transform:`scale(${rq})`}}>ON</span>}</div>})}
-    {d.badge&&<span style={{position:'absolute',right:12,top:12,fontFamily:MONO,fontSize:19,color:AT.dim,border:`1.5px solid ${AT.line}`,borderRadius:999,padding:'3px 10px'}}>{d.badge}</span>}</div>;
-   return <div key={k} style={{opacity:Math.min(1,m3(f,d.at,'fx')),transform:`translateY(${(1-q)*70}px)`}}>
-    <div style={{position:'relative',display:'inline-block'}}>
-     {d.kind==='mac'?<div><div style={{display:'flex',justifyContent:'center'}}>{scr(300,280)}</div><div style={{height:16,margin:'0 auto',width:360,background:AT.card2,borderRadius:'0 0 18px 18px',border:`2px solid ${AT.line}`,borderTop:'none'}}/></div>:scr(250,460)}
-     {done&&<span style={{position:'absolute',right:-16,top:-16,width:62,height:62,borderRadius:31,background:AT.green,display:'flex',alignItems:'center',justifyContent:'center',transform:`scale(${dq})`}}><svg width={32} height={32} viewBox="0 0 24 24"><path d="M4.5 12.5 10 18 19.5 6.5" stroke={AT.onPrim} strokeWidth={3.4} fill="none" strokeLinecap="round" strokeLinejoin="round"/></svg></span>}
-    </div></div>})}</div>
+/* 9. where the app runs: one card per device (phone / mac glyph + name + badge), settings rows inside (on:true → green ON chip),
+   ok → green outline + tick. Cards stack vertically so names and settings stay reel-readable. */
+const DevGlyph:React.FC<{kind?:'phone'|'mac';c:string}>=({kind,c})=>kind==='mac'
+ ?<svg width={120} height={96} viewBox="0 0 120 96"><rect x={16} y={8} width={88} height={60} rx={8} fill="none" stroke={c} strokeWidth={5}/><path d="M4 80 H116 L108 90 H12 Z" fill={c}/></svg>
+ :<svg width={120} height={110} viewBox="0 0 120 110"><rect x={34} y={4} width={52} height={100} rx={12} fill="none" stroke={c} strokeWidth={5}/><rect x={50} y={12} width={20} height={5} rx={2.5} fill={c}/></svg>;
+export const AtDevice:React.FC<{title:string;devices:{kind?:'phone'|'mac';name:string;badge?:string;at:number;ok?:number;screen?:{s:string;at:number;on?:boolean}[]}[];note?:{s:string;at:number}}>=({title,devices,note})=>{const {f}=useS();const ats=devices.map(d=>d.at);
+ return <div><Title s={title} one/>
+  <div style={{display:'flex',flexDirection:'column',gap:24}}>
+  {devices.map((d,k)=>{if(f<d.at)return null;const q=m3(f,d.at,'def');const done=d.ok!=null&&f>=d.ok;const dq=done?m3(f,d.ok!,'fast'):0;const {act}=focus(f,ats,k,done);
+   const c=done||act>.5?AT.green:AT.dim;
+   return <div key={k} {...bb('dev')} style={{display:'flex',alignItems:'center',gap:22,background:done?'rgba(61,220,132,.09)':AT.card,border:`${2+act}px solid ${done||act>.5?AT.green:AT.line}`,borderRadius:28,padding:'30px 28px 30px 14px',
+    opacity:Math.min(1,m3(f,d.at,'fx')),transform:`translateY(${(1-q)*60}px)`}}>
+    <span style={{flex:'none'}}><DevGlyph kind={d.kind} c={c}/></span>
+    <div style={{flex:1,minWidth:0}}>
+     <div style={{display:'flex',alignItems:'center',gap:16,flexWrap:'wrap'}}><span style={{fontFamily:SANS,fontWeight:800,fontSize:fitSize(d.name,480,54,.52),color:AT.ink,lineHeight:1.15,whiteSpace:'nowrap'}}>{d.name}</span>
+      {d.badge&&<span style={{...lbl(28,AT.dim),border:`1.5px solid ${AT.line}`,borderRadius:999,padding:'2px 14px',whiteSpace:'nowrap'}}>{d.badge}</span>}</div>
+     {(d.screen??[]).map((r,j)=>{if(f<r.at)return null;const rq=m3(f,r.at,'fast');
+      return <div key={j} style={{display:'flex',alignItems:'center',gap:16,marginTop:12,opacity:Math.min(1,m3(f,r.at,'fx')),transform:`translateX(${(1-rq)*-24}px)`}}>
+       <span style={{fontFamily:MONO,fontSize:38,color:r.on?AT.ink:'#A9ADB4'}}>{r.s}</span>
+       {r.on&&<span style={{fontFamily:MONO,fontWeight:800,fontSize:28,color:AT.onPrim,background:AT.green,borderRadius:999,padding:'3px 16px',display:'inline-block',transform:`scale(${Math.min(1.1,rq)})`}}>ON</span>}</div>})}</div>
+    {d.ok!=null&&<span style={{flex:'none',width:66,height:66,borderRadius:33,background:done?AT.green:'transparent',border:`3px solid ${done?AT.green:AT.line}`,display:'flex',alignItems:'center',justifyContent:'center',transform:done?`scale(${.7+.3*Math.min(1.3,dq)})`:'none'}}>{done&&<Tick s={34}/>}</span>}
+   </div>})}</div>
   {note&&<Note s={note.s} at={note.at}/>}</div>};
-/* 10. spec tiles: requirement cards — big value pops at `at`, tile turns green at `ok` (or on pop if no `ok`) */
+/* 10. spec tiles (recap of requirements): 2-column grid, big value pops at `at`, tile turns green at `ok` (or on pop). */
 export const AtSpec:React.FC<{title:string;tiles:{big:string;small:string;at:number;ok?:number}[];note?:{s:string;at:number}}>=({title,tiles,note})=>{const {f}=useS();
- return <div><Title s={title}/>
-  <div {...bb('spec')} style={{display:'flex',flexWrap:'wrap',gap:22}}>
-  {tiles.map((t,k)=>{if(f<t.at)return null;const q=m3(f,t.at,'def');const done=f>=(t.ok??t.at);const dq=done?m3(f,t.ok??t.at,'fast'):0;
-   return <div key={k} {...bb('tile')} style={{width:280,background:done?'rgba(61,220,132,.08)':AT.card,border:`2px solid ${done?AT.green:AT.line}`,borderRadius:26,padding:'26px 26px 20px',opacity:Math.min(1,m3(f,t.at,'fx')),transform:`scale(${.85+.15*q})`,transformOrigin:'left bottom'}}>
-    <div style={{fontFamily:MONO,fontWeight:800,fontSize:fitSize(t.big,232,62,.62),color:done?AT.green:AT.ink,lineHeight:1.1,whiteSpace:'nowrap'}}>{t.big}</div>
-    <div style={{...lbl(24,AT.dim),marginTop:10}}>{t.small}</div></div>})}</div>
+ return <div><Title s={title} one/>
+  <div style={{display:'flex',flexWrap:'wrap',gap:24}}>
+  {tiles.map((t,k)=>{if(f<t.at)return null;const q=m3(f,t.at,'def');const done=f>=(t.ok??t.at);
+   return <div key={k} {...bb('tile')} style={{width:435,boxSizing:'border-box',background:done?'rgba(61,220,132,.09)':AT.card,border:`2.5px solid ${done?AT.green:AT.line}`,borderRadius:28,padding:'26px 30px 24px',opacity:Math.min(1,m3(f,t.at,'fx')),transform:`scale(${.85+.15*q})`,transformOrigin:'left bottom'}}>
+    <div style={{fontFamily:MONO,fontWeight:800,fontSize:fitSize(t.big,370,104,.62),color:done?AT.green:AT.ink,lineHeight:1.05,whiteSpace:'nowrap'}}>{t.big}</div>
+    <div style={{fontFamily:SANS,fontWeight:600,fontSize:fitSize(t.small,740,36,.5),color:'#C4C7CC',marginTop:10,lineHeight:1.2}}>{t.small}</div></div>})}</div>
   {note&&<Note s={note.s} at={note.at}/>}</div>};
 /* chrome: slim header (robot + brand left, page right, one line in SZ.header), decorative gutter, mid-ground shapes.
    The file name lives on the code card tab (AtCode/AtPreview), not in a strip under the header. */

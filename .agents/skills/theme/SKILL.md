@@ -71,6 +71,8 @@ Brand (wordmark, tên, handle, logo, chữ nút Follow) lấy từ `channels/<id
 - Font mới phải có licence OFL trong `assets/fonts/licenses/`.
 - Motion spring M3E (material3 ExpressiveMotionTokens): spatial fast .6/800, default .8/380, slow .8/200; effects (màu/opacity) critically damped, không overshoot. Helper `m3(f,at,'fast'|'def'|'slow'|'fx')`.
 - Code trong props bắt đầu bằng `@` (vd `@Composable`) bị hiểu là anchor: viết `"\\@Composable"` (component bỏ dấu `\`).
+- **Cỡ chữ tối thiểu ở cỡ reel** (canvas px, màn hình = ×0.795): chữ thân ≥ 46, mono/code ≥ 40, nhãn/meta ≥ 28–30. Nhãn 19–26 px (bản đầu của AtDevice/AtSpec/AtTerm) đọc không ra trên điện thoại. Thiết bị/tile xếp dọc hoặc 2 cột cho chữ to, đừng nhét 3 mock nhỏ cạnh nhau.
+- **Nhấn bước đang nói** cho scene dạng danh sách (AtSteps/AtPackages/AtDevice: helper `focus()` trong `android.tsx`): hàng mới nhất chưa xong viền accent, hàng cũ chưa xong mờ nhẹ (≥ 0.68 opacity để vẫn đọc được), hàng xong tô accent + tick.
 - Code card: dòng dài > ~34 ký tự ở fs 40 sẽ tràn; tách dòng như IDE format. Phone frame + code phải nằm gọn trong phần dùng được của canvas, y ≤ ~1280 (không chạm dải caption).
 - **Màu thương hiệu dùng đúng mã chính thức** (Android: #3DDC84 theo developer.android.com/distribute/marketing-tools/brand-guidelines) cho accent chính ở mọi chỗ: chip caption, highlight, robot, transition, nút. Không thay bằng tông pastel M3 (#7DDB9F) cho "dịu mắt", Dan thấy nhạt.
 - **Nền tối kiểu IDE nên gần đen** (#0B0C0E), surface/card nâng từng bậc (#101114 panel, #121316 tab, #17181B card, viền #2A2C31) để vẫn tách lớp.
