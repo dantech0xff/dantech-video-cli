@@ -36,7 +36,7 @@ description: Tạo theme mới hoặc chỉnh theme Dan Tech từ một spec (mo
 ## Caption karaoke (mọi theme)
 Caption = karaoke **chip** (mọi theme): mỗi chữ là một chip có nền (`chipBg`/`chipText`). Chữ sắp đọc thì text mờ hơn (`upcomingText`). Chữ đang đọc: nền đổi sang `activeBg`, text sang `activeText`, pop nhẹ (`pop` ~1.06, spring, không rung). Đọc xong thì về chip thường. **Không gạch chân.** Cấu hình ở `theme.json → look.caption`: `font,size,upper,weight,chipBg,chipText,upcomingText,activeBg,activeText,radius,padX,padY,gap,pop`. Size phải để 2 dòng chip lọt dải y 1366–1500 (Anton 50, BVPX/BVPM 44, JBM 38). Chip trên nền tối phải sáng hơn nền để còn thấy. Ước lượng 2 dòng trong `Captions` đã trừ padding + gap của chip.
 - Font caption khai báo trong `theme.json` → `look.caption` `{font, size, upper, weight?}`; mặc định = font chính (`head`) của theme. Caption phải cùng font với video.
-- Hiện tại: hot-news Anton 72 (in hoa) · quick-tips BVPX 62 · tech-explain JBM 52 (700) · tech-explain-cyber BVPM 60 · hot-news-glitch Anton 72 (in hoa) · android-tutor GSF (Google Sans Flex) 48 (800), chip bo 14.
+- Hiện tại: hot-news Anton 72 (in hoa) · quick-tips BVPX 62 · tech-explain JBM 52 (700) · tech-explain-cyber BVPM 60 · hot-news-glitch Anton 72 (in hoa) · android-tutor GSF (Google Sans Flex) 48 (800), chip bo 14 · flutter-tutor GSF 48 (800), chip active Sky #027DFD chữ trắng, bo 18, pop 1.06, không gạch chân.
 - Component `Captions` (remotion/src/sys.tsx) dùng chung, không viết caption riêng cho theme mới.
 
 ## Safe zone (BẮT BUỘC — tạo / sửa / cập nhật theme)
@@ -72,6 +72,16 @@ Brand (wordmark, tên, handle, logo, chữ nút Follow) lấy từ `channels/<id
 - **Màu thương hiệu dùng đúng mã chính thức** (Android: #3DDC84 theo developer.android.com/distribute/marketing-tools/brand-guidelines) cho accent chính ở mọi chỗ: chip caption, highlight, robot, transition, nút. Không thay bằng tông pastel M3 (#7DDB9F) cho "dịu mắt", Dan thấy nhạt.
 - **Nền tối kiểu IDE nên gần đen** (#0B0C0E), surface/card nâng từng bậc (#101114 panel, #121316 tab, #17181B card, viền #2A2C31) để vẫn tách lớp.
 
+### Bài học từ flutter-tutor
+- **Logo:** khác Android, docs.flutter.dev/brand cho phép dùng logomark Flutter trong tài liệu đào tạo (video tutorial) nếu: đúng file chính thức **không chỉnh sửa** (không đổi màu, xoay, cắt, ghép, animate từng phần; chỉ scale/fade nguyên khối), **nhỏ và không phải thứ nổi bật nhất**, có khoảng trống quanh (≥ 1 chiều cao "F"), ™ cho chữ "Flutter" nổi bật đầu tiên, end card có đúng dòng "Flutter and the related logo are trademarks of Google LLC. We are not endorsed by or affiliated with Google LLC." **Không dùng Dash (mascot)**. File: `assets/brand/flutter/flutter_logomark.svg` (tải từ flutter.dev, sha256 trong README cạnh file), dùng qua `<Img src>` (SVG có class CSS, không inline).
+- Màu chính thức flutter.dev/brand: Navy #042B59, Blue #0553B1, Sky #027DFD (Sky là accent chính: chip caption, highlight, hero chip, nút). Màu phụ (Red #F25D50, Yellow #FFF275, Green #1CDAC5) chỉ cho cú pháp Dart. Nền #050A14, surface #081120 / #0A1424 / #0F1B30, viền #1A2B47.
+- Font flutter.dev: Google Sans Flex + **Google Sans Code** (OFL; instance tĩnh `gsc_md.ttf` 500, `gsc_bd.ttf` 700 cắt từ variable font google/fonts). GSC monospace 0.6 em nên tính được chính xác bề rộng chip.
+- Motion: implicit animation của Flutter = `Curves.fastOutSlowIn` `(.4,0,.2,1)`, ~300 ms, không overshoot (helper `ease(f,at,dur)` trong `flutter.tsx`). Không dùng spring nảy.
+- Chuyển cảnh **Hero** (`out: "hero"`): Flutter route mặc định (FadeForwards, Cupertino slide) quá giống sharedx của android-tutor, nên lấy Hero làm chữ ký: phần tử chung (chip từ khoá) bay theo cung nhẹ (lệch ~14% quãng đường theo phương vuông góc ở giữa), phần còn lại cross-fade. Overlay vẽ chip một lần (zIndex 10); cả 2 layer ẩn chip của mình trong cửa sổ (ctx `hx`). Hình học chip dùng chung một hàm (`heroBox`) cho scene và overlay để điểm đầu/cuối khớp từng pixel.
+- Mid-ground Flutter: chỉ các **dải song song cùng một hướng** (−36° ± 5°, trượt ±70 px, bo 6–75 px dao động), để không bao giờ ghép thành hình chữ F/chevron của logo.
+- SFX `hero_soft` (`scripts/sfx_soft.py hero`): 0.5 s, peak −22 dBFS, centroid ~220 Hz: gần như chỉ là hơi gió.
+- Card label + badge trong hộp hẹp (FAB) dễ đè nhau mà bbcheck không bắt (hộp lồng nhau không tính overlap): nhìn still phóng to các hộp lồng. Label của highlight code đặt **dưới** khung (không đè dòng dài), và chừa thêm padding nếu highlight ở dòng cuối (editor overflow hidden).
+
 ## Chống chồng lấn (BẮT BUỘC, mọi theme)
 - Mọi hộp nội dung (title, card, phone, nhãn, pill, hàng, note, brand, end card) gắn `{...bb('tên')}` (`data-bb`). Lớp scene có `data-layer`, caption + nút Follow là lớp `g`.
 - Chạy `scripts/bbcheck.sh videos/<slug>/script.json` sau mỗi lần đổi layout: render lại mọi frame với `debugBB` (`remotion/src/bbcheck.tsx` tô magenta phần giao nhau của 2 hộp cùng lớp, hoặc hộp scene × caption/CTA), in frame + cặp hộp bị chồng. Phải ra `frames with overlaps: 0`. Không tốn TTS.
@@ -79,7 +89,7 @@ Brand (wordmark, tên, handle, logo, chữ nút Follow) lấy từ `channels/<id
 - Tiêu đề dài trên cảnh nhiều nội dung: `one` (1 dòng, `fitSize`) để không đẩy layout xuống dải caption.
 
 ## Chuyển cảnh: mượt, không "ú òa"
-- Dan thấy chuyển cảnh **zoom-in/zoom-out / pop bằng shape phủ toàn khung** (cookie wipe cũ của android-tutor) giật, không đẹp. **Không dùng** kiểu này cho android-tutor (đã gỡ hẳn). Theme lấy cảm hứng từ một nền tảng thì dùng motion điều hướng thật của nền tảng đó: Android = Material **shared-axis X** (`out: "sharedx"`, sys.tsx): cảnh cũ lùi trái ~120 px + scale 0.96 + mờ trong 35% đầu, cảnh mới trượt từ phải + fade, easing emphasized-decelerate `(.05,.7,.1,1)`, ~470 ms, không overshoot.
+- Dan thấy chuyển cảnh **zoom-in/zoom-out / pop bằng shape phủ toàn khung** (cookie wipe cũ của android-tutor) giật, không đẹp. **Không dùng** kiểu này cho android-tutor (đã gỡ hẳn). Theme lấy cảm hứng từ một nền tảng thì dùng motion điều hướng thật của nền tảng đó: Flutter = **Hero** (`out: "hero"`, xem bài học flutter-tutor). Android = Material **shared-axis X** (`out: "sharedx"`, sys.tsx): cảnh cũ lùi trái ~120 px + scale 0.96 + mờ trong 35% đầu, cảnh mới trượt từ phải + fade, easing emphasized-decelerate `(.05,.7,.1,1)`, ~470 ms, không overshoot.
 - Đặt transition mặc định của theme bằng `look.defaultOut` (Timeline dùng khi scene không ghi `out`). End card vào bằng cùng kiểu (fade + trượt từ phải), không mọc shape.
 - Kiểm bằng strip frame qua một ranh giới (vd 10 frame từ −333 ms tới +333 ms) trước khi gửi Dan.
 

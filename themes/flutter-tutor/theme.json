@@ -1,0 +1,85 @@
+{
+ "look": {
+  "id": "flutter-tutor",
+  "label": "FLUTTER TUTOR",
+  "subtitle": "flutter dev · layered blue + hero",
+  "bg": "#050A14",
+  "ink": "#EEF3FA",
+  "onAccent": "#FFFFFF",
+  "accent": "#027DFD",
+  "accent2": "#54C5F8",
+  "muted": "#8FA3BF",
+  "head": "GSF",
+  "body": "GSF",
+  "upper": false,
+  "step": 1,
+  "video": "clean",
+  "entry": "rise",
+  "rule": "#1A2B47",
+  "pal": {
+   "card": "#0A1424",
+   "card2": "#0F1B30",
+   "panel": "#081120",
+   "line": "#1A2B47",
+   "dim": "#8FA3BF",
+   "navy": "#042B59",
+   "blue": "#0553B1",
+   "sky": "#027DFD"
+  },
+  "sfx": {
+   "trans": "hero_soft",
+   "stamp": "select_003",
+   "tick": "tick_002",
+   "entry": "tick_002"
+  },
+  "trans": [
+   "hero"
+  ],
+  "caption": {
+   "font": "GSF",
+   "size": 48,
+   "upper": false,
+   "weight": 800,
+   "chipBg": "rgba(15,27,48,.96)",
+   "chipText": "#EEF3FA",
+   "upcomingText": "rgba(238,243,250,.56)",
+   "activeBg": "#027DFD",
+   "activeText": "#FFFFFF",
+   "radius": 18,
+   "pop": 1.06
+  },
+  "defaultOut": "hero"
+ },
+ "tail_hold": 40,
+ "cta": {
+  "top": 1150,
+  "in_offset": -6,
+  "sub": "BẬT CHUÔNG ĐỂ HỌC FLUTTER MỖI NGÀY"
+ },
+ "outro": {
+  "dur": 90,
+  "tagline": "Flutter mỗi ngày"
+ },
+ "voice": {
+  "voice": "vi-vn-concierge-2",
+  "model": "gemini-3.8-flash-tts",
+  "styles": {
+   "hao-hung": "hào hứng, tràn đầy năng lượng, nhịp nhanh như dẫn bản tin drama công nghệ nóng hổi",
+   "ke-chuyen": "kể chuyện kịch tính, hồi hộp, có ngắt nghỉ tạo căng thẳng",
+   "tu-nhien": "tự nhiên, thoải mái như đang nói chuyện với bạn bè, phong cách YouTuber"
+  }
+ },
+ "music": {
+  "pool": [
+   {
+    "id": "sappheiros-perspective",
+    "start": 0
+   },
+   {
+    "id": "alexi-action-ghost",
+    "start": 0
+   }
+  ],
+  "rel": -10
+ }
+}

@@ -1,0 +1,241 @@
+{
+ "theme": "flutter-tutor",
+ "title": "setState vs ValueNotifier trong Flutter",
+ "topic": [
+  "setState",
+  "ValueNotifier",
+  "Flutter"
+ ],
+ "date": "17 · 10 · 2026",
+ "caption": "setState vs ValueNotifier trong Flutter: setState build lại State đó cùng mọi widget con, nên đặt càng sâu trong cây càng tốt. ValueNotifier + ValueListenableBuilder chỉ build lại phần đang lắng nghe. Lưu ý: ValueNotifier chỉ báo khi gán giá trị mới (==), sửa List tại chỗ thì không. #DanTech #Flutter #Dart",
+ "sources": [
+  "Flutter docs, Performance best practices (setState rebuilds all descendant widgets; localize setState; đọc ngày 17/10/2026): https://docs.flutter.dev/perf/best-practices",
+  "Flutter API, ValueNotifier class (notifies when value is replaced with something not equal; in-place mutation does not notify; đọc ngày 17/10/2026): https://api.flutter.dev/flutter/foundation/ValueNotifier-class.html",
+  "Flutter API, ValueListenableBuilder class (rebuilds builder when value changes; child is pre-built; đọc ngày 17/10/2026): https://api.flutter.dev/flutter/widgets/ValueListenableBuilder-class.html"
+ ],
+ "voice": {
+  "style": "random"
+ },
+ "music": {
+  "track": "random"
+ },
+ "hook": {
+  "kind": "explainer",
+  "claim": "setState vs ValueNotifier: khác nhau ở số widget phải build lại",
+  "why": "đặt setState sai chỗ, đổi một con số là cả màn hình build lại"
+ },
+ "scenes": [
+  {
+   "say": "setState và ValueNotifier trong Flutter: khác ở số widget build lại. Đặt setState sai chỗ, đổi một con số là cả màn hình build lại.",
+   "type": "FlHook",
+   "section": "counter_page.dart",
+   "out": "hero",
+   "props": {
+    "hero": "setState",
+    "tag": "Flutter™ · State",
+    "vs": "ValueNotifier",
+    "line": "Khác ở số widget build lại.",
+    "why": {
+     "s": "Đặt sai chỗ: đổi một số, cả màn hình build lại.",
+     "at": "@sai"
+    },
+    "lit": "@đổi"
+   }
+  },
+  {
+   "say": "Gọi setState là Flutter build lại State đó cùng mọi widget con. Đặt ở cấp màn hình thì mỗi lần bấm, cả AppBar lẫn danh sách đều build lại.",
+   "type": "FlTree",
+   "section": "counter_page.dart",
+   "out": "hero",
+   "props": {
+    "hero": "setState",
+    "title": "setState ở cấp màn hình",
+    "mode": "setState",
+    "taps": [
+     "@bấm",
+     "@danh"
+    ],
+    "readout": {
+     "k": "widget build lại mỗi lần bấm",
+     "at": "@bấm"
+    },
+    "note": {
+     "s": "Minh hoạ: State nằm ở Scaffold, nên cả cây con build lại.",
+     "at": "@lẫn"
+    }
+   }
+  },
+  {
+   "say": "ValueNotifier giữ một giá trị và chỉ báo cho ai đang lắng nghe khi giá trị đổi. Bọc riêng cái Text hiển thị số trong ValueListenableBuilder.",
+   "type": "FlCode",
+   "section": "counter_page.dart",
+   "out": "hero",
+   "props": {
+    "hero": "ValueNotifier",
+    "title": "Chỉ bọc phần cần đổi",
+    "file": "counter_page.dart",
+    "lines": [
+     {
+      "s": "final count = ValueNotifier<int>(0);",
+      "at": 2
+     },
+     {
+      "s": "ValueListenableBuilder<int>(",
+      "at": "@Bọc"
+     },
+     {
+      "s": "  valueListenable: count,",
+      "at": "@Bọc+4"
+     },
+     {
+      "s": "  builder: (context, value, child) {",
+      "at": "@Text"
+     },
+     {
+      "s": "    return Text('Đã bấm $value');",
+      "at": "@hiển"
+     },
+     {
+      "s": "  },",
+      "at": "@số"
+     },
+     {
+      "s": ")",
+      "at": "@số+3"
+     },
+     {
+      "s": "",
+      "at": "@số"
+     },
+     {
+      "s": "onPressed: () => count.value += 1,",
+      "at": "@ValueListenableBuilder"
+     }
+    ],
+    "hl": {
+     "from": 1,
+     "to": 6,
+     "at": "@ValueListenableBuilder",
+     "label": "chỉ phần này build lại"
+    },
+    "note": {
+     "s": "count.value đổi → chỉ builder chạy lại.",
+     "at": "@lắng"
+    }
+   }
+  },
+  {
+   "say": "Giờ bấm nút, chỉ builder đó chạy lại, phần còn lại đứng yên.",
+   "type": "FlTree",
+   "section": "counter_page.dart",
+   "out": "hero",
+   "props": {
+    "hero": "ValueNotifier",
+    "title": "ValueListenableBuilder",
+    "mode": "notifier",
+    "taps": [
+     "@bấm",
+     "@chạy"
+    ],
+    "readout": {
+     "k": "widget build lại mỗi lần bấm",
+     "at": "@bấm"
+    }
+   }
+  },
+  {
+   "say": "Trong ví dụ này, setState build lại bảy widget, còn ValueNotifier chỉ một.",
+   "type": "FlStat",
+   "section": "counter_page.dart",
+   "out": "hero",
+   "props": {
+    "hero": "build()",
+    "title": "Mỗi lần bấm nút",
+    "a": {
+     "k": "setState",
+     "v": 7,
+     "unit": "widget build lại",
+     "at": "@setState"
+    },
+    "b": {
+     "k": "ValueNotifier",
+     "v": 1,
+     "unit": "widget build lại",
+     "at": "@ValueNotifier"
+    },
+    "note": {
+     "s": "Số liệu của cây minh hoạ ở trên.",
+     "at": "@bảy"
+    }
+   }
+  },
+  {
+   "say": "Có một bẫy nhỏ: ValueNotifier chỉ báo khi bạn gán giá trị mới. Sửa thẳng phần tử trong List thì không ai được báo, hãy gán một List mới.",
+   "type": "FlCode",
+   "section": "cart.dart",
+   "out": "hero",
+   "props": {
+    "hero": "ValueNotifier",
+    "title": "Bẫy: sửa List tại chỗ",
+    "file": "cart.dart",
+    "lines": [
+     {
+      "s": "final items = ValueNotifier<List<int>>([]);",
+      "at": 2
+     },
+     {
+      "s": "// sửa tại chỗ: không báo ai",
+      "at": "@Sửa"
+     },
+     {
+      "s": "items.value.add(1);",
+      "at": "@List"
+     },
+     {
+      "s": "// gán List mới: listener chạy",
+      "at": "@hãy"
+     },
+     {
+      "s": "items.value = [...items.value, 1];",
+      "at": "@gán#2"
+     }
+    ],
+    "hl": {
+     "from": 3,
+     "to": 4,
+     "at": "@gán#2+4",
+     "label": "listener chạy"
+    },
+    "note": {
+     "s": "ValueNotifier so sánh bằng ==, nên hợp với dữ liệu bất biến.",
+     "at": "@mới#2"
+    }
+   }
+  },
+  {
+   "say": "State chỉ một chỗ dùng thì setState, đặt càng sâu càng tốt. Vài widget lẻ cần nghe một giá trị thì ValueNotifier. Follow Dan Tech để học Flutter mỗi ngày nhé!",
+   "type": "FlTake",
+   "section": "counter_page.dart",
+   "props": {
+    "hero": "setState",
+    "title": "Chọn cái nào",
+    "rows": [
+     {
+      "k": "State chỉ một chỗ dùng",
+      "v": "setState",
+      "at": "@setState"
+     },
+     {
+      "k": "Vài widget lẻ cần nghe",
+      "v": "ValueNotifier",
+      "at": "@ValueNotifier"
+     }
+    ],
+    "rule": {
+     "s": "Gọi setState càng sâu trong cây càng tốt.",
+     "at": "@sâu"
+    }
+   }
+  }
+ ]
+}

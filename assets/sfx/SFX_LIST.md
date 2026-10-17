@@ -23,6 +23,7 @@ Kenney packs: CC0 1.0 (the License.txt in each pack says Creative Commons Zero),
 | whoosh_soft.wav | MẸO code reflow | own | synthesised with ffmpeg | own work |
 | outro_sting.wav | end card sting | own | synthesised with ffmpeg | own work |
 | slide_soft.wav | ANDROID TUTOR transitions (shared-axis X slide): barely audible low-passed air, 0.45 s, raised-cosine fade, peak at 0.17 s (fastest part of the slide), peak -20 dBFS | own | `scripts/sfx_soft.py` (numpy) | own work |
+| hero_soft.wav | FLUTTER TUTOR transitions (Hero flight + cross-fade): barely audible low-passed air, 0.5 s, raised-cosine fade, peak at 0.24 s (fastest part of the fastOutSlowIn flight), peak -22 dBFS | own | `scripts/sfx_soft.py hero` (numpy) | own work |
 | morph_soft.wav | spare (old android-tutor cookie transition, removed): soft air 0.72 s, peak -12 dBFS | own | `scripts/sfx_soft.py morph` | own work |
 
 More candidates (33 sounds, preview reel) were auditioned in /workspace/dantech-sfx; not part of this repo.
