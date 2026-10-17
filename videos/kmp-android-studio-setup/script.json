@@ -24,12 +24,35 @@
  },
  "scenes": [
   {
-   "say": "Setup cho Kotlin Multiplatform cần Android Studio, JDK và chỗ chạy app. Chạy Android thì máy nào cũng được, còn build cho iOS thì Apple bắt buộc một máy Mac.",
+   "say": "Setup cho Kotlin Multiplatform cần Android Studio, JDK và chỗ chạy app.",
+   "type": "AtSteps",
+   "section": "Setup",
+   "out": "sharedx",
+   "props": {
+    "title": "Setup cho Kotlin Multiplatform",
+    "steps": [
+     {
+      "s": "Android Studio",
+      "at": "@Studio"
+     },
+     {
+      "s": "JDK 17 trở lên",
+      "at": "@JDK"
+     },
+     {
+      "s": "Một chỗ chạy app",
+      "at": "@chạy"
+     }
+    ]
+   }
+  },
+  {
+   "say": "Chạy Android thì máy nào cũng được, còn build cho iOS thì Apple bắt buộc một máy Mac.",
    "type": "AtHook",
    "section": "Setup",
    "out": "sharedx",
    "props": {
-    "tag": "Android™ · Kotlin Multiplatform",
+    "tag": "Chạy được ở đâu",
     "a": "Android",
     "b": "iOS",
     "line": "Setup đúng một lần là đủ.",

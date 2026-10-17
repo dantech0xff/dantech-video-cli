@@ -62,9 +62,9 @@ export const AtHook:React.FC<{tag:string;a:string;b:string;line:string;why?:{s:s
  const rob=m3(f,4,'slow'),ck=m3(f,0,'slow');const w=why?m3(f,why.at,'def'):0;
  return <div style={{position:'relative',height:1320}}>
   <span {...bb('tag')}><Pill size={30}><svg width={30} height={30} viewBox="0 0 40 40"><path d={cookiePath(20,20,16,.12,9)} fill={AT.onPrim}/></svg>{tag}</Pill></span>
-  <div {...bb('a')} style={{display:'inline-block',marginTop:44,fontFamily:MONO,fontWeight:700,fontSize:fitSize(a,860,116,.6),color:AT.green,whiteSpace:'nowrap',lineHeight:1.1}}>{a}</div>
+  <div {...bb('a')} style={{marginTop:44,fontFamily:MONO,fontWeight:700,fontSize:fitSize(a,860,116,.6),color:AT.green,whiteSpace:'nowrap',lineHeight:1.1}}>{a}</div>
   <div><span {...bb('vs')} style={{fontFamily:SANS,fontWeight:800,fontSize:70,color:AT.dim,lineHeight:1.1,margin:'6px 0',display:'inline-block'}}>vs</span></div>
-  <div {...bb('b')} style={{display:'inline-block',fontFamily:MONO,fontWeight:700,fontSize:fitSize(b,880,116,.6),color:AT.ink,whiteSpace:'nowrap',lineHeight:1.1}}>{b}</div>
+  <div {...bb('b')} style={{fontFamily:MONO,fontWeight:700,fontSize:fitSize(b,880,116,.6),color:AT.ink,whiteSpace:'nowrap',lineHeight:1.1}}>{b}</div>
   <div {...bb('line')} style={{marginTop:40,fontFamily:SANS,fontWeight:800,fontSize:86,lineHeight:1.12,color:AT.ink,letterSpacing:-1,maxWidth:880}}>{line}</div>
   {why&&<div {...bb('why')} style={{marginTop:40,display:'flex',gap:18,alignItems:'center',opacity:Math.min(1,m3(f,why.at,'fx')),transform:`translateX(${(1-w)*-60}px)`}}>
    <span style={{width:14,height:56,borderRadius:7,background:AT.green,flex:'none'}}/><span style={{fontFamily:SANS,fontWeight:500,fontSize:52,color:AT.ink,lineHeight:1.25}}>{why.s}</span></div>}

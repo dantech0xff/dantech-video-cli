@@ -129,6 +129,7 @@ Video chỉ "xong" khi tất cả đều ✅:
 - Mở bằng câu dẫn dắt vòng vo. Đặt vấn đề 4 cảnh trong khi lõi chỉ nửa video. Kể lại mọi ví dụ trong bài học.
 - Viết kiểu ghi chú, thiếu từ nối, thuật ngữ không định nghĩa (ioc_v1 bị chê "thiếu chữ").
 - Đi theo thứ tự bài học thay vì theo chủ đề. Bịa code minh hoạ không có trong nguồn.
+- Lời nói liệt kê nhiều mục nhưng màn hình chỉ có một hình tĩnh không liên quan (vd hook "A vs B" đứng yên suốt câu "cần X, Y và Z"). Mỗi câu say cần visual tương ứng; tách cảnh ở ranh giới câu hoặc đổi scene type liệt kê được (`AtSteps`/`Checklist`/`BpSpec`). Cảnh báo nhịp hình của validator phải xử lý hoặc giải thích trong báo cáo, không bỏ qua.
 - Gọi lại TTS cho vừa độ dài, hoặc "test thử" TTS, làm hết quota ngày. Retry khi 429.
 - In tên theme, "tech explain", "FIG. 01"… lên khung hình.
 - Để chữ, caption hay nút Follow dưới y 1500 hoặc sát mép phải (bị nút like/comment che).
