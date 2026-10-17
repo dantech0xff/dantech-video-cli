@@ -1,7 +1,8 @@
 #!/bin/bash
 # Dan Tech video tool.
 #   ./dt render videos/<slug>/script.json   full pipeline: TTS → align → props → Remotion → mix → description
-#   ./dt render <script> --from render      resume from a step (tts|align|props|render|mix|describe)
+#   ./dt render <script> --from render      resume from a step (tts|align|props|render|gate|mix|describe)
+#   ./dt gate <script>                      static-screen gate only (needs out/props.json; low-res re-render, no TTS)
 #   ./dt render <script> --new-voice        force a fresh TTS take (otherwise unchanged narration reuses .cache/tts)
 #   ./dt render <script> --tts edge         free Edge TTS (no key); --tts gemini forces Gemini. Default: key -> Gemini, no key -> Edge
 #     Edge options: --voice vi-VN-HoaiMyNeural --rate +10% --pitch +0Hz --volume +0%   (or script.json "tts": {...})
@@ -18,6 +19,7 @@ cmd=$1; shift || true
 case "$cmd" in
  fetch-music) python3 scripts/fetch_music.py ;;
  doctor) exec scripts/doctor.sh ;;
+ gate) exec python3 scripts/static_gate.py "$@" ;;
  setup) exec scripts/setup.sh ;;
  render)
   SCRIPT=$1; shift || true; FROM=tts; TTS_ARGS=()
@@ -31,7 +33,7 @@ case "$cmd" in
   [ -f "$SCRIPT" ] || { echo "script not found: $SCRIPT"; exit 1; }
   DIR=$(dirname "$SCRIPT"); OUT=$DIR/out; SLUG=$(basename "$DIR"); mkdir -p "$OUT"
   THEME=$(cd scripts && python3 -c "import json,sys;from common import theme_id;print(theme_id(json.load(open('$ROOT/$SCRIPT'))['theme']))")
-  steps=(tts align props render mix describe); run=0
+  steps=(tts align props render gate mix describe); run=0
   for s in "${steps[@]}"; do [ "$s" = "$FROM" ] && run=1; [ $run = 1 ] || continue; echo "── $s"
    case $s in
     tts)    python3 scripts/tts.py "$SCRIPT" ${TTS_ARGS[@]+"${TTS_ARGS[@]}"} ;;
@@ -39,6 +41,7 @@ case "$cmd" in
     props)  python3 scripts/build_props.py "$SCRIPT" ;;
     render) (cd remotion && npx remotion render src/index.ts "$THEME" "$ROOT/$OUT/raw.mp4" --props="$ROOT/$OUT/props.json" --log=error)
             scripts/loudnorm.sh "$OUT/raw.mp4" "$OUT/voice_sfx.mp4" ;;
+    gate)   python3 scripts/static_gate.py "$SCRIPT" || { echo "✗ static-screen gate failed: no final mp4 exported (details: $OUT/gate.json)"; exit 1; } ;;
     mix)    python3 scripts/pick_music.py "$SCRIPT"
             eval "$(python3 -c "import json;m=json.load(open('$OUT/music.json'));p=json.load(open('$OUT/props.json'));print(f\"MF='{m['file']}';MS={m['start']};REL={m['rel']};FS={p['outro']['start']/30:.2f}\")")"
             REL=$REL FS=$FS scripts/mix_bgm.sh "$OUT/voice_sfx.mp4" "$MF" "$MS" "$OUT/$SLUG.mp4" "$OUT/stems"
@@ -47,5 +50,5 @@ case "$cmd" in
     describe) python3 scripts/describe.py "$SCRIPT" ;;
    esac; done
   echo "✓ $OUT/$SLUG.mp4" ;;
- *) sed -n 2,11p "$0"; exit 1 ;;
+ *) sed -n 2,12p "$0"; exit 1 ;;
 esac
