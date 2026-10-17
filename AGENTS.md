@@ -47,7 +47,7 @@ Ví dụ đi từ đầu đến cuối: [docs/WALKTHROUGH.md](docs/WALKTHROUGH.m
 | `quick-tips` | mẹo, tool, tutorial, listicle | `videos/android-studio-shortcuts` |
 | `tech-explain` | dev explainer (editor sáng/vàng) | `videos/git-merge-vs-rebase`, `videos/inversion-of-control` |
 | `tech-explain-cyber` | dev explainer (blueprint tối, lime) | `videos/flutter-mvvm` |
-| `android-tutor` | chỉ cho dev Android: Kotlin/Compose/lifecycle (IDE gần đen #0B0C0E + Compose Preview + Logcat, đúng xanh Android #3DDC84, chuyển cảnh `cookie`, hình mid-ground morph chậm) 🧪 | `videos/compose-remember-saveable` |
+| `android-tutor` | chỉ cho dev Android: Kotlin/Compose/lifecycle (IDE gần đen #0B0C0E + Compose Preview + Logcat, đúng xanh Android #3DDC84, chuyển cảnh `sharedx` (shared-axis X), hình mid-ground morph chậm) 🧪 | `videos/compose-remember-saveable` |
 
 Script mới dùng `"voice": {"style":"random"}`. Không đặt `voice.file`. Câu cuối có `ctaPhrase` của kênh (mặc định "follow Dan Tech"). Outro tự lo handle.
 

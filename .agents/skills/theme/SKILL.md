@@ -78,8 +78,13 @@ Brand (wordmark, tên, handle, logo, chữ nút Follow) lấy từ `channels/<id
 - Vật thể xoay/biến hình (vd phone xoay ngang) phải có **slot vuông ≥ đường chéo** của nó, để mọi góc xoay không chạm hộp khác. Đừng đặt cột chữ cạnh vật thể theo kích thước lúc đứng yên.
 - Tiêu đề dài trên cảnh nhiều nội dung: `one` (1 dòng, `fitSize`) để không đẩy layout xuống dải caption.
 
+## Chuyển cảnh: mượt, không "ú òa"
+- Dan thấy chuyển cảnh **zoom-in/zoom-out / pop bằng shape phủ toàn khung** (cookie wipe cũ của android-tutor) giật, không đẹp. **Không dùng** kiểu này cho android-tutor (đã gỡ hẳn). Theme lấy cảm hứng từ một nền tảng thì dùng motion điều hướng thật của nền tảng đó: Android = Material **shared-axis X** (`out: "sharedx"`, sys.tsx): cảnh cũ lùi trái ~120 px + scale 0.96 + mờ trong 35% đầu, cảnh mới trượt từ phải + fade, easing emphasized-decelerate `(.05,.7,.1,1)`, ~470 ms, không overshoot.
+- Đặt transition mặc định của theme bằng `look.defaultOut` (Timeline dùng khi scene không ghi `out`). End card vào bằng cùng kiểu (fade + trượt từ phải), không mọc shape.
+- Kiểm bằng strip frame qua một ranh giới (vd 10 frame từ −333 ms tới +333 ms) trước khi gửi Dan.
+
 ## SFX chuyển cảnh
-- Mềm, ngắn, nhỏ: low-pass (năng lượng > 4 kHz < ~0.5%, centroid vài trăm Hz), fade vào/ra raised-cosine, mẫu đầu/cuối = 0 (không click), peak ≤ -12 dBFS trong file (Timeline còn phát 0.5). Đỉnh tiếng phải trùng khoảnh khắc chuyển (sfx bắt đầu ở `start - T/2 - 2` = 10 frame trước ranh giới → đỉnh ở 0.333 s). Mẫu: `scripts/sfx_morph_soft.py` → `assets/sfx/morph_soft.wav` (in số đo khi chạy). Ghi vào `SFX_LIST.md` + `sfx.json`.
+- Mềm, ngắn, nhỏ: low-pass (năng lượng > 4 kHz < ~0.5%, centroid vài trăm Hz), fade vào/ra raised-cosine, mẫu đầu/cuối = 0 (không click), peak ≤ -12 dBFS trong file (Timeline còn phát 0.5). Đỉnh tiếng phải trùng lúc chuyển động mạnh nhất (sfx bắt đầu ở `start - T/2 - 2` = 10 frame trước ranh giới; cửa sổ chuyển cảnh bắt đầu sau 0.067 s). Mẫu: `scripts/sfx_soft.py` → `assets/sfx/slide_soft.wav` (slide: 0.45 s, peak -20 dBFS, gần như không nghe, đỉnh ở 0.17 s = đoạn trượt nhanh nhất; `morph` → `morph_soft.wav` dự phòng). Script in số đo khi chạy. Chuyển cảnh nhẹ thì SFX phải nhẹ tương ứng. Ghi vào `SFX_LIST.md` + `sfx.json`.
 
 ## Hình mid-ground
 - Theme có thể có 2–3 hình trang trí giữa nền và nội dung, biến đổi **chậm và liên tục** theo frame toàn cục (không nhảy khi đổi cảnh): xoay ~6°/s, số cánh/cạnh morph liên tục (crossfade giữa n và n+1), độ bo tròn dao động chu kỳ 10–30 s. Alpha thấp (fill ≤ 0.08, stroke ≤ 0.16), không gắn `data-bb`, không đặt dưới chữ chính với độ tương phản cao. Mẫu: `MidShapes` / `morphPath` trong `android.tsx`.
