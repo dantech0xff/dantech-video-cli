@@ -63,7 +63,7 @@
    }
   },
   {
-   "say": "Trước hết là JDK. Gradle với Kotlin cần bản mười bảy trở lên, nên gõ java -version để kiểm. Thấy số từ mười bảy là đủ; còn nhỏ hơn, hoặc báo không có lệnh, thì cài Temurin JDK hai mốt — miễn phí, không cần tài khoản.",
+   "say": "Trước hết là JDK. Gradle với Kotlin cần bản mười bảy trở lên, nên gõ java -version để kiểm.",
    "type": "AtCode",
    "section": "Terminal",
    "out": "sharedx",
@@ -72,24 +72,59 @@
     "file": "Terminal",
     "lines": [
      {
+      "s": "// kiểm tra JDK trong máy",
+      "at": "@JDK"
+     },
+     {
       "s": "$ java -version",
       "at": "@gõ"
      },
      {
       "s": "openjdk version \"21.0.5\"",
-      "at": "@kiểm"
+      "at": "@java"
      }
     ],
     "hl": {
-     "from": 1,
-     "to": 1,
-     "at": "@đủ"
-    },
-    "note": {
-     "s": "AGP 9.0.1 từ chối chạy trên JDK cũ hơn 17.",
-     "at": "@Temurin"
+     "from": 2,
+     "to": 2,
+     "at": "@java"
     }
    }
+  },
+  {
+   "say": "Thấy số từ mười bảy là đủ; còn nhỏ hơn, hoặc báo không có lệnh, thì cài Temurin JDK hai mốt — miễn phí, không cần tài khoản.",
+   "type": "AtSteps",
+   "section": "JDK",
+   "out": "sharedx",
+   "props": {
+    "title": "Nếu chưa đủ JDK 17",
+    "steps": [
+     {
+      "s": "Từ 17 trở lên → xong",
+      "at": "@mười",
+      "ok": "@đủ"
+     },
+     {
+      "s": "Nhỏ hơn, hoặc báo không có lệnh",
+      "at": "@nhỏ"
+     },
+     {
+      "s": "Cài Temurin JDK 21",
+      "at": "@Temurin"
+     }
+    ],
+    "note": {
+     "s": "Miễn phí, không cần tài khoản.",
+     "at": "@miễn"
+    }
+   },
+   "sfx": [
+    {
+     "s": "tick_002",
+     "at": "@đủ",
+     "v": 0.4
+    }
+   ]
   },
   {
    "say": "Cài Android Studio bản stable mới nhất, đừng lấy bản Canary hay Beta. Rồi mở SDK Manager, tick Android SDK Platform ba mươi sáu, vì compileSdk của mọi project trong khóa là ba mươi sáu. App chạy được từ Android 7.0 vì minSdk là hai tư. Và cài plugin Kotlin Multiplatform để có nút chạy iOS ngay trong IDE.",
@@ -129,27 +164,59 @@
    }
   },
   {
-   "say": "Giờ cần một nơi để chạy app. Điện thoại Android thật bật USB debugging là ngon nhất, không thì tạo một emulator Pixel. Trên Mac thì cài thêm Xcode cho phần iOS. Xong thì đừng đoán máy đã sẵn sàng chưa — chạy adb devices, hoặc kdoctor trên macOS, để kiểm chắc chắn.",
+   "say": "Giờ cần một nơi để chạy app. Điện thoại Android thật bật USB debugging là ngon nhất, không thì tạo một emulator Pixel. Trên Mac thì cài thêm Xcode cho phần iOS.",
    "type": "AtSteps",
    "section": "Chạy app",
    "out": "sharedx",
    "props": {
-    "title": "Nơi chạy, cách kiểm tra",
+    "title": "Nơi chạy app",
     "steps": [
      {
       "s": "Máy Android thật: bật USB debugging",
-      "at": "@Điện",
-      "ok": "@adb"
+      "at": "@Điện"
      },
      {
       "s": "Hoặc một emulator Pixel",
-      "at": "@emulator",
-      "ok": "@devices"
+      "at": "@emulator"
      },
      {
       "s": "Xcode cho phần iOS — chỉ trên Mac",
-      "at": "@Xcode",
-      "ok": "@kdoctor"
+      "at": "@Xcode"
+     }
+    ]
+   }
+  },
+  {
+   "say": "Xong thì đừng đoán máy đã sẵn sàng chưa — chạy adb devices, hoặc kdoctor trên macOS, để kiểm chắc chắn.",
+   "type": "AtLogcat",
+   "section": "Kiểm tra",
+   "out": "sharedx",
+   "props": {
+    "title": "Kiểm máy trước khi chạy",
+    "lines": [
+     {
+      "lvl": "W",
+      "tag": "check",
+      "msg": "máy đã sẵn sàng chưa?",
+      "at": "@máy"
+     },
+     {
+      "lvl": "D",
+      "tag": "shell",
+      "msg": "$ adb devices",
+      "at": "@adb"
+     },
+     {
+      "lvl": "I",
+      "tag": "adb",
+      "msg": "emulator-5554  device",
+      "at": "@devices"
+     },
+     {
+      "lvl": "I",
+      "tag": "kdoctor",
+      "msg": "✓ Android toolchain · ✓ Xcode",
+      "at": "@kdoctor"
      }
     ],
     "note": {
@@ -160,7 +227,7 @@
    "sfx": [
     {
      "s": "tick_001",
-     "at": "@adb",
+     "at": "@devices",
      "v": 0.4
     },
     {
