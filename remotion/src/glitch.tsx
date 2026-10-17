@@ -1,7 +1,7 @@
 import {useBrand,fitSize} from './brand';
 // hot-news-glitch (TIN NÓNG GLITCH): dark breaking-news with tasteful signal glitches on hits only.
 // Directions via look.dir: 'signal' (broadcast break), 'vhs' (tape tracking), 'teletext' (block text).
-import React from 'react';import {AbsoluteFill,interpolate,Easing} from 'remotion';import {useS} from './sys';
+import React from 'react';import {AbsoluteFill,interpolate,Easing} from 'remotion';import {useS} from './sys';import {SZ} from './safezone';
 const cl={extrapolateLeft:'clamp',extrapolateRight:'clamp'} as const;const EO=Easing.bezier(.22,.61,.36,1);
 const rnd=(n:number)=>{const x=Math.sin(n*127.1+311.7)*43758.5453;return x-Math.floor(x)};
 const pr=(f:number,a:number,d=16)=>interpolate(f,[a,a+d],[0,1],{...cl,easing:EO});
@@ -13,9 +13,9 @@ const BLK='█▓▒░';const corrupt=(s:string,g:number,seed:number)=>g<=0?s:s
 export const GlChrome:React.FC<{date:string}>=({date})=>{const {t}=useS();const B=useBrand();const d=(t as any).dir;return <>
  {d!=='teletext'&&<AbsoluteFill style={{backgroundImage:`repeating-linear-gradient(0deg, rgba(0,0,0,${d==='vhs'?.22:.16}) 0 2px, transparent 2px 4px)`,zIndex:20,pointerEvents:'none'}}/>}
  <AbsoluteFill style={{background:'radial-gradient(130% 90% at 50% 40%, transparent 60%, rgba(0,0,0,.55) 100%)',zIndex:19,pointerEvents:'none'}}/>
- <div style={{position:'absolute',left:80,right:80,top:84,display:'flex',justifyContent:'space-between',alignItems:'baseline',paddingBottom:22,borderBottom:`2px solid ${d==='teletext'?t.accent:'#333'}`}}>
-  <div style={{fontFamily:'BVPX',fontSize:fitSize(B.wordmark,520,50,.66,1),lineHeight:1,color:'#F2F2F2',letterSpacing:1,whiteSpace:'nowrap'}}>{B.wordmark}<span style={{color:t.accent}}>{d==='teletext'?'':'.'}</span></div>
-  <div style={{fontFamily:'JBM',fontSize:28,lineHeight:1,color:'#9A9A9A'}}>{date}</div></div></>};
+ <div style={{position:'absolute',left:SZ.chrome.x,right:SZ.chrome.right,top:SZ.chrome.top+4,display:'flex',justifyContent:'space-between',alignItems:'baseline',paddingBottom:20,borderBottom:`2px solid ${d==='teletext'?t.accent:'#333'}`}}>
+  <div style={{fontFamily:'BVPX',fontSize:fitSize(B.wordmark,480,48,.66,1),lineHeight:1,color:'#F2F2F2',letterSpacing:1,whiteSpace:'nowrap'}}>{B.wordmark}<span style={{color:t.accent}}>{d==='teletext'?'':'.'}</span></div>
+  <div style={{fontFamily:'JBM',fontSize:24,lineHeight:1,color:'#9A9A9A',whiteSpace:'nowrap'}}>{date}</div></div></>};
 
 const Block:React.FC<{p:any;d:string;g:number;f:number;tint?:string}>=({p,d,g,f,tint})=>{const {t}=useS();const F=FONT[d];const A0=t.accent,ON0=(t as any).onAccent;const A=tint?'transparent':A0,ON=tint??ON0;
  const head=(s:string,k:number):React.CSSProperties=>({fontFamily:F.head,fontSize:F.size,lineHeight:d==='signal'?.98:1.08,color:tint??'#F4F4F4',textTransform:'uppercase',letterSpacing:d==='teletext'?-2:d==='vhs'?-3:0,fontWeight:d==='teletext'?800:400,whiteSpace:'nowrap'});

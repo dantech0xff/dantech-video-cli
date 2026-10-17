@@ -133,13 +133,13 @@ export const AtTake:React.FC<{title:string;head?:[string,string];rows:{k:string;
 /* chrome: brand + page (baseline), editor tab strip, decorative gutter, faint cookie */
 export const AtChrome:React.FC<{section:string;page:string}>=({section,page})=>{const {f}=useS();const B=useBrand();return <>
  <MidShapes/>
- <div {...bb('brand')} style={{position:'absolute',left:136,right:50,top:84,display:'flex',justifyContent:'space-between',alignItems:'baseline'}}>
-  <div style={{display:'flex',alignItems:'baseline',gap:16}}><span style={{alignSelf:'center'}}><Robot s={58}/></span><span style={{fontFamily:SANS,fontWeight:800,fontSize:fitSize(B.wordmark,520,48,.68),lineHeight:1,color:AT.ink,letterSpacing:1,whiteSpace:'nowrap'}}>{B.wordmark}</span></div>
-  <span style={{...lbl(26),lineHeight:1}}>{page}</span></div>
- <div {...bb('tabs')} style={{position:'absolute',left:136,right:50,top:168,height:56,display:'flex',alignItems:'flex-end',gap:30,borderBottom:`1.5px solid ${AT.line}`}}>
+ <div {...bb('brand')} style={{position:'absolute',left:SZ.chrome.x,right:SZ.chrome.right,top:SZ.chrome.top,display:'flex',justifyContent:'space-between',alignItems:'baseline'}}>
+  <div style={{display:'flex',alignItems:'baseline',gap:14}}><span style={{alignSelf:'center'}}><Robot s={48}/></span><span style={{fontFamily:SANS,fontWeight:800,fontSize:fitSize(B.wordmark,460,42,.68),lineHeight:1,color:AT.ink,letterSpacing:1,whiteSpace:'nowrap'}}>{B.wordmark}</span></div>
+  <span style={{...lbl(24),lineHeight:1}}>{page}</span></div>
+ <div {...bb('tabs')} style={{position:'absolute',left:SZ.chrome.x,right:SZ.chrome.right,top:SZ.chrome.top+56,height:48,display:'flex',alignItems:'flex-end',gap:30,borderBottom:`1.5px solid ${AT.line}`}}>
   <span style={{...lbl(24,AT.ink),padding:'0 4px 12px',borderBottom:`3px solid ${AT.blue}`,whiteSpace:'nowrap'}}>{section}</span>
   <span style={{flex:1}}/><span style={{...lbl(22,AT.str),paddingBottom:14}}>▶ app</span></div>
- <div style={{position:'absolute',left:30,top:300,width:56}}>{Array.from({length:24},(_,k)=><div key={k} style={{height:50,textAlign:'right',...lbl(20,k%5===4?'#4A4D53':'#2C2E33')}}>{k+1}</div>)}</div></>};
+ <div style={{position:'absolute',left:30,top:SZ.content.y,width:56}}>{Array.from({length:21},(_,k)=><div key={k} style={{height:50,textAlign:'right',...lbl(20,k%5===4?'#4A4D53':'#2C2E33')}}>{k+1}</div>)}</div></>};
 const PN:Record<string,string>={youtube:'YouTube',facebook:'Facebook',tiktok:'TikTok'};
 /* end card: robot, brand, tagline, 3 handle tiles, CC BY 3.0 attribution (end ≤ y 1480) */
 export const AtEndCard:React.FC<{dur?:number;handles?:Handle[];tagline?:string}>=({dur=90,handles,tagline=''})=>{const f=useCurrentFrame();const B=useBrand();handles=handles??B.handles;
@@ -148,7 +148,7 @@ export const AtEndCard:React.FC<{dur?:number;handles?:Handle[];tagline?:string}>
  return <AbsoluteFill data-layer="end" style={{zIndex:40,opacity:out}}><style>{FONTS}</style>
   <AbsoluteFill style={{background:AT.bg,opacity:interpolate(f,[0,8],[0,1],cl)}}/>
   <div style={{opacity:interpolate(f,[0,8],[0,1],cl)}}><MidShapes/></div>
-  <div style={{position:'absolute',left:SZ.end.x,right:SZ.end.right,top:430,transform:`translateX(${120*(1-ein)}px)`,opacity:interpolate(ein,[.2,.7],[0,1],cl)}}>
+  <div style={{position:'absolute',left:SZ.end.x,right:SZ.end.right,top:SZ.end.top+10,transform:`translateX(${120*(1-ein)}px)`,opacity:interpolate(ein,[.2,.7],[0,1],cl)}}>
    <div {...bb('e-robot')} style={{transform:`scale(${S(4,'slow')})`,transformOrigin:'left bottom',width:150}}><Robot s={150}/></div>
    <div {...bb('e-kick')} style={{display:'table',fontFamily:SANS,fontWeight:500,fontSize:46,color:AT.dim,marginTop:30,opacity:op(8)}}>Theo dõi để học</div>
    <div {...bb('e-tag')} style={{display:'table',fontFamily:SANS,fontWeight:800,fontSize:fitSize(tagline,724,92,.56),color:AT.ink,lineHeight:1.1,whiteSpace:'nowrap',opacity:op(10),transform:`translateY(${(1-S(10))*30}px)`}}>{tagline}</div>

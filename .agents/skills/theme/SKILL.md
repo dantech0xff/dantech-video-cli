@@ -41,18 +41,20 @@ Caption = karaoke **chip** (mọi theme): mỗi chữ là một chip có nền (
 
 ## Safe zone (BẮT BUỘC — tạo / sửa / cập nhật theme)
 Khung 1080x1920 bị UI TikTok / Reels / Shorts / Facebook Reels che. Hằng số dùng chung nằm ở `remotion/src/safezone.ts` (`ZONE`, `SZ`) — theme **import từ đây, không hardcode toạ độ**.
-- Vùng che (organic): top 250, bottom 420, left 60, right 200 (cột nút từ y 700 trở xuống). Strict (template quảng cáo): top 288, bottom 672, left 120, right 192.
-- Nội dung chính: x 136–860, y 290–~1360. Scene vẫn thiết kế trên canvas 894x1320, `Timeline` tự scale vào hộp `SZ.content` — không đặt chữ ngoài canvas đó.
+- Vùng **không có chữ** (`SZ.noText`, UI che): top y < 290 (thanh tìm kiếm, tab Following/For You, LIVE), bottom y ≥ 1500, left x < 60, right x ≥ 880 từ y 700 (cột nút). Strict (template quảng cáo): top 288, bottom 672, left 120, right 192.
+- **Trên y 290 không có chữ hay thông tin nào, kể cả brand.** Wordmark, số trang, tab file, breadcrumb, section, nhãn pill đều nằm trong `SZ.chrome`: y 296–402, x 136–860 (`left:SZ.chrome.x,right:SZ.chrome.right,top:SZ.chrome.top…`). Hai hàng: hàng brand (wordmark ≤ ~56 px, số trang canh baseline) + dải section/tab (font 20–24). Thanh màu, rail, lưới, hình mid-ground được tràn lên trên y 290 vì không mang chữ.
+- Nội dung cảnh: `SZ.content` = y 416–1359 (canvas 894x1320, scale ~0.714, rộng ~640 px từ x 136). Scene vẫn thiết kế trên canvas 894x1320, `Timeline` tự scale vào hộp — không đặt chữ ngoài canvas đó. Đừng hardcode toạ độ chrome/end card, lấy từ `SZ`.
+- Rail trang trí ở mép trái: nền màu chạy suốt chiều cao được, nhưng chữ trong rail chỉ ở x ≥ 60, y 290–1500 (xem `Chrome` trong `sys.tsx`: hộp clip + mask mờ hai đầu). Số dòng gutter cũng vậy (bắt đầu từ `SZ.content.y`).
 - Caption: `SZ.captions` (y 1366, rộng 724), tối đa 2 dòng, phải kết thúc trước y 1500.
 - Nút Follow: `cta.top` = 1150 trong theme.json, hộp phải ở x ≤ 860, y ~1150–1350.
 - End card: chữ/handle canh trái, mép phải ≤ 860, không có footer dưới y 1480.
-- Trên y 250 chỉ để brand/trang trí (top bar, số trang); dải rail/trang trí ở mép trái/phải được phép.
-- **Trước khi coi theme là xong:** render still các khung chính (headline, cảnh nhiều nội dung, caption, nút follow, end card), chạy `python3 scripts/safezone.py <png>... -o <dir>` và `--sheet`, nhìn bằng mắt: không có chữ / nút quan trọng trong vùng đỏ. % "busy" do nền / lưới / rail trang trí thì bỏ qua.
+- End card: chữ bắt đầu từ `SZ.end.top` (y 420) trở xuống.
+- **Trước khi coi theme là xong:** render still các khung chính (VersusHook frame 0 + ~40, headline, cảnh nhiều nội dung, caption, nút follow, end card, và một bộ với `channels/example.json`), chạy `python3 scripts/safezone.py <png>... -o <dir>` và `--sheet`. Phải ra `0 with text in a no-text zone`. Script chia khung thành ô 24 px và chỉ tính ô có cạnh sáng/tối theo cả 2 chiều (chữ, icon), nên nền, thanh màu trơn, đường kẻ, lưới mờ, hình mid-ground không bị tính. Ô bị bắt được viền xanh cyan trên overlay; vẫn nhìn bằng mắt.
 
 ## Quality bar cho theme (bài học đã gặp)
 - Accent đậm, bão hoà, chỉ một accent. Nền tối dùng xám trung tính `#1C1C1C` (đỡ mỏi mắt). Không neon tím/hồng, không hologram, không bloom nặng.
 - Không in tên theme, meta label, nhãn kỹ thuật giả (FIG./SHEET/§). Brand "Dan Tech" đậm (ExtraBold).
-- Top bar: wordmark và số trang thẳng **baseline** (`align-items: baseline`), không căn giữa. Kiểm bằng crop phóng to.
+- Top bar: wordmark và số trang thẳng **baseline** (`align-items: baseline`), không căn giữa. Kiểm bằng crop phóng to. Top bar nằm trong `SZ.chrome` (y 296–402), **không** ở trên y 290 (Dan: bị UI TikTok/Shorts/Reels che).
 - Glitch/hiệu ứng chỉ ở beat hoặc chuyển cảnh, không chạy liên tục. Chuyển cảnh mượt.
 - Theme mới làm trên branch `theme/<id>`, stills trước, video sau, merge thường khi đã duyệt.
 

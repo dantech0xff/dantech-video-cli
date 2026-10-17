@@ -98,7 +98,10 @@ Mọi chữ thương hiệu trên màn hình lấy từ file kênh, không hardc
   - **Content ID (YouTube):** bài Pixabay có thể bị claim. `description.txt` có cảnh báo/credit. Bài Commons CC BY bắt buộc credit. Không dùng nhạc ngoài `assets/music/LIBRARY.md`.
 - **Mix:** -14 LUFS, true peak -2 dBTP (AAC cuối ≤ -1), giọng cao hơn nhạc ~21 dB (18–22). Không sửa chuỗi mix nếu không được yêu cầu.
 - **Caption:** karaoke phân trang (mọi theme). Hết câu thì xoá trang, hiện trọn câu mới, highlight từng chữ. Tối đa 2 dòng. Câu dài cắt ở dấu phẩy/ranh giới tự nhiên. Mỗi chữ là một chip có nền. Chữ đang đọc đổi sang nền accent + text tương phản, pop nhẹ. Không gạch chân. Font và màu chip lấy từ `theme.json → look.caption`. Không sửa thành chạy cuộn.
-- **Safe zone bắt buộc:** hằng số ở `remotion/src/safezone.ts`. Nội dung x 136–860, y 290–~1360. Caption y 1366–1500. Follow y 1150–1350. Trên y 250 chỉ để brand. Kiểm bằng `scripts/safezone.py`.
+- **Safe zone bắt buộc:** hằng số ở `remotion/src/safezone.ts` (`ZONE`, `SZ`). **Trên y 290 không có chữ hay thông tin nào**, kể cả wordmark DAN TECH, số trang, tab, nhãn: thanh tìm kiếm, tab Following/For You, nút LIVE của TikTok/Shorts/Reels che vùng này. Ở đó chỉ còn nền và hình trang trí. Cũng không có chữ ở x < 60, y ≥ 1500 và x ≥ 880 từ y 700 (cột nút).
+  - Thanh brand (wordmark + số trang) và dải section/tab nằm trong `SZ.chrome`: y 296–402, x 136–860. Nội dung cảnh trong `SZ.content`: y 416–1359 (canvas 894x1320 scale ~0.714). Caption y 1366–1500. Follow y 1150–1350. End card bắt đầu từ y ≥ 420, kết thúc ≤ y 1480.
+  - Rail trang trí ở mép trái được giữ nền màu suốt chiều cao, nhưng chữ trong rail chỉ nằm ở x ≥ 60, y 290–1500.
+  - Kiểm bằng `scripts/safezone.py`: phải ra `0 with text in a no-text zone`.
 - **Trên màn hình:** không tên theme, không meta label, không nhãn kỹ thuật giả (FIG./SHEET/§/"END OF SHEET"…). Brand "Dan Tech" thì giữ. **Không người, mặt người AI.** B-roll faceless.
 - **Outro/end card:** 3 dòng có logo: **YouTube @dantech-0xff**, **Facebook @dantech0xff**, **TikTok @dantech_0xff**. Nguồn duy nhất là `channels/<id>.json` (mặc định `channels/dantech.json`), sửa handle ở đó. Logo vendored từ simple-icons, CC0, nằm ở `assets/icons/` và `remotion/src/brand.tsx`. Nút Follow do code lo.
 - Không sửa theme đã duyệt nếu không được yêu cầu. Theme mới/sửa theme: làm theo skill `theme`.
@@ -112,7 +115,7 @@ Video chỉ "xong" khi tất cả đều ✅:
 - [ ] **Contact sheet:** mỗi cảnh một still + outro, vd. `ffmpeg -i <mp4> -vf "fps=1/3,scale=270:-1,tile=6x2" -frames:v 1 sheet.png`. Phải mở ra xem bằng mắt.
 - [ ] **Frame inspection:** still ở 0.5 s, giữa mỗi cảnh, lúc bấm Follow, end card (`ffmpeg -ss <t> -i <mp4> -frames:v 1 f.png`). Chữ không tràn, không chồng, baseline top bar thẳng, code đọc được.
 - [ ] **Overlap audit** (theme có gắn `data-bb`, hiện tại android-tutor, flutter-tutor): `scripts/bbcheck.sh videos/<slug>/script.json` → `frames with overlaps: 0`.
-- [ ] **Safe zone:** `python3 scripts/safezone.py f*.png -o qc/` + `--sheet`. Chữ, caption, nút, handle không nằm trong vùng đỏ. Nền, lưới, rail trang trí thì bỏ qua.
+- [ ] **Safe zone:** `python3 scripts/safezone.py f*.png -o qc/` + `--sheet` → `0 with text in a no-text zone` (exit 0). Không có chữ nào trên y 290 (kể cả brand, số trang, tab), dưới y 1500, ở x < 60, hay ở cột nút x ≥ 880 từ y 700. Nền, lưới, rail màu trơn, hình mid-ground thì được. Vẫn nhìn overlay bằng mắt.
 - [ ] Caption khớp giọng, mỗi trang ≤ 2 dòng. Anchor `@chữ` bật đúng lúc.
 - [ ] Không mặt người, không tên theme, không label giả. End card có 3 handle có logo.
 - [ ] `description.txt` có nguồn + credit nhạc. Không có số liệu nào thiếu nguồn.
@@ -128,6 +131,7 @@ Video chỉ "xong" khi tất cả đều ✅:
 - Gọi lại TTS cho vừa độ dài, hoặc "test thử" TTS, làm hết quota ngày. Retry khi 429.
 - In tên theme, "tech explain", "FIG. 01"… lên khung hình.
 - Để chữ, caption hay nút Follow dưới y 1500 hoặc sát mép phải (bị nút like/comment che).
+- Đặt wordmark DAN TECH / số trang / tab trên y 290 (luật cũ "trên y 250 chỉ để brand" đã bỏ): thanh tìm kiếm và tab Following/For You che mất. Thanh brand nằm trong `SZ.chrome` (y 296–402).
 - Caption chạy cuộn liên tục, hoặc rớt 3 dòng.
 - Đổi nhạc giữa các lần re-render vì quên ghim `music.track`.
 - Commit `videos/*/out/`, nhạc mp3, `.env`. Commit sai identity.

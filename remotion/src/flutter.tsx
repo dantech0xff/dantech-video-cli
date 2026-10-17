@@ -154,13 +154,13 @@ export const FlTake:React.FC<{hero:string;title:string;rows:{k:string;v:string;a
   {rule&&<In at={rule.at} bbn="rule" style={{position:'absolute',left:0,top:200+rows.length*152+20,width:894,background:FT.navy,border:`3px solid ${FT.sky}`,borderRadius:30,padding:'26px 30px',boxSizing:'border-box',
    fontFamily:SANS,fontWeight:800,fontSize:44,lineHeight:1.22,color:'#FFFFFF'}}>{rule.s}</In>}
  </div>};
-/* chrome: bands, brand + page (baseline), section breadcrumb (all above y 250) */
+/* chrome: bands, brand + page (baseline), section breadcrumb (inside SZ.chrome, y 296..402; nothing with text above y 290) */
 export const FlChrome:React.FC<{section:string;page:string}>=({section,page})=>{const B=useBrand();return <>
  <FlBands/>
- <div {...bb('brand')} style={{position:'absolute',left:136,right:50,top:84,display:'flex',justifyContent:'space-between',alignItems:'baseline'}}>
-  <span style={{fontFamily:SANS,fontWeight:800,fontSize:fitSize(B.wordmark,560,48,.68),lineHeight:1,color:FT.ink,letterSpacing:1,whiteSpace:'nowrap'}}>{B.wordmark}</span>
-  <span style={{...mono(26),lineHeight:1}}>{page}</span></div>
- <div {...bb('crumb')} style={{position:'absolute',left:136,right:50,top:168,height:52,display:'flex',alignItems:'center',gap:14,borderBottom:`2px solid ${FT.line}`,paddingBottom:6,boxSizing:'border-box'}}>
+ <div {...bb('brand')} style={{position:'absolute',left:SZ.chrome.x,right:SZ.chrome.right,top:SZ.chrome.top+4,display:'flex',justifyContent:'space-between',alignItems:'baseline'}}>
+  <span style={{fontFamily:SANS,fontWeight:800,fontSize:fitSize(B.wordmark,480,44,.68),lineHeight:1,color:FT.ink,letterSpacing:1,whiteSpace:'nowrap'}}>{B.wordmark}</span>
+  <span style={{...mono(24),lineHeight:1}}>{page}</span></div>
+ <div {...bb('crumb')} style={{position:'absolute',left:SZ.chrome.x,right:SZ.chrome.right,top:SZ.chrome.top+58,height:46,display:'flex',alignItems:'center',gap:14,borderBottom:`2px solid ${FT.line}`,paddingBottom:6,boxSizing:'border-box'}}>
   <span style={{width:12,height:12,borderRadius:6,background:FT.sky}}/><span style={{...mono(24,FT.ink),whiteSpace:'nowrap'}}>{section}</span></div></>};
 const PN:Record<string,string>={youtube:'YouTube',facebook:'Facebook',tiktok:'TikTok'};
 /* end card: logomark (clear space), kicker, tagline, name, 3 handle tiles, trademark disclaimer. Ends above y 1480. */
@@ -169,7 +169,7 @@ export const FlEndCard:React.FC<{dur?:number;handles?:Handle[];tagline?:string}>
  return <AbsoluteFill data-layer="end" style={{zIndex:40,opacity:out}}><style>{FONTS}</style>
   <AbsoluteFill style={{background:FT.bg,opacity:interpolate(f,[0,8],[0,1],cl)}}/>
   <div style={{opacity:interpolate(f,[0,8],[0,1],cl)}}><FlBands/></div>
-  <div style={{position:'absolute',left:SZ.end.x,right:SZ.end.right,top:420,opacity:ein,transform:`translateY(${30*(1-ein)}px)`}}>
+  <div style={{position:'absolute',left:SZ.end.x,right:SZ.end.right,top:SZ.end.top,opacity:ein,transform:`translateY(${30*(1-ein)}px)`}}>
    <div {...bb('e-logo')} style={{width:56,opacity:op(4)}}><FlutterMark h={70}/></div>
    <div {...bb('e-kick')} style={{display:'table',fontFamily:SANS,fontWeight:500,fontSize:46,color:FT.dim,marginTop:56,opacity:op(8)}}>Theo dõi để học</div>
    <div {...bb('e-tag')} style={{display:'table',fontFamily:SANS,fontWeight:800,fontSize:fitSize(tagline,724,92,.56),color:FT.ink,lineHeight:1.1,whiteSpace:'nowrap',opacity:op(10)}}>{tagline}</div>

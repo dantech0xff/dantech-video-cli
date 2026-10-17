@@ -72,7 +72,7 @@ Caption = karaoke **chip** (mọi theme): mỗi chữ là một chip có nền (
 
 ## Safe zone (kiểm tra UI điện thoại — bắt buộc trong QC)
 QC: trích 5 khung (headline, nội dung dày, caption, nút follow, end card) và chạy safezone.py; chữ, caption, nút, handle không được nằm trong vùng đỏ. Hằng số ở `remotion/src/safezone.ts`.
-`python3 scripts/safezone.py <frame.png>... -o <dir>` vẽ vùng bị UI che (đỏ = organic: top 250, bottom 420, left 60, right 200 từ y 700; viền vàng = union template quảng cáo chính thức: top 288, bottom 672, left 120, right 192, rail TikTok x≥780 từ y 840). `--sheet out.png a_sz.png …` ghép sheet. % "busy" là heuristic (lưới/nền có thể báo nhầm); kết luận bằng mắt.
+`python3 scripts/safezone.py <frame.png>... -o <dir>` vẽ vùng không được có chữ (đỏ: top y < 290, bottom y ≥ 1500, left x < 60, cột nút x ≥ 880 từ y 700; viền vàng = union template quảng cáo chính thức: top 288, bottom 672, left 120, right 192, rail TikTok x≥780 từ y 840) và đánh dấu ô có chữ (viền cyan). Mỗi frame in số ô có chữ theo vùng và y của chúng; dòng cuối `N frames, K with text in a no-text zone`, exit 1 nếu K > 0. Phải ra 0. Brand, số trang, tab cũng không được nằm trên y 290. `--sheet out.png a_sz.png …` ghép sheet. Vẫn kết luận bằng mắt.
 
 ## Kênh
 `build_props.py` đọc `channels/<script.channel or dantech>.json` rồi đưa brand vào `props.channel`: wordmark, handle, chữ Follow, tagline/followSub theo theme, và mốc bật/bấm nút Follow lấy từ `ctaInWord`/`ctaPressWord`. Kênh khác thì đổi kênh trong script, không sửa code.

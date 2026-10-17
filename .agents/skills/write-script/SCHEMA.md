@@ -23,7 +23,7 @@
    "section": "DÒNG NHỎ TRÊN ĐẦU",
    "out": "page|bar|zoom|push|stack|morph|scroll",      // chuyển cảnh sang cảnh sau (cảnh cuối bỏ trống)
    "focus": [x, y],                               // tâm zoom khi out = zoom
-   "morph": {"from":[x,y,w,h,font],"to":[…],"txt":"14"},  // bắt buộc khi out = morph
+   "morph": {"from":[x,y,w,h,font],"to":[…],"txt":"14"},  // bắt buộc khi out = morph; toạ độ px màn hình 1080x1920 (hộp nội dung SZ.content: y 416–1359, scale ~0.714)
    "props": {…},                                  // theo template bên dưới
    "sfx": [{"at":"@chữ","s":"<file trong assets/sfx, không đuôi>","v":0.5,"every":5,"count":14}]
  }]

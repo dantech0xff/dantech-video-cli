@@ -1,7 +1,7 @@
 import {BrandTile,HANDLES,Handle,useBrand,fitSize} from './brand';
 // tech-explain-cyber (GIẢI THÍCH CYBER): "dark blueprint" scenes.
 // One cold cyan accent, hairlines, self-drawing strokes, dimension lines, callouts, slow precise easing.
-import React from 'react';import {interpolate,Easing,useCurrentFrame,AbsoluteFill} from 'remotion';import {useS,FONTS} from './sys';
+import React from 'react';import {interpolate,Easing,useCurrentFrame,AbsoluteFill} from 'remotion';import {useS,FONTS} from './sys';import {SZ} from './safezone';
 const ES=Easing.bezier(.25,.1,.25,1),EO=Easing.bezier(.22,.61,.36,1);const cl={extrapolateLeft:'clamp',extrapolateRight:'clamp'} as const;
 const MONO='JBM',SANS='BVPM';
 const pr=(f:number,at:number,d=24)=>interpolate(f,[at,at+d],[0,1],{...cl,easing:ES});
@@ -96,11 +96,11 @@ export const BpChrome:React.FC<{section:string;page:string}>=({section,page})=>{
  <AbsoluteFill style={{backgroundImage:`linear-gradient(${BP.grid} 1px,transparent 1px),linear-gradient(90deg,${BP.grid} 1px,transparent 1px),linear-gradient(${BP.grid2} 1px,transparent 1px),linear-gradient(90deg,${BP.grid2} 1px,transparent 1px)`,backgroundSize:'24px 24px,24px 24px,120px 120px,120px 120px',backgroundPosition:'136px 0,136px 0,136px 0,136px 0'}}/>
  <AbsoluteFill style={{background:'radial-gradient(120% 80% at 50% 35%, transparent 55%, rgba(10,10,10,.55) 100%)'}}/>
  <div style={{position:'absolute',left:40,right:40,top:40,bottom:40,border:`1px solid ${BP.line}`}}/>
- <div style={{position:'absolute',left:136,right:50,top:86,display:'flex',justifyContent:'space-between',alignItems:'baseline',paddingBottom:22,borderBottom:`1px solid ${BP.hair}`}}>
-  <div><div style={{fontFamily:'BVPX',fontSize:fitSize(B.wordmark,560,46,.66),lineHeight:1,color:BP.ink,letterSpacing:1.5,whiteSpace:'nowrap'}}>{B.wordmark}</div></div>
+ <div style={{position:'absolute',left:SZ.chrome.x,right:SZ.chrome.right,top:SZ.chrome.top+4,display:'flex',justifyContent:'space-between',alignItems:'baseline',paddingBottom:20,borderBottom:`1px solid ${BP.hair}`}}>
+  <div><div style={{fontFamily:'BVPX',fontSize:fitSize(B.wordmark,480,46,.66),lineHeight:1,color:BP.ink,letterSpacing:1.5,whiteSpace:'nowrap'}}>{B.wordmark}</div></div>
   <div style={{fontFamily:MONO,fontSize:26,lineHeight:1,color:BP.dim}}>{page}</div></div>
  
- <div style={{position:'absolute',left:64,top:300,bottom:330,width:30}}>{Array.from({length:27},(_,k)=><div key={k} style={{position:'absolute',top:k*48,right:0,width:k%5===0?22:10,height:1,background:k%5===0?BP.dim:BP.hair}}></div>)}</div></>};
+ <div style={{position:'absolute',left:64,top:SZ.content.y,bottom:430,width:30}}>{Array.from({length:23},(_,k)=><div key={k} style={{position:'absolute',top:k*48,right:0,width:k%5===0?22:10,height:1,background:k%5===0?BP.dim:BP.hair}}></div>)}</div></>};
 
 /* end card */
 export const BpEndCard:React.FC<{A?:string;dur?:number;handles?:Handle[];tagline?:string}>=({A='#5CD6E8',dur=75,handles,tagline=''})=>{const f=useCurrentFrame();const B=useBrand();handles=handles??B.handles;const p=(a:number,d=24)=>interpolate(f,[a,a+d],[0,1],{...cl,easing:EO});const out=interpolate(f,[dur-10,dur],[1,0],cl);
