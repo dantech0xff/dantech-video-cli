@@ -112,13 +112,17 @@ for i,sc in enumerate(sc_list,1):
         if not timed(v): pos.append(0)
     pos=sorted(set(pos)); hasnum=numts(sc.get('props',{})) or numts(sc.get('sfx',[]))
     if not pos and not hasnum:
-        if n>14: warn(f'{tag}: {n} words but no timed prop (@anchor/"at") — nothing changes on screen')
+        if n>14: err(f'{tag}: {n} words but no timed prop (@anchor/"at") — nothing changes on screen')
         continue
     if not pos or hasnum: continue
-    if pos[0]>14: warn(f'{tag}: first visual beat lands ~word {pos[0]+1}/{n} (~{pos[0]/WPS:.0f}s in) — put a prop on screen earlier or split the scene')
+    if pos[0]>14: err(f'{tag}: first visual beat lands ~word {pos[0]+1}/{n} (~{pos[0]/WPS:.0f}s in) — put a prop on screen earlier or split the scene')
     for a,b in zip(pos,pos[1:]):
-        if b-a>26: warn(f'{tag}: ~{b-a} words (~{(b-a)/WPS:.0f}s) between beats — screen sits still')
-    if n-pos[-1]>20: warn(f'{tag}: last beat at word {pos[-1]+1}/{n}, then ~{n-pos[-1]} words with nothing new on screen')
+        if b-a>26: err(f'{tag}: ~{b-a} words (~{(b-a)/WPS:.0f}s) between beats — screen sits still')
+    if n-pos[-1]>20: err(f'{tag}: last beat at word {pos[-1]+1}/{n}, then ~{n-pos[-1]} words with nothing new on screen')
+    # a beat landing <~3 words (~1s) before the scene exits is on screen too briefly to be read;
+    # the channel CTA press-word legitimately lives at the end, so it is exempt
+    beats=[p for p in pos if p!=(words.index(press_w) if press_w in words else -1)]
+    if beats and n-1-beats[-1]<3: err(f'{tag}: last beat lands at word {beats[-1]+1}/{n}, <~3 words before the scene exits — anchor it earlier so viewers can read it')
 # channel CTA phrase (channels/<id>.json): Follow button pops on ctaInWord, is pressed on ctaPressWord
 try:
     CHN=json.load(open(os.path.join(ROOT,'channels',f"{S.get('channel','dantech')}.json"),encoding='utf-8'))

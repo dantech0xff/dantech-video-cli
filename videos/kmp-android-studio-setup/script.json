@@ -41,7 +41,7 @@
      },
      {
       "s": "Một chỗ chạy app",
-      "at": "@chỗ"
+      "at": "@và"
      }
     ]
    }
@@ -58,7 +58,7 @@
     "line": "Setup đúng một lần là đủ.",
     "why": {
      "s": "Build iOS bắt buộc máy chạy macOS.",
-     "at": "@Mac"
+     "at": "@bắt"
     }
    }
   },
@@ -154,7 +154,7 @@
     ],
     "note": {
      "s": "Windows và Linux chưa có kdoctor, kiểm bằng adb devices.",
-     "at": "@kiểm"
+     "at": "@macOS"
     }
    },
    "sfx": [
@@ -192,11 +192,11 @@
      },
      {
       "s": "Plugin Kotlin Multiplatform",
-      "at": "@Multiplatform"
+      "at": "@plugin"
      },
      {
       "s": "Một chỗ chạy app",
-      "at": "@chỗ"
+      "at": "@và"
      }
     ]
    }
@@ -227,7 +227,7 @@
     ],
     "rule": {
      "s": "Máy nào cũng học được KMP.",
-     "at": "@mỗi"
+     "at": "@để"
     }
    }
   }

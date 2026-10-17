@@ -66,12 +66,12 @@
     "title": "Model không import Flutter",
     "cmd": "rg \"^import 'package:flutter\" lib/domain/",
     "cmdAt": "@lệnh",
-    "resAt": "@trống",
+    "resAt": "@kết",
     "empty": "(không có kết quả)",
     "ok": "0 dòng import Flutter trong lib/domain",
     "note": {
      "s": "Model là Dart thuần.",
-     "at": "@trơn"
+     "at": "@trả"
     }
    }
   },

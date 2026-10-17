@@ -28,7 +28,7 @@ description: Render một videos/<slug>/script.json thành MP4 hoàn chỉnh (TT
    - Contact sheet: `ffmpeg -i <mp4> -vf "fps=1/3,scale=270:-1,tile=6x2" -frames:v 1 <slug>_sheet.png`, mở ra xem.
    - Frame check: trích vài still, ví dụ `ffmpeg -ss 1 -i <mp4> -frames:v 1 /tmp/f1.png` (1 s, giữa mỗi cảnh, outro). Xem: không có mặt người, chữ không tràn, Follow/end card có 3 handle có logo (YouTube @dantech-0xff, Facebook @dantech0xff, TikTok @dantech_0xff, lấy từ `channels/<id>.json`).
    - Phụ đề và anchor khớp giọng: xem video, hoặc so `words.json` với still tại các mốc `@chữ`.
-   - **Hình theo từng câu:** đối chiếu stills với từng câu `say`. Câu nào không có visual tương ứng (đang liệt kê/diễn giải mà màn hình chỉ có một hình tĩnh không liên quan) → sửa props, đổi scene type hoặc tách cảnh ở ranh giới câu rồi `--from props` (không tốn TTS). Cảnh báo nhịp hình của validator cũng phải xử lý hoặc giải thích, không bỏ qua.
+   - **Hình theo từng câu:** đối chiếu stills với từng câu `say`. Câu nào không có visual tương ứng (đang liệt kê/diễn giải mà màn hình chỉ có một hình tĩnh không liên quan) → sửa props, đổi scene type hoặc tách cảnh ở ranh giới câu rồi `--from props` (không tốn TTS). Lỗi nhịp hình của validator (❌) bắt buộc sửa trước khi render; mọi `⚠️` còn lại phải xử lý hoặc giải thích trong báo cáo, không bỏ qua.
    - So với bản đã duyệt nếu cần: `scripts/compare.sh <new.mp4> <ref.mp4> sheet.png <frame> …`.
    - `description.txt` có nguồn và credit CC BY (nhạc Commons); bài Pixabay 4–7 có cảnh báo Content ID.
 5. **Giao:** mp4 + `<slug>_sheet.png` + `description.txt`. Definition of done ở `AGENTS.md` mục 4.

@@ -110,7 +110,7 @@ Mọi chữ thương hiệu trên màn hình lấy từ file kênh, không hardc
 ## 4. QC: Definition of done / quality bar
 
 Video chỉ "xong" khi tất cả đều ✅:
-- [ ] Validator `✅ OK`. Câu đầu nêu chủ đề. Trong frame 0–3 s thấy tiêu đề chủ đề.
+- [ ] Validator `✅ OK`. Câu đầu nêu chủ đề. Trong frame 0–3 s thấy tiêu đề chủ đề. Lỗi nhịp hình (❌: đoạn tĩnh > ~8 s, beat đầu quá trễ, beat cuối sát mép cảnh < ~3 chữ, cảnh dài không prop) làm script không pass — bắt buộc sửa, không render được.
 - [ ] Đúng 1 lần gọi TTS Gemini (hoặc 0 nếu dùng cache / Edge). Engine + style/giọng đã ghi log, đã báo engine nào được dùng.
 - [ ] Log mix: I ≈ -14 LUFS, peak ≤ -1 dBTP, `voice/music while speaking: median` 18–22 dB. Đo lại: `ffmpeg -i <mp4> -af ebur128=peak=true -f null - 2>&1 | tail -12`.
 - [ ] **Contact sheet:** mỗi cảnh một still + outro, vd. `ffmpeg -i <mp4> -vf "fps=1/3,scale=270:-1,tile=6x2" -frames:v 1 sheet.png`. Phải mở ra xem bằng mắt.
@@ -136,6 +136,7 @@ Video chỉ "xong" khi tất cả đều ✅:
 - Đặt wordmark DAN TECH / số trang / tab trên y 290 (luật cũ "trên y 250 chỉ để brand" đã bỏ): thanh tìm kiếm và tab Following/For You che mất. Header là một dòng mảnh trong `SZ.header` (y 294–334). Đừng thêm dải tab/section thứ hai: nó ăn chỗ của nội dung (bản fb03dd6 hai dòng làm nội dung nhỏ đi 12%, Dan không thích).
 - Caption chạy cuộn liên tục, hoặc rớt 3 dòng.
 - Đổi nhạc giữa các lần re-render vì quên ghim `music.track`.
+- Nói dài mà màn hình đứng yên: anchor dồn cuối cảnh; câu liệt kê N mục trên scene chỉ vẽ được một ý (tách cảnh ở ranh giới câu, không tốn TTS); prop xuất hiện sát mép cuối cảnh — kịp hiện không kịp nhìn (validator ❌, neo sớm hơn); bỏ qua `⚠️` của validator mà không sửa/giải thích.
 - Commit `videos/*/out/`, nhạc mp3, `.env`. Commit sai identity.
 
 ## 5. Git & không được làm
