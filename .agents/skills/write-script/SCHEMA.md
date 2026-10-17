@@ -116,3 +116,33 @@ Dùng scene của hot-news (Flow, Quote, Checklist, Evidence, CTA); cảnh mở 
 
 ## Scene chung: VersusHook (dùng được với mọi theme)
 **VersusHook** `{kicker?, claim:[dòng…] (2–3 dòng, chữ HOA ngắn), hl?:index dòng nền accent, a:{label,line}, b:{label,line}, sidesAt?:frame|@word, payoff?:string, payoffAt?:frame|@word}`. Claim hiện ngay frame 0 (không fade). Hai thẻ phe + "VS" nảy vào ở `sidesAt` (nên đặt ~1 s, vd `@Phe`). Dòng payoff ▶ hiện ở `payoffAt`. Màu và font lấy từ theme (accent, ink, head/body). Riêng hot-news-glitch có RGB split ngắn khi hai phe xuất hiện. Size chữ tự co theo bề rộng (khung nội dung an toàn 894 px trước khi scale). Ví dụ: `videos/openai-vs-apple-glitch` cảnh 1.
+
+## Universal overlays + autofill (mọi theme; `remotion/src/overlay.tsx`, `scripts/autofill.py`)
+Mục tiêu: **giọng đang đọc thì màn hình không bao giờ đứng yên** quá ~2.5 s. 3 lớp:
+1. **Lớp 1 autofill** (build_props, sau align): dựng timeline thay đổi hình của từng cảnh (anchor, `*at`, `ok`/`warn`/`hl`, `taps`, `kw`, overlay; **SFX không tính**). Đoạn trống > 2.5 s trong lúc đọc được chèn filler lấy từ chính câu đang đọc, theo thứ tự **focus > number > term chip > progress / diagram**. Tất định (cùng script + words → cùng kết quả), in log `autofill: scene N (Type) a-b s kind "…" ← lý do` và `static gaps > 2.5s: X before -> Y after`, lưu `out/autofill.json`.
+2. **Lớp 2 `kw`**: item/dòng code khai báo từ khoá; khi chữ đó được đọc (sau lúc item hiện) thì item được focus + highlight.
+3. **Lớp 3 gate** (`scripts/static_gate.py`, stage `gate` của `./dt render`): render lại frame low-res (mỗi 3 frame, scale 0.25, `qc:true` ẩn caption, hình mid-ground, con trỏ nháy = mọi `[data-deco]`), vùng y 290–1500; mọi cửa sổ 3 s trong khoảng giọng đọc (chữ đầu → chữ cuối, trước outro) phải có thay đổi (≥ 45 px lệch > 18 mức xám). Fail → exit 1, in mốc giây + cảnh, không ra mp4 cuối.
+
+Khoá mới (validator biết hết; sai kiểu → ❌, nghi vấn → ⚠️):
+```jsonc
+{
+ "autofill": true,                      // script: tắt toàn bộ autofill (⚠️ khi false; gate vẫn chạy)
+ "glossary": {"JDK": "bộ công cụ để build Java/Kotlin"},   // gloss ≤ ~70 ký tự; term chip CHỈ hiện gloss từ đây (không tự bịa nghĩa)
+ "scenes": [{
+   "autofill": false,                   // cảnh: tắt autofill riêng cảnh này
+   "diagram": {"nodes": ["View","ViewModel","Model"], "label": "phụ thuộc đi một chiều"},   // gợi ý sơ đồ 2–3 hộp cho autofill
+   "overlays": [                        // overlay viết tay; at = frame hoặc anchor, dur = giây (1–6, mặc định 2.2)
+     {"kind":"term", "w":"ValueNotifier", "g":"giữ một giá trị, báo widget khi đổi", "icon?":"bolt", "at":"@ValueNotifier"},
+     {"kind":"num", "n":"36", "label":"compileSdk", "at":"@ba", "dur":2.5},     // đếm lên từ 0 trong ~0.6 s
+     {"kind":"icon", "icon":"download", "label":"Cài Android Studio bản stable", "at":"@Cài"},
+     {"kind":"focus", "match":"minSdk", "at":"@minSdk"},                       // phóng nhẹ + viền + làm tối phần còn lại quanh phần tử có chữ khớp
+     {"kind":"progress", "n":3, "m":7, "label":"Cài SDK", "at":40},
+     {"kind":"diagram", "nodes":["View","ViewModel","Model"], "label":"…", "at":"@View"}
+   ],
+   "props": {"steps":[{"s":"Tick SDK Platform 36","at":"@tick","kw":["compileSdk"]}]}   // kw: list chữ (khớp như anchor) trên item / dòng code
+ }]
+}
+```
+- **icon** chỉ lấy từ bộ glyph tự vẽ (stroke 24px): `bolt book bug check clock cloud code download laptop layers link lock phone play refresh search settings terminal warn`. Không logo/brand bên thứ ba trong overlay.
+- **Vị trí:** dock dưới cùng của hộp nội dung (x 136–860, đáy ~y 1352, ngay trên caption 1366), không bao giờ ra ngoài safe zone. Nội dung cảnh chạm dock thì cả cảnh **co nhẹ từ góc trên trái** (tối thiểu 0.72) trong lúc overlay hiện rồi trả lại; focus push-in ≤ 1.06 và bị kẹp trong hộp nội dung. Đang có nút Follow (cửa sổ CTA) thì autofill chỉ dùng focus.
+- Ưu tiên viết anchor/`kw`/`overlays` có chủ đích; autofill là lưới an toàn, không thay cho nhịp hình tốt. Validator tính overlay và `kw` có đọc là beat.

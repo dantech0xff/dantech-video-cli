@@ -93,6 +93,16 @@ Brand (wordmark, tên, handle, logo, chữ nút Follow) lấy từ `channels/<id
 - Vật thể xoay/biến hình (vd phone xoay ngang) phải có **slot vuông ≥ đường chéo** của nó, để mọi góc xoay không chạm hộp khác. Đừng đặt cột chữ cạnh vật thể theo kích thước lúc đứng yên.
 - Tiêu đề dài trên cảnh nhiều nội dung: `one` (1 dòng, `fitSize`) để không đẩy layout xuống dải caption.
 
+## Universal overlays (mọi theme, `remotion/src/overlay.tsx`)
+- 6 phần tử dùng chung, render bởi `Overlays` trong `sys.tsx` từ `scene.ov` (do autofill hoặc `overlays` trong script sinh ra): term chip + gloss, số lớn đếm lên + nhãn, icon + nhãn, focus (push-in ≤ 1.06 + viền + spotlight làm tối phần còn lại), progress n/m, sơ đồ 2–3 hộp có mũi tên. Chi tiết khoá: SCHEMA "Universal overlays".
+- **Token:** overlay không có màu riêng. `tok()` lấy từ palette của theme (`pal`, hoặc suy ra từ bg/ink/accent/muted của `look`), font head/body của theme, bo góc theo theme (hot-news/glitch vuông 0, quick-tips 24, còn lại 26). Theme mới chỉ cần `look` đúng; muốn chỉnh riêng thì thêm nhánh trong `tok()`, không hardcode màu trong component.
+- **Dock:** card nằm đáy hộp nội dung (x 136–860, đáy ~y 1352, trên caption 1366), gắn `data-bb="ov-<kind>"` + `data-ov-dock` nên bbcheck kiểm được. Scene phải bọc nội dung trong wrapper `data-content` (sys.tsx đã làm) và gắn `data-bb` cho mọi hộp, vì squeeze/focus đo bbox từ đó.
+- **Squeeze:** nội dung chạm dock thì wrapper scale từ góc trên trái (min 0.72) trong ~8 frame trước khi card vào, nhả ra sau khi card đi. Không bao giờ phủ đè nội dung, không zoom toàn khung.
+- **Focus:** tìm phần tử theo chữ (`match`/`kw`), leo lên hàng chứa nó (dừng ở hộp `data-bb`), viền accent + phủ `bg` 65% ngoài phần tử. Spotlight bắt đầu từ x 100 để không làm tối rail trái của theme.
+- **Motion:** M3 emphasized-decelerate `(.05,.7,.1,1)`, card trượt lên 34 px + fade ~10 frame, ra nhanh hơn vào. Không pop/bounce.
+- **`data-deco`:** mọi trang trí chuyển động liên tục (caption, hình mid-ground, con trỏ nháy, dải nền trôi) phải gắn `data-deco="…"`. Gate hình tĩnh (`static_gate.py`) render với `qc:true` ẩn `[data-deco]`, để trang trí không "giả" thay đổi hình. Theme mới quên gắn thì gate pass sai: kiểm bằng `./dt gate` trên một script tĩnh thử (phải ❌).
+- Kiểm theme mới: render sheet 6 phần tử (mẫu `/workspace/dantech-style/elements/universal_sheet.png`), `safezone.py` 0 flag, `bbcheck.sh` 0 overlap.
+
 ## Chuyển cảnh: mượt, không "ú òa"
 - Dan thấy chuyển cảnh **zoom-in/zoom-out / pop bằng shape phủ toàn khung** (cookie wipe cũ của android-tutor) giật, không đẹp. **Không dùng** kiểu này cho android-tutor (đã gỡ hẳn). Theme lấy cảm hứng từ một nền tảng thì dùng motion điều hướng thật của nền tảng đó: Flutter = **Hero** (`out: "hero"`, xem bài học flutter-tutor). Android = Material **shared-axis X** (`out: "sharedx"`, sys.tsx): cảnh cũ lùi trái ~120 px + scale 0.96 + mờ trong 35% đầu, cảnh mới trượt từ phải + fade, easing emphasized-decelerate `(.05,.7,.1,1)`, ~470 ms, không overshoot.
 - Đặt transition mặc định của theme bằng `look.defaultOut` (Timeline dùng khi scene không ghi `out`). End card vào bằng cùng kiểu (fade + trượt từ phải), không mọc shape.

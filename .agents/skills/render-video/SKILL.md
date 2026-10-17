@@ -17,8 +17,9 @@ description: Render một videos/<slug>/script.json thành MP4 hoàn chỉnh (TT
    |---|---|---|
    | tts | `scripts/tts.py` | `voice.mp3` (44.1 kHz, -16 LUFS, mọi engine giống nhau) + `voice_meta.json`. Lời không đổi thì dùng lại cache `.cache/tts/` (không gọi API). Gemini `vi-vn-concierge-2`, style ngẫu nhiên từ `theme.json → voice.styles` khi `style: random`; hoặc Edge (xem mục "Chọn engine TTS"). Ghi vào `logs/voice_log.md` |
    | align | `scripts/align.py` | `words.json` (faster-whisper, lần đầu tải ~1.5 GB) |
-   | props | `scripts/build_props.py` | `props.json` (giải `@chữ` → frame, thời lượng cảnh, outro) |
+   | props | `scripts/build_props.py` + `scripts/autofill.py` | `props.json` (giải `@chữ` → frame, thời lượng cảnh, outro, overlay `ov` mỗi cảnh) + `autofill.json`. In log `autofill: scene N … kind "…" ← lý do` và `static gaps > 2.5s: X before -> 0 after` |
    | render | Remotion + `loudnorm.sh` | `raw.mp4`, `voice_sfx.mp4` |
+   | gate | `scripts/static_gate.py` (+ `remotion/qc_frames.mjs`) | `gate.json`, `qc_frames/`. Render lại low-res với `qc:true` (ẩn caption + `[data-deco]`), mọi cửa sổ 3 s trong lúc đọc phải có hình đổi. ❌ → dừng trước mix, in mốc giây + cảnh |
    | mix | `pick_music.py` + `mix_bgm.sh` + `measure_vm.py` | `<slug>.mp4`, `stems/`, `music.json`. Nhạc random từ `music.pool` (TIN NÓNG xoay 7 bài Pixabay), có ghi log |
    | describe | `scripts/describe.py` | `description.txt` (nguồn + credit nhạc) |
 4. **QC** (ghi kết quả vào báo cáo):
@@ -28,6 +29,8 @@ description: Render một videos/<slug>/script.json thành MP4 hoàn chỉnh (TT
    - Contact sheet: `ffmpeg -i <mp4> -vf "fps=1/3,scale=270:-1,tile=6x2" -frames:v 1 <slug>_sheet.png`, mở ra xem.
    - Frame check: trích vài still, ví dụ `ffmpeg -ss 1 -i <mp4> -frames:v 1 /tmp/f1.png` (1 s, giữa mỗi cảnh, outro). Xem: không có mặt người, chữ không tràn, Follow/end card có 3 handle có logo (YouTube @dantech-0xff, Facebook @dantech0xff, TikTok @dantech_0xff, lấy từ `channels/<id>.json`).
    - Phụ đề và anchor khớp giọng: xem video, hoặc so `words.json` với still tại các mốc `@chữ`.
+   - **Gate hình tĩnh:** `gate: ✅ PASS …`. Fail: đọc mốc giây, thêm anchor/`kw`/`overlays` cho cảnh đó (hoặc bỏ `autofill:false`) rồi `--from props`. Chạy riêng: `./dt gate <script>` (cần `out/props.json`, không TTS, ~10–30 s). Không nới ngưỡng để qua gate.
+   - **Autofill:** đọc log `autofill:` của stage props; filler chọn sai ý (số sai ngữ cảnh, chip lạc đề) thì sửa script (`overlays`/`glossary`/`kw`, hoặc `autofill:false` cho cảnh đó kèm anchor thật), không sửa props tay.
    - **Hình theo từng câu:** đối chiếu stills với từng câu `say`. Câu nào không có visual tương ứng (đang liệt kê/diễn giải mà màn hình chỉ có một hình tĩnh không liên quan) → sửa props, đổi scene type hoặc tách cảnh ở ranh giới câu rồi `--from props` (không tốn TTS). Lỗi nhịp hình của validator (❌) bắt buộc sửa trước khi render; mọi `⚠️` còn lại phải xử lý hoặc giải thích trong báo cáo, không bỏ qua.
    - So với bản đã duyệt nếu cần: `scripts/compare.sh <new.mp4> <ref.mp4> sheet.png <frame> …`.
    - `description.txt` có nguồn và credit CC BY (nhạc Commons); bài Pixabay 4–7 có cảnh báo Content ID.
@@ -47,7 +50,8 @@ Thứ tự: `--tts edge|gemini` (CLI) > `script.json → "tts": {"engine": "edge
 - Sau TTS mọi thứ như nhau: whisper căn chữ, mix -14 LUFS / -2 dBTP, giọng hơn nhạc ~21 dB.
 
 ## Chạy lại một phần (`--from`)
-- Sửa props/sfx/section (không đổi `say`): `./dt render <script> --from props`
+- Sửa props/sfx/section/overlays (không đổi `say`): `./dt render <script> --from props`
+- Chỉ kiểm lại gate: `./dt gate <script>` (hoặc `--from gate` để chạy tiếp mix + describe khi pass)
 - Chỉ trộn lại nhạc / đổi bài: `./dt render <script> --from mix`
 - Đổi `say`: chạy lại từ đầu (tts). Lời mới nghĩa là một lần TTS mới, rút style mới.
 - Chỉ viết lại description: `--from describe`
@@ -62,6 +66,7 @@ Thứ tự: `--tts edge|gemini` (CLI) > `script.json → "tts": {"engine": "edge
 | `Edge failed` | mạng chặn `speech.platform.bing.com`; thử lại sau, hoặc dùng Gemini nếu có key |
 | Lỗi TTS 401/403/429/5xx (Gemini) | **dừng, không retry** (quota 100 req/ngày dùng chung). Báo lại người điều khiển, kiểm `GEMINI_API_KEY`/quota |
 | `music file not found` / mix lỗi | thiếu mp3: `./dt fetch-music` hoặc tải tay Pixabay vào `assets/music/pixabay/` |
+| `gate: ❌ FAIL static screen while the voice talks` | cảnh in ra đứng yên ≥ 3 s khi đang đọc: anchor thêm mốc, `kw`, `overlays`, hoặc bật lại autofill; `--from props` |
 | Nhạc lấn giọng | **không sửa chuỗi mix**; báo Dan số đo median, chỉ đổi `music.rel` khi Dan đồng ý |
 
 ## Caption (karaoke, phân trang)
