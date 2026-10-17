@@ -13,6 +13,11 @@
   "Flutter API, ValueNotifier class (notifies when value is replaced with something not equal; in-place mutation does not notify; đọc ngày 17/10/2026): https://api.flutter.dev/flutter/foundation/ValueNotifier-class.html",
   "Flutter API, ValueListenableBuilder class (rebuilds builder when value changes; child is pre-built; đọc ngày 17/10/2026): https://api.flutter.dev/flutter/widgets/ValueListenableBuilder-class.html"
  ],
+ "glossary": {
+  "ValueListenableBuilder": "widget chỉ build lại khi ValueNotifier nó nghe đổi giá trị",
+  "AppBar": "thanh tiêu đề trên cùng của màn hình",
+  "builder": "hàm vẽ lại phần UI khi giá trị đổi"
+ },
  "voice": {
   "style": "random"
  },

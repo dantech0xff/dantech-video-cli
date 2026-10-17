@@ -4,11 +4,14 @@ Visual-change timeline per scene = scene entry + every resolved cue anchor / num
 typing, highlights) + script "overlays" + kw highlights + Follow CTA in/press. SFX alone never counts; captions never count.
 Any stretch of voiced narration longer than GAP_S with no change gets fillers spaced <= GAP_S apart, each drawn from the
 words being spoken at that moment, in this order:
-  focus (a visible item/code line contains a spoken word) > num (spoken number) > term (most salient term, + icon)
-  > progress (section n/m, once per scene) > diagram (scene "diagram" hint, once).
+  focus (a visible item/code line contains a spoken word, or a spoken number already on screen)
+  > num (only numbers declared in scene "numbers": [{n,label}]) > term (only glossary terms, with their gloss, + icon)
+  > progress (scene n/m, once per scene) > diagram (scene "diagram" hint, once) > re-focus a visible item
+  > the scene title (once per scene) > diagram / progress again.
+Scenes with "still": true only get fillers beyond STILL_S (the gate lets them hold up to 5 s).
 Disable with script/scene "autofill": false. Returns overlay events (scene-relative frames) + a log."""
 import re
-FPS=30; GAP_S=2.5; GAP=round(GAP_S*FPS)
+FPS=30; GAP_S=2.5; STILL_S=4.5; GAP=round(GAP_S*FPS); STILL_GAP=round(STILL_S*FPS)
 STOP=set('''và là thì mà của cho với để trong khi nếu nhưng còn rồi này đó kia cái các những một được bị có không cũng đã
 sẽ đang thôi nhé nha ra vào lên xuống từ tới đến theo như bạn mình ta chúng nó họ hay hoặc vì nên lại vẫn chỉ ngay
 thế vậy nào gì đây ở trên dưới ai mỗi mọi rất quá hơn nhất cần phải muốn biết thấy làm dùng xem nói bằng về sau trước
@@ -84,7 +87,8 @@ def beats(raw,res,acc,key=''):
     return acc
 def plan(S,W,ranges,starts,durs,raw_props,res_props,cta,resolve_word):
     """-> (ov per scene, log lines, timeline dict)"""
-    gloss={low(k):v for k,v in (S.get('glossary') or {}).items()}
+    gloss={low(k):v for k,v in (S.get('glossary') or {}).items() if isinstance(v,str) and 0<len(v)<=70}
+    gterm={low(k):k for k in (S.get('glossary') or {})}
     secs=[];[secs.append(sc['section']) for sc in S['scenes'] if sc['section'] not in secs]
     allov=[];log=[];tl=[]
     for k,sc in enumerate(S['scenes']):
@@ -117,14 +121,15 @@ def plan(S,W,ranges,starts,durs,raw_props,res_props,cta,resolve_word):
             if st<=c<st+dur: ev.append(c-st)
         voiced=round(W[hi-1]['e']*FPS)-st if hi>lo else 0
         ev=sorted(set(e for e in ev if e<=voiced))
-        gaps=[(a,b) for a,b in zip(ev,ev[1:]+[voiced]) if b-a>GAP]
+        G=STILL_GAP if sc.get('still') else GAP   # still:true (quote-like) scenes may hold up to 5 s; fill only beyond ~4.5 s
+        gaps=[(a,b) for a,b in zip(ev,ev[1:]+[voiced]) if b-a>G]
         tl.append({'scene':k+1,'type':sc['type'],'start':st,'dur':dur,'voiced':voiced,'events':ev,'gaps_before':[(a,b) for a,b in gaps]})
         auto=S.get('autofill',True) is not False and sc.get('autofill',True) is not False
         if not auto:
             if gaps: log.append(f'autofill: scene {k+1} disabled (autofill:false), {len(gaps)} static gap(s) left: '+', '.join(f'{(st+a)/FPS:.1f}-{(st+b)/FPS:.1f}s' for a,b in gaps))
             allov.append(sorted(ov,key=lambda o:o['at'])); tl[-1]['gaps_after']=gaps; continue
         items=[(txt,at or 0) for txt,at,_ in texts(res_props[k]) if not _.endswith('.title') and _!='props.title' and len(txt)>=3]
-        used=set();last_focus=None
+        used=set();last_focus=None;nums=[x for x in (sc.get('numbers') or []) if isinstance(x,dict) and x.get('label')]
         def window(f):
             """scene words spoken in [f-1.0s, f+1.6s], current word first"""
             t=(st+f)/FPS;idx=[i for i in range(len(ws)) if W[lo+i]['s']<=t+1.6 and W[lo+i]['e']>=t-1.0]
@@ -160,37 +165,30 @@ def plan(S,W,ranges,starts,durs,raw_props,res_props,cta,resolve_word):
             if not dock_ok:
                 vis=[txt for txt,at in items if at<=f-4 and txt!=last_focus]
                 if vis: txt=vis[(f//GAP)%len(vis)];last_focus=txt;return {'kind':'focus','match':txt[:60],'why':'Follow CTA on screen: focus only'}
-                if still: txt=still[(f//GAP)%len(still)];last_focus=txt;return {'kind':'focus','match':txt[:60],'why':'Follow CTA on screen: focus the title / static text'}
+                if still and ('title',) not in used: used.add(('title',));txt=still[0];last_focus=txt;return {'kind':'focus','match':txt[:60],'why':'Follow CTA on screen: focus the title (once)'}
                 return None
-            # number
+            # number: on screen -> focus the element that shows it; else only numbers the script declares in scene "numbers"
             for i in sorted(idx):
                 r=parse_num(say,i)
                 if r and i>0 and (lambda q:q and q[1]>=2)(parse_num(say,i-1)): r=None   # "bốn" inside "mười bốn" is not a new number
-                if r and any(re.search(r'(^|\D)'+re.escape(r[0])+r'(\D|$)',t) for t,_ in every): r=None   # already on screen: a chip would repeat it
-                if r and ('n',r[0]) not in used:
-                    v,n=r;a=0;b=len(say)
-                    for q in range(i-1,-1,-1):   # label stays inside the sentence/clause
-                        if re.search(r'[.!?:;,]$',say[q]): a=q+1;break
-                    for q in range(i+n-1,len(say)):
-                        if re.search(r'[.!?:;,]$',say[q]): b=q+1 if q>=i+n else i+n;break
-                    # label: the identifiers the clause is about (minSdk, compileSdk, Kotlin), else the 3 words before the number
-                    ids=[]
-                    for q in list(range(a,i))+list(range(i+n,b)):
-                        c=clean(say[q])
-                        if re.fullmatch(r'[A-Za-z][A-Za-z0-9.+#-]{2,}',c) and (re.search(r'[a-z][A-Z]|\d',c) or c.isupper() or low(c) in gloss): ids.append((abs(q-i),c))
-                    after=[clean(x) for x in say[i+n:min(b,i+n+3)]]
-                    # label: nearest technical identifier in the clause (minSdk, JDK, compileSdk), else the words that follow the number, else the 3 before
-                    lab=min(ids)[1] if ids else ' '.join(after) if len(after)>=2 else ' '.join(clean(x) for x in say[max(a,i-3):i]).strip()
-                    used.add(('n',v));return {'kind':'num','n':v,'label':lab,'why':f'spoken number "{" ".join(say[i:i+n])}" = {v}'}
-            # term (most salient, with an icon when a spoken word maps to one)
-            best=None
-            for i in idx:
-                r=term_at(say,i,gloss)
-                if r and r[1]>=1.2 and ('t',low(r[0])) not in used and not any(low(r[0]) in low(tx) for tx,at in vis_all(f)) and (best is None or r[1]>best[1]): best=r
-            if best:
-                t=best[0];used.add(('t',low(t)));o={'kind':'term','w':t,'why':f'salient term "{t}" (score {best[1]:.1f})'}
-                if low(t) in gloss: o['g']=gloss[low(t)]
-                win=' '.join(low(say[i]) for i in idx)
+                if not r: continue
+                v=r[0];hit=lambda t:re.search(r'(^|\D)'+re.escape(v)+r'(\D|$)',t)
+                if any(hit(t) for t,_ in every):
+                    el=next((txt for txt,at in items if at<=f-4 and hit(txt)),None) or (v if ('fn',v) not in used else None)
+                    if el and ('fn',v) not in used and el!=last_focus:
+                        used.add(('fn',v));last_focus=el;return {'kind':'focus','match':el[:60],'why':f'spoken number {v} is on screen: focus it'}
+                    continue
+                d=next((x for x in nums if str(x.get('n'))==v),None)
+                if d and ('n',v) not in used:
+                    used.add(('n',v));return {'kind':'num','n':v,'label':d['label'],'why':f'declared number {v} spoken ("{" ".join(say[i:i+r[1]])}")'}
+            # term chip: only a glossary term (with its gloss) that is being spoken and is not already on screen
+            sl=[low(clean(x)) for x in say]
+            for key in sorted(gloss,key=lambda x:-len(x)):
+                kt=[low(clean(x)) for x in key.split()]
+                at_i=next((i for i in idx if sl[i:i+len(kt)]==kt),None)
+                if at_i is None or ('t',key) in used or any(key in low(tx) for tx,_ in vis_all(f)): continue
+                used.add(('t',key));o={'kind':'term','w':gterm[key],'g':gloss[key],'why':f'glossary term "{gterm[key]}" spoken'}
+                win=' '.join(sl[i] for i in idx)
                 for keys,g in ICON:
                     if any(re.search(r'(^| )'+re.escape(kk)+r'($| )',win) for kk in keys): o['icon']=g;break
                 return o
@@ -201,10 +199,12 @@ def plan(S,W,ranges,starts,durs,raw_props,res_props,cta,resolve_word):
             # last resort: re-focus a visible item (cycles)
             vis=[txt for txt,at in items if at<=f-4 and txt!=last_focus]
             if vis: txt=vis[(f//GAP)%len(vis)];last_focus=txt;return {'kind':'focus','match':txt[:60],'why':'fallback: re-focus a visible item'}
-            if still: txt=still[(f//GAP)%len(still)];last_focus=txt;return {'kind':'focus','match':txt[:60],'why':'fallback: focus the scene title / static text'}
+            if still and ('title',) not in used: used.add(('title',));txt=still[0];last_focus=txt;return {'kind':'focus','match':txt[:60],'why':'fallback: focus the scene title (once per scene)'}
+            if sc.get('diagram'): d=sc['diagram'];return {'kind':'diagram','nodes':d['nodes'],'label':d.get('label'),'why':'fallback after title focus: diagram again'}
+            if len(S['scenes'])>1: return {'kind':'progress','n':k+1,'m':len(S['scenes']),'label':sc['section'],'why':'fallback after title focus: progress again'}
             return None
         for a,b in gaps:
-            n=-(-(b-a)//GAP)-1; slots=[a+round((b-a)*j/(n+1)) for j in range(1,n+1)]
+            n=-(-(b-a)//G)-1; slots=[a+round((b-a)*j/(n+1)) for j in range(1,n+1)]
             for j,f0 in enumerate(slots):
                 end=(slots[j+1]-1) if j+1<len(slots) else b-4
                 if end-f0<30: end=min(b-2,f0+30)
@@ -216,6 +216,7 @@ def plan(S,W,ranges,starts,durs,raw_props,res_props,cta,resolve_word):
                 desc=o.get('w') or o.get('match') or o.get('n') or o.get('label')
                 log.append(f'autofill: scene {k+1} ({sc["type"]}) {(st+f0)/FPS:5.1f}-{(st+end)/FPS:5.1f}s  {o["kind"]:<8} "{str(desc)[:34]}"  ← {o["why"]}')
         ev2=sorted(set(ev+[o['at'] for o in ov]))
-        tl[-1]['gaps_after']=[(x,y) for x,y in zip(ev2,ev2[1:]+[voiced]) if y-x>GAP]
+        tl[-1]['gaps_after']=[(x,y) for x,y in zip(ev2,ev2[1:]+[voiced]) if y-x>G]
+        if sc.get('still'): tl[-1]['still']=True
         allov.append(sorted(ov,key=lambda o:o['at']))
     return allov,log,tl

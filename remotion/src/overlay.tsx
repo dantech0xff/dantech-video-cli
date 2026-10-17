@@ -114,6 +114,6 @@ export const Overlays:React.FC<{ov:Ov[];section:string}>=({ov})=>{const {t,f}=us
  // spotlight dims the content box only (header, captions, Follow stay untouched); ring has no data-bb (it frames an existing box)
  const C=SZ.content;
  return <div ref={me} data-ov="1" style={{position:'absolute',inset:0,pointerEvents:'none',zIndex:5}}>
-  <div style={{position:'absolute',left:C.x-36,top:C.y-8,width:1080-(C.x-36),height:DOCK_B-C.y+14,overflow:'hidden'}}><div ref={spot} style={{position:'absolute',left:-(C.x-36),top:-(C.y-8),width:1080,height:1920,background:/^#[0-9a-fA-F]{6}$/.test(T.bg)?T.bg+'A6':'rgba(0,0,0,.6)',display:'none'}}/></div>
+  <div style={{position:'absolute',left:C.x-36,top:C.y-8,width:1080-(C.x-36),height:DOCK_B-C.y+14,overflow:'hidden'}}><div ref={spot} style={{position:'absolute',left:-(C.x-36),top:-(C.y-8),width:1080,height:1920,background:/^#[0-9a-fA-F]{6}$/.test(T.bg)?T.bg+'80':'rgba(0,0,0,.5)',display:'none'}}/></div>
   <div ref={ring} style={{position:'absolute',display:'none',border:`4px solid ${T.A}`,borderRadius:T.r?22:0,boxShadow:`0 0 0 8px ${T.light?'rgba(0,0,0,.05)':'rgba(255,255,255,.04)'}`}}/>
   {dock&&React.createElement(ELS[dock.kind],{o:dock,t:T,f})}</div>};
