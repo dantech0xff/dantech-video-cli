@@ -27,7 +27,7 @@ export const morphPath=(cx:number,cy:number,R:number,nF:number,round:number,rot:
 const osc=(g:number,sec:number,ph=0)=>Math.sin(2*Math.PI*(g/30/sec)+ph);
 /* slow, continuous, low-contrast shapes behind content (global frame, so they never jump between scenes) */
 export const MidShapes:React.FC=()=>{const g=useCurrentFrame();
- return <svg width={1080} height={1920} style={{position:'absolute',left:0,top:0,pointerEvents:'none'}}>
+ return <svg data-deco="mid" width={1080} height={1920} style={{position:'absolute',left:0,top:0,pointerEvents:'none'}}>
   <path d={morphPath(980,130,300,6.5+2.5*osc(g,24),.55+.4*osc(g,17,1),g*.0035)} fill="rgba(61,220,132,.075)"/>
   <path d={morphPath(30,1030,230,4.5+1.5*osc(g,19,2),.5+.45*osc(g,11),-g*.0025)} fill="none" stroke="rgba(61,220,132,.16)" strokeWidth={3}/>
   <path d={morphPath(1010,1720,270,8+3*osc(g,29,3),.6+.35*osc(g,13,2),g*.002)} fill="rgba(61,220,132,.055)"/></svg>};
@@ -176,7 +176,7 @@ export const AtTerm:React.FC<{title:string;dir?:string;shell?:string;lines:{s:st
     const q=interpolate(f,[l.at,l.at+12],[0,1],cl);const txt=l.s.slice(0,Math.ceil(l.s.length*q));const cur=l===last&&(q<1||Math.floor(f/16)%2===0);
     return <div key={k} style={{display:'flex',alignItems:'center',padding:'8px 30px',fontFamily:MONO,fontWeight:600,fontSize:46,opacity:Math.min(1,m3(f,l.at,'fx'))}}>
      <span style={{width:52,flex:'none',color:AT.green,fontWeight:800}}>$</span><span style={{color:AT.ink,whiteSpace:'pre'}}>{txt}</span>
-     {cur&&<span style={{display:'inline-block',width:22,height:46,marginLeft:4,background:AT.green,opacity:.85}}/>}{tick}</div>})}</div></div>
+     {cur&&<span data-deco="cursor" style={{display:'inline-block',width:22,height:46,marginLeft:4,background:AT.green,opacity:.85}}/>}{tick}</div>})}</div></div>
   {note&&<Note s={note.s} at={note.at}/>}</div>};
 /* 8. package/settings window: checkbox rows slide in at `at`, box fills green at `ok` (falls back to `at`), meta on its own line.
    Header pill counts ticked rows n/m. */

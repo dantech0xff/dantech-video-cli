@@ -46,7 +46,7 @@ export const FlBands:React.FC=()=>{const g=useCurrentFrame();const ang=-36+5*osc
   const ux=Math.cos(ang*Math.PI/180),uy=Math.sin(ang*Math.PI/180);
   return <rect key={k} x={-L/2} y={-W/2} width={L} height={W} rx={r} fill={fill} stroke={stroke??'none'} strokeWidth={stroke?3:0}
    transform={`translate(${cx+ux*sl} ${cy+uy*sl}) rotate(${ang})`}/>};
- return <svg width={1080} height={1920} style={{position:'absolute',left:0,top:0,pointerEvents:'none'}}>
+ return <svg data-deco="mid" width={1080} height={1920} style={{position:'absolute',left:0,top:0,pointerEvents:'none'}}>
   {band(0,1010,330,760,150,'rgba(5,83,177,.08)',undefined,23)}
   {band(1,1060,520,520,96,'rgba(2,125,253,.05)','rgba(2,125,253,.14)',17)}
   {band(2,60,1560,820,170,'rgba(5,83,177,.075)',undefined,21)}
