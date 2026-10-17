@@ -74,6 +74,24 @@ if sc_list:
     else:
         miss=[k for k in S['topic'] if k.lower() not in first.lower()]
         if miss: warn(f'hook: first sentence of scene 1 does not name the topic {miss}: "{first}"')
+# content-driven hook (any theme): "hook": {"kind": controversy|news|explainer|tips|..., claim, sides, why, promise, payoff}
+H=S.get('hook')
+first1=re.split(r'(?<=[.!?:])\s',sc_list[0].get('say','').strip(),maxsplit=1)[0] if sc_list else ''
+if not H: warn('hook: no "hook" block; add "hook": {"kind": "controversy|news|explainer|tips", "claim": …} (see write-script "Hook theo nội dung")')
+else:
+    k=H.get('kind')
+    if k not in ['controversy','news','explainer','tips','story']: warn(f'hook.kind "{k}" unknown (controversy|news|explainer|tips|story)')
+    if not H.get('claim'): warn('hook: missing "claim" (the concrete first-second line, spoken AND on screen)')
+    if k in ['controversy','news']:
+        if len(H.get('sides') or [])!=2: warn('hook: controversy/news needs "sides": [side A, side B] shown in seconds 1–3')
+        if not H.get('payoff'): warn('hook: controversy/news needs a "payoff" promise ("Cuối video…") delivered later')
+    if k=='explainer' and not H.get('why'): warn('hook: explainer should state "why" it matters right after naming the topic')
+    if k=='tips' and not H.get('promise'): warn('hook: tips should state the outcome "promise" (what the viewer gains)')
+    if H.get('payoff'):
+        d=[i for i,sc in enumerate(sc_list,1) if sc.get('payoff')]
+        if not d: warn('hook: payoff promised but no scene has "payoff": true (it must actually be delivered)')
+        elif d[0]==1: warn('hook: payoff delivered in scene 1; it should come near the end')
+if first1.endswith('?'): warn(f'hook: scene 1 opens with a question "{first1}"; open with a concrete claim, poll only after context')
 # info only (no warnings): rough voice length per Gemini style, words/second measured from past renders
 RATE={'hao-hung':3.8,'tu-nhien':3.1,'ke-chuyen':2.55}
 n=len(allw)

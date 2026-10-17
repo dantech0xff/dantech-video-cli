@@ -55,3 +55,6 @@ Khung 1080x1920 bị UI TikTok / Reels / Shorts / Facebook Reels che. Hằng s�
 - Top bar: wordmark và số trang thẳng **baseline** (`align-items: baseline`), không căn giữa. Kiểm bằng crop phóng to.
 - Glitch/hiệu ứng chỉ ở beat hoặc chuyển cảnh, không chạy liên tục. Chuyển cảnh mượt.
 - Theme mới làm trên branch `theme/<id>`, stills trước, video sau, merge thường khi đã duyệt.
+
+## Scene chung cho mọi theme
+`VersusHook` (`remotion/src/versus.tsx`) là scene mở cho hook dạng controversy/news, dùng cho **mọi theme**. Nó lấy màu và font từ theme. Theme mới/sửa theme phải render still VersusHook ở frame 0 (claim to, đọc được) và ~frame 40 (2 phe + VS), rồi chạy safezone.py. Nếu theme cần phong cách riêng thì nhánh trong `versus.tsx` theo `t.id` (như glitch), không tạo scene riêng cho theme.

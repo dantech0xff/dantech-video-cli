@@ -25,6 +25,7 @@ Nguồn chủ đề, lịch đăng, mức tự động đăng do **người đi�
 2. **Chọn theme** (xem bảng dưới + `write-script`). Spec không ghi theme và có người trả lời được thì đề xuất rồi chờ. Chạy tự động thì tự chọn và ghi lý do.
 3. **Viết `videos/<slug>/script.json`** theo skill `write-script`:
    - **Một ý lõi** cho mỗi video. Ý phụ để thành video khác.
+   - **Hook theo nội dung** (`hook.kind`: controversy/news → claim cụ thể + 2 phe + payoff; explainer → nêu chủ đề + why; tips → promise). Áp dụng cho mọi theme.
    - **Hook trực diện:** câu đầu cảnh 1 nêu thẳng chủ đề (≤10–12 chữ, ~3 s). Tiêu đề trên màn hình cảnh 1 cũng hiện chủ đề ngay. Khai báo `topic`.
    - **Đặt vấn đề tối đa 2 câu**, rồi vào lõi luôn. Khung: hook → khái niệm lõi → một bằng chứng/ví dụ → takeaway + CTA.
    - **Xoay quanh chủ đề** (topic-centric), không đi theo cấu trúc nguồn.
@@ -97,6 +98,8 @@ Video chỉ "xong" khi tất cả đều ✅:
 - [ ] Thời lượng chỉ ghi lại để báo, **không** là lý do render lại hay gọi lại TTS.
 
 ## Common mistakes (đã gặp thật)
+- Hook chung chung ("Anh em đứng về phía nào?") hoặc claim mơ hồ, không nói ai vs ai và vì sao. Thiếu 2 phe trong 1–3 s. Hứa "cuối video…" mà không giao. Bịa claim giật tít không có trong nguồn. Xem [docs/LEARNINGS.md](docs/LEARNINGS.md).
+- Viết hook theo theme. Hook phải theo **nội dung** (`hook.kind`).
 - Mở bằng câu dẫn dắt vòng vo. Đặt vấn đề 4 cảnh trong khi lõi chỉ nửa video. Kể lại mọi ví dụ trong bài học.
 - Viết kiểu ghi chú, thiếu từ nối, thuật ngữ không định nghĩa (ioc_v1 bị chê "thiếu chữ").
 - Đi theo thứ tự bài học thay vì theo chủ đề. Bịa code minh hoạ không có trong nguồn.

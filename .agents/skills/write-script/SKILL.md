@@ -41,6 +41,27 @@ Dựng script quanh **sợi chỉ xuyên suốt của chủ đề**, không theo
 - Mỗi cảnh mở bằng từ nối nối với cảnh trước (*nhờ vậy, và chính điều đó, trong project, tóm lại*).
 - Chỉ dùng code / lệnh / đường dẫn **có thật trong nguồn**; không bịa kiểu dữ liệu, tên file hay chữ ký hàm.
 
+## Hook theo nội dung (áp dụng MỌI theme)
+Hook do **nội dung input** quyết định, không do theme. Bước đầu tiên: phân loại input rồi điền khối `hook` trong `script.json` (validator kiểm theo `hook.kind`, không theo theme id):
+
+| `hook.kind` | Input | Giây 0–1 (nói **và** chữ to trên màn hình) | Giây 1–3 | Bắt buộc |
+|---|---|---|---|---|
+| `controversy` / `news` | tin, drama, tranh chấp | **claim cụ thể**: ai vs ai + vì sao | **2 phe cụ thể** (Phe A vs Phe B) để người xem ở lại chọn | `claim`, `sides` (2), `payoff` + scene `"payoff": true` |
+| `explainer` | khái niệm, code | nêu thẳng chủ đề (xem "Hook trực diện") | vì sao nó quan trọng / nỗi đau cụ thể | `claim`, `why` |
+| `tips` | mẹo, tool | kết quả người xem nhận được | cái giá của cách cũ | `claim`, `promise` |
+| `story` | kể chuyện | khoảnh khắc gay cấn nhất | bối cảnh 1 câu | `claim` |
+
+Quy tắc chung:
+- **Hook lấy từ câu chuyện thật.** Claim, phe, payoff đều phải có trong nguồn. Không bịa clickbait. (Ví dụ nhà phân tích gợi ý "chuyện đặt tên App Store" là **sai** với vụ này nên không dùng.)
+- **Không mở bằng câu hỏi chung chung** ("Anh em đứng về phía nào?", "Merge hay rebase?"). Câu hỏi bình chọn chỉ đặt **sau khi đã có bối cảnh**, ở cảnh cuối.
+- **Payoff phải được giao:** hứa "Cuối video…" thì scene gần cuối phải nói đúng điều đó, đánh dấu `"payoff": true`, và đừng lộ trước ở cảnh giữa.
+- `sides` là **lập trường người xem có thể chọn**, bám vào sự kiện thật. Nếu gán lời cho một bên ("OpenAI nói…") thì phải có nguồn.
+- Hình: claim to ở frame 0, hai phe hiện trong 1–3 s. Scene chung **VersusHook** dùng được với mọi theme (xem SCHEMA).
+
+Ví dụ thật (`videos/openai-vs-apple-glitch`, reel cũ: chỉ 36.7% xem qua 3 s, xem TB 6 s/33 s):
+- ❌ Cũ: "OpenAI vừa phải xuống nước trước Apple!" (không rõ ai kiện ai, vì sao) … rồi cuối mới hỏi "Anh em nghĩ ai đúng?" mà không có phe cụ thể, không có payoff.
+- ✅ Mới: "Apple kiện OpenAI vì 14 cựu nhân viên, OpenAI đã xuống nước. Phe Apple: bí mật thương mại phải được bảo vệ. Phe OpenAI: nhân tài có quyền nhảy việc. Cuối video là thứ OpenAI phải giao nộp cho Apple." Payoff giao ở cảnh 5 ("Và đây là thứ mình hứa: … bản sao pháp lý ổ cứng của cả mười bốn nhân viên"). Poll ở cảnh cuối, sau khi đã đủ dữ kiện.
+
 ## Hook trực diện (direct hook)
 
 Trong 3 giây đầu, người xem phải biết **video nói về chủ đề gì** (vd "MVVM trong Flutter"). Không dẫn vòng, không "thử tưởng tượng…" trước khi gọi tên chủ đề.

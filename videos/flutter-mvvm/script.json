@@ -193,5 +193,10 @@
     }
    }
   }
- ]
+ ],
+ "hook": {
+  "kind": "explainer",
+  "claim": "MVVM trong Flutter: mỗi dòng code có đúng một chỗ ở",
+  "why": "setState vỡ khi app có hơn một màn hình"
+ }
 }

@@ -82,3 +82,9 @@ Ví dụ: `videos/flutter-mvvm/script.json`. Không hiển thị tên theme; kh�
 
 ## Theme `hot-news-glitch` (TIN NÓNG GLITCH)
 Dùng scene của hot-news (Flow, Quote, Checklist, Evidence, CTA); cảnh mở dùng **GlHeadline** `{kicker,l1,bar,l3,deck[],hits?:[frame|@word]}` (glitch RGB split + cắt lát tại các `hits`). `out: "signal"` = chuyển cảnh tín hiệu vỡ (ngắn). `kick` nên là nhãn có nghĩa (vd "TOÀ ÁN"), không nhãn kiểu báo/trang.
+
+## Khối `hook` (mọi theme, khuyến nghị; validator cảnh báo nếu thiếu)
+`"hook": {"kind": "controversy|news|explainer|tips|story", "claim": "...", "sides": ["Phe A…","Phe B…"], "why": "...", "promise": "...", "payoff": "..."}`. Scene giao payoff thêm `"payoff": true`. Xem write-script "Hook theo nội dung".
+
+## Scene chung: VersusHook (dùng được với mọi theme)
+**VersusHook** `{kicker?, claim:[dòng…] (2–3 dòng, chữ HOA ngắn), hl?:index dòng nền accent, a:{label,line}, b:{label,line}, sidesAt?:frame|@word, payoff?:string, payoffAt?:frame|@word}`. Claim hiện ngay frame 0 (không fade). Hai thẻ phe + "VS" nảy vào ở `sidesAt` (nên đặt ~1 s, vd `@Phe`). Dòng payoff ▶ hiện ở `payoffAt`. Màu và font lấy từ theme (accent, ink, head/body). Riêng hot-news-glitch có RGB split ngắn khi hai phe xuất hiện. Size chữ tự co theo bề rộng (khung nội dung an toàn 894 px trước khi scale). Ví dụ: `videos/openai-vs-apple-glitch` cảnh 1.

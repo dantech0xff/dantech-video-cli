@@ -2,13 +2,12 @@
  "theme": "hot-news-glitch",
  "title": "OpenAI xuống nước trước Apple",
  "date": "16 · 10 · 2026",
- "caption": "OpenAI nhượng bộ trong vụ Apple kiện đánh cắp bí mật thương mại. Anh em nghĩ ai đúng? #DanTech #TinNong",
+ "caption": "Apple kiện OpenAI vì 14 cựu nhân viên, OpenAI đã xuống nước. Phe Apple hay phe OpenAI? #DanTech #TinNong",
  "sources": [
   "The Verge, Bloomberg (15.10.2026)"
  ],
  "voice": {
-  "style": "random",
-  "file": "voice_approved.mp3"
+  "style": "random"
  },
  "music": {
   "track": "pink_sound-storm-zone-epic-background-instrumental-music-for-video-short-1-587216",
@@ -16,27 +15,40 @@
  },
  "scenes": [
   {
-   "say": "OpenAI vừa phải xuống nước trước Apple!",
-   "type": "GlHeadline",
+   "say": "Apple kiện OpenAI vì 14 cựu nhân viên, OpenAI đã xuống nước. Phe Apple: bí mật thương mại phải được bảo vệ. Phe OpenAI: nhân tài có quyền nhảy việc. Cuối video là thứ OpenAI phải giao nộp cho Apple.",
+   "type": "VersusHook",
    "section": "TRANG NHẤT",
    "out": "signal",
    "props": {
-    "kicker": "ĐỘC QUYỀN · CẬP NHẬT 15.10.2026",
-    "l1": "OPENAI",
-    "bar": "XUỐNG NƯỚC",
-    "l3": "TRƯỚC APPLE",
-    "deck": [
-     "Toà án sắp ra lệnh cấm. OpenAI chọn nhượng bộ trước.",
-     "14 nhân viên cũ của Apple ở tâm bão."
+    "kicker": "VỤ KIỆN BÍ MẬT THƯƠNG MẠI · 15.10.2026",
+    "claim": [
+     "APPLE KIỆN OPENAI",
+     "VÌ 14 CỰU NHÂN VIÊN",
+     "OPENAI XUỐNG NƯỚC"
     ],
-    "hits": [
-     0,
-     "@xuống"
-    ]
-   }
+    "hl": 2,
+    "a": {
+     "label": "PHE APPLE",
+     "line": "Bí mật thương mại phải được bảo vệ"
+    },
+    "b": {
+     "label": "PHE OPENAI",
+     "line": "Nhân tài có quyền nhảy việc"
+    },
+    "sidesAt": "@Phe",
+    "payoff": "Cuối video: thứ OpenAI phải giao nộp",
+    "payoffAt": "@Cuối"
+   },
+   "sfx": [
+    {
+     "at": "@Phe",
+     "s": "impactPlank_medium_000",
+     "v": 0.45
+    }
+   ]
   },
   {
-   "say": "Apple kiện OpenAI, cáo buộc đánh cắp bí mật thương mại, khi mười bốn nhân viên nhảy việc từ Apple sang.",
+   "say": "Cụ thể, Apple cáo buộc OpenAI đánh cắp bí mật thương mại, khi mười bốn nhân viên nhảy việc từ Apple sang.",
    "type": "Flow",
    "section": "VỤ KIỆN BÍ MẬT THƯƠNG MẠI",
    "out": "signal",
@@ -98,10 +110,6 @@
      {
       "s": "Áp dụng trong suốt thời gian vụ kiện",
       "at": 64
-     },
-     {
-      "s": "Giao bản sao pháp lý ổ cứng của 14 nhân viên",
-      "at": 175
      }
     ]
    },
@@ -120,16 +128,11 @@
      "at": 74,
      "s": "tick_001",
      "v": 0.4
-    },
-    {
-     "at": 185,
-     "s": "tick_001",
-     "v": 0.4
     }
    ]
   },
   {
-   "say": "Không chỉ vậy, OpenAI còn phải giao bản sao pháp lý ổ cứng của cả mười bốn nhân viên này.",
+   "say": "Và đây là thứ mình hứa: OpenAI phải giao bản sao pháp lý ổ cứng của cả mười bốn nhân viên này.",
    "type": "Evidence",
    "section": "BẰNG CHỨNG",
    "out": "signal",
@@ -153,10 +156,11 @@
      "s": "tick_001",
      "v": 0.3
     }
-   ]
+   ],
+   "payoff": true
   },
   {
-   "say": "Cuộc chiến nhân tài AI đang ngày càng căng. Anh em nghĩ ai đúng? Comment bên dưới, và follow Dan Tech nhé!",
+   "say": "Giờ anh em đã đủ dữ kiện: phe Apple hay phe OpenAI? Comment bên dưới, và follow Dan Tech nhé!",
    "type": "CTA",
    "section": "TRANG CUỐI",
    "props": {
@@ -165,8 +169,8 @@
     "lead": "Cuộc chiến nhân tài AI ngày càng căng.",
     "big": "AI ĐÚNG?",
     "opts": [
-     "APPLE",
-     "OPENAI"
+     "PHE APPLE",
+     "PHE OPENAI"
     ],
     "hint": "↓ Bình chọn ở phần COMMENT",
     "ctaAt": "@Comment-40",
@@ -181,5 +185,18 @@
     }
    ]
   }
- ]
+ ],
+ "topic": [
+  "Apple",
+  "OpenAI"
+ ],
+ "hook": {
+  "kind": "controversy",
+  "claim": "Apple kiện OpenAI vì 14 cựu nhân viên, OpenAI đã xuống nước",
+  "sides": [
+   "Apple: bí mật thương mại phải được bảo vệ",
+   "OpenAI: nhân tài có quyền nhảy việc"
+  ],
+  "payoff": "thứ OpenAI phải giao nộp cho Apple"
+ }
 }
