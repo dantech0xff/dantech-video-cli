@@ -80,7 +80,7 @@ Script mới dùng `"voice": {"style":"random"}`. Không đặt `voice.file`. C�
 - **Caption:** karaoke phân trang (mọi theme). Hết câu thì xoá trang, hiện trọn câu mới, highlight từng chữ. Tối đa 2 dòng. Câu dài cắt ở dấu phẩy/ranh giới tự nhiên. Mỗi chữ là một chip có nền. Chữ đang đọc đổi sang nền accent + text tương phản, pop nhẹ. Không gạch chân. Font và màu chip lấy từ `theme.json → look.caption`. Không sửa thành chạy cuộn.
 - **Safe zone bắt buộc:** hằng số ở `remotion/src/safezone.ts`. Nội dung x 136–860, y 290–~1360. Caption y 1366–1500. Follow y 1150–1350. Trên y 250 chỉ để brand. Kiểm bằng `scripts/safezone.py`.
 - **Trên màn hình:** không tên theme, không meta label, không nhãn kỹ thuật giả (FIG./SHEET/§/"END OF SHEET"…). Brand "Dan Tech" thì giữ. **Không người, mặt người AI.** B-roll faceless.
-- **Outro/CTA:** có cả hai handle **YouTube @dantech-0xff** và **Facebook @dantech0xff**. Nút Follow do code lo.
+- **Outro/end card:** 3 dòng có logo: **YouTube @dantech-0xff**, **Facebook @dantech0xff**, **TikTok @dantech_0xff**. Nguồn duy nhất là `channel.json`, sửa handle ở đó. Logo vendored từ simple-icons, CC0, nằm ở `assets/icons/` và `remotion/src/brand.tsx`. Nút Follow do code lo.
 - Không sửa theme đã duyệt nếu không được yêu cầu. Theme mới/sửa theme: làm theo skill `theme`.
 
 ## 4. QC: Definition of done / quality bar

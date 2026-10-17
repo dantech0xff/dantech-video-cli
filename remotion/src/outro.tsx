@@ -1,3 +1,4 @@
+import {BrandTile,HANDLES,Handle} from './brand';
 import React from 'react';import {AbsoluteFill,Audio,Sequence,staticFile,useCurrentFrame,interpolate,Easing} from 'remotion';
 import {Theme} from './themes';import {H,Bd,FONTS} from './sys';import {SZ} from './safezone';
 const EO=Easing.bezier(.16,1,.3,1),EIO=Easing.bezier(.7,0,.2,1);const cl={extrapolateLeft:'clamp',extrapolateRight:'clamp'} as const;
@@ -43,7 +44,7 @@ export const FollowCTASfx:React.FC<{pressAt:number;click?:string;bell?:string}>=
  <Sequence from={pressAt-1}><Audio src={staticFile(`sfx/${click}.wav`)} volume={0.9}/></Sequence>
  <Sequence from={pressAt+5}><Audio src={staticFile(`sfx/${bell}.wav`)} volume={0.45}/></Sequence></>;
 /* Branded end card. Render inside <Sequence from={start} durationInFrames={dur}> */
-export const EndCard:React.FC<{t:Theme;dur?:number;handles?:{p:string;h:string}[];tagline?:string;sting?:string;pal?:{panel?:string;fg?:string;tagBg?:string;tagFg?:string;mark?:string;rail?:string}}>=({t,dur=75,handles=[{p:'YOUTUBE',h:'@dantech-0xff'},{p:'FACEBOOK',h:'@dantech0xff'}],tagline='Tin công nghệ mỗi ngày',sting='outro_sting',pal})=>{const P={panel:t.ink,fg:t.bg,tagBg:t.accent,tagFg:t.onAccent,mark:t.accent,rail:t.accent,...(pal||{})};
+export const EndCard:React.FC<{t:Theme;dur?:number;handles?:Handle[];tagline?:string;sting?:string;pal?:{panel?:string;fg?:string;tagBg?:string;tagFg?:string;mark?:string;rail?:string}}>=({t,dur=75,handles=HANDLES,tagline='Tin công nghệ mỗi ngày',sting='outro_sting',pal})=>{const P={panel:t.ink,fg:t.bg,tagBg:t.accent,tagFg:t.onAccent,mark:t.accent,rail:t.accent,...(pal||{})};
  const f=useCurrentFrame();const O=dur-14;
  const wipe=interpolate(f,[0,9],[100,0],{...cl,easing:EIO});
  const it=(at:number,k:number)=>{const p=interpolate(f,[at,at+8],[0,1],{...cl,easing:EO});const o=interpolate(f,[O+k*2,O+8+k*2],[0,1],{...cl,easing:EIO});return {opacity:p*(1-o),transform:`translateY(${(1-p)*40-o*90}px) scale(${1.12-0.12*p})`,transformOrigin:'left center'} as React.CSSProperties};
@@ -55,8 +56,8 @@ export const EndCard:React.FC<{t:Theme;dur?:number;handles?:{p:string;h:string}[
     <div style={{...it(5,0),fontFamily:'Anton',fontSize:168,color:P.fg,lineHeight:.95,whiteSpace:'nowrap'}}>DAN TECH<span style={{color:P.mark}}>■</span></div>
     <div style={{height:8,background:P.fg,marginTop:18,width:`${interpolate(f,[9,20],[0,100],{...cl,easing:EO})*(1-interpolate(f,[O,O+8],[0,1],cl))}%`}}/>
     <div style={{...it(13,1),marginTop:34}}><span style={{...H(t,t.head==='Anton'?62:50,P.tagFg),background:P.tagBg,padding:t.head==='Anton'?'6px 22px 0':'4px 22px',borderRadius:r(t,16),display:'inline-block'}}>{tagline}</span></div>
-    <div style={{marginTop:70,display:'flex',flexDirection:'column',gap:26}}>{handles.map((x,k)=><div key={x.p} style={{...it(20+k*5,2+k),display:'flex',alignItems:'center',gap:26}}>
-     <span style={{...Bd(t,30,P.fg),letterSpacing:5,border:`3px solid ${P.fg}`,padding:'6px 14px',minWidth:180,textAlign:'center',borderRadius:r(t,10)}}>{x.p}</span>
+    <div style={{marginTop:60,display:'flex',flexDirection:'column',gap:22}}>{handles.map((x,k)=><div key={x.p} style={{...it(20+k*5,2+k),display:'flex',alignItems:'center',gap:26}}>
+     <BrandTile icon={x.icon} size={t.head==='Anton'?76:64} radius={Math.max(10,r(t,14))}/>
      <span style={{...H(t,t.head==='Anton'?74:56,P.fg),textTransform:'none'}}>{x.h}</span></div>)}</div>
    </div>
    {/* footer dropped: it sat in the bottom UI zone */}

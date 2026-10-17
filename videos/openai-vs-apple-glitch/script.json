@@ -166,11 +166,11 @@
    "props": {
     "n": "6",
     "kick": "BẠN NGHĨ SAO?",
-    "lead": "Cuộc chiến nhân tài AI ngày càng căng.",
-    "big": "AI ĐÚNG?",
+    "lead": "Apple kiện vậy là đúng, hay OpenAI chỉ tuyển người giỏi?",
+    "big": "APPLE ĐÚNG|HAY OPENAI?",
     "opts": [
-     "PHE APPLE",
-     "PHE OPENAI"
+     "APPLE ĐÚNG",
+     "OPENAI ĐÚNG"
     ],
     "hint": "↓ Bình chọn ở phần COMMENT",
     "ctaAt": "@Comment-40",

@@ -58,3 +58,6 @@ Khung 1080x1920 bị UI TikTok / Reels / Shorts / Facebook Reels che. Hằng s�
 
 ## Scene chung cho mọi theme
 `VersusHook` (`remotion/src/versus.tsx`) là scene mở cho hook dạng controversy/news, dùng cho **mọi theme**. Nó lấy màu và font từ theme. Theme mới/sửa theme phải render still VersusHook ở frame 0 (claim to, đọc được) và ~frame 40 (2 phe + VS), rồi chạy safezone.py. Nếu theme cần phong cách riêng thì nhánh trong `versus.tsx` theo `t.id` (như glitch), không tạo scene riêng cho theme.
+
+## End card handles
+Handle và logo lấy từ `channel.json` qua `HANDLES` / `BrandTile` (`remotion/src/brand.tsx`). Không hardcode handle trong theme. End card gồm 3 dòng canh trái, mỗi dòng là ô trắng có logo màu thương hiệu rồi tới handle, mép phải ≤ 860.

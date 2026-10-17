@@ -11,7 +11,7 @@
  "music": {"track": "random"},          // hoặc id trong assets/music/tracks.json, + "start": giây
  "variant": "red",                     // tuỳ chọn: biến thể trong theme.json → variants (GIẢI THÍCH: "red" = accent YouTube đỏ)
  "look": {"accent": "#…"},             // tuỳ chọn: ghi đè màu look cho riêng video (sau variant)
- "handles": [{"p":"YOUTUBE","h":"@dantech-0xff"}, …],  // tuỳ chọn, mặc định đã đúng
+ "handles": [...],  // tuỳ chọn, KHÔNG nên đặt: mặc định lấy từ /channel.json (YouTube, Facebook, TikTok + icon)
  "cta": {"in": "@follow-6", "press": "@Dan", "sub": "…"}, // tuỳ chọn, mặc định từ theme.json → cta
  "scenes": [{
    "say": "Câu giọng đọc nói trong cảnh này.",   // cảnh bắt đầu ở chữ đầu tiên của say

@@ -82,7 +82,7 @@ Nhờ vậy khi đổi giọng (thời lượng khác), keycap, popup, SFX vẫn
 | Màu, font, kiểu chữ | `theme.json` → `look` |
 | Biến thể màu (vd GIẢI THÍCH đỏ) | `theme.json` → `variants.<tên>.look`; dùng: `"variant": "red"` trong script.json (hoặc `"look": {...}` ghi đè riêng 1 video) |
 | Tagline end card, vị trí nút Follow, thời gian giữ cuối | `theme.json` → `outro`, `cta`, `tail_hold` |
-| Handle mạng xã hội | mặc định YouTube @dantech-0xff, Facebook @dantech0xff (ghi đè bằng `"handles"` trong script.json) |
+| Handle mạng xã hội | `channel.json` (YouTube @dantech-0xff, Facebook @dantech0xff, TikTok @dantech_0xff, có logo). Ghi đè từng video bằng `"handles"` trong script nếu thật cần |
 
 Độ dài: rõ ràng trước, độ dài theo nội dung. Giọng đọc: gọi TTS **một lần** cho mỗi video và giữ style đã rút, không gọi lại để chỉnh độ dài. Lời không đổi thì dùng lại cache `.cache/tts/` (cùng audio, cùng style). Muốn giọng mới: `./dt render <script> --new-voice`.
 

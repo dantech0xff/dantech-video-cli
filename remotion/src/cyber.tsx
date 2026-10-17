@@ -1,3 +1,4 @@
+import {BrandTile,HANDLES,Handle} from './brand';
 // tech-explain-cyber (GIẢI THÍCH CYBER): "dark blueprint" scenes.
 // One cold cyan accent, hairlines, self-drawing strokes, dimension lines, callouts, slow precise easing.
 import React from 'react';import {interpolate,Easing,useCurrentFrame,AbsoluteFill} from 'remotion';import {useS,FONTS} from './sys';
@@ -102,17 +103,17 @@ export const BpChrome:React.FC<{section:string;page:string}>=({section,page})=>{
  <div style={{position:'absolute',left:64,top:300,bottom:330,width:30}}>{Array.from({length:27},(_,k)=><div key={k} style={{position:'absolute',top:k*48,right:0,width:k%5===0?22:10,height:1,background:k%5===0?BP.dim:BP.hair}}></div>)}</div></>};
 
 /* end card */
-export const BpEndCard:React.FC<{A?:string;dur?:number;handles?:{p:string;h:string}[];tagline?:string}>=({A='#5CD6E8',dur=75,handles=[{p:'YOUTUBE',h:'@dantech-0xff'},{p:'FACEBOOK',h:'@dantech0xff'}],tagline=''})=>{const f=useCurrentFrame();const p=(a:number,d=24)=>interpolate(f,[a,a+d],[0,1],{...cl,easing:EO});const out=interpolate(f,[dur-10,dur],[1,0],cl);
+export const BpEndCard:React.FC<{A?:string;dur?:number;handles?:Handle[];tagline?:string}>=({A='#5CD6E8',dur=75,handles=HANDLES,tagline=''})=>{const f=useCurrentFrame();const p=(a:number,d=24)=>interpolate(f,[a,a+d],[0,1],{...cl,easing:EO});const out=interpolate(f,[dur-10,dur],[1,0],cl);
  return <AbsoluteFill style={{zIndex:40,background:BP.bg,opacity:Math.min(1,p(0,10))*out}}><style>{FONTS}</style>
   <AbsoluteFill style={{backgroundImage:`linear-gradient(${BP.grid} 1px,transparent 1px),linear-gradient(90deg,${BP.grid} 1px,transparent 1px)`,backgroundSize:'24px 24px'}}/>
   <div style={{position:'absolute',left:40,right:40,top:40,bottom:40,border:`1px solid ${BP.line}`}}/>
   <div style={{position:'absolute',left:136,right:220,top:640}}>
    
-   <svg width={834} height={8} style={{marginTop:22}}><path d="M0 4 H834" stroke={A} strokeWidth={2} pathLength={1} strokeDasharray={1} strokeDashoffset={1-p(6,30)}/></svg>
+   <svg width={724} height={8} style={{marginTop:22}}><path d="M0 4 H724" stroke={A} strokeWidth={2} pathLength={1} strokeDasharray={1} strokeDashoffset={1-p(6,30)}/></svg>
    <div style={{fontFamily:'BVPX',fontSize:150,color:BP.ink,lineHeight:1.12,marginTop:30,letterSpacing:-3,opacity:p(10),transform:`translateY(${(1-p(10))*20}px)`}}>Dan Tech</div>
    <div style={{fontFamily:SANS,fontSize:46,color:BP.dim,marginTop:18,opacity:p(16)}}>{tagline}</div>
-   <div style={{marginTop:70,display:'flex',flexDirection:'column',gap:0}}>{handles.map((h,k)=><div key={k} style={{display:'flex',justifyContent:'space-between',alignItems:'baseline',padding:'24px 0',borderTop:`1px solid ${BP.hair}`,borderBottom:k===handles.length-1?`1px solid ${BP.hair}`:'none',opacity:p(22+k*5)}}>
-    <span style={lbl(22)}>{h.p}</span><span style={{fontFamily:MONO,fontSize:50,color:k===0?A:BP.ink}}>{h.h}</span></div>)}</div>
+   <div style={{marginTop:70,display:'flex',flexDirection:'column',gap:0}}>{handles.map((h,k)=><div key={k} style={{display:'flex',alignItems:'center',gap:26,padding:'20px 0',borderTop:`1px solid ${BP.hair}`,borderBottom:k===handles.length-1?`1px solid ${BP.hair}`:'none',opacity:p(22+k*5)}}>
+    <BrandTile icon={h.icon} size={56} radius={6}/><span style={{fontFamily:MONO,fontSize:48,color:k===0?A:BP.ink}}>{h.h}</span></div>)}</div>
   </div>
   {/* footer dropped (bottom UI zone) */}
  </AbsoluteFill>};

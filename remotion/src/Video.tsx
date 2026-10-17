@@ -12,7 +12,7 @@ export type VideoProps={theme:string;look?:Record<string,any>;date:string;voice:
  scenes:{type:string;dur:number;section:string;out?:string;focus?:[number,number];morph?:any;props:any}[];
  sfx:{at:number;s:string;v?:number}[];
  cta:{inAt:number;pressAt:number;outAt:number;top:number;sub:string};
- outro:{start:number;dur:number;tagline:string;pal?:any;handles:{p:string;h:string}[]}};
+ outro:{start:number;dur:number;tagline:string;pal?:any;handles:{p:string;h:string;icon?:string}[]}};
 export const Video:React.FC<VideoProps>=(p)=>{const t={...THEMES[p.theme],...(p.look||{})} as typeof THEMES[string]; // look = theme variant / script override (build_props.py)
  const scenes:Scene[]=p.scenes.map(s=>{const El=SCENES[s.type];if(!El)throw new Error(`Unknown scene type ${s.type}`);
   return {dur:s.dur,section:s.section,out:s.out as any,focus:s.focus,morph:s.morph,el:<El {...s.props}/>}});
