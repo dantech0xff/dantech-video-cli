@@ -40,7 +40,7 @@ for i in need:
     if i not in TR: err(f'theme music.pool id "{i}" not in tracks.json')
     elif not os.path.isfile(os.path.join(ROOT,TR[i]['file'])): err(f'music file missing: {TR[i]["file"]} (./dt fetch-music; Pixabay tải tay)')
 if tid!='random': warn(f'music.track pinned to {tid} (the rule is rotation: "random")')
-types=set(re.search(r'const SCENES[^{]*\{([^}]*)\}',open(os.path.join(ROOT,'remotion/src/Video.tsx')).read()).group(1).replace(' ','').split(','))
+types={x.split(':')[0] for x in re.search(r'const SCENES[^{]*\{([^}]*)\}',open(os.path.join(ROOT,'remotion/src/Video.tsx')).read()).group(1).replace(' ','').replace('\n','').split(',') if x}
 sfx={os.path.splitext(f)[0] for f in os.listdir(os.path.join(ROOT,'assets/sfx'))}
 known={}
 for ex in glob.glob(os.path.join(ROOT,'videos/*/script.json')):
@@ -83,17 +83,27 @@ def kw_lists(x):
         for v in x: yield from kw_lists(v)
 GLYPHS=set(re.findall(r"^ ?(\w+):'",open(os.path.join(ROOT,'remotion/src/overlay.tsx')).read().split('export const GLYPH')[1].split('};')[0],re.M)) if os.path.isfile(os.path.join(ROOT,'remotion/src/overlay.tsx')) else set()
 GLYPHS|=set(re.findall(r"(\w+):'M",open(os.path.join(ROOT,'remotion/src/overlay.tsx')).read())) if os.path.isfile(os.path.join(ROOT,'remotion/src/overlay.tsx')) else set()
-OVK={'term':({'w'},{'g','icon'}),'num':({'n'},{'label'}),'icon':({'icon','label'},set()),'focus':({'match'},set()),'progress':({'n','m'},{'label'}),'diagram':({'nodes'},{'label'})}
+OVK={'term':({'w'},{'g','icon'}),'num':({'n','label'},set()),'icon':({'icon','label'},set()),'focus':({'match'},set()),'progress':({'n','m'},{'label'}),'diagram':({'nodes'},{'label'})}
 if 'autofill' in S and not isinstance(S['autofill'],bool): err('"autofill" must be true or false')
 if S.get('autofill') is False: warn('autofill is off for the whole script: static stretches > 2.5 s will not be filled (the render gate still fails on 3 s)')
 g=S.get('glossary',{})
 if g and (not isinstance(g,dict) or not all(isinstance(k,str) and isinstance(v,str) for k,v in g.items())): err('glossary must map term -> short gloss (strings)')
-elif g:
+elif not g: print('ℹ️  no "glossary": term chips only show glossary terms; add 3–6 key terms with a short gloss (write-script "Glossary")')
+if g and isinstance(g,dict):
     for k_,v_ in g.items():
         if len(v_)>70: warn(f'glossary "{k_}": gloss is {len(v_)} chars; keep it ≤ ~70 (2 lines on the term card)')
 for i,sc in enumerate(sc_list,1):
     tag=f'scene {i} ({sc.get("type")})';words=[norm(w) for w in sc.get('say','').split()]
     if 'autofill' in sc and not isinstance(sc['autofill'],bool): err(f'{tag}: "autofill" must be true or false')
+    if 'still' in sc and not isinstance(sc['still'],bool): err(f'{tag}: "still" must be true or false')
+    if sc.get('still'): print(f'ℹ️  {tag}: still:true — the gate allows one static stretch ≤ 5 s here (quote-like scenes only); longer still fails')
+    nl=sc.get('numbers')
+    if nl is not None:
+        if not isinstance(nl,list) or not all(isinstance(x,dict) and isinstance(x.get('n'),(str,int,float)) and isinstance(x.get('label'),str) and x['label'] for x in nl): err(f'{tag}: numbers must be [{{n, label}}] (label is shown on the number card)')
+        else:
+            for x in nl:
+                if set(x)-{'n','label'}: err(f'{tag}: numbers item has unknown keys {sorted(set(x)-{"n","label"})}')
+                if len(x['label'])>40: warn(f'{tag}: numbers label "{x["label"]}" > 40 chars')
     d=sc.get('diagram')
     if d is not None and not (isinstance(d,dict) and isinstance(d.get('nodes'),list) and 2<=len(d['nodes'])<=3): err(f'{tag}: diagram hint must be {{nodes:[2-3 labels], label?}}')
     for kws in kw_lists(sc.get('props',{})):
@@ -119,6 +129,57 @@ ITEMS={'AtSteps':('steps',{'s','at'},{'ok','warn','kw'}),'AtTerm':('lines',{'s',
  'AtSpec':('tiles',{'big','small','at'},{'ok','kw'})}
 TOP={'AtSteps':{'title','steps','note'},'AtTerm':{'title','dir','shell','lines','note'},'AtPackages':{'title','head','rows','note'},
  'AtDevice':{'title','devices','note'},'AtSpec':{'title','tiles','note'}}
+# scenario packs (remotion/src/packs.tsx) + neutral names of the At* scenes (run in every theme)
+ALIAS={'Steps':'AtSteps','Terminal':'AtTerm','Packages':'AtPackages','Specs':'AtSpec','Devices':'AtDevice','Table':'AtTake'}
+for k_,v_ in ALIAS.items():
+    if v_ in ITEMS: ITEMS[k_]=ITEMS[v_];TOP[k_]=TOP[v_]
+ITEMS['AtTake']=ITEMS['Table']=('rows',{'k','a','b','at'},{'win','kw'});TOP['AtTake']=TOP['Table']={'title','head','rows','rule'}
+ITEMS.update({'Meter':('bars',{'s','v','at'},{'val','best','kw'}),'DataFlow':('nodes',{'s','at'},{'sub','via','icon','kw'}),'Layers':('layers',{'s','at'},{'sub','kw'}),
+ 'Loop':('nodes',{'s','at'},{'kw'}),'Debug':('lines',{'s'},{'kw'}),'Timeline':('events',{'d','s','at'},{'kw'}),'Rating':('items',{'s','v','at'},{'kw'}),'TopN':('items',{'s','at'},{'sub','kw'})})
+TOP.update({'Meter':{'title','bars','note'},'DataFlow':{'title','nodes','note'},'Layers':{'title','layers','dir','note'},'Loop':{'title','nodes','center','cur','note'},
+ 'Debug':{'title','err','file','lines','codeAt','bad','fix','ok','note'},'Timeline':{'title','events','note'},'Rating':{'title','items','max','verdict'},'TopN':{'title','items','countdown','note'}})
+MAXN={'Meter':5,'DataFlow':5,'Layers':5,'Loop':6,'Debug':8,'Timeline':5,'Rating':4,'TopN':5,'Table':5,'AtTake':5,'Steps':6,'AtSteps':6,'Specs':6,'AtSpec':6}
+MINN={'Loop':3,'DataFlow':2,'Layers':2}
+OBJ={'Scale':({'title','a','b'},{'tiltAt','verdict'},{'a':({'s','w','at'},{'sub','kw'}),'b':({'s','w','at'},{'sub','kw'}),'verdict':({'s','at'},set())}),
+ 'Debug':(set(),set(),{'err':({'s','at'},{'kw'}),'bad':({'line','at'},set()),'fix':({'s','at'},{'kw'}),'ok':({'s','at'},{'kw'})}),
+ 'BigStat':({'big','label'},{'kick','unit','at','src','sub'},{'sub':({'s','at'},set())}),
+ 'QuoteCard':({'q','who'},{'role','at','hl','kw'},{'hl':({'w','at'},set())}),
+ 'BeforeAfter':({'title','before','after'},{'tags','note'},{'before':({'s'},{'lines','code','at','kw'}),'after':({'s','at'},{'lines','code','kw'})})}
+for i,sc in enumerate(sc_list,1):
+    t=sc.get('type');pr=sc.get('props',{});tag=f'scene {i} ({t})'
+    if t in OBJ:
+        req,opt,subs=OBJ[t]
+        if req or opt:
+            for k in set(pr)-req-opt-set(subs): err(f'{tag}: unknown prop "{k}" (allowed: {sorted(req|opt|set(subs))}, see SCHEMA.md)')
+            for k in req-set(pr): err(f'{tag}: missing prop "{k}"')
+        for k,(rq,op) in subs.items():
+            if k not in pr: continue
+            v=pr[k]
+            if not isinstance(v,dict): err(f'{tag}: {k} must be an object {sorted(rq)}'); continue
+            if rq-set(v): err(f'{tag}: {k} missing {sorted(rq-set(v))}')
+            if set(v)-rq-op: err(f'{tag}: {k} unknown keys {sorted(set(v)-rq-op)}')
+        if t=='Debug':
+            for k in ('err','bad','fix'):
+                if k not in pr: err(f'{tag}: missing prop "{k}"')
+            if isinstance(pr.get('bad'),dict) and isinstance(pr.get('lines'),list) and not (isinstance(pr['bad'].get('line'),int) and 0<=pr['bad']['line']<len(pr['lines'])): err(f'{tag}: bad.line must index lines (0-based)')
+        if t=='Scale':
+            for k in ('a','b'):
+                if isinstance(pr.get(k),dict) and not isinstance(pr[k].get('w'),(int,float)): err(f'{tag}: {k}.w must be a number (relative weight)')
+        if t=='BeforeAfter':
+            for k in ('before','after'):
+                if isinstance(pr.get(k),dict) and pr[k].get('lines') is not None and not (isinstance(pr[k]['lines'],list) and len(pr[k]['lines'])<=5): err(f'{tag}: {k}.lines is a list of ≤ 5 strings')
+        if t=='QuoteCard' and len(str(pr.get('q','')))>180: warn(f'{tag}: quote is {len(pr["q"])} chars; ≤ ~180 keeps it reel-readable')
+    if t in MAXN and isinstance(pr.get(ITEMS.get(t,('',))[0]),list):
+        n=len(pr[ITEMS[t][0]])
+        if n>MAXN[t]: warn(f'{tag}: {n} {ITEMS[t][0]}; ≤ {MAXN[t]} keeps it inside the content box at reel size (split the scene)')
+        if n<MINN.get(t,1): err(f'{tag}: needs ≥ {MINN[t]} {ITEMS[t][0]}')
+    if t=='Meter':
+        for j,b in enumerate(pr.get('bars',[]) or [],1):
+            if isinstance(b,dict) and not (isinstance(b.get('v'),(int,float)) and 0<=b['v']<=100): err(f'{tag}: bars[{j}].v is 0–100')
+    if t=='Rating':
+        mx=pr.get('max',5)
+        for j,b in enumerate(pr.get('items',[]) or [],1):
+            if isinstance(b,dict) and not (isinstance(b.get('v'),(int,float)) and 0<=b['v']<=mx): err(f'{tag}: items[{j}].v is 0–{mx}')
 for i,sc in enumerate(sc_list,1):
     t=sc.get('type');pr=sc.get('props',{})
     if t not in ITEMS: continue
@@ -130,11 +191,10 @@ for i,sc in enumerate(sc_list,1):
         miss=req-set(it); bad=set(it)-req-opt
         if miss: err(f'{tag}: {key}[{j}] missing {sorted(miss)}')
         if bad: err(f'{tag}: {key}[{j}] unknown keys {sorted(bad)} (allowed: {sorted(req|opt)})')
-        if t=='AtTerm' and len(it.get('s',''))>28: warn(f'{tag}: lines[{j}] "{it["s"]}" > 28 chars, overflows the terminal at reel size; shorten or split')
-        if t=='AtDevice':
+        if t in ('AtTerm','Terminal') and len(it.get('s',''))>28: warn(f'{tag}: lines[{j}] "{it["s"]}" > 28 chars, overflows the terminal at reel size; shorten or split')
+        if t in ('AtDevice','Devices'):
             for r in it.get('screen',[]) or []:
                 if set(r)-{'s','at','on'} or not {'s','at'}<=set(r): err(f'{tag}: devices[{j}].screen rows take {{s, at, on?}}')
-    if t=='AtSteps' and len(pr['steps'])>6: warn(f'{tag}: {len(pr["steps"])} steps; ≤ 6 keeps rows reel-readable (split the scene)')
     if 'note' in pr and not (isinstance(pr['note'],dict) and {'s','at'}<=set(pr['note'])): err(f'{tag}: note must be {{s, at}}')
 # visual-beat density: @word anchors should be spread through the scene's say (~3.2 wps).
 # A long stretch of narration with nothing new on screen reads as a static card.
