@@ -1,0 +1,167 @@
+{
+ "theme": "android-tutor",
+ "title": "Setup máy để học Kotlin Multiplatform: JDK 17+, Android Studio, SDK 36",
+ "topic": [
+  "Kotlin Multiplatform",
+  "setup",
+  "Android Studio"
+ ],
+ "date": "17 · 10 · 2026",
+ "caption": "Setup máy học Kotlin Multiplatform: JDK 17 trở lên, Android Studio bản stable, SDK Platform 36, plugin Kotlin Multiplatform, một máy Android thật hoặc emulator; iOS bắt buộc macOS + Xcode, kiểm bằng kdoctor. #DanTech #Android #Kotlin #KMP",
+ "sources": [
+  "Dan Tech Academy, Kotlin Mobile 101 — bài 01: Android Studio, JDK và KMP plugin (đọc ngày 17/10/2026): https://dantech.academy/courses/kotlin-mobile-101/00-setup-first-run/lesson-01-install-android-studio"
+ ],
+ "voice": {
+  "style": "random"
+ },
+ "music": {
+  "track": "random"
+ },
+ "hook": {
+  "kind": "tips",
+  "claim": "Setup cho Kotlin Multiplatform: chạy Android thì máy nào cũng được, build iOS bắt buộc máy Mac",
+  "promise": "Setup đúng một lần là máy build được project KMP đầu tiên"
+ },
+ "scenes": [
+  {
+   "say": "Setup cho Kotlin Multiplatform cần Android Studio, JDK và chỗ chạy app. Chạy Android thì máy nào cũng được, còn build cho iOS thì Apple bắt buộc một máy Mac.",
+   "type": "AtHook",
+   "section": "Setup",
+   "out": "sharedx",
+   "props": {
+    "tag": "Android™ · Kotlin Multiplatform",
+    "a": "Android",
+    "b": "iOS",
+    "line": "Setup đúng một lần là đủ.",
+    "why": {
+     "s": "Build iOS bắt buộc máy chạy macOS.",
+     "at": "@Mac"
+    }
+   }
+  },
+  {
+   "say": "Trước hết là JDK. Gradle với Kotlin cần bản mười bảy trở lên, nên gõ java -version để kiểm. Thấy số từ mười bảy là đủ; còn nhỏ hơn, hoặc báo không có lệnh, thì cài Temurin JDK hai mốt — miễn phí, không cần tài khoản.",
+   "type": "AtCode",
+   "section": "Terminal",
+   "out": "sharedx",
+   "props": {
+    "title": "JDK 17 trở lên",
+    "file": "Terminal",
+    "lines": [
+     {
+      "s": "$ java -version",
+      "at": "@gõ"
+     },
+     {
+      "s": "openjdk version \"21.0.5\"",
+      "at": "@kiểm"
+     }
+    ],
+    "hl": {
+     "from": 1,
+     "to": 1,
+     "at": "@đủ"
+    },
+    "note": {
+     "s": "AGP 9.0.1 từ chối chạy trên JDK cũ hơn 17.",
+     "at": "@Temurin"
+    }
+   }
+  },
+  {
+   "say": "Cài Android Studio bản stable mới nhất, đừng lấy bản Canary hay Beta. Rồi mở SDK Manager, tick Android SDK Platform ba mươi sáu, vì compileSdk của mọi project trong khóa là ba mươi sáu. App chạy được từ Android 7.0 vì minSdk là hai tư. Và cài plugin Kotlin Multiplatform để có nút chạy iOS ngay trong IDE.",
+   "type": "AtCode",
+   "section": "build.gradle.kts",
+   "out": "sharedx",
+   "props": {
+    "title": "Android Studio + SDK 36",
+    "file": "build.gradle.kts",
+    "lines": [
+     {
+      "s": "compileSdk = 36",
+      "at": "@compileSdk"
+     },
+     {
+      "s": "minSdk = 24  // Android 7.0",
+      "at": "@minSdk"
+     }
+    ],
+    "hl": {
+     "from": 0,
+     "to": 0,
+     "at": "@compileSdk"
+    },
+    "note": {
+     "s": "Plugin: Settings → Marketplace → Kotlin Multiplatform.",
+     "at": "@Multiplatform"
+    }
+   }
+  },
+  {
+   "say": "Giờ cần một nơi để chạy app. Điện thoại Android thật bật USB debugging là ngon nhất, không thì tạo một emulator Pixel. Trên Mac thì cài thêm Xcode cho phần iOS. Xong thì đừng đoán máy đã sẵn sàng chưa — chạy adb devices, hoặc kdoctor trên macOS, để kiểm chắc chắn.",
+   "type": "AtCode",
+   "section": "Terminal",
+   "out": "sharedx",
+   "props": {
+    "title": "Nơi chạy, cách kiểm tra",
+    "file": "Terminal",
+    "lines": [
+     {
+      "s": "$ adb devices",
+      "at": "@adb"
+     },
+     {
+      "s": "RF8N30XXXXX   device",
+      "at": "@devices"
+     },
+     {
+      "s": "$ kdoctor",
+      "at": "@kdoctor"
+     },
+     {
+      "s": "[✓] Operating System  [✓] Java",
+      "at": "@macOS"
+     },
+     {
+      "s": "[✓] Android Studio  [✓] Xcode",
+      "at": "@macOS+15"
+     }
+    ],
+    "note": {
+     "s": "Windows và Linux chưa có kdoctor, kiểm bằng adb devices.",
+     "at": "@chắc"
+    }
+   }
+  },
+  {
+   "say": "Tóm lại, cần JDK mười bảy cộng, Android Studio stable, SDK Platform ba mươi sáu, plugin Kotlin Multiplatform và một chỗ chạy app. Dùng Windows hay Linux vẫn học được bình thường, chỉ thiếu phần bấm chạy iOS trên macOS thôi. Follow Dan Tech để học Android mỗi ngày nhé!",
+   "type": "AtTake",
+   "section": "Checklist",
+   "props": {
+    "title": "Windows, Linux hay macOS?",
+    "head": [
+     "Android",
+     "iOS"
+    ],
+    "rows": [
+     {
+      "k": "Windows / Linux",
+      "a": "✓",
+      "b": "không",
+      "at": "@Windows"
+     },
+     {
+      "k": "macOS",
+      "a": "✓",
+      "b": "✓",
+      "at": "@macOS"
+     }
+    ],
+    "rule": {
+     "s": "Máy nào cũng học được KMP.",
+     "at": "@mỗi"
+    }
+   }
+  }
+ ]
+}
