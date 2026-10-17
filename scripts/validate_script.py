@@ -74,6 +74,29 @@ for i,sc in enumerate(sc_list,1):
         n=int(m.group(2) or 1)
         if words.count(norm(m.group(1)))<n: err(f'{tag}: anchor {a}: word "{m.group(1)}" (x{n}) not in this scene\'s say')
 allw=[norm(w) for sc in sc_list for w in sc.get('say','').split()]
+# item-level props for list scenes (SCHEMA.md): a misspelt item key renders an empty row or crashes the render
+ITEMS={'AtSteps':('steps',{'s','at'},{'ok','warn'}),'AtTerm':('lines',{'s','at'},{'out','ok','hl'}),
+ 'AtPackages':('rows',{'s','at'},{'meta','ok'}),'AtDevice':('devices',{'name','at'},{'kind','badge','ok','screen'}),
+ 'AtSpec':('tiles',{'big','small','at'},{'ok'})}
+TOP={'AtSteps':{'title','steps','note'},'AtTerm':{'title','dir','shell','lines','note'},'AtPackages':{'title','head','rows','note'},
+ 'AtDevice':{'title','devices','note'},'AtSpec':{'title','tiles','note'}}
+for i,sc in enumerate(sc_list,1):
+    t=sc.get('type');pr=sc.get('props',{})
+    if t not in ITEMS: continue
+    tag=f'scene {i} ({t})';key,req,opt=ITEMS[t]
+    for k in set(pr)-TOP[t]: err(f'{tag}: unknown prop "{k}" (allowed: {sorted(TOP[t])}, see SCHEMA.md)')
+    if not isinstance(pr.get(key),list) or not pr.get(key): err(f'{tag}: needs a non-empty "{key}" list'); continue
+    for j,it in enumerate(pr[key],1):
+        if not isinstance(it,dict): err(f'{tag}: {key}[{j}] must be an object'); continue
+        miss=req-set(it); bad=set(it)-req-opt
+        if miss: err(f'{tag}: {key}[{j}] missing {sorted(miss)}')
+        if bad: err(f'{tag}: {key}[{j}] unknown keys {sorted(bad)} (allowed: {sorted(req|opt)})')
+        if t=='AtTerm' and len(it.get('s',''))>28: warn(f'{tag}: lines[{j}] "{it["s"]}" > 28 chars, overflows the terminal at reel size; shorten or split')
+        if t=='AtDevice':
+            for r in it.get('screen',[]) or []:
+                if set(r)-{'s','at','on'} or not {'s','at'}<=set(r): err(f'{tag}: devices[{j}].screen rows take {{s, at, on?}}')
+    if t=='AtSteps' and len(pr['steps'])>6: warn(f'{tag}: {len(pr["steps"])} steps; ≤ 6 keeps rows reel-readable (split the scene)')
+    if 'note' in pr and not (isinstance(pr['note'],dict) and {'s','at'}<=set(pr['note'])): err(f'{tag}: note must be {{s, at}}')
 # visual-beat density: @word anchors should be spread through the scene's say (~3.2 wps).
 # A long stretch of narration with nothing new on screen reads as a static card.
 # A prop with no "at"/@anchor anywhere inside counts as a beat at word 0 (visible from the start).
@@ -101,7 +124,7 @@ for i,sc in enumerate(sc_list,1):
     tag=f'scene {i} ({sc.get("type")})'
     words=[norm(w) for w in sc.get('say','').split()]; n=len(words)
     pos=[]
-    for a in anchors({'p':sc.get('props',{}),'s':sc.get('sfx',[])}):
+    for a in anchors(sc.get('props',{})):  # visual beats only: an sfx alone changes nothing on screen
         m=AN.match(a)
         if not m: continue
         nth=int(m.group(2) or 1); tgt=norm(m.group(1))
