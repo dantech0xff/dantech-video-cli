@@ -1,0 +1,315 @@
+{
+ "theme": "android-tutor",
+ "title": "remember vs rememberSaveable trong Jetpack Compose",
+ "topic": [
+  "remember",
+  "rememberSaveable",
+  "Compose"
+ ],
+ "date": "17 · 10 · 2026",
+ "caption": "remember vs rememberSaveable trong Jetpack Compose: remember giữ state qua recomposition nhưng mất khi xoay màn hình (activity bị tạo lại). rememberSaveable lưu vào Bundle nên giữ được qua xoay màn hình và process death; kiểu không bỏ vào Bundle được thì dùng @Parcelize hoặc Saver. #DanTech #Android #JetpackCompose #Kotlin",
+ "sources": [
+  "Android Developers, State and Jetpack Compose (remember, rememberSaveable, Bundle, @Parcelize, mapSaver/listSaver; đọc ngày 17/10/2026): https://developer.android.com/develop/ui/compose/state"
+ ],
+ "voice": {
+  "style": "random"
+ },
+ "music": {
+  "track": "sappheiros-perspective"
+ },
+ "hook": {
+  "kind": "explainer",
+  "claim": "remember vs rememberSaveable: chỉ một cái sống qua xoay màn hình",
+  "why": "xoay máy là activity bị tạo lại, state trong remember mất sạch"
+ },
+ "scenes": [
+  {
+   "say": "remember và rememberSaveable trong Jetpack Compose: cả hai đều giữ state, nhưng chỉ một cái còn sống khi bạn xoay màn hình.",
+   "type": "AtHook",
+   "section": "Counter.kt",
+   "out": "sharedx",
+   "props": {
+    "tag": "Android™ · Jetpack Compose",
+    "a": "remember",
+    "b": "rememberSaveable",
+    "line": "Chỉ một cái sống qua xoay màn hình.",
+    "why": {
+     "s": "Xoay máy là activity bị tạo lại.",
+     "at": "@xoay"
+    }
+   }
+  },
+  {
+   "say": "Thử một bộ đếm dùng remember. Bấm một, hai, ba lần, số đếm lên ba. Giờ xoay ngang điện thoại, và số đếm quay về không.",
+   "type": "AtPreview",
+   "section": "Counter.kt",
+   "out": "sharedx",
+   "props": {
+    "title": "Bộ đếm dùng remember",
+    "file": "Counter.kt",
+    "lines": [
+     {
+      "s": "\\@Composable",
+      "at": 2
+     },
+     {
+      "s": "fun Counter() {",
+      "at": 5
+     },
+     {
+      "s": "  var count by remember {",
+      "at": 8
+     },
+     {
+      "s": "    mutableStateOf(0)",
+      "at": 11
+     },
+     {
+      "s": "  }",
+      "at": 14
+     },
+     {
+      "s": "  Button(onClick = { count++ }) {",
+      "at": 17
+     },
+     {
+      "s": "    Text(\"Đã bấm $count lần\")",
+      "at": 20
+     },
+     {
+      "s": "  }",
+      "at": 23
+     },
+     {
+      "s": "}",
+      "at": 26
+     }
+    ],
+    "hl": {
+     "from": 2,
+     "to": 4,
+     "at": "@remember"
+    },
+    "taps": [
+     "@một",
+     "@hai",
+     "@ba"
+    ],
+    "rotateAt": "@xoay",
+    "keep": false,
+    "label": "Đã bấm {n} lần",
+    "btn": "Bấm",
+    "verdict": {
+     "s": "mất state",
+     "at": "@không"
+    }
+   }
+  },
+  {
+   "say": "Lý do là remember chỉ cất giá trị trong Composition. Khi xoay màn hình, Android huỷ activity cũ rồi tạo activity mới, nên Composition chạy lại từ đầu với số không.",
+   "type": "AtLogcat",
+   "section": "Logcat",
+   "out": "sharedx",
+   "props": {
+    "title": "Xoay máy = activity mới",
+    "lines": [
+     {
+      "lvl": "D",
+      "tag": "Counter",
+      "msg": "count = 3",
+      "at": "@Composition"
+     },
+     {
+      "lvl": "I",
+      "tag": "MainActivity",
+      "msg": "onDestroy() · configuration change",
+      "at": "@huỷ"
+     },
+     {
+      "lvl": "I",
+      "tag": "MainActivity",
+      "msg": "onCreate()",
+      "at": "@tạo"
+     },
+     {
+      "lvl": "W",
+      "tag": "Counter",
+      "msg": "count = 0",
+      "at": "@đầu"
+     }
+    ],
+    "note": {
+     "s": "remember sống theo Composition, không theo activity.",
+     "at": "@chạy"
+    }
+   }
+  },
+  {
+   "say": "Đổi remember thành rememberSaveable. Bấm một, hai, ba lần rồi xoay máy, số ba vẫn còn nguyên, vì giá trị đã được lưu vào Bundle.",
+   "type": "AtPreview",
+   "section": "Counter.kt",
+   "out": "sharedx",
+   "props": {
+    "title": "Đổi sang rememberSaveable",
+    "file": "Counter.kt",
+    "lines": [
+     {
+      "s": "\\@Composable",
+      "at": 2
+     },
+     {
+      "s": "fun Counter() {",
+      "at": 5
+     },
+     {
+      "s": "  var count by rememberSaveable {",
+      "at": 8
+     },
+     {
+      "s": "    mutableStateOf(0)",
+      "at": 11
+     },
+     {
+      "s": "  }",
+      "at": 14
+     },
+     {
+      "s": "  Button(onClick = { count++ }) {",
+      "at": 17
+     },
+     {
+      "s": "    Text(\"Đã bấm $count lần\")",
+      "at": 20
+     },
+     {
+      "s": "  }",
+      "at": 23
+     },
+     {
+      "s": "}",
+      "at": 26
+     }
+    ],
+    "hl": {
+     "from": 2,
+     "to": 4,
+     "at": "@rememberSaveable"
+    },
+    "taps": [
+     "@một",
+     "@hai",
+     "@ba"
+    ],
+    "rotateAt": "@xoay",
+    "keep": true,
+    "label": "Đã bấm {n} lần",
+    "btn": "Bấm",
+    "verdict": {
+     "s": "giữ state",
+     "at": "@nguyên"
+    }
+   }
+  },
+  {
+   "say": "Mà rememberSaveable chỉ tự lưu những kiểu bỏ vào Bundle được, như số, chuỗi hay Parcelable. Với data class của bạn, thêm Parcelize là xong, hoặc tự viết một Saver.",
+   "type": "AtCode",
+   "section": "City.kt",
+   "out": "sharedx",
+   "props": {
+    "title": "Kiểu nào lưu được?",
+    "file": "City.kt",
+    "lines": [
+     {
+      "s": "\\@Parcelize",
+      "at": 8
+     },
+     {
+      "s": "data class City(",
+      "at": 12
+     },
+     {
+      "s": "  val name: String,",
+      "at": 16
+     },
+     {
+      "s": "  val country: String",
+      "at": 20
+     },
+     {
+      "s": ") : Parcelable",
+      "at": 24
+     },
+     {
+      "s": "",
+      "at": 0
+     },
+     {
+      "s": "var city = rememberSaveable {",
+      "at": "@data"
+     },
+     {
+      "s": "  mutableStateOf(",
+      "at": "@data+3"
+     },
+     {
+      "s": "    City(\"Madrid\", \"Spain\")",
+      "at": "@data+6"
+     },
+     {
+      "s": "  )",
+      "at": "@data+9"
+     },
+     {
+      "s": "}",
+      "at": "@data+12"
+     }
+    ],
+    "hl": {
+     "from": 0,
+     "to": 0,
+     "at": "@Parcelize"
+    },
+    "note": {
+     "s": "Không Parcelable được? Dùng mapSaver hoặc listSaver.",
+     "at": "@Saver"
+    }
+   }
+  },
+  {
+   "say": "Tóm lại, state chỉ cần sống qua recompose thì dùng remember. State mà mất khi xoay máy làm người dùng khó chịu, như chữ đang gõ, thì dùng rememberSaveable. Còn khi người dùng vuốt app khỏi màn hình đa nhiệm, cả hai đều mất. Follow Dan Tech để học Android mỗi ngày nhé!",
+   "type": "AtTake",
+   "section": "Tóm lại",
+   "props": {
+    "title": "Chọn cái nào?",
+    "head": [
+     "remember",
+     "saveable"
+    ],
+    "rows": [
+     {
+      "k": "Recompose",
+      "a": "giữ",
+      "b": "giữ",
+      "at": "@recompose"
+     },
+     {
+      "k": "Xoay màn hình",
+      "a": "mất",
+      "b": "giữ",
+      "at": "@xoay"
+     },
+     {
+      "k": "Vuốt khỏi đa nhiệm",
+      "a": "mất",
+      "b": "mất",
+      "at": "@vuốt"
+     }
+    ],
+    "rule": {
+     "s": "Người dùng nhập gì, dùng rememberSaveable.",
+     "at": "@gõ"
+    }
+   }
+  }
+ ]
+}

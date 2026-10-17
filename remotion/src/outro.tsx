@@ -15,14 +15,14 @@ export const FollowCTA:React.FC<{t:Theme;inAt:number;pressAt:number;outAt:number
  const cOp=interpolate(f,[inAt+4,inAt+8,pressAt+14,pressAt+22],[0,1,1,0],cl);
  const wig=f>=pressAt+3?Math.sin((f-pressAt-3)*1.3)*22*Math.exp(-(f-pressAt-3)/9):0;
  const flip=interpolate(f,[pressAt,pressAt+4],[0,1],cl);
- const isCy=t.id==='tech-explain-cyber'||t.id==='hot-news-glitch';
- if(isCy)return <AbsoluteFill style={{zIndex:30,pointerEvents:'none'}}>
-  <div style={{position:'absolute',left:136,right:SZ.cta.right,top,transform:`translateY(${(1-pin)*30-ex*40}px) scale(${1-0.02*dn})`,opacity:pin*(1-ex)}}>
-   <div style={{display:'flex',border:`1.5px solid ${pressed?t.accent:'#4A4A4A'}`,background:'#222222',height:150,overflow:'hidden'}}>
+ const isCy=t.id==='tech-explain-cyber'||t.id==='hot-news-glitch'||t.id==='android-tutor';const at=t.id==='android-tutor';const FF=at?'GSF':'BVPX';const FW=at?800:400;
+ if(isCy)return <AbsoluteFill data-layer="g" style={{zIndex:30,pointerEvents:'none'}}>
+  <div data-bb="cta" style={{position:'absolute',left:136,right:SZ.cta.right,top,transform:`translateY(${(1-pin)*30-ex*40}px) scale(${1-0.02*dn})`,opacity:pin*(1-ex)}}>
+   <div style={{display:'flex',border:`1.5px solid ${pressed?t.accent:'#4A4A4A'}`,background:at?'#17181B':'#222222',height:150,overflow:'hidden',borderRadius:at?75:0}}>
     <div style={{width:150,display:'flex',alignItems:'center',justifyContent:'center',borderRight:`1.5px solid ${pressed?t.accent:'#4A4A4A'}`,background:pressed?t.accent:'transparent'}}><Bell c={pressed?t.onAccent:t.accent} s={74} rot={wig}/></div>
     <div style={{flex:1,position:'relative',overflow:'hidden'}}>
-     <div style={{position:'absolute',inset:0,display:'flex',alignItems:'center',paddingLeft:40,transform:`translateY(${-flip*100}%)`}}><span style={{fontFamily:'BVPX',fontSize:fitSize(label!,520,46,.7),color:t.ink,letterSpacing:1,whiteSpace:'nowrap'}}>{label}</span></div>
-     <div style={{position:'absolute',inset:0,display:'flex',alignItems:'center',paddingLeft:40,background:t.accent,transform:`translateY(${(1-flip)*100}%)`}}><span style={{fontFamily:'BVPX',fontSize:fitSize(done!,520,46,.7),color:t.onAccent,whiteSpace:'nowrap'}}>{done}</span></div>
+     <div style={{position:'absolute',inset:0,display:'flex',alignItems:'center',paddingLeft:40,transform:`translateY(${-flip*100}%)`}}><span style={{fontFamily:FF,fontWeight:FW,fontSize:fitSize(label!,520,46,.7),color:t.ink,letterSpacing:1,whiteSpace:'nowrap'}}>{label}</span></div>
+     <div style={{position:'absolute',inset:0,display:'flex',alignItems:'center',paddingLeft:40,background:t.accent,transform:`translateY(${(1-flip)*100}%)`}}><span style={{fontFamily:FF,fontWeight:FW,fontSize:fitSize(done!,520,46,.7),color:t.onAccent,whiteSpace:'nowrap'}}>{done}</span></div>
     </div></div>
    <div style={{fontFamily:'JBM',fontSize:22,letterSpacing:4,color:'#8C8C8C',marginTop:22,display:'flex',alignItems:'center',gap:12,opacity:interpolate(f,[pressAt+4,pressAt+10],[0,1],cl)}}><span style={{width:12,height:12,background:t.accent,display:'inline-block'}}/>{sub}</div>
   </div>

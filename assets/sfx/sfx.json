@@ -134,5 +134,21 @@
   "license": "own work",
   "url": "",
   "use": "end card sting"
+ },
+ "morph_soft": {
+  "source": "own",
+  "pack": "",
+  "orig": "synthesised with numpy (scripts/sfx_soft.py morph)",
+  "license": "own work",
+  "url": "",
+  "use": "spare (old android-tutor cookie transition, removed)"
+ },
+ "slide_soft": {
+  "source": "own",
+  "pack": "",
+  "orig": "synthesised with numpy (scripts/sfx_soft.py)",
+  "license": "own work",
+  "url": "",
+  "use": "ANDROID TUTOR shared-axis X slide: barely audible air, peak at the fastest part of the slide"
  }
 }

@@ -1,14 +1,16 @@
 import {useBrand,fitSize} from './brand';
 import React,{createContext,useContext} from 'react';
 import {AbsoluteFill,Audio,OffthreadVideo,Sequence,staticFile,useCurrentFrame,interpolate,Easing,random,spring} from 'remotion';
-import {Theme} from './themes';import {BpChrome} from './cyber';import {SZ} from './safezone';import {GlChrome} from './glitch';
-export const FONTS=`@font-face{font-family:Anton;src:url(${staticFile('fonts/anton.ttf')})}@font-face{font-family:Barlow;src:url(${staticFile('fonts/barlow.ttf')})}@font-face{font-family:JBM;src:url(${staticFile('fonts/jbm.ttf')});font-weight:100 800}@font-face{font-family:BVPX;src:url(${staticFile('fonts/bvp_xb.ttf')})}@font-face{font-family:BVPM;src:url(${staticFile('fonts/bvp_md.ttf')})}`;
+import {Theme} from './themes';import {BpChrome} from './cyber';import {SZ} from './safezone';import {GlChrome} from './glitch';import {AtChrome} from './android';
+export const FONTS=`@font-face{font-family:Anton;src:url(${staticFile('fonts/anton.ttf')})}@font-face{font-family:Barlow;src:url(${staticFile('fonts/barlow.ttf')})}@font-face{font-family:JBM;src:url(${staticFile('fonts/jbm.ttf')});font-weight:100 800}@font-face{font-family:BVPX;src:url(${staticFile('fonts/bvp_xb.ttf')})}@font-face{font-family:BVPM;src:url(${staticFile('fonts/bvp_md.ttf')})}@font-face{font-family:GSF;src:url(${staticFile('fonts/gsf_md.ttf')});font-weight:100 600}@font-face{font-family:GSF;src:url(${staticFile('fonts/gsf_xb.ttf')});font-weight:700 900}`;
 export const Ctx=createContext<{t:Theme;f:number;exit:number}>(null as any);
 export const useS=()=>useContext(Ctx);
 const EO=Easing.bezier(.16,1,.3,1),EIO=Easing.bezier(.7,0,.2,1);
+// Material 3 emphasized-decelerate (no overshoot); shared-axis X uses it over ~470 ms of the 533 ms window
+const EMD=Easing.bezier(.05,.7,.1,1);const SAX=120; // px slide distance
 const cl={extrapolateLeft:'clamp',extrapolateRight:'clamp'} as const;
-export const H=(t:Theme,size:number,c?:string):React.CSSProperties=>({fontFamily:t.head,fontWeight:t.head==='JBM'?800:400,fontSize:size,color:c??t.ink,lineHeight:t.head==='BVPX'?1.12:1.02,textTransform:t.upper?'uppercase':'none',letterSpacing:t.head==='BVPX'?-2:0});
-export const Bd=(t:Theme,size:number,c?:string):React.CSSProperties=>({fontFamily:t.body,fontWeight:t.body==='JBM'?500:400,fontSize:size,color:c??t.ink,lineHeight:1.25});
+export const H=(t:Theme,size:number,c?:string):React.CSSProperties=>({fontFamily:t.head,fontWeight:t.head==='JBM'||t.head==='GSF'?800:400,fontSize:size,color:c??t.ink,lineHeight:t.head==='BVPX'?1.12:1.02,textTransform:t.upper?'uppercase':'none',letterSpacing:t.head==='BVPX'?-2:0});
+export const Bd=(t:Theme,size:number,c?:string):React.CSSProperties=>({fontFamily:t.body,fontWeight:t.body==='JBM'||t.body==='GSF'?500:400,fontSize:size,color:c??t.ink,lineHeight:1.25});
 /* staggered element: entry by theme, staggered exit */
 export const It:React.FC<{i?:number;at?:number;children:React.ReactNode;style?:React.CSSProperties;origin?:string}>=({i=0,at,children,style,origin='left center'})=>{const {t,f,exit}=useS();const start=at??i*4;
  const lf=Math.floor((f-start)/t.step)*t.step;if(lf<0)return null;
@@ -46,7 +48,7 @@ export const TermChrome:React.FC<{section:string;page:string;idx:number}>=({sect
 /* ---------- karaoke captions (all themes) ----------
    Paged, never rolling: one complete sentence (or comma-phrase chunk if it would exceed 2 lines) is shown whole,
    then words light up one by one on the whisper timings. Font comes from theme look.caption (default: theme head font). */
-const CW:Record<string,number>={Anton:.46,BVPX:.6,BVPM:.58,JBM:.66,Barlow:.5}; // avg glyph width / font size, measured on renders
+const CW:Record<string,number>={Anton:.46,BVPX:.6,BVPM:.58,JBM:.66,Barlow:.5,GSF:.56}; // avg glyph width / font size, measured on renders
 export const capStyle=(t:Theme)=>{const c=(t as any).caption||{};const font=c.font??t.head;const size=c.size??(font==='Anton'?50:font==='JBM'?38:44);
  return {font,size,upper:c.upper??(font==='Anton'),weight:c.weight??(font==='JBM'?700:400),
   chipBg:c.chipBg??'rgba(16,16,16,.84)',chipText:c.chipText??'#FFFFFF',upText:c.upcomingText??'rgba(255,255,255,.62)',
@@ -75,7 +77,7 @@ export const Captions:React.FC<{words:Wd[]}>=({words})=>{const {t}=useS();const 
  if(ci<0)return null;const ch=chunks[ci];
  const lh=Math.round(c.size*1.12);
  let cur=-1;ch.forEach((k,j)=>{if(tm>=words[k].s-0.05)cur=j});if(cur>=0&&tm>words[ch[cur]].e+0.25)cur=-1; // exactly one active chip
- return <div style={{position:'absolute',left:SZ.captions.x,width:SZ.captions.w,top:SZ.captions.top,display:'flex',flexWrap:'wrap',columnGap:c.gap,rowGap:6,alignItems:'center'}}>{ch.map((k,j)=>{const w=words[k];
+ return <div data-layer="g" data-bb="caption" style={{position:'absolute',left:SZ.captions.x,maxWidth:SZ.captions.w,top:SZ.captions.top,display:'flex',flexWrap:'wrap',columnGap:c.gap,rowGap:6,alignItems:'center'}}>{ch.map((k,j)=>{const w=words[k];
   const on=spring({frame:f-Math.round((w.s-0.05)*30),fps:30,config:{damping:20,stiffness:260,mass:.6}});
   const isA=j===cur;const act=isA?on:0;const up=tm<w.s-0.05;
   return <span key={k} style={{fontFamily:c.font,fontWeight:c.weight,fontSize:c.size,lineHeight:`${lh}px`,textTransform:c.upper?'uppercase':'none',
@@ -88,7 +90,7 @@ const SignalBreak:React.FC<{g:number;f:number;c:string}>=({g,f,c})=>{const fr=Ma
  {Array.from({length:7},(_,k)=>{const y=srnd(fr*7+k)*1920,h=4+srnd(fr*3+k)*46;const kind=k%3;return <div key={k} style={{position:'absolute',left:0,right:0,top:y,height:h,background:kind===0?c:kind===1?'#000':'repeating-linear-gradient(90deg, rgba(255,255,255,.6) 0 3px, transparent 3px 11px)',transform:`translateX(${(srnd(fr+k*5)-.5)*200}px)`,opacity:kind===1?.8:.9}}/>})}
  <AbsoluteFill style={{backgroundImage:'repeating-linear-gradient(0deg, rgba(255,255,255,.06) 0 1px, transparent 1px 3px)'}}/></AbsoluteFill>};
 /* ---------- timeline with designed transitions ---------- */
-export type Scene={dur:number;el:React.ReactNode;section:string;out?:'page'|'bar'|'zoom'|'push'|'stack'|'morph'|'scroll';focus?:[number,number];morph?:{from:number[];to:number[];txt:string}};
+export type Scene={dur:number;el:React.ReactNode;section:string;out?:'page'|'bar'|'zoom'|'push'|'stack'|'morph'|'scroll'|'signal'|'sharedx';focus?:[number,number];morph?:{from:number[];to:number[];txt:string}};
 const T=16;
 export const Timeline:React.FC<{t:Theme;scenes:Scene[];words:any[];voice:string;sfx:{at:number;s:string;v?:number}[];date:string}>=({t,scenes,words,voice,sfx,date})=>{const f=useCurrentFrame();const B=useBrand();
  const starts=scenes.reduce<number[]>((a,s,i)=>[...a,(a[i]??0)+s.dur],[0]);
@@ -97,7 +99,7 @@ export const Timeline:React.FC<{t:Theme;scenes:Scene[];words:any[];voice:string;
   const inP=i>0?interpolate(f,[starts[i]-T/2,starts[i]+T/2],[0,1],{...cl,easing:EIO}):1;
   const outP=i<scenes.length-1?interpolate(f,[starts[i+1]-T/2,starts[i+1]+T/2],[0,1],{...cl,easing:EIO}):0;
   const exitStag=i<scenes.length-1&&['bar','morph','stack','push'].includes(s.out??'bar')?interpolate(f,[starts[i+1]-T-6,starts[i+1]-2],[0,1],cl):0;
-  const kin=i>0?scenes[i-1].out??'bar':'bar',kout=s.out??'bar';
+  const DO=(t as any).defaultOut??'bar';const kin=i>0?scenes[i-1].out??DO:DO,kout=s.out??DO;
   let st:React.CSSProperties={};let z=1;
   const blur=(p:number,k=14)=>`blur(${Math.sin(Math.PI*p)*k}px)`;
   if(outP>0){ if(kout==='page'){st={transform:`perspective(1600px) translateX(${-outP*700}px) rotateY(${outP*-35}deg)`,transformOrigin:'left center',filter:blur(outP),boxShadow:`${40*outP}px 0 60px rgba(0,0,0,${.35*outP})`};z=2}
@@ -106,6 +108,7 @@ export const Timeline:React.FC<{t:Theme;scenes:Scene[];words:any[];voice:string;
    else if(kout==='stack'){st={transform:`scale(${1-.1*outP})`,filter:`brightness(${1-.5*outP})`,borderRadius:40*outP,overflow:'hidden'}}
    else if(kout==='scroll'){st={transform:`translateY(${-Math.round(outP*9)/9*1920}px)`}}
    else if(kout==='signal'){const g=Math.sin(Math.PI*outP);st={opacity:outP<.5?1:0,...sig(g,f)}}
+   else if(kout==='sharedx'){const q=interpolate(outP,[.06,.94],[0,1],cl);const e=EMD(q);st={transform:`translateX(${-SAX*e}px) scale(${1-.04*e})`,opacity:interpolate(q,[0,.35],[1,0],cl)}}
    else if(kout==='bar'||kout==='morph'){st={opacity:outP<.5?1:0}}}
   if(i>0&&inP<1){ if(kin==='page'){st={...st,transform:`translateX(${(1-inP)*260}px)`,filter:`brightness(${.75+.25*inP})`};z=1}
    else if(kin==='zoom'){st={...st,transform:`scale(${.82+.18*inP})`,opacity:interpolate(inP,[.55,.8],[0,1],cl)};z=3}
@@ -113,10 +116,11 @@ export const Timeline:React.FC<{t:Theme;scenes:Scene[];words:any[];voice:string;
    else if(kin==='stack'){st={...st,transform:`translateY(${(1-inP)*1920}px) rotate(${(1-inP)*-4}deg)`,boxShadow:'0 -30px 80px rgba(0,0,0,.4)',borderRadius:40*(1-inP),overflow:'hidden'};z=3}
    else if(kin==='scroll'){st={...st,transform:`translateY(${(1-Math.round(inP*9)/9)*1920}px)`}}
    else if(kin==='signal'){const g=Math.sin(Math.PI*inP);st={...st,opacity:inP>=.5?1:0,...sig(g,f+7)}}
+   else if(kin==='sharedx'){const q=interpolate(inP,[.06,.94],[0,1],cl);const e=EMD(q);st={...st,transform:`translateX(${SAX*(1-e)}px)`,opacity:interpolate(q,[.25,.7],[0,1],cl)};z=3}
    else if(kin==='bar'||kin==='morph'){st={...st,opacity:inP>=.5?1:0}}}
   const lf=f-starts[i];
-  layers.push(<AbsoluteFill key={i} style={{zIndex:z,background:t.bg,backgroundImage:t.texture?`url(${staticFile(t.texture)})`:'none',...st}}>
-   <Ctx.Provider value={{t,f:lf,exit:exitStag}}>{t.id==='hot-news-glitch'?<GlChrome date={date}/>:t.id==='tech-explain-cyber'?<BpChrome section={s.section} page={`${String(i+1).padStart(2,'0')} / ${String(scenes.length).padStart(2,'0')}`}/>:t.id==='tech-explain'?<TermChrome section={s.section} page={`${i+1}/${scenes.length}`} idx={i}/>:<Chrome section={s.section} page={`TRANG ${i+1}/${scenes.length}`} date={date}/>}
+  layers.push(<AbsoluteFill key={i} data-layer={String(i)} style={{zIndex:z,background:t.bg,backgroundImage:t.texture?`url(${staticFile(t.texture)})`:'none',...st}}>
+   <Ctx.Provider value={{t,f:lf,exit:exitStag}}>{t.id==='android-tutor'?<AtChrome section={s.section} page={`${String(i+1).padStart(2,'0')} / ${String(scenes.length).padStart(2,'0')}`}/>:t.id==='hot-news-glitch'?<GlChrome date={date}/>:t.id==='tech-explain-cyber'?<BpChrome section={s.section} page={`${String(i+1).padStart(2,'0')} / ${String(scenes.length).padStart(2,'0')}`}/>:t.id==='tech-explain'?<TermChrome section={s.section} page={`${i+1}/${scenes.length}`} idx={i}/>:<Chrome section={s.section} page={`TRANG ${i+1}/${scenes.length}`} date={date}/>}
    <div style={{position:'absolute',left:SZ.content.x,top:SZ.content.y,width:SZ.content.w,height:SZ.content.h,transform:`scale(${SZ.content.scale})`,transformOrigin:'top left'}}>{s.el}</div></Ctx.Provider></AbsoluteFill>);
   if(i<scenes.length-1&&(kout==='bar')&&outP>0&&outP<1){const p=outP;const w=p<.5?interpolate(p,[0,.5],[96,1080]):1080;const x=p<.5?0:interpolate(p,[.5,1],[0,1080],{easing:EIO});
    overlay=<div style={{position:'absolute',top:0,bottom:0,left:x,width:w-(p<.5?0:0),background:t.accent,zIndex:10,display:'flex',alignItems:'center',justifyContent:'center',overflow:'hidden'}}><div style={{transform:`rotate(-90deg) translateY(${(p-.5)*400}px)`,fontFamily:t.id==='tech-explain'?'JBM':'Anton',fontWeight:t.id==='tech-explain'?800:400,fontSize:t.id==='tech-explain'?150:200,color:t.onAccent,whiteSpace:'nowrap'}}>{t.id==='tech-explain'?'git commit ▸':B.wordmark+' ■'}</div></div>}

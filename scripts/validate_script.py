@@ -50,7 +50,7 @@ for i,sc in enumerate(sc_list,1):
     for k in ['say','type','section']:
         if not sc.get(k): err(f'{tag}: missing "{k}"')
     if sc.get('type') not in types: err(f'{tag}: unknown type, use one of {sorted(types)}')
-    if sc.get('out') and sc['out'] not in ['page','bar','zoom','push','stack','morph','scroll','signal']: err(f'{tag}: bad out "{sc["out"]}"')
+    if sc.get('out') and sc['out'] not in ['page','bar','zoom','push','stack','morph','scroll','signal','sharedx']: err(f'{tag}: bad out "{sc["out"]}"')
     if i<len(sc_list) and not sc.get('out'): warn(f'{tag}: no "out" transition (defaults to bar)')
     if sc.get('out')=='morph' and not sc.get('morph'): err(f'{tag}: out "morph" needs a "morph" {{from,to,txt}}')
     extra=set(sc.get('props',{}))-known.get(sc.get('type'),set())
