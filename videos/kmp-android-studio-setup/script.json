@@ -64,31 +64,27 @@
   },
   {
    "say": "Trước hết là JDK. Gradle với Kotlin cần bản mười bảy trở lên, nên gõ java -version để kiểm.",
-   "type": "AtCode",
+   "type": "AtTerm",
    "section": "Terminal",
    "out": "sharedx",
    "props": {
     "title": "JDK 17 trở lên",
-    "file": "Terminal",
     "lines": [
      {
-      "s": "// kiểm tra JDK trong máy",
-      "at": "@JDK"
+      "s": "# kiểm tra JDK trong máy",
+      "at": "@JDK",
+      "out": true
      },
      {
-      "s": "$ java -version",
+      "s": "java -version",
       "at": "@gõ"
      },
      {
-      "s": "openjdk version \"21.0.5\"",
-      "at": "@java"
+      "s": "openjdk \"21.0.5\"",
+      "at": "@java",
+      "out": true
      }
-    ],
-    "hl": {
-     "from": 2,
-     "to": 2,
-     "at": "@java"
-    }
+    ]
    }
   },
   {
@@ -127,25 +123,47 @@
    ]
   },
   {
-   "say": "Cài Android Studio bản stable mới nhất, đừng lấy bản Canary hay Beta. Rồi mở SDK Manager, tick Android SDK Platform ba mươi sáu, vì compileSdk của mọi project trong khóa là ba mươi sáu. App chạy được từ Android 7.0 vì minSdk là hai tư. Và cài plugin Kotlin Multiplatform để có nút chạy iOS ngay trong IDE.",
+   "say": "Cài Android Studio bản stable mới nhất, đừng lấy bản Canary hay Beta. Rồi mở SDK Manager, tick Android SDK Platform ba mươi sáu, vì compileSdk của mọi project trong khóa là ba mươi sáu.",
+   "type": "AtPackages",
+   "section": "SDK Manager",
+   "out": "sharedx",
+   "props": {
+    "title": "Cài Studio & SDK 36",
+    "head": "SDK Manager",
+    "rows": [
+     {
+      "s": "Android Studio · bản stable",
+      "meta": "không Canary/Beta",
+      "at": "@Android",
+      "ok": "@stable"
+     },
+     {
+      "s": "Android SDK Platform 36",
+      "meta": "API 36",
+      "at": "@tick",
+      "ok": "@Platform"
+     },
+     {
+      "s": "compileSdk = 36",
+      "meta": "mọi project",
+      "at": "@compileSdk",
+      "ok": "@mọi"
+     }
+    ]
+   }
+  },
+  {
+   "say": "App chạy được từ Android 7.0 vì minSdk là hai tư. Và cài plugin Kotlin Multiplatform để có nút chạy iOS ngay trong IDE.",
    "type": "AtCode",
    "section": "build.gradle.kts",
    "out": "sharedx",
    "props": {
-    "title": "Android Studio + SDK 36",
+    "title": "minSdk & plugin",
     "file": "build.gradle.kts",
     "lines": [
      {
-      "s": "// Android Studio — bản stable",
-      "at": "@stable"
-     },
-     {
-      "s": "// SDK Manager: tick Platform 36",
-      "at": "@tick"
-     },
-     {
-      "s": "compileSdk = 36",
-      "at": "@compileSdk"
+      "s": "// app/build.gradle.kts",
+      "at": "@App"
      },
      {
       "s": "minSdk = 24  // Android 7.0",
@@ -153,9 +171,9 @@
      }
     ],
     "hl": {
-     "from": 2,
-     "to": 2,
-     "at": "@compileSdk"
+     "from": 1,
+     "to": 1,
+     "at": "@minSdk"
     },
     "note": {
      "s": "Plugin: Settings → Marketplace → Kotlin Multiplatform.",
@@ -165,23 +183,46 @@
   },
   {
    "say": "Giờ cần một nơi để chạy app. Điện thoại Android thật bật USB debugging là ngon nhất, không thì tạo một emulator Pixel. Trên Mac thì cài thêm Xcode cho phần iOS.",
-   "type": "AtSteps",
+   "type": "AtDevice",
    "section": "Chạy app",
    "out": "sharedx",
    "props": {
     "title": "Nơi chạy app",
-    "steps": [
+    "devices": [
      {
-      "s": "Máy Android thật: bật USB debugging",
-      "at": "@Điện"
+      "name": "Máy Android thật",
+      "at": "@Điện",
+      "ok": "@nhất",
+      "screen": [
+       {
+        "s": "USB debugging",
+        "at": "@USB",
+        "on": true
+       }
+      ]
      },
      {
-      "s": "Hoặc một emulator Pixel",
-      "at": "@emulator"
+      "name": "Emulator",
+      "badge": "Pixel",
+      "at": "@emulator",
+      "screen": [
+       {
+        "s": "AVD · sẵn sàng chạy",
+        "at": "@Pixel"
+       }
+      ]
      },
      {
-      "s": "Xcode cho phần iOS — chỉ trên Mac",
-      "at": "@Xcode"
+      "kind": "mac",
+      "name": "Xcode",
+      "badge": "chỉ trên Mac",
+      "at": "@Trên",
+      "screen": [
+       {
+        "s": "iOS target",
+        "at": "@Xcode"
+       }
+      ]
      }
     ]
    }
@@ -239,30 +280,35 @@
   },
   {
    "say": "Tóm lại, cần JDK mười bảy cộng, Android Studio stable, SDK Platform ba mươi sáu, plugin Kotlin Multiplatform và một chỗ chạy app.",
-   "type": "AtSteps",
+   "type": "AtSpec",
    "section": "Tóm tắt",
    "out": "sharedx",
    "props": {
     "title": "Checklist đầy đủ",
-    "steps": [
+    "tiles": [
      {
-      "s": "JDK 17 trở lên",
+      "big": "17+",
+      "small": "JDK trở lên",
       "at": "@JDK"
      },
      {
-      "s": "Android Studio stable",
+      "big": "IDE",
+      "small": "Android Studio stable",
       "at": "@Android"
      },
      {
-      "s": "SDK Platform 36",
+      "big": "36",
+      "small": "SDK Platform",
       "at": "@Platform"
      },
      {
-      "s": "Plugin Kotlin Multiplatform",
+      "big": "KMP",
+      "small": "plugin Multiplatform",
       "at": "@plugin"
      },
      {
-      "s": "Một chỗ chạy app",
+      "big": "▶",
+      "small": "chỗ chạy app",
       "at": "@và"
      }
     ]
