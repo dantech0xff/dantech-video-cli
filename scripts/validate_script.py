@@ -194,6 +194,9 @@ for i,sc in enumerate(sc_list,1):
         miss=req-set(it); bad=set(it)-req-opt
         if miss: err(f'{tag}: {key}[{j}] missing {sorted(miss)}')
         if bad: err(f'{tag}: {key}[{j}] unknown keys {sorted(bad)} (allowed: {sorted(req|opt)})')
+        if t in ('AtTake','Table'):
+            for side in ('a','b'):
+                if len(str(it.get(side,'')))>9: warn(f'{tag}: rows[{j}].{side} "{it[side]}" > 9 chars, the 190px cell shrinks it below reel size; use a short verdict (Bắt buộc, Không, App Store)')
         if t in ('AtTerm','Terminal') and len(it.get('s',''))>28: warn(f'{tag}: lines[{j}] "{it["s"]}" > 28 chars, overflows the terminal at reel size; shorten or split')
         if t in ('AtDevice','Devices'):
             for r in it.get('screen',[]) or []:

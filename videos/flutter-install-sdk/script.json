@@ -1,0 +1,487 @@
+{
+ "theme": "flutter-tutor",
+ "title": "Cài Flutter SDK và đọc flutter doctor",
+ "topic": [
+  "Flutter SDK",
+  "flutter doctor"
+ ],
+ "date": "18 · 10 · 2026",
+ "caption": "Cài Flutter SDK trên macOS, Windows, Linux: thư mục không dấu cách, thêm flutter/bin vào PATH, đọc flutter doctor (✓ ổn, ! thiếu một phần, ✗ chưa có), chấp nhận Android licenses, chọn nơi chạy app và kiểm bằng flutter devices. #DanTech #Flutter #Dart",
+ "sources": [
+  "Dan Tech Academy, Flutter Mobile 101 — bài 01: Cài Flutter SDK và flutter doctor (đọc ngày 18/10/2026): https://dantech.academy/courses/flutter-mobile-101/00-foundations-setup/lesson-01-install-flutter-sdk",
+  "Flutter docs, Get started / Install (link trong bài học): https://docs.flutter.dev/get-started/install"
+ ],
+ "glossary": {
+  "PATH": "danh sách thư mục mà terminal tìm lệnh để chạy",
+  "flutter doctor": "lệnh khám máy, in từng hạng mục ổn, thiếu hoặc chưa có",
+  "Android toolchain": "SDK và công cụ Android mà Flutter dùng để build app",
+  "emulator": "máy Android ảo chạy ngay trên laptop",
+  "USB debugging": "cho phép máy tính cài và chạy app qua cáp USB"
+ },
+ "voice": {
+  "style": "random"
+ },
+ "music": {
+  "track": "random"
+ },
+ "tts": {
+  "engine": "edge"
+ },
+ "hook": {
+  "kind": "tips",
+  "claim": "Cài Flutter SDK: ngày đầu chỉ có một mục tiêu, flutter doctor báo xanh",
+  "promise": "Gỡ sẵn các bẫy setup hay gặp, làm đúng một lần là xong"
+ },
+ "scenes": [
+  {
+   "say": "Cài Flutter SDK cho tới khi flutter doctor báo xanh. Setup là ngày nhiều người bỏ cuộc nhất, nên mình gỡ sẵn các bẫy hay gặp.",
+   "type": "Steps",
+   "section": "Setup",
+   "props": {
+    "title": "Cài Flutter SDK",
+    "steps": [
+     {
+      "s": "flutter doctor báo xanh",
+      "at": 0,
+      "ok": "@xanh"
+     },
+     {
+      "s": "Ngày dễ bỏ cuộc nhất",
+      "at": "@Setup",
+      "warn": "@bỏ"
+     },
+     {
+      "s": "Gỡ sẵn bẫy hay gặp",
+      "at": "@gỡ"
+     }
+    ]
+   },
+   "sfx": [
+    {
+     "s": "tick_002",
+     "at": "@xanh",
+     "v": 0.4
+    }
+   ],
+   "out": "hero"
+  },
+  {
+   "say": "Máy cần tối thiểu tám GB RAM, mười sáu thì thoải mái hơn nhiều, và hai lăm GB ổ trống. Hệ điều hành từ Windows mười, macOS mười hai, hoặc Ubuntu hai mươi chấm không bốn.",
+   "type": "Specs",
+   "section": "Yêu cầu máy",
+   "props": {
+    "title": "Yêu cầu máy",
+    "tiles": [
+     {
+      "big": "8GB",
+      "small": "RAM tối thiểu",
+      "at": "@tám"
+     },
+     {
+      "big": "16GB",
+      "small": "RAM thoải mái hơn",
+      "at": "@mười"
+     },
+     {
+      "big": "25GB",
+      "small": "ổ trống",
+      "at": "@lăm"
+     },
+     {
+      "big": "10+",
+      "small": "Windows",
+      "at": "@Windows"
+     },
+     {
+      "big": "12+",
+      "small": "macOS",
+      "at": "@macOS"
+     },
+     {
+      "big": "20.04+",
+      "small": "Ubuntu",
+      "at": "@Ubuntu"
+     }
+    ]
+   },
+   "out": "hero"
+  },
+  {
+   "say": "Cài qua VS Code extension, hoặc tải từ trang chính thức của Flutter. Chọn thư mục không có dấu cách, không cần quyền admin, và đừng cài vào Program Files nhé.",
+   "type": "Steps",
+   "section": "Cài SDK",
+   "props": {
+    "title": "Cài vào đâu cho khỏi lỗi",
+    "steps": [
+     {
+      "s": "VS Code extension hoặc docs.flutter.dev",
+      "at": "@VS",
+      "ok": "@chính"
+     },
+     {
+      "s": "~/development/flutter · C:\\dev\\flutter",
+      "at": "@thư"
+     },
+     {
+      "s": "Không dấu cách, không cần quyền admin",
+      "at": "@dấu",
+      "ok": "@admin"
+     },
+     {
+      "s": "Đừng cài vào Program Files",
+      "at": "@đừng",
+      "warn": "@đừng+8"
+     }
+    ]
+   },
+   "out": "hero"
+  },
+  {
+   "say": "Giải nén xong, thêm thư mục flutter bin vào PATH, quên bước này là gặp lỗi command not found. Rồi mở terminal mới, gõ flutter version, thấy số version in ra là SDK đã vào đúng chỗ.",
+   "type": "Terminal",
+   "section": "PATH",
+   "props": {
+    "title": "Thêm flutter/bin vào PATH",
+    "dir": "~",
+    "lines": [
+     {
+      "s": "# thêm flutter/bin vào PATH",
+      "at": "@thêm",
+      "out": true
+     },
+     {
+      "s": "# quên bước này thì báo:",
+      "at": "@quên",
+      "out": true
+     },
+     {
+      "s": "flutter: command not found",
+      "at": "@command",
+      "out": true
+     },
+     {
+      "s": "# mở terminal mới",
+      "at": "@mở",
+      "out": true
+     },
+     {
+      "s": "flutter --version",
+      "at": "@gõ"
+     },
+     {
+      "s": "Flutter 3.x.x • stable",
+      "at": "@số",
+      "out": true,
+      "ok": "@số+10",
+      "hl": "@in"
+     }
+    ]
+   },
+   "sfx": [
+    {
+     "s": "tick_001",
+     "at": "@in",
+     "v": 0.4
+    }
+   ],
+   "out": "hero"
+  },
+  {
+   "say": "Giờ chạy flutter doctor để khám tổng quát máy bạn. Dấu tick là ổn, chấm than là thiếu một phần, còn dấu nhân là chưa có.",
+   "type": "Terminal",
+   "section": "flutter doctor",
+   "props": {
+    "title": "Đọc flutter doctor",
+    "dir": "~",
+    "lines": [
+     {
+      "s": "flutter doctor",
+      "at": "@chạy"
+     },
+     {
+      "s": "[✓] Flutter",
+      "at": "@khám",
+      "out": true
+     },
+     {
+      "s": "[!] Android toolchain",
+      "at": "@khám+4",
+      "out": true
+     },
+     {
+      "s": "[✓] Chrome",
+      "at": "@khám+8",
+      "out": true
+     },
+     {
+      "s": "[!] Xcode",
+      "at": "@khám+12",
+      "out": true
+     },
+     {
+      "s": "[✓] VS Code",
+      "at": "@khám+16",
+      "out": true
+     },
+     {
+      "s": "[✗] Connected device",
+      "at": "@khám+20",
+      "out": true
+     }
+    ],
+    "note": {
+     "s": "✓ ổn  ·  ! thiếu một phần  ·  ✗ chưa có",
+     "at": "@Dấu"
+    }
+   },
+   "overlays": [
+    {
+     "kind": "focus",
+     "match": "[✓] Flutter",
+     "at": "@tick"
+    },
+    {
+     "kind": "focus",
+     "match": "[!] Android toolchain",
+     "at": "@chấm"
+    },
+    {
+     "kind": "focus",
+     "match": "[✗] Connected device",
+     "at": "@dấu#2"
+    }
+   ],
+   "out": "hero"
+  },
+  {
+   "say": "Không cần xanh hết mọi dòng. Flutter, Android toolchain và Connected device là bắt buộc. Xcode chỉ cần khi build iOS trên Mac, còn Chrome thì bỏ qua.",
+   "type": "Steps",
+   "section": "flutter doctor",
+   "props": {
+    "title": "Không cần xanh hết",
+    "steps": [
+     {
+      "s": "Flutter · bắt buộc",
+      "at": "@Flutter",
+      "ok": "@Flutter+6"
+     },
+     {
+      "s": "Android toolchain · bắt buộc",
+      "at": "@toolchain",
+      "ok": "@toolchain+6"
+     },
+     {
+      "s": "Connected device · bắt buộc",
+      "at": "@Connected",
+      "ok": "@bắt"
+     },
+     {
+      "s": "Xcode · chỉ khi build iOS trên macOS",
+      "at": "@Xcode",
+      "warn": "@build"
+     },
+     {
+      "s": "Chrome · bỏ qua",
+      "at": "@Chrome"
+     }
+    ]
+   },
+   "out": "hero"
+  },
+  {
+   "say": "Với Android toolchain, cài Android Studio, vì Flutter dùng SDK và emulator của nó, kể cả khi bạn code bằng VS Code. Rồi thêm command line tools trong SDK Manager.",
+   "type": "Packages",
+   "section": "Android toolchain",
+   "props": {
+    "title": "Sửa Android toolchain",
+    "head": "SDK Manager",
+    "rows": [
+     {
+      "s": "Android Studio",
+      "meta": "SDK + emulator cho Flutter",
+      "at": "@Studio",
+      "ok": "@kể"
+     },
+     {
+      "s": "Android SDK Command-line Tools",
+      "meta": "cmdline-tools",
+      "at": "@command",
+      "ok": "@command+12"
+     }
+    ]
+   },
+   "out": "hero"
+  },
+  {
+   "say": "Sau đó chạy flutter doctor android licenses, gõ y để chấp nhận hết, rồi chạy lại doctor để xem tiến triển.",
+   "type": "Terminal",
+   "section": "Android licenses",
+   "props": {
+    "title": "Chấp nhận Android licenses",
+    "dir": "~",
+    "lines": [
+     {
+      "s": "flutter doctor --android-licenses",
+      "at": "@chạy"
+     },
+     {
+      "s": "# gõ y để chấp nhận hết",
+      "at": "@gõ",
+      "out": true
+     },
+     {
+      "s": "y",
+      "at": "@chấp"
+     },
+     {
+      "s": "flutter doctor",
+      "at": "@lại"
+     },
+     {
+      "s": "[✓] Android toolchain",
+      "at": "@lại+12",
+      "out": true,
+      "hl": "@để#2"
+     }
+    ]
+   },
+   "sfx": [
+    {
+     "s": "tick_002",
+     "at": "@để#2",
+     "v": 0.4
+    }
+   ],
+   "out": "hero"
+  },
+  {
+   "say": "Để chạy app, máy Android thật là tốt nhất: nhấn bảy lần vào Build number, rồi bật USB debugging. Không có máy thật thì tạo emulator Pixel tám, còn simulator iOS chỉ có trên macOS.",
+   "type": "Devices",
+   "section": "Nơi chạy app",
+   "props": {
+    "title": "Chọn nơi chạy app",
+    "devices": [
+     {
+      "name": "Máy Android thật",
+      "badge": "tốt nhất",
+      "at": "@máy",
+      "ok": "@debugging",
+      "screen": [
+       {
+        "s": "Build number × 7",
+        "at": "@bảy"
+       },
+       {
+        "s": "USB debugging",
+        "at": "@USB",
+        "on": true
+       }
+      ]
+     },
+     {
+      "name": "Emulator",
+      "badge": "ảo",
+      "at": "@emulator",
+      "screen": [
+       {
+        "s": "Device Manager · Pixel 8",
+        "at": "@Pixel"
+       }
+      ]
+     },
+     {
+      "kind": "mac",
+      "name": "iOS Simulator",
+      "badge": "chỉ macOS",
+      "at": "@Simulator",
+      "screen": [
+       {
+        "s": "open -a Simulator",
+        "at": "@iOS"
+       }
+      ]
+     }
+    ]
+   },
+   "out": "hero"
+  },
+  {
+   "say": "Kiểm bằng flutter devices, phải thấy ít nhất một máy trong danh sách.",
+   "type": "Terminal",
+   "section": "Kiểm tra",
+   "props": {
+    "title": "Kiểm bằng flutter devices",
+    "dir": "~",
+    "lines": [
+     {
+      "s": "flutter devices",
+      "at": "@bằng"
+     },
+     {
+      "s": "# ≥ 1 device trong danh sách",
+      "at": "@thấy",
+      "out": true,
+      "ok": "@ít",
+      "hl": "@ít"
+     }
+    ]
+   },
+   "out": "hero"
+  },
+  {
+   "say": "Danh sách trống thì emulator chưa khởi động xong, máy thật chưa Allow USB debugging, hoặc cáp chỉ sạc, thử cáp khác.",
+   "type": "Steps",
+   "section": "Kiểm tra",
+   "props": {
+    "title": "Danh sách trống?",
+    "steps": [
+     {
+      "s": "Emulator chưa khởi động xong",
+      "at": "@emulator",
+      "warn": "@khởi"
+     },
+     {
+      "s": "Máy thật chưa Allow USB debugging",
+      "at": "@máy",
+      "warn": "@Allow"
+     },
+     {
+      "s": "Cáp chỉ sạc, không truyền data",
+      "at": "@cáp",
+      "warn": "@sạc"
+     }
+    ]
+   },
+   "out": "hero"
+  },
+  {
+   "say": "Tóm lại, flutter version chạy từ terminal mới, doctor xanh ở Flutter và Android toolchain, flutter devices thấy máy. Bạn đang kẹt ở dòng nào của doctor? Follow Dan Tech để làm tiếp hot reload nhé!",
+   "type": "Steps",
+   "section": "Checklist",
+   "props": {
+    "title": "Checklist ngày đầu",
+    "steps": [
+     {
+      "s": "flutter --version chạy từ terminal mới",
+      "at": "@version",
+      "ok": "@mới"
+     },
+     {
+      "s": "doctor xanh: Flutter, Android toolchain",
+      "at": "@doctor",
+      "ok": "@toolchain"
+     },
+     {
+      "s": "flutter devices thấy máy",
+      "at": "@devices",
+      "ok": "@máy"
+     }
+    ],
+    "note": {
+     "s": "Bạn đang kẹt ở dòng nào của doctor?",
+     "at": "@kẹt"
+    }
+   }
+  }
+ ]
+}
