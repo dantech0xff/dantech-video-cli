@@ -94,8 +94,19 @@ Brand (wordmark, tên, handle, logo, chữ nút Follow) lấy từ `channels/<id
 - Tiêu đề dài trên cảnh nhiều nội dung: `one` (1 dòng, `fitSize`) để không đẩy layout xuống dải caption.
 
 ## Scenario packs + palette sống `AT` (mọi theme)
-- `remotion/src/packs.tsx` (Meter, Scale, DataFlow, Layers, Loop, Debug, Timeline, BigStat, QuoteCard, BeforeAfter, Rating, TopN) và At* của android (đăng ký thêm tên trung tính Steps/Terminal/Packages/Specs/Devices/Table) đọc màu/font/bo góc từ `AT` trong `android.tsx`. `Video.tsx` gọi `setPal(theme)` mỗi lần render: android-tutor giữ nguyên `AT_ANDROID` (pixel-identical); theme khác suy ra từ `look` (sáng/tối theo bg, accent, tint nền nhạt hơn ×0.8 trên nền sáng, góc vuông cho hot-news, head font/weight/uppercase của theme, mono GSC cho flutter, JBM cho còn lại). `AT.good`/`onGood` = xanh cho "đúng/sau/fix/thắng", tách khỏi accent (theme accent đỏ không làm "fix" trông như lỗi).
-- Theme mới: chỉ cần `look` đúng; cần chỉnh thì thêm nhánh trong `setPal`, không hardcode màu trong pack. Kiểm: render pack fixture (mỗi pack 1 cảnh) qua safezone + bbcheck.
+- `remotion/src/packs.tsx` (Meter, Scale, DataFlow, Layers, Loop, Debug, Timeline, BigStat, QuoteCard, BeforeAfter, Rating, TopN) và At* của android (đăng ký thêm tên trung tính Steps/Terminal/Packages/Specs/Devices/Table) đọc màu/font/bo góc từ `AT` trong `android.tsx`. `Video.tsx` gọi `setPal(theme)` mỗi lần render: android-tutor giữ nguyên `AT_ANDROID` (pixel-identical); theme khác: `setPal` suy ra mặc định từ `look` (sáng/tối, accent, góc vuông cho hot-news, head font/weight/uppercase, mono GSC cho flutter, JBM cho còn lại) rồi **ghi đè bằng palette chỉnh tay `look.pack`** trong `themes/<id>/theme.json` (overlay `tok()` cũng lấy card/line/dim từ đây):
+  | khoá | nghĩa |
+  |---|---|
+  | `hl` / `onHl` | highlight: hàng đang nói, viền active, nút, sao, ô thắng / chữ trên nó |
+  | `good` / `onGood` | đúng / sau / fix / tốt nhất (xanh, tách khỏi accent đỏ) |
+  | `bad` / `badBg` / `badInk` / `badRow` | lỗi / dòng thủ phạm, nền nhạt ô thua, chữ ô thua, chữ log lỗi |
+  | `warn` / `warnBg` / `onWarn` | nhánh "nếu không" |
+  | `card` / `card2` / `panel` / `term` | nền thẻ, header thẻ, cửa sổ, terminal |
+  | `line` / `dim` / `sub` / `out` | viền, chữ phụ, nhãn nhỏ, output terminal |
+  | `tint` + `tintK` | màu + hệ số của nền nhạt (active/done); theme giấy dùng mực đen ×0.55 thay vì đỏ cho khỏi "hồng" |
+  | `news` | true = kiểu báo: kicker số + rule, QuoteCard không khung, BigStat số trên thanh accent |
+  Giá trị `"accent"` / `"onAccent"` / `"accent2"` = lấy từ token của theme, nên variant đổi accent (tech-explain red, cyber blue/violet…) vẫn đúng màu. `good`, `bad`, `warn` phải là hex 6 số (pack ghép alpha vào). Theme mới: thêm `look.pack` ngay từ đầu, không hardcode màu trong pack.
+- **Lấp đầy chiều dọc** (`fill.tsx`): scene list/sơ đồ bọc trong `<Fill head={<Title/>}>`; cỡ chữ/padding viết bằng `z(px)` / `zf(text,width,max,ratio)` (dòng đơn), khoảng cách dọc bằng `zg(px)`, hàng chưa tới lượt render ẩn bằng `hid(vis)` và chỉ gắn `data-bb` khi hiện. Room = `Ctx.room` (Timeline trừ chỗ thẻ dock + nút Follow). Sơ đồ vẽ tuyệt đối (Scale, Loop) tự kéo dài theo `useRoom()`. Kiểm: render pack fixture (mỗi pack 1 cảnh) qua safezone + bbcheck.
 
 ## Universal overlays (mọi theme, `remotion/src/overlay.tsx`)
 - 6 phần tử dùng chung, render bởi `Overlays` trong `sys.tsx` từ `scene.ov` (do autofill hoặc `overlays` trong script sinh ra): term chip + gloss, số lớn đếm lên + nhãn, icon + nhãn, focus (push-in ≤ 1.06 + viền + spotlight làm tối phần còn lại), progress n/m, sơ đồ 2–3 hộp có mũi tên. Chi tiết khoá: SCHEMA "Universal overlays".

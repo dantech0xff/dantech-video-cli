@@ -41,7 +41,7 @@ description: Viết videos/<slug>/script.json cho video Dan Tech từ một spec
      | Debug / sửa lỗi | `Debug` (lỗi → dòng thủ phạm → fix → kết quả), thêm `Terminal` nếu cần chạy lệnh |
      | Tin tức | `VersusHook`/headline → `Timeline` (diễn biến), `BigStat` (con số, có `src`), `QuoteCard` (trích dẫn, có thể `still`) |
      | Mẹo / review | `BeforeAfter`, `Rating`, `TopN` |
-     Dùng scene riêng của theme khi nó khớp hơn (vd `AtCode`, `FlTree`, Quote/Evidence của hot-news); pack là mặc định khi theme chưa có scene cho ý đó.
+     Dùng scene riêng của theme khi nó khớp hơn (vd `AtCode`, `FlTree`, `Checklist` của hot-news; Quote/Evidence cũ nay là alias của QuoteCard/BigStat); pack là mặc định khi theme chưa có scene cho ý đó.
    - **Cảnh báo validator là bắt buộc xử lý:** mọi `⚠️` (nhất là nhịp hình) phải được sửa hoặc giải thích rõ trong báo cáo cho Dan — không bỏ qua lặng lẽ. Lỗi nhịp hình (❌) thì script không pass được, bắt buộc sửa.
 6. **Hình ảnh:** chỉ infographics/UI mockup. **Không có người hay mặt người.** `media` chỉ dùng clip faceless trong `assets/broll/`.
 7. **Metadata:** `title`, `date` (ngày hôm nay, dạng `16 · 10 · 2026`), `caption` có hashtag (#DanTech + #TinNong/#MeoNhanh), `sources` đầy đủ (tên + URL + ngày). Credit nhạc do `describe.py` tự thêm. Giữ `"voice": {"style":"random"}`, `"music": {"track":"random"}` (không đặt `voice.file`).
