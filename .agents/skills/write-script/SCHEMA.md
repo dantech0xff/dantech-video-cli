@@ -91,6 +91,7 @@ Canvas rộng 894 như mọi theme, dùng được tới y ~1280 (SZ.content.h).
 - **AtPreview** `{title, file, lines, hl?, taps:[at], rotateAt, keep, label:"…{n}…", btn, verdict?:{s,at}}`: code (≤ 9 dòng) ở trên, dưới là slot vuông cho điện thoại (xoay không chạm gì) + cột readout bên phải. Title 1 dòng tự co. Mỗi `tap` tăng `{n}`; `rotateAt` xoay máy (activity tạo lại): `keep:false` → n về 0, `keep:true` giữ.
 - **AtLogcat** `{title, lines:[{lvl:D|I|W|E, tag, msg, at}], note?:{s,at}}`.
 - **AtTake** `{title, head?:[colA,colB], rows:[{k,a,b,at}], rule?:{s,at}}`: hàng pill so sánh, ô bắt đầu bằng "giữ/có/✓" tô xanh, còn lại tô đỏ nhạt.
+- **AtSteps** `{title, steps:[{s,at,ok?:at}], note?:{s,at}}`: checklist các bước cho nội dung thủ tục/setup/yêu cầu (không phải code). Hàng trượt vào ở `at` với vòng số xám; ô tròn đổi xanh + tick pop ở `ok` (bỏ `ok` = mục chỉ liệt kê, chưa "xong"). Title 1 dòng tự co; ≤ 7 hàng để còn chỗ cho note.
 - `out: "sharedx"` (mặc định của theme qua `look.defaultOut`): Material shared-axis X như điều hướng activity/fragment Android: cảnh cũ lùi trái 120 px, scale 0.96, mờ dần; cảnh mới trượt vào từ phải 120 px + fade, easing emphasized-decelerate, không bounce, ~470 ms. Không dùng zoom / shape phủ toàn khung cho theme này.
 
 ## Theme `flutter-tutor` (FLUTTER TUTOR, 🧪 chờ duyệt) — scene types (`remotion/src/flutter.tsx`)

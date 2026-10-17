@@ -74,6 +74,51 @@ for i,sc in enumerate(sc_list,1):
         n=int(m.group(2) or 1)
         if words.count(norm(m.group(1)))<n: err(f'{tag}: anchor {a}: word "{m.group(1)}" (x{n}) not in this scene\'s say')
 allw=[norm(w) for sc in sc_list for w in sc.get('say','').split()]
+# visual-beat density: @word anchors should be spread through the scene's say (~3.2 wps).
+# A long stretch of narration with nothing new on screen reads as a static card.
+# A prop with no "at"/@anchor anywhere inside counts as a beat at word 0 (visible from the start).
+# Numeric timings (keys ending in "at", bare number lists like taps/hits) are beats we can't position -> skip spacing checks for that scene.
+def timed(x):
+    if isinstance(x,dict):
+        r=False
+        for k,v in x.items():
+            if isinstance(k,str) and k.lower().endswith('at') and isinstance(v,(int,float)) and not isinstance(v,bool): r=True
+            if isinstance(v,str) and v.startswith('@'): r=True
+            else: r=r or timed(v)
+        return r
+    if isinstance(x,list): return any(timed(y) or isinstance(y,(int,float)) and not isinstance(y,bool) for y in x)
+    if isinstance(x,str): return x.startswith('@')
+    return False
+def numts(x):
+    if isinstance(x,dict): return any((isinstance(k,str) and k.lower().endswith('at') and isinstance(v,(int,float)) and not isinstance(v,bool)) or numts(v) for k,v in x.items())
+    if isinstance(x,list): return any(isinstance(y,(int,float)) and not isinstance(y,bool) or numts(y) for y in x)
+    return False
+press_w=''
+try: press_w=norm(json.load(open(os.path.join(ROOT,'channels',f"{S.get('channel','dantech')}.json"),encoding='utf-8'))['ctaPressWord'])
+except Exception: pass
+WPS=3.2
+for i,sc in enumerate(sc_list,1):
+    tag=f'scene {i} ({sc.get("type")})'
+    words=[norm(w) for w in sc.get('say','').split()]; n=len(words)
+    pos=[]
+    for a in anchors({'p':sc.get('props',{}),'s':sc.get('sfx',[])}):
+        m=AN.match(a)
+        if not m: continue
+        nth=int(m.group(2) or 1); tgt=norm(m.group(1))
+        idx=[k for k,w in enumerate(words) if w==tgt]
+        if len(idx)>=nth: pos.append(idx[nth-1])
+    if press_w in words: pos.append(words.index(press_w))
+    for v in sc.get('props',{}).values():
+        if not timed(v): pos.append(0)
+    pos=sorted(set(pos)); hasnum=numts(sc.get('props',{})) or numts(sc.get('sfx',[]))
+    if not pos and not hasnum:
+        if n>14: warn(f'{tag}: {n} words but no timed prop (@anchor/"at") — nothing changes on screen')
+        continue
+    if not pos or hasnum: continue
+    if pos[0]>14: warn(f'{tag}: first visual beat lands ~word {pos[0]+1}/{n} (~{pos[0]/WPS:.0f}s in) — put a prop on screen earlier or split the scene')
+    for a,b in zip(pos,pos[1:]):
+        if b-a>26: warn(f'{tag}: ~{b-a} words (~{(b-a)/WPS:.0f}s) between beats — screen sits still')
+    if n-pos[-1]>20: warn(f'{tag}: last beat at word {pos[-1]+1}/{n}, then ~{n-pos[-1]} words with nothing new on screen')
 # channel CTA phrase (channels/<id>.json): Follow button pops on ctaInWord, is pressed on ctaPressWord
 try:
     CHN=json.load(open(os.path.join(ROOT,'channels',f"{S.get('channel','dantech')}.json"),encoding='utf-8'))

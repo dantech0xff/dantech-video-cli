@@ -130,6 +130,17 @@ export const AtTake:React.FC<{title:string;head?:[string,string];rows:{k:string;
   {rule&&f>=rule.at&&(()=>{const q=m3(f,rule.at,'def');return <div {...bb('rule')} style={{marginTop:44,background:'rgba(61,220,132,.12)',border:`2px solid ${AT.green}`,borderRadius:32,padding:'28px 32px',display:'flex',gap:22,alignItems:'center',transform:`scale(${.9+.1*q})`,opacity:Math.min(1,m3(f,rule.at,'fx')),transformOrigin:'left center'}}>
    <svg width={64} height={64} style={{flex:'none'}} viewBox="0 0 64 64"><path d={cookiePath(32,32,28,.1*(1-Math.min(1,q))+.04,9,f*.01)} fill={AT.green}/></svg>
    <span style={{fontFamily:SANS,fontWeight:800,fontSize:50,lineHeight:1.25,color:AT.ink}}>{rule.s}</span></div>})()}</div>};
+/* 6. steps/checklist: numbered rows slide in at `at`; circle turns green + check pops at `ok` (optional, else stays pending) */
+export const AtSteps:React.FC<{title:string;steps:{s:string;at:number;ok?:number}[];note?:{s:string;at:number}}>=({title,steps,note})=>{const {f}=useS();
+ return <div><Title s={title} one/>
+  <div style={{display:'flex',flexDirection:'column',gap:20}}>{steps.map((st,k)=>{if(f<st.at)return null;const q=m3(f,st.at,'def');
+   const done=st.ok!=null&&f>=st.ok;const dq=done?m3(f,st.ok!,'fast'):0;
+   return <div key={k} {...bb('step')} style={{display:'flex',alignItems:'center',gap:24,background:done?'rgba(61,220,132,.10)':AT.card,border:`1.5px solid ${done?AT.green:AT.line}`,borderRadius:26,padding:'22px 28px',opacity:Math.min(1,m3(f,st.at,'fx')),transform:`translateX(${(1-q)*70}px)`}}>
+    <span style={{flex:'none',width:60,height:60,borderRadius:30,background:done?AT.green:AT.card2,border:`2px solid ${done?AT.green:AT.line}`,display:'flex',alignItems:'center',justifyContent:'center',transform:done?`scale(${.7+.3*Math.min(1.3,dq)})`:'none'}}>
+     {done?<svg width={30} height={30} viewBox="0 0 24 24"><path d="M4.5 12.5 10 18 19.5 6.5" stroke={AT.onPrim} strokeWidth={3.4} fill="none" strokeLinecap="round" strokeLinejoin="round"/></svg>
+      :<span style={{fontFamily:MONO,fontWeight:800,fontSize:30,color:AT.dim}}>{k+1}</span>}</span>
+    <span style={{flex:1,fontFamily:SANS,fontWeight:600,fontSize:42,color:AT.ink,lineHeight:1.25}}>{st.s}</span></div>})}</div>
+  {note&&f>=note.at&&(()=>{const q=m3(f,note.at,'def');return <div {...bb('note')} style={{marginTop:44,fontFamily:SANS,fontWeight:500,fontSize:48,lineHeight:1.3,color:AT.ink,opacity:Math.min(1,m3(f,note.at,'fx')),transform:`translateY(${(1-q)*40}px)`,borderLeft:`8px solid ${AT.green}`,paddingLeft:26}}>{note.s}</div>})()}</div>};
 /* chrome: slim header (robot + brand left, page right, one line in SZ.header), decorative gutter, mid-ground shapes.
    The file name lives on the code card tab (AtCode/AtPreview), not in a strip under the header. */
 export const AtChrome:React.FC<{section:string;page:string}>=({section,page})=>{const {f}=useS();const B=useBrand();return <>
