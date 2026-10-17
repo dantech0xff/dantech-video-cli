@@ -30,3 +30,6 @@ Không humanize để rút ngắn video, và không viết lại sau khi đã c�
 - Sự kiện, con số, tên riêng, trích dẫn, `sources`.
 - Câu kết có **"follow Dan Tech"**.
 - **Anchor `@chữ`**: nếu sửa/xoá một chữ đang được anchor dùng (trong `props` hoặc `sfx` của cảnh đó), cập nhật anchor sang chữ mới (kể cả `#n` nếu số lần xuất hiện thay đổi). Sau khi sửa luôn chạy `python3 scripts/validate_script.py <script>`.
+
+## Không đọc cấu trúc (meta signposting)
+Khi humanize, xoá mọi câu kể về kịch bản thay vì kể chuyện: "như đã hứa", "đây là thứ mình hứa", "đây là phần quan trọng", "giờ bạn đã đủ thông tin", "cuối cùng là", "tiếp theo", "hãy cùng tìm hiểu". Payoff thì nói thẳng sự việc. Poll là câu hỏi tự nhiên bám vào chuyện. Tease ở đầu nói như với bạn ("…để cuối mình kể"). Đổi dấu hai chấm kiểu liệt kê thành câu nói. Ví dụ: xem write-script, mục "Không đọc cấu trúc kịch bản".

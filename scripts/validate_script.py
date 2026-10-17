@@ -92,6 +92,12 @@ else:
         if not d: warn('hook: payoff promised but no scene has "payoff": true (it must actually be delivered)')
         elif d[0]==1: warn('hook: payoff delivered in scene 1; it should come near the end')
 if first1.endswith('?'): warn(f'hook: scene 1 opens with a question "{first1}"; open with a concrete claim, poll only after context')
+# meta signposting: narration must tell the story, not the script structure
+META=['như đã hứa','thứ mình hứa','điều mình hứa','đây là phần quan trọng','đủ dữ kiện','đủ thông tin','cuối cùng là','tiếp theo chúng ta','hãy cùng tìm hiểu','cuối video là','phần tiếp theo']
+for i,sc in enumerate(sc_list,1):
+    low=sc.get('say','').lower()
+    for m in META:
+        if m in low: warn(f'scene {i}: meta signposting "{m}"; say the fact itself / ask naturally (write-script "Không đọc cấu trúc kịch bản")')
 # info only (no warnings): rough voice length per Gemini style, words/second measured from past renders
 RATE={'hao-hung':3.8,'tu-nhien':3.1,'ke-chuyen':2.55}
 n=len(allw)

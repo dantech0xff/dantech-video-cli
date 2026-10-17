@@ -2,7 +2,7 @@
  "theme": "hot-news-glitch",
  "title": "Apple kiện OpenAI vì 14 cựu nhân viên: OpenAI đã xuống nước",
  "date": "16 · 10 · 2026",
- "caption": "Apple kiện OpenAI vì 14 cựu nhân viên nhảy việc, và OpenAI đã phải nhượng bộ. Cuối video: thứ OpenAI phải giao nộp cho Apple. Bạn phe Apple hay phe OpenAI? #DanTech #TinNong #OpenAI #Apple",
+ "caption": "Apple kiện OpenAI vì 14 cựu nhân viên nhảy việc, và OpenAI đã phải nhượng bộ, còn phải giao nộp cả một thứ. Bạn bênh Apple hay OpenAI? #DanTech #TinNong #OpenAI #Apple",
  "sources": [
   "The Verge, Bloomberg (15.10.2026)"
  ],
@@ -15,7 +15,7 @@
  },
  "scenes": [
   {
-   "say": "Apple kiện OpenAI vì 14 cựu nhân viên, OpenAI đã xuống nước. Phe Apple: bí mật thương mại phải được bảo vệ. Phe OpenAI: nhân tài có quyền nhảy việc. Cuối video là thứ OpenAI phải giao nộp cho Apple.",
+   "say": "Apple kiện OpenAI vì 14 cựu nhân viên, OpenAI đã xuống nước. Người bênh Apple bảo bí mật thương mại phải được giữ, người bênh OpenAI thì nói nhân tài có quyền nhảy việc. Mà OpenAI còn phải giao nộp một thứ nữa, để cuối mình kể.",
    "type": "VersusHook",
    "section": "TRANG NHẤT",
    "out": "signal",
@@ -29,15 +29,15 @@
     "hl": 2,
     "a": {
      "label": "PHE APPLE",
-     "line": "Bí mật thương mại phải được bảo vệ"
+     "line": "Bí mật thương mại phải được giữ"
     },
     "b": {
      "label": "PHE OPENAI",
      "line": "Nhân tài có quyền nhảy việc"
     },
     "sidesAt": 30,
-    "payoff": "Cuối video: thứ OpenAI phải giao nộp",
-    "payoffAt": "@Cuối"
+    "payoff": "OpenAI còn phải giao nộp một thứ…",
+    "payoffAt": "@giao"
    },
    "sfx": [
     {
@@ -48,7 +48,7 @@
    ]
   },
   {
-   "say": "Cụ thể, Apple cáo buộc OpenAI đánh cắp bí mật thương mại, khi mười bốn nhân viên nhảy việc từ Apple sang.",
+   "say": "Chuyện là Apple cáo buộc OpenAI đánh cắp bí mật thương mại, khi có mười bốn nhân viên nhảy việc từ Apple sang.",
    "type": "Flow",
    "section": "VỤ KIỆN BÍ MẬT THƯƠNG MẠI",
    "out": "signal",
@@ -73,7 +73,7 @@
    ]
   },
   {
-   "say": "Thẩm phán Edward Davila nói ông rất có khả năng sẽ chấp thuận lệnh cấm mà Apple yêu cầu.",
+   "say": "Rồi thẩm phán Edward Davila nói ông rất có khả năng sẽ chấp thuận lệnh cấm mà Apple yêu cầu.",
    "type": "Quote",
    "section": "PHÁN QUYẾT",
    "out": "signal",
@@ -88,7 +88,7 @@
    }
   },
   {
-   "say": "Ngay sau đó, OpenAI tự nguyện nhượng bộ: cam kết không dùng thông tin độc quyền của Apple để phát triển sản phẩm, trong lúc vụ kiện còn tiếp diễn.",
+   "say": "Ngay sau đó, OpenAI tự nguyện lùi một bước, cam kết không dùng thông tin độc quyền của Apple để làm sản phẩm trong lúc vụ kiện còn diễn ra.",
    "type": "Checklist",
    "section": "NHƯỢNG BỘ",
    "out": "signal",
@@ -132,7 +132,7 @@
    ]
   },
   {
-   "say": "Và đây là thứ mình hứa: OpenAI phải giao bản sao pháp lý ổ cứng của cả mười bốn nhân viên này.",
+   "say": "Không chỉ vậy, OpenAI còn phải giao nộp bản sao pháp lý ổ cứng của cả mười bốn người này.",
    "type": "Evidence",
    "section": "BẰNG CHỨNG",
    "out": "signal",
@@ -160,7 +160,7 @@
    "payoff": true
   },
   {
-   "say": "Giờ anh em đã đủ dữ kiện: phe Apple hay phe OpenAI? Comment bên dưới, và follow Dan Tech nhé!",
+   "say": "Anh em thấy sao, Apple kiện vậy là đúng, hay OpenAI chỉ đang tuyển người giỏi thôi? Comment bên dưới, và follow Dan Tech nhé!",
    "type": "CTA",
    "section": "TRANG CUỐI",
    "props": {
@@ -194,9 +194,9 @@
   "kind": "controversy",
   "claim": "Apple kiện OpenAI vì 14 cựu nhân viên, OpenAI đã xuống nước",
   "sides": [
-   "Apple: bí mật thương mại phải được bảo vệ",
-   "OpenAI: nhân tài có quyền nhảy việc"
+   "Bênh Apple: bí mật thương mại phải được giữ",
+   "Bênh OpenAI: nhân tài có quyền nhảy việc"
   ],
-  "payoff": "thứ OpenAI phải giao nộp cho Apple"
+  "payoff": "thứ OpenAI phải giao nộp (bản sao pháp lý ổ cứng của 14 người)"
  }
 }

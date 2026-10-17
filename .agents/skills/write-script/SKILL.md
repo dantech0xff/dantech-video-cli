@@ -62,6 +62,23 @@ Ví dụ thật (`videos/openai-vs-apple-glitch`, reel cũ: chỉ 36.7% xem qua 
 - ❌ Cũ: "OpenAI vừa phải xuống nước trước Apple!" (không rõ ai kiện ai, vì sao) … rồi cuối mới hỏi "Anh em nghĩ ai đúng?" mà không có phe cụ thể, không có payoff.
 - ✅ Mới: "Apple kiện OpenAI vì 14 cựu nhân viên, OpenAI đã xuống nước. Phe Apple: bí mật thương mại phải được bảo vệ. Phe OpenAI: nhân tài có quyền nhảy việc. Cuối video là thứ OpenAI phải giao nộp cho Apple." Payoff giao ở cảnh 5 ("Và đây là thứ mình hứa: … bản sao pháp lý ổ cứng của cả mười bốn nhân viên"). Poll ở cảnh cuối, sau khi đã đủ dữ kiện.
 
+## Không đọc cấu trúc kịch bản (no meta signposting)
+Lời đọc kể **nội dung**, không kể **kịch bản**. Không nói ra cấu trúc: "như đã hứa", "đây là thứ mình hứa", "đây là phần quan trọng", "giờ bạn đã đủ thông tin/dữ kiện", "cuối cùng là", "tiếp theo chúng ta sẽ", "phần 1/2/3", "hãy cùng tìm hiểu". Nói như YouTuber kể cho bạn nghe.
+- **Payoff = nói thẳng sự việc.** Đừng báo trước là sắp tới payoff.
+- **Tease ở đầu** phải nghe như lời nói tự nhiên ("Mà OpenAI còn phải giao nộp một thứ nữa, để cuối mình kể."), không như mục lục ("Cuối video là thứ…").
+- **Poll = câu hỏi tự nhiên bám vào câu chuyện**, gắn với hai phe. Không dùng "phe A hay phe B?" khô khốc.
+- Tránh văn viết khi đọc: dấu hai chấm liệt kê ("Phe Apple: …"), "cụ thể," mở câu, "phát triển sản phẩm" (nói "làm sản phẩm").
+
+| ❌ Meta / máy móc | ✅ Tự nhiên |
+|---|---|
+| Và đây là thứ mình hứa: OpenAI phải giao bản sao pháp lý ổ cứng… | Không chỉ vậy, OpenAI còn phải giao nộp bản sao pháp lý ổ cứng của cả mười bốn người này. |
+| Giờ anh em đã đủ dữ kiện: phe Apple hay phe OpenAI? | Anh em thấy sao, Apple kiện vậy là đúng, hay OpenAI chỉ đang tuyển người giỏi thôi? |
+| Cuối video là thứ OpenAI phải giao nộp cho Apple. | Mà OpenAI còn phải giao nộp một thứ nữa, để cuối mình kể. |
+| Phe Apple: bí mật thương mại phải được bảo vệ. Phe OpenAI: … | Người bênh Apple bảo bí mật thương mại phải được giữ, người bênh OpenAI thì nói nhân tài có quyền nhảy việc. |
+| Cụ thể, Apple cáo buộc… | Chuyện là Apple cáo buộc… |
+
+Validator cảnh báo các cụm meta phổ biến. Danh sách không đủ hết, nên vẫn phải đọc to để tự kiểm.
+
 ## Hook trực diện (direct hook)
 
 Trong 3 giây đầu, người xem phải biết **video nói về chủ đề gì** (vd "MVVM trong Flutter"). Không dẫn vòng, không "thử tưởng tượng…" trước khi gọi tên chủ đề.

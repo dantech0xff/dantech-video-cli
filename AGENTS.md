@@ -99,6 +99,7 @@ Video chỉ "xong" khi tất cả đều ✅:
 
 ## Common mistakes (đã gặp thật)
 - Hook chung chung ("Anh em đứng về phía nào?") hoặc claim mơ hồ, không nói ai vs ai và vì sao. Thiếu 2 phe trong 1–3 s. Hứa "cuối video…" mà không giao. Bịa claim giật tít không có trong nguồn. Xem [docs/LEARNINGS.md](docs/LEARNINGS.md).
+- Lời đọc kể cấu trúc kịch bản ("đây là thứ mình hứa", "giờ anh em đã đủ dữ kiện", "cuối video là…"). Payoff thì nói thẳng sự việc, poll là câu hỏi tự nhiên.
 - Viết hook theo theme. Hook phải theo **nội dung** (`hook.kind`).
 - Mở bằng câu dẫn dắt vòng vo. Đặt vấn đề 4 cảnh trong khi lõi chỉ nửa video. Kể lại mọi ví dụ trong bài học.
 - Viết kiểu ghi chú, thiếu từ nối, thuật ngữ không định nghĩa (ioc_v1 bị chê "thiếu chữ").
