@@ -42,8 +42,9 @@ Caption = karaoke **chip** (mọi theme): mỗi chữ là một chip có nền (
 ## Safe zone (BẮT BUỘC — tạo / sửa / cập nhật theme)
 Khung 1080x1920 bị UI TikTok / Reels / Shorts / Facebook Reels che. Hằng số dùng chung nằm ở `remotion/src/safezone.ts` (`ZONE`, `SZ`) — theme **import từ đây, không hardcode toạ độ**.
 - Vùng **không có chữ** (`SZ.noText`, UI che): top y < 290 (thanh tìm kiếm, tab Following/For You, LIVE), bottom y ≥ 1500, left x < 60, right x ≥ 880 từ y 700 (cột nút). Strict (template quảng cáo): top 288, bottom 672, left 120, right 192.
-- **Trên y 290 không có chữ hay thông tin nào, kể cả brand.** Wordmark, số trang, tab file, breadcrumb, section, nhãn pill đều nằm trong `SZ.chrome`: y 296–402, x 136–860 (`left:SZ.chrome.x,right:SZ.chrome.right,top:SZ.chrome.top…`). Hai hàng: hàng brand (wordmark ≤ ~56 px, số trang canh baseline) + dải section/tab (font 20–24). Thanh màu, rail, lưới, hình mid-ground được tràn lên trên y 290 vì không mang chữ.
-- Nội dung cảnh: `SZ.content` = y 416–1359 (canvas 894x1320, scale ~0.714, rộng ~640 px từ x 136). Scene vẫn thiết kế trên canvas 894x1320, `Timeline` tự scale vào hộp — không đặt chữ ngoài canvas đó. Đừng hardcode toạ độ chrome/end card, lấy từ `SZ`.
+- **Trên y 290 không có chữ hay thông tin nào, kể cả brand.** Brand nằm trong **header mảnh một dòng** `SZ.header`: y 294–334 (40 px), x 136–860. Trái: wordmark/tên kênh (~30–34 px, `fitSize` để "MOBILE HUB" hay tên dài tự co). Phải: số trang (+ ngày nếu theme có), ~21–22 px, cùng **baseline**. Dùng `HeadLine` trong `sys.tsx` (`left`, `right`, `rule` = viền dưới tuỳ theme). Có thể làm header thành thanh màu (tech-explain: thanh vàng chính là header, kèm `❯ section` mờ ở giữa).
+- **Không có dải thứ hai** dưới header (tab bar, breadcrumb, section line, prompt line). Thông tin đó đưa vào header (một dòng) hoặc vào nội dung: tên file nằm trên tab của card code (android/flutter), section là kicker của cảnh. Thanh màu, rail, lưới, hình mid-ground được tràn lên trên y 290 vì không mang chữ.
+- Nội dung cảnh: `SZ.content` = y 340–1359, canvas rộng 894 scale **0.795** (711 px, x 136–847). Chiều cao dùng được của canvas ~1282 (`SZ.content.h`); scene cũ vẽ trên 894x1320 nhưng không đặt gì dưới y ~1280. Cảnh CTA: nội dung kết thúc trên y ~1019 của canvas (nút Follow ở y 1150 màn hình). `Timeline` tự scale vào hộp — không đặt chữ ngoài canvas đó. Đừng hardcode toạ độ header/end card, lấy từ `SZ`.
 - Rail trang trí ở mép trái: nền màu chạy suốt chiều cao được, nhưng chữ trong rail chỉ ở x ≥ 60, y 290–1500 (xem `Chrome` trong `sys.tsx`: hộp clip + mask mờ hai đầu). Số dòng gutter cũng vậy (bắt đầu từ `SZ.content.y`).
 - Caption: `SZ.captions` (y 1366, rộng 724), tối đa 2 dòng, phải kết thúc trước y 1500.
 - Nút Follow: `cta.top` = 1150 trong theme.json, hộp phải ở x ≤ 860, y ~1150–1350.
@@ -54,7 +55,7 @@ Khung 1080x1920 bị UI TikTok / Reels / Shorts / Facebook Reels che. Hằng s�
 ## Quality bar cho theme (bài học đã gặp)
 - Accent đậm, bão hoà, chỉ một accent. Nền tối dùng xám trung tính `#1C1C1C` (đỡ mỏi mắt). Không neon tím/hồng, không hologram, không bloom nặng.
 - Không in tên theme, meta label, nhãn kỹ thuật giả (FIG./SHEET/§). Brand "Dan Tech" đậm (ExtraBold).
-- Top bar: wordmark và số trang thẳng **baseline** (`align-items: baseline`), không căn giữa. Kiểm bằng crop phóng to. Top bar nằm trong `SZ.chrome` (y 296–402), **không** ở trên y 290 (Dan: bị UI TikTok/Shorts/Reels che).
+- Top bar: wordmark và số trang thẳng **baseline** (`align-items: baseline`), không căn giữa. Kiểm bằng crop phóng to. Top bar là header một dòng trong `SZ.header` (y 294–334), **không** ở trên y 290 (Dan: bị UI TikTok/Shorts/Reels che) và **không** thêm dòng thứ hai (Dan: nội dung bị thu nhỏ).
 - Glitch/hiệu ứng chỉ ở beat hoặc chuyển cảnh, không chạy liên tục. Chuyển cảnh mượt.
 - Theme mới làm trên branch `theme/<id>`, stills trước, video sau, merge thường khi đã duyệt.
 
@@ -70,7 +71,7 @@ Brand (wordmark, tên, handle, logo, chữ nút Follow) lấy từ `channels/<id
 - Font mới phải có licence OFL trong `assets/fonts/licenses/`.
 - Motion spring M3E (material3 ExpressiveMotionTokens): spatial fast .6/800, default .8/380, slow .8/200; effects (màu/opacity) critically damped, không overshoot. Helper `m3(f,at,'fast'|'def'|'slow'|'fx')`.
 - Code trong props bắt đầu bằng `@` (vd `@Composable`) bị hiểu là anchor: viết `"\\@Composable"` (component bỏ dấu `\`).
-- Code card: dòng dài > ~34 ký tự ở fs 40 sẽ tràn; tách dòng như IDE format. Phone frame + code phải nằm gọn trong canvas 1320 (không chạm dải caption).
+- Code card: dòng dài > ~34 ký tự ở fs 40 sẽ tràn; tách dòng như IDE format. Phone frame + code phải nằm gọn trong phần dùng được của canvas, y ≤ ~1280 (không chạm dải caption).
 - **Màu thương hiệu dùng đúng mã chính thức** (Android: #3DDC84 theo developer.android.com/distribute/marketing-tools/brand-guidelines) cho accent chính ở mọi chỗ: chip caption, highlight, robot, transition, nút. Không thay bằng tông pastel M3 (#7DDB9F) cho "dịu mắt", Dan thấy nhạt.
 - **Nền tối kiểu IDE nên gần đen** (#0B0C0E), surface/card nâng từng bậc (#101114 panel, #121316 tab, #17181B card, viền #2A2C31) để vẫn tách lớp.
 

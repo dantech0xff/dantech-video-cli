@@ -23,7 +23,7 @@
    "section": "DÒNG NHỎ TRÊN ĐẦU",
    "out": "page|bar|zoom|push|stack|morph|scroll",      // chuyển cảnh sang cảnh sau (cảnh cuối bỏ trống)
    "focus": [x, y],                               // tâm zoom khi out = zoom
-   "morph": {"from":[x,y,w,h,font],"to":[…],"txt":"14"},  // bắt buộc khi out = morph; toạ độ px màn hình 1080x1920 (hộp nội dung SZ.content: y 416–1359, scale ~0.714)
+   "morph": {"from":[x,y,w,h,font],"to":[…],"txt":"14"},  // bắt buộc khi out = morph; toạ độ px màn hình 1080x1920 (hộp nội dung SZ.content: y 340–1359, scale 0.795)
    "props": {…},                                  // theo template bên dưới
    "sfx": [{"at":"@chữ","s":"<file trong assets/sfx, không đuôi>","v":0.5,"every":5,"count":14}]
  }]
@@ -85,7 +85,7 @@ Tất cả có `n`, `cap` (nhãn ngắn có nghĩa), `title` (heading). `at` nh�
 Ví dụ: `videos/flutter-mvvm/script.json`. Không hiển thị tên theme; không thêm nhãn trang trí vô nghĩa.
 
 ## Theme `android-tutor` (ANDROID TUTOR) — scene types
-Canvas 894x1320 như mọi theme. Code dòng bắt đầu bằng `@` viết `"\\@Composable"` (để không bị hiểu là anchor). Dòng code ≤ ~34 ký tự.
+Canvas rộng 894 như mọi theme, dùng được tới y ~1280 (SZ.content.h). Code dòng bắt đầu bằng `@` viết `"\\@Composable"` (để không bị hiểu là anchor). Dòng code ≤ ~34 ký tự.
 - **AtHook** `{tag, a, b, line, why?:{s,at}}`: tag pill (gắn ™ cho "Android" đầu tiên), `a` vs `b` chữ code to ở frame 0, `line` câu chốt, robot trên shape cookie. Dùng cho hook explainer kiểu "X vs Y". Hook controversy/news thì dùng VersusHook.
 - **AtCode** `{title, file, lines:[{s,at}], hl?:{from,to,at}, note?:{s,at}}`: card editor (tab file, gutter, gõ từng dòng, highlight dòng from..to, 0-based).
 - **AtPreview** `{title, file, lines, hl?, taps:[at], rotateAt, keep, label:"…{n}…", btn, verdict?:{s,at}}`: code (≤ 9 dòng) ở trên, dưới là slot vuông cho điện thoại (xoay không chạm gì) + cột readout bên phải. Title 1 dòng tự co. Mỗi `tap` tăng `{n}`; `rotateAt` xoay máy (activity tạo lại): `keep:false` → n về 0, `keep:true` giữ.
@@ -94,7 +94,7 @@ Canvas 894x1320 như mọi theme. Code dòng bắt đầu bằng `@` viết `"\\
 - `out: "sharedx"` (mặc định của theme qua `look.defaultOut`): Material shared-axis X như điều hướng activity/fragment Android: cảnh cũ lùi trái 120 px, scale 0.96, mờ dần; cảnh mới trượt vào từ phải 120 px + fade, easing emphasized-decelerate, không bounce, ~470 ms. Không dùng zoom / shape phủ toàn khung cho theme này.
 
 ## Theme `flutter-tutor` (FLUTTER TUTOR, 🧪 chờ duyệt) — scene types (`remotion/src/flutter.tsx`)
-Canvas 894x1320. Code dùng Google Sans Code (monospace, 0.6 em) fs 30: dòng ≤ ~44 ký tự. Mọi scene có `hero` = chip từ khoá (chữ code, nền Sky): chip này bay sang vị trí chip của cảnh sau khi `out:"hero"` (mặc định theme). Chip ở góc trên trái (to ở FlHook), title ngay dưới.
+Canvas rộng 894, dùng được tới y ~1280. Code dùng Google Sans Code (monospace, 0.6 em) fs 30: dòng ≤ ~44 ký tự. Mọi scene có `hero` = chip từ khoá (chữ code, nền Sky): chip này bay sang vị trí chip của cảnh sau khi `out:"hero"` (mặc định theme). Chip ở góc trên trái (to ở FlHook), title ngay dưới.
 - **FlHook** `{hero, tag, vs, line, why?:{s,at}, lit?}`: tag (gắn ™ cho "Flutter" đầu tiên, vd `"Flutter™ · State"`) + logomark Flutter nhỏ góc phải, chip `hero` to ở frame 0, "vs `vs`", `line` câu chốt (≤ 2 dòng), `why`, 3 card widget lồng nhau Scaffold → Column → Text; `lit` (frame/@word) làm card Text sáng lên.
 - **FlTree** `{hero, title, mode:"setState"|"notifier", taps:[at], readout:{k,at}, note?:{s,at}}`: cây widget kiểu Widget Inspector (Scaffold > AppBar, Column > [Text, ListView, Text 'Đã bấm {n}'], FAB). Mỗi `tap` tăng n và làm widget build lại sáng viền Sky + badge `build()` (lan theo độ sâu): `setState` → cả 7 widget, `notifier` → chỉ ValueListenableBuilder + Text. Readout = số widget build lại. Đây là minh hoạ, ghi rõ trong note/lời.
 - **FlCode** `{hero, title, file, lines:[{s,at}], hl?:{from,to,at,label?}, note?:{s,at}}`: card editor Dart (tab file, gutter, gõ từng dòng, `hl` = khung Sky quanh dòng from..to 0-based, `label` pill dưới khung). ≤ 9 dòng.

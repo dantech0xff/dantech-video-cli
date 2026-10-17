@@ -7,7 +7,7 @@
 // Legal: official Flutter logomark only, unaltered (assets/brand/flutter, see README there), small, kept apart; ™ on the
 // first prominent "Flutter"; trademark disclaimer on the end card; no Dash.
 import React from 'react';import {AbsoluteFill,Audio,Img,Sequence,staticFile,interpolate,useCurrentFrame,Easing} from 'remotion';
-import {useS,FONTS} from './sys';import {useBrand,fitSize,BrandTile,Handle} from './brand';import {SZ} from './safezone';
+import {useS,FONTS,HeadLine} from './sys';import {useBrand,fitSize,BrandTile,Handle} from './brand';import {SZ} from './safezone';
 const cl={extrapolateLeft:'clamp',extrapolateRight:'clamp'} as const;
 export const FT={bg:'#050A14',card:'#0A1424',card2:'#0F1B30',card3:'#14243F',panel:'#081120',line:'#1A2B47',dim:'#8FA3BF',ink:'#EEF3FA',
  navy:'#042B59',blue:'#0553B1',sky:'#027DFD',sky2:'#54C5F8',
@@ -154,14 +154,12 @@ export const FlTake:React.FC<{hero:string;title:string;rows:{k:string;v:string;a
   {rule&&<In at={rule.at} bbn="rule" style={{position:'absolute',left:0,top:200+rows.length*152+20,width:894,background:FT.navy,border:`3px solid ${FT.sky}`,borderRadius:30,padding:'26px 30px',boxSizing:'border-box',
    fontFamily:SANS,fontWeight:800,fontSize:44,lineHeight:1.22,color:'#FFFFFF'}}>{rule.s}</In>}
  </div>};
-/* chrome: bands, brand + page (baseline), section breadcrumb (inside SZ.chrome, y 296..402; nothing with text above y 290) */
+/* chrome: bands + slim header (brand left, page right, one line in SZ.header y 294..334; nothing with text above y 290).
+   The file name lives on the code card header (FlCode), not in a breadcrumb strip. */
 export const FlChrome:React.FC<{section:string;page:string}>=({section,page})=>{const B=useBrand();return <>
  <FlBands/>
- <div {...bb('brand')} style={{position:'absolute',left:SZ.chrome.x,right:SZ.chrome.right,top:SZ.chrome.top+4,display:'flex',justifyContent:'space-between',alignItems:'baseline'}}>
-  <span style={{fontFamily:SANS,fontWeight:800,fontSize:fitSize(B.wordmark,480,44,.68),lineHeight:1,color:FT.ink,letterSpacing:1,whiteSpace:'nowrap'}}>{B.wordmark}</span>
-  <span style={{...mono(24),lineHeight:1}}>{page}</span></div>
- <div {...bb('crumb')} style={{position:'absolute',left:SZ.chrome.x,right:SZ.chrome.right,top:SZ.chrome.top+58,height:46,display:'flex',alignItems:'center',gap:14,borderBottom:`2px solid ${FT.line}`,paddingBottom:6,boxSizing:'border-box'}}>
-  <span style={{width:12,height:12,borderRadius:6,background:FT.sky}}/><span style={{...mono(24,FT.ink),whiteSpace:'nowrap'}}>{section}</span></div></>};
+ <HeadLine rule={`2px solid ${FT.line}`} left={<span style={{fontFamily:SANS,fontWeight:800,fontSize:fitSize(B.wordmark,420,30,.68),lineHeight:1,color:FT.ink,letterSpacing:1,whiteSpace:'nowrap'}}>{B.wordmark}</span>}
+  right={<span style={{...mono(22),lineHeight:1}}>{page}</span>}/></>};
 const PN:Record<string,string>={youtube:'YouTube',facebook:'Facebook',tiktok:'TikTok'};
 /* end card: logomark (clear space), kicker, tagline, name, 3 handle tiles, trademark disclaimer. Ends above y 1480. */
 export const FlEndCard:React.FC<{dur?:number;handles?:Handle[];tagline?:string}>=({dur=90,handles,tagline=''})=>{const f=useCurrentFrame();const B=useBrand();handles=handles??B.handles;

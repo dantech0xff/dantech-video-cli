@@ -6,7 +6,7 @@
 // Legal: no official Android logo/wordmark/3D head, no Android Studio/IntelliJ/Pixel art. The robot below is our own
 // simplified drawing; the end card carries the CC BY 3.0 attribution line.
 import React from 'react';import {AbsoluteFill,Audio,Sequence,staticFile,interpolate,spring,useCurrentFrame,Easing} from 'remotion';
-import {useS,FONTS} from './sys';import {useBrand,fitSize,BrandTile,Handle} from './brand';import {SZ} from './safezone';
+import {useS,FONTS,HeadLine} from './sys';import {useBrand,fitSize,BrandTile,Handle} from './brand';import {SZ} from './safezone';
 const cl={extrapolateLeft:'clamp',extrapolateRight:'clamp'} as const;
 // Main accent is exactly the official Android green #3DDC84 (developer.android.com brand guidelines) everywhere; no pastel M3 tones.
 export const AT={bg:'#0B0C0E',card:'#17181B',card2:'#121316',panel:'#101114',line:'#2A2C31',dim:'#8B8F96',ink:'#E6E8EB',green:'#3DDC84',onPrim:'#00391C',
@@ -130,16 +130,13 @@ export const AtTake:React.FC<{title:string;head?:[string,string];rows:{k:string;
   {rule&&f>=rule.at&&(()=>{const q=m3(f,rule.at,'def');return <div {...bb('rule')} style={{marginTop:44,background:'rgba(61,220,132,.12)',border:`2px solid ${AT.green}`,borderRadius:32,padding:'28px 32px',display:'flex',gap:22,alignItems:'center',transform:`scale(${.9+.1*q})`,opacity:Math.min(1,m3(f,rule.at,'fx')),transformOrigin:'left center'}}>
    <svg width={64} height={64} style={{flex:'none'}} viewBox="0 0 64 64"><path d={cookiePath(32,32,28,.1*(1-Math.min(1,q))+.04,9,f*.01)} fill={AT.green}/></svg>
    <span style={{fontFamily:SANS,fontWeight:800,fontSize:50,lineHeight:1.25,color:AT.ink}}>{rule.s}</span></div>})()}</div>};
-/* chrome: brand + page (baseline), editor tab strip, decorative gutter, faint cookie */
+/* chrome: slim header (robot + brand left, page right, one line in SZ.header), decorative gutter, mid-ground shapes.
+   The file name lives on the code card tab (AtCode/AtPreview), not in a strip under the header. */
 export const AtChrome:React.FC<{section:string;page:string}>=({section,page})=>{const {f}=useS();const B=useBrand();return <>
  <MidShapes/>
- <div {...bb('brand')} style={{position:'absolute',left:SZ.chrome.x,right:SZ.chrome.right,top:SZ.chrome.top,display:'flex',justifyContent:'space-between',alignItems:'baseline'}}>
-  <div style={{display:'flex',alignItems:'baseline',gap:14}}><span style={{alignSelf:'center'}}><Robot s={48}/></span><span style={{fontFamily:SANS,fontWeight:800,fontSize:fitSize(B.wordmark,460,42,.68),lineHeight:1,color:AT.ink,letterSpacing:1,whiteSpace:'nowrap'}}>{B.wordmark}</span></div>
-  <span style={{...lbl(24),lineHeight:1}}>{page}</span></div>
- <div {...bb('tabs')} style={{position:'absolute',left:SZ.chrome.x,right:SZ.chrome.right,top:SZ.chrome.top+56,height:48,display:'flex',alignItems:'flex-end',gap:30,borderBottom:`1.5px solid ${AT.line}`}}>
-  <span style={{...lbl(24,AT.ink),padding:'0 4px 12px',borderBottom:`3px solid ${AT.blue}`,whiteSpace:'nowrap'}}>{section}</span>
-  <span style={{flex:1}}/><span style={{...lbl(22,AT.str),paddingBottom:14}}>▶ app</span></div>
- <div style={{position:'absolute',left:30,top:SZ.content.y,width:56}}>{Array.from({length:21},(_,k)=><div key={k} style={{height:50,textAlign:'right',...lbl(20,k%5===4?'#4A4D53':'#2C2E33')}}>{k+1}</div>)}</div></>};
+ <HeadLine left={<><span style={{alignSelf:'center',display:'flex',marginRight:12}}><Robot s={34}/></span><span style={{fontFamily:SANS,fontWeight:800,fontSize:fitSize(B.wordmark,420,30,.68),lineHeight:1,color:AT.ink,letterSpacing:1,whiteSpace:'nowrap'}}>{B.wordmark}</span></>}
+  right={<span style={{...lbl(22),lineHeight:1}}>{page}</span>} rule={`1.5px solid ${AT.line}`}/>
+ <div style={{position:'absolute',left:30,top:SZ.content.y,width:56}}>{Array.from({length:22},(_,k)=><div key={k} style={{height:50,textAlign:'right',...lbl(20,k%5===4?'#4A4D53':'#2C2E33')}}>{k+1}</div>)}</div></>};
 const PN:Record<string,string>={youtube:'YouTube',facebook:'Facebook',tiktok:'TikTok'};
 /* end card: robot, brand, tagline, 3 handle tiles, CC BY 3.0 attribution (end ≤ y 1480) */
 export const AtEndCard:React.FC<{dur?:number;handles?:Handle[];tagline?:string}>=({dur=90,handles,tagline=''})=>{const f=useCurrentFrame();const B=useBrand();handles=handles??B.handles;

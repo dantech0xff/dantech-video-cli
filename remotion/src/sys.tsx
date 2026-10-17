@@ -32,21 +32,24 @@ export const Kicker:React.FC<{n:string;txt:string}>=({n,txt})=>{const {t}=useS()
 export const Stamp:React.FC<{at:number;text:string;sub?:string;style?:React.CSSProperties}>=({at,text,sub,style})=>{const {t,f,exit}=useS();if(f<at)return null;const p=interpolate(f-at,[0,6],[0,1],{...cl,easing:EO});
  return <div style={{position:'absolute',border:`8px solid ${t.stamp??t.accent}`,outline:`3px solid ${t.stamp??t.accent}`,outlineOffset:6,padding:'10px 26px 4px',color:t.stamp??t.accent,transform:`rotate(-10deg) scale(${1.8-0.8*p})`,opacity:p*(1-exit),mixBlendMode:t.id==='hot-news'?'multiply':'normal',textAlign:'center',borderRadius:t.id==='quick-tips'?20:0,...style}}>
  <div style={{...H(t,80,t.stamp??t.accent)}}>{text}</div>{sub&&<div style={{...Bd(t,24,t.stamp??t.accent),letterSpacing:3}}>{sub}</div>}</div>};
-/* ---------- brand chrome (shared device across themes) ---------- */
-export const Chrome:React.FC<{section:string;page:string;date:string}>=({section,page,date})=>{const {t}=useS();const B=useBrand();const C=SZ.chrome;const N=SZ.noText;return <>
+/* ---------- brand chrome (shared device across themes) ----------
+   slim header: ONE line in SZ.header (y 294..334, x 136..860): wordmark left, page (+ date) right, same baseline. */
+export const HeadLine:React.FC<{left:React.ReactNode;right:React.ReactNode;rule?:string;style?:React.CSSProperties}>=({left,right,rule,style})=>{const H=SZ.header;
+ return <div data-bb="header" style={{position:'absolute',left:H.x,right:H.right,top:H.top,height:H.h,boxSizing:'border-box',display:'flex',justifyContent:'space-between',alignItems:'baseline',gap:24,whiteSpace:'nowrap',overflow:'hidden',borderBottom:rule,...style}}>
+  <div style={{display:'flex',alignItems:'baseline',minWidth:0}}>{left}</div><div style={{flex:'none',display:'flex',alignItems:'baseline'}}>{right}</div></div>};
+export const Chrome:React.FC<{section:string;page:string;date:string}>=({page,date})=>{const {t}=useS();const B=useBrand();const N=SZ.noText;return <>
  {/* rail: solid accent full height (decoration); its wordmark text only inside x>=60, y 290..1500 (no-text zones) */}
  <div style={{position:'absolute',left:0,top:0,bottom:0,width:96,background:t.accent}}/>
  <div style={{position:'absolute',left:N.left,top:N.top,width:96-N.left,height:N.bottom-N.top,overflow:'hidden',WebkitMaskImage:'linear-gradient(180deg,transparent 0,#000 90px,#000 calc(100% - 90px),transparent 100%)',maskImage:'linear-gradient(180deg,transparent 0,#000 90px,#000 calc(100% - 90px),transparent 100%)',display:'flex',alignItems:'center',justifyContent:'center'}}><div style={{transform:'rotate(-90deg)',whiteSpace:'nowrap',fontFamily:'Anton',fontSize:34,lineHeight:1,color:t.onAccent,letterSpacing:5}}>{Array(5).fill(B.wordmark).join(' ■ ')}</div></div>
- <div style={{position:'absolute',left:C.x,right:C.right,top:C.top,borderBottom:`5px solid ${t.ink}`,paddingBottom:8,display:'flex',justifyContent:'space-between',alignItems:'flex-end'}}>
-  <div style={{fontFamily:'Anton',fontSize:fitSize(B.wordmark,430,56,.47,1),color:t.ink,lineHeight:1,whiteSpace:'nowrap'}}>{B.wordmark}<span style={{color:t.accent}}>■</span></div><div style={{...Bd(t,21),textAlign:'right',lineHeight:1.15}}>{page}<br/>{date}</div></div>
- <div style={{position:'absolute',left:C.x,right:C.right,top:C.top+76,...Bd(t,20),lineHeight:1.2,borderBottom:`2px solid ${t.rule}`,paddingBottom:3,whiteSpace:'nowrap',overflow:'hidden'}}>{section}</div></>};
-/* tech-explain chrome: editor tab bar + line-number gutter + prompt line (all text inside y 296..402, x 136..860) */
-export const TermChrome:React.FC<{section:string;page:string;idx:number}>=({section,page,idx})=>{const {t}=useS();const B=useBrand();const wm=B.wordmark.trim().split(/\s+/).join('/');const C=SZ.chrome;return <>
- <div style={{position:'absolute',left:0,right:0,top:C.top,height:56,background:t.accent,display:'flex',alignItems:'center',justifyContent:'space-between',padding:`0 ${C.right}px 0 ${C.x}px`}}>
-  <div style={{fontFamily:'JBM',fontWeight:800,fontSize:fitSize(wm,440,36,.62,4),color:t.onAccent,letterSpacing:-1,whiteSpace:'nowrap'}}>{wm}<span style={{opacity:.55}}>.git</span></div>
-  <div style={{fontFamily:'JBM',fontWeight:700,fontSize:24,color:t.onAccent,whiteSpace:'nowrap'}}>main ▸ {page}</div></div>
- <div style={{position:'absolute',left:0,top:0,bottom:0,width:96,borderRight:`3px solid ${t.rule}`}}>{Array.from({length:21},(_,k)=><div key={k} style={{position:'absolute',right:8,top:SZ.content.y+8+k*50,fontFamily:'JBM',fontSize:22,lineHeight:1,color:k===idx*3+3?t.accent:t.muted}}>{k+1}</div>)}</div>
- <div style={{position:'absolute',left:C.x,right:C.right,top:C.top+66,fontFamily:'JBM',fontSize:24,lineHeight:1.2,color:t.muted,borderBottom:`3px solid ${t.rule}`,paddingBottom:6,whiteSpace:'nowrap',overflow:'hidden'}}><span style={{color:t.accent2}}>~/commit</span> <span style={{color:t.ink}}>❯</span> {section}</div></>};
+ <HeadLine rule={`4px solid ${t.ink}`} left={<div style={{fontFamily:'Anton',fontSize:fitSize(B.wordmark,420,34,.47,1),color:t.ink,lineHeight:1,whiteSpace:'nowrap'}}>{B.wordmark}<span style={{color:t.accent}}>■</span></div>}
+  right={<div style={{...Bd(t,21),lineHeight:1}}>{page}<span style={{opacity:.55,padding:'0 10px'}}>·</span>{date}</div>}/></>};
+/* tech-explain chrome: the yellow editor tab bar IS the slim header (wordmark.git ❯ section … main ▸ page), gutter numbers from the content top */
+export const TermChrome:React.FC<{section:string;page:string;idx:number}>=({section,page,idx})=>{const {t}=useS();const B=useBrand();const wm=B.wordmark.trim().split(/\s+/).join('/');const H=SZ.header;return <>
+ <div style={{position:'absolute',left:0,right:0,top:H.top,height:H.h,background:t.accent}}/>
+ <HeadLine style={{alignItems:'center'}} left={<><span style={{fontFamily:'JBM',fontWeight:800,fontSize:fitSize(wm+'.git',300,26,.62),lineHeight:1,color:t.onAccent,letterSpacing:-.5}}>{wm}<span style={{opacity:.55}}>.git</span></span>
+   <span style={{fontFamily:'JBM',fontWeight:500,fontSize:20,lineHeight:1,color:t.onAccent,opacity:.7,marginLeft:16,overflow:'hidden',textOverflow:'ellipsis'}}>❯ {section}</span></>}
+  right={<span style={{fontFamily:'JBM',fontWeight:700,fontSize:22,lineHeight:1,color:t.onAccent}}>main ▸ {page}</span>}/>
+ <div style={{position:'absolute',left:0,top:0,bottom:0,width:96,borderRight:`3px solid ${t.rule}`}}>{Array.from({length:22},(_,k)=><div key={k} style={{position:'absolute',right:8,top:SZ.content.y+10+k*50,fontFamily:'JBM',fontSize:22,lineHeight:1,color:k===idx*3+3?t.accent:t.muted}}>{k+1}</div>)}</div></>};
 /* ---------- karaoke captions (all themes) ----------
    Paged, never rolling: one complete sentence (or comma-phrase chunk if it would exceed 2 lines) is shown whole,
    then words light up one by one on the whisper timings. Font comes from theme look.caption (default: theme head font). */
