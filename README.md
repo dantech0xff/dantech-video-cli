@@ -50,7 +50,7 @@ export GEMINI_API_KEY=...                # chỉ đọc từ biến môi trườ
 2. Sửa `script.json`:
    - `theme`, `title`, `date` (hiện trên masthead), `caption`, `sources` (đi vào description).
    - `scenes`: mỗi cảnh có `say` (câu giọng đọc nói trong cảnh đó), `type` (scene template), `section` (dòng nhỏ trên đầu trang), `out` (kiểu chuyển cảnh sang cảnh sau: `page`, `bar`, `zoom`, `push`, `stack`, `morph`, `scroll`), `props` (nội dung cảnh), `sfx` (tuỳ chọn).
-   - Câu cuối nên có "follow Dan Tech": nút Follow tự bật lên ở chữ "follow" và được bấm đúng chữ "Dan".
+   - Câu cuối nên có `ctaPhrase` của kênh (mặc định "follow Dan Tech"): nút Follow tự bật lên ở `ctaInWord` ("follow") và được bấm đúng `ctaPressWord` ("Dan".
 3. Chạy:
    ```bash
    make video SCRIPT=videos/<slug>/script.json      # hoặc: ./dt render videos/<slug>/script.json
@@ -82,7 +82,7 @@ Nhờ vậy khi đổi giọng (thời lượng khác), keycap, popup, SFX vẫn
 | Màu, font, kiểu chữ | `theme.json` → `look` |
 | Biến thể màu (vd GIẢI THÍCH đỏ) | `theme.json` → `variants.<tên>.look`; dùng: `"variant": "red"` trong script.json (hoặc `"look": {...}` ghi đè riêng 1 video) |
 | Tagline end card, vị trí nút Follow, thời gian giữ cuối | `theme.json` → `outro`, `cta`, `tail_hold` |
-| Handle mạng xã hội | `channel.json` (YouTube @dantech-0xff, Facebook @dantech0xff, TikTok @dantech_0xff, có logo). Ghi đè từng video bằng `"handles"` trong script nếu thật cần |
+| Handle mạng xã hội | `channels/<id>.json`, mặc định `dantech` (YouTube @dantech-0xff, Facebook @dantech0xff, TikTok @dantech_0xff, có logo). Ghi đè từng video bằng `"handles"` trong script nếu thật cần |
 
 Độ dài: rõ ràng trước, độ dài theo nội dung. Giọng đọc: gọi TTS **một lần** cho mỗi video và giữ style đã rút, không gọi lại để chỉnh độ dài. Lời không đổi thì dùng lại cache `.cache/tts/` (cùng audio, cùng style). Muốn giọng mới: `./dt render <script> --new-voice`.
 

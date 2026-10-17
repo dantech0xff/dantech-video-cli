@@ -1,3 +1,4 @@
+import {useBrand,fitSize} from './brand';
 import React,{createContext,useContext} from 'react';
 import {AbsoluteFill,Audio,OffthreadVideo,Sequence,staticFile,useCurrentFrame,interpolate,Easing,random,spring} from 'remotion';
 import {Theme} from './themes';import {BpChrome} from './cyber';import {SZ} from './safezone';import {GlChrome} from './glitch';
@@ -30,15 +31,15 @@ export const Stamp:React.FC<{at:number;text:string;sub?:string;style?:React.CSSP
  return <div style={{position:'absolute',border:`8px solid ${t.stamp??t.accent}`,outline:`3px solid ${t.stamp??t.accent}`,outlineOffset:6,padding:'10px 26px 4px',color:t.stamp??t.accent,transform:`rotate(-10deg) scale(${1.8-0.8*p})`,opacity:p*(1-exit),mixBlendMode:t.id==='hot-news'?'multiply':'normal',textAlign:'center',borderRadius:t.id==='quick-tips'?20:0,...style}}>
  <div style={{...H(t,80,t.stamp??t.accent)}}>{text}</div>{sub&&<div style={{...Bd(t,24,t.stamp??t.accent),letterSpacing:3}}>{sub}</div>}</div>};
 /* ---------- brand chrome (shared device across themes) ---------- */
-export const Chrome:React.FC<{section:string;page:string;date:string}>=({section,page,date})=>{const {t}=useS();return <>
- <div style={{position:'absolute',left:0,top:0,bottom:0,width:96,background:t.accent,display:'flex',alignItems:'center',justifyContent:'center'}}><div style={{transform:'rotate(-90deg)',whiteSpace:'nowrap',fontFamily:'Anton',fontSize:62,color:t.onAccent,letterSpacing:6}}>DAN TECH ■ DAN TECH ■ DAN TECH</div></div>
+export const Chrome:React.FC<{section:string;page:string;date:string}>=({section,page,date})=>{const {t}=useS();const B=useBrand();return <>
+ <div style={{position:'absolute',left:0,top:0,bottom:0,width:96,background:t.accent,display:'flex',alignItems:'center',justifyContent:'center'}}><div style={{transform:'rotate(-90deg)',whiteSpace:'nowrap',fontFamily:'Anton',fontSize:62,color:t.onAccent,letterSpacing:6}}>{Array(3).fill(B.wordmark).join(' ■ ')}</div></div>
  <div style={{position:'absolute',left:136,right:50,top:70,borderBottom:`6px solid ${t.ink}`,paddingBottom:12,display:'flex',justifyContent:'space-between',alignItems:'flex-end'}}>
-  <div style={{fontFamily:'Anton',fontSize:96,color:t.ink,lineHeight:1}}>DAN TECH<span style={{color:t.accent}}>■</span></div><div style={{...Bd(t,28),textAlign:'right',lineHeight:1.15}}>{page}<br/>{date}</div></div>
+  <div style={{fontFamily:'Anton',fontSize:fitSize(B.wordmark,560,96,.47,1),color:t.ink,lineHeight:1,whiteSpace:'nowrap'}}>{B.wordmark}<span style={{color:t.accent}}>■</span></div><div style={{...Bd(t,28),textAlign:'right',lineHeight:1.15}}>{page}<br/>{date}</div></div>
  <div style={{position:'absolute',left:136,right:50,top:208,...Bd(t,30),borderBottom:`2px solid ${t.rule}`,paddingBottom:8}}>{section}</div></>};
 /* tech-explain chrome: editor tab bar + line-number gutter + prompt line */
-export const TermChrome:React.FC<{section:string;page:string;idx:number}>=({section,page,idx})=>{const {t}=useS();return <>
+export const TermChrome:React.FC<{section:string;page:string;idx:number}>=({section,page,idx})=>{const {t}=useS();const B=useBrand();const wm=B.wordmark.trim().split(/\s+/).join('/');return <>
  <div style={{position:'absolute',left:0,right:0,top:0,height:110,background:t.accent,display:'flex',alignItems:'center',justifyContent:'space-between',padding:'0 50px 0 40px'}}>
-  <div style={{fontFamily:'JBM',fontWeight:800,fontSize:56,color:t.onAccent,letterSpacing:-1}}>DAN/TECH<span style={{opacity:.55}}>.git</span></div>
+  <div style={{fontFamily:'JBM',fontWeight:800,fontSize:fitSize(wm,600,56,.62,4),color:t.onAccent,letterSpacing:-1,whiteSpace:'nowrap'}}>{wm}<span style={{opacity:.55}}>.git</span></div>
   <div style={{fontFamily:'JBM',fontWeight:700,fontSize:32,color:t.onAccent}}>main ▸ {page}</div></div>
  <div style={{position:'absolute',left:0,top:110,bottom:0,width:96,borderRight:`3px solid ${t.rule}`}}>{Array.from({length:23},(_,k)=><div key={k} style={{position:'absolute',right:18,top:44+k*66,fontFamily:'JBM',fontSize:26,color:k===idx*3+3?t.accent:t.muted}}>{k+1}</div>)}</div>
  <div style={{position:'absolute',left:136,right:50,top:150,fontFamily:'JBM',fontSize:32,color:t.muted,borderBottom:`3px solid ${t.rule}`,paddingBottom:18,whiteSpace:'nowrap',overflow:'hidden'}}><span style={{color:t.accent2}}>~/commit</span> <span style={{color:t.ink}}>❯</span> {section}</div></>};
@@ -89,7 +90,7 @@ const SignalBreak:React.FC<{g:number;f:number;c:string}>=({g,f,c})=>{const fr=Ma
 /* ---------- timeline with designed transitions ---------- */
 export type Scene={dur:number;el:React.ReactNode;section:string;out?:'page'|'bar'|'zoom'|'push'|'stack'|'morph'|'scroll';focus?:[number,number];morph?:{from:number[];to:number[];txt:string}};
 const T=16;
-export const Timeline:React.FC<{t:Theme;scenes:Scene[];words:any[];voice:string;sfx:{at:number;s:string;v?:number}[];date:string}>=({t,scenes,words,voice,sfx,date})=>{const f=useCurrentFrame();
+export const Timeline:React.FC<{t:Theme;scenes:Scene[];words:any[];voice:string;sfx:{at:number;s:string;v?:number}[];date:string}>=({t,scenes,words,voice,sfx,date})=>{const f=useCurrentFrame();const B=useBrand();
  const starts=scenes.reduce<number[]>((a,s,i)=>[...a,(a[i]??0)+s.dur],[0]);
  const layers:React.ReactNode[]=[];let overlay:React.ReactNode=null;
  scenes.forEach((s,i)=>{const a=starts[i]-(i>0?T/2:0),b=starts[i+1]+(i<scenes.length-1?T/2:0);if(f<a||f>=b)return;
@@ -118,7 +119,7 @@ export const Timeline:React.FC<{t:Theme;scenes:Scene[];words:any[];voice:string;
    <Ctx.Provider value={{t,f:lf,exit:exitStag}}>{t.id==='hot-news-glitch'?<GlChrome date={date}/>:t.id==='tech-explain-cyber'?<BpChrome section={s.section} page={`${String(i+1).padStart(2,'0')} / ${String(scenes.length).padStart(2,'0')}`}/>:t.id==='tech-explain'?<TermChrome section={s.section} page={`${i+1}/${scenes.length}`} idx={i}/>:<Chrome section={s.section} page={`TRANG ${i+1}/${scenes.length}`} date={date}/>}
    <div style={{position:'absolute',left:SZ.content.x,top:SZ.content.y,width:SZ.content.w,height:SZ.content.h,transform:`scale(${SZ.content.scale})`,transformOrigin:'top left'}}>{s.el}</div></Ctx.Provider></AbsoluteFill>);
   if(i<scenes.length-1&&(kout==='bar')&&outP>0&&outP<1){const p=outP;const w=p<.5?interpolate(p,[0,.5],[96,1080]):1080;const x=p<.5?0:interpolate(p,[.5,1],[0,1080],{easing:EIO});
-   overlay=<div style={{position:'absolute',top:0,bottom:0,left:x,width:w-(p<.5?0:0),background:t.accent,zIndex:10,display:'flex',alignItems:'center',justifyContent:'center',overflow:'hidden'}}><div style={{transform:`rotate(-90deg) translateY(${(p-.5)*400}px)`,fontFamily:t.id==='tech-explain'?'JBM':'Anton',fontWeight:t.id==='tech-explain'?800:400,fontSize:t.id==='tech-explain'?150:200,color:t.onAccent,whiteSpace:'nowrap'}}>{t.id==='tech-explain'?'git commit ▸':'DAN TECH ■'}</div></div>}
+   overlay=<div style={{position:'absolute',top:0,bottom:0,left:x,width:w-(p<.5?0:0),background:t.accent,zIndex:10,display:'flex',alignItems:'center',justifyContent:'center',overflow:'hidden'}}><div style={{transform:`rotate(-90deg) translateY(${(p-.5)*400}px)`,fontFamily:t.id==='tech-explain'?'JBM':'Anton',fontWeight:t.id==='tech-explain'?800:400,fontSize:t.id==='tech-explain'?150:200,color:t.onAccent,whiteSpace:'nowrap'}}>{t.id==='tech-explain'?'git commit ▸':B.wordmark+' ■'}</div></div>}
   if(i<scenes.length-1&&kout==='signal'&&outP>0&&outP<1){const g=Math.sin(Math.PI*outP);overlay=<SignalBreak g={g} f={f} c={t.accent}/>}
   if(i<scenes.length-1&&kout==='zoom'&&outP>0&&outP<1){overlay=<AbsoluteFill style={{zIndex:2,background:t.accent,opacity:interpolate(outP,[.4,.6,.8],[0,1,0],cl)}}/>}
   if(i<scenes.length-1&&kout==='morph'&&s.morph&&outP>0&&outP<1){const m=s.morph;const p=outP;const L=(k:number)=>m.from[k]+(m.to[k]-m.from[k])*p;

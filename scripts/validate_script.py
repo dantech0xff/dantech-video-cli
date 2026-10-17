@@ -2,7 +2,7 @@
 """Check a videos/<slug>/script.json before rendering (no API calls).
 usage: python3 scripts/validate_script.py videos/<slug>/script.json   → exit 1 on errors; warnings don't fail.
 Checks: required keys, theme exists, scene types registered in remotion/src/Video.tsx, transitions, sfx files,
-@word anchors present in the scene's "say", music track id, voice style, sources, the 'follow Dan Tech' close.
+@word anchors present in the scene's "say", music track id, voice style, sources, the channel CTA phrase close (channels/<id>.json).
 Prop keys are compared with the example scripts (videos/*/script.json) for the same scene type (warning only)."""
 import glob,json,os,re,sys
 ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -64,7 +64,12 @@ for i,sc in enumerate(sc_list,1):
         n=int(m.group(2) or 1)
         if words.count(norm(m.group(1)))<n: err(f'{tag}: anchor {a}: word "{m.group(1)}" (x{n}) not in this scene\'s say')
 allw=[norm(w) for sc in sc_list for w in sc.get('say','').split()]
-if 'follow' not in allw or 'dan' not in allw: err('script must say "follow Dan Tech" (the Follow button pops on "follow" and is pressed on "Dan")')
+# channel CTA phrase (channels/<id>.json): Follow button pops on ctaInWord, is pressed on ctaPressWord
+try:
+    CHN=json.load(open(os.path.join(ROOT,'channels',f"{S.get('channel','dantech')}.json"),encoding='utf-8'))
+    ph=[norm(w) for w in CHN['ctaPhrase'].split()]
+    if not any(allw[i:i+len(ph)]==ph for i in range(len(allw))): err(f'script must say the channel CTA "{CHN["ctaPhrase"]}" (Follow pops on "{CHN["ctaInWord"]}", pressed on "{CHN["ctaPressWord"]}")')
+except FileNotFoundError: err(f'channel "{S.get("channel")}" not found in channels/')
 # direct hook: first sentence of scene 1 names the topic ("topic": ["MVVM","Flutter"]) and is short (<=12 words, ~3s)
 if sc_list:
     first=re.split(r'(?<=[.!?:])\s',sc_list[0].get('say','').strip(),maxsplit=1)[0]

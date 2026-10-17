@@ -1,0 +1,31 @@
+{
+ "id": "example",
+ "name": "Mobile Hub",
+ "wordmark": "MOBILE HUB",
+ "tagline": "Mẹo điện thoại mỗi tuần",
+ "handles": [
+  {
+   "p": "YOUTUBE",
+   "icon": "youtube",
+   "h": "@mobilehub-demo"
+  },
+  {
+   "p": "FACEBOOK",
+   "icon": "facebook",
+   "h": "@mobilehub.demo"
+  },
+  {
+   "p": "TIKTOK",
+   "icon": "tiktok",
+   "h": "@mobilehub_demo"
+  }
+ ],
+ "followLabel": "FOLLOW MOBILE HUB",
+ "followDone": "ĐÃ FOLLOW ✓",
+ "followSub": "BẬT CHUÔNG ĐỂ NHẬN MẸO MỚI",
+ "ctaPhrase": "theo dõi Mobile Hub",
+ "ctaInWord": "theo",
+ "ctaPressWord": "Mobile",
+ "site": "",
+ "course": ""
+}

@@ -26,7 +26,7 @@ description: Render một videos/<slug>/script.json thành MP4 hoàn chỉnh (TT
    - Mix: log có `voice/music while speaking: median ~21 dB` (chấp nhận 18–22).
    - Loudness: dòng `mix:` có I ≈ -14 LUFS, Peak ≤ -1 dBTP. Đo lại: `ffmpeg -i <mp4> -af ebur128=peak=true -f null - 2>&1 | tail -12`.
    - Contact sheet: `ffmpeg -i <mp4> -vf "fps=1/3,scale=270:-1,tile=6x2" -frames:v 1 <slug>_sheet.png`, mở ra xem.
-   - Frame check: trích vài still, ví dụ `ffmpeg -ss 1 -i <mp4> -frames:v 1 /tmp/f1.png` (1 s, giữa mỗi cảnh, outro). Xem: không có mặt người, chữ không tràn, Follow/end card có 3 handle có logo (YouTube @dantech-0xff, Facebook @dantech0xff, TikTok @dantech_0xff, lấy từ `channel.json`).
+   - Frame check: trích vài still, ví dụ `ffmpeg -ss 1 -i <mp4> -frames:v 1 /tmp/f1.png` (1 s, giữa mỗi cảnh, outro). Xem: không có mặt người, chữ không tràn, Follow/end card có 3 handle có logo (YouTube @dantech-0xff, Facebook @dantech0xff, TikTok @dantech_0xff, lấy từ `channels/<id>.json`).
    - Phụ đề và anchor khớp giọng: xem video, hoặc so `words.json` với still tại các mốc `@chữ`.
    - So với bản đã duyệt nếu cần: `scripts/compare.sh <new.mp4> <ref.mp4> sheet.png <frame> …`.
    - `description.txt` có nguồn và credit CC BY (nhạc Commons); bài Pixabay 4–7 có cảnh báo Content ID.
@@ -62,3 +62,6 @@ Caption = karaoke **chip** (mọi theme): mỗi chữ là một chip có nền (
 ## Safe zone (kiểm tra UI điện thoại — bắt buộc trong QC)
 QC: trích 5 khung (headline, nội dung dày, caption, nút follow, end card) và chạy safezone.py; chữ, caption, nút, handle không được nằm trong vùng đỏ. Hằng số ở `remotion/src/safezone.ts`.
 `python3 scripts/safezone.py <frame.png>... -o <dir>` vẽ vùng bị UI che (đỏ = organic: top 250, bottom 420, left 60, right 200 từ y 700; viền vàng = union template quảng cáo chính thức: top 288, bottom 672, left 120, right 192, rail TikTok x≥780 từ y 840). `--sheet out.png a_sz.png …` ghép sheet. % "busy" là heuristic (lưới/nền có thể báo nhầm); kết luận bằng mắt.
+
+## Kênh
+`build_props.py` đọc `channels/<script.channel or dantech>.json` rồi đưa brand vào `props.channel`: wordmark, handle, chữ Follow, tagline/followSub theo theme, và mốc bật/bấm nút Follow lấy từ `ctaInWord`/`ctaPressWord`. Kênh khác thì đổi kênh trong script, không sửa code.

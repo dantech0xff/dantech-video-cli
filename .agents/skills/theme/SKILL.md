@@ -26,7 +26,7 @@ description: Tạo theme mới hoặc chỉnh theme Dan Tech từ một spec (mo
    - `remotion/src/themes.ts`: import JSON, thêm `'<id>': x.look as Theme` vào `THEMES`.
    - `remotion/src/Root.tsx`: thêm `'<id>'` vào mảng composition.
 5. Layout mới (nếu cần): viết component trong `remotion/src/` (theo mẫu `scenes.tsx`/`meo.tsx`, dùng `useS()`), thêm vào `SCENES` ở `Video.tsx`, ghi props vào `.agents/skills/write-script/SCHEMA.md`.
-6. Luật thương hiệu: không người/mặt người; chuyển cảnh có motion; giữ Follow CTA + end card với 3 handle có logo (YouTube @dantech-0xff, Facebook @dantech0xff, TikTok @dantech_0xff, lấy từ `channel.json`); **không sửa** `mix_bgm.sh`/`loudnorm.sh`.
+6. Luật thương hiệu: không người/mặt người; chuyển cảnh có motion; giữ Follow CTA + end card với 3 handle có logo (YouTube @dantech-0xff, Facebook @dantech0xff, TikTok @dantech_0xff, lấy từ `channels/<id>.json`); **không sửa** `mix_bgm.sh`/`loudnorm.sh`.
 7. Test: tạo `videos/<id>-test/script.json` (copy ví dụ gần nhất, đổi `theme`, có thể đặt `voice.file` = `../openai-vs-apple/voice_approved.mp3` để khỏi tốn TTS), `python3 scripts/validate_script.py …`, `make video SCRIPT=…`. Lỗi type: `cd remotion && npx tsc --noEmit`.
 8. So still: `scripts/compare.sh videos/<id>-test/out/<id>-test.mp4 <video theme gốc> sheet.png 15 90 200 400`. Xem từng frame, sửa, `--from props` để render lại nhanh. Lặp đến khi đẹp.
 9. Cập nhật bảng theme trong `README.md` và `AGENTS.md` (trạng thái 🧪 cho đến khi Dan duyệt). Gửi Dan video test + sheet. Không commit `out/`.
@@ -60,4 +60,4 @@ Khung 1080x1920 bị UI TikTok / Reels / Shorts / Facebook Reels che. Hằng s�
 `VersusHook` (`remotion/src/versus.tsx`) là scene mở cho hook dạng controversy/news, dùng cho **mọi theme**. Nó lấy màu và font từ theme. Theme mới/sửa theme phải render still VersusHook ở frame 0 (claim to, đọc được) và ~frame 40 (2 phe + VS), rồi chạy safezone.py. Nếu theme cần phong cách riêng thì nhánh trong `versus.tsx` theo `t.id` (như glitch), không tạo scene riêng cho theme.
 
 ## End card handles
-Handle và logo lấy từ `channel.json` qua `HANDLES` / `BrandTile` (`remotion/src/brand.tsx`). Không hardcode handle trong theme. End card gồm 3 dòng canh trái, mỗi dòng là ô trắng có logo màu thương hiệu rồi tới handle, mép phải ≤ 860.
+Brand (wordmark, tên, handle, logo, chữ nút Follow) lấy từ `channels/<id>.json` qua `useBrand()` / `BrandTile` / `fitSize` (`remotion/src/brand.tsx`, props.channel). **Không hardcode "DAN TECH", handle hay chữ follow trong theme.** Chữ brand phải dùng `fitSize` để tên dài tự co. Theme mới phải render thử với `channels/example.json`. End card gồm 3 dòng canh trái, mỗi dòng là ô trắng có logo màu thương hiệu rồi tới handle, mép phải ≤ 860.

@@ -50,7 +50,7 @@
    }
   },
   {
-   "say": "Kết luận và câu hỏi cho người xem. Nhớ follow Dan Tech nhé!",
+   "say": "Kết luận và câu hỏi cho người xem. Nhớ follow Dan Tech nhé! (câu kết = ctaPhrase của kênh)",
    "type": "CTA",
    "section": "KẾT",
    "props": {

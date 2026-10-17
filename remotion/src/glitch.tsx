@@ -1,3 +1,4 @@
+import {useBrand,fitSize} from './brand';
 // hot-news-glitch (TIN NÓNG GLITCH): dark breaking-news with tasteful signal glitches on hits only.
 // Directions via look.dir: 'signal' (broadcast break), 'vhs' (tape tracking), 'teletext' (block text).
 import React from 'react';import {AbsoluteFill,interpolate,Easing} from 'remotion';import {useS} from './sys';
@@ -9,11 +10,11 @@ export const gAt=(f:number,hits:number[])=>hits.reduce((m,h)=>f>=h&&f<h+10?Math.
 const FONT:Record<string,{head:string;size:number;deck:string}>={signal:{head:'Anton',size:176,deck:'BVPM'},vhs:{head:'BVPX',size:112,deck:'BVPM'},teletext:{head:'JBM',size:112,deck:'JBM'}};
 const BLK='█▓▒░';const corrupt=(s:string,g:number,seed:number)=>g<=0?s:s.split('').map((c,i)=>c!==' '&&rnd(seed+i*3.1)<g*.35?BLK[Math.floor(rnd(seed+i)*4)]:c).join('');
 
-export const GlChrome:React.FC<{date:string}>=({date})=>{const {t}=useS();const d=(t as any).dir;return <>
+export const GlChrome:React.FC<{date:string}>=({date})=>{const {t}=useS();const B=useBrand();const d=(t as any).dir;return <>
  {d!=='teletext'&&<AbsoluteFill style={{backgroundImage:`repeating-linear-gradient(0deg, rgba(0,0,0,${d==='vhs'?.22:.16}) 0 2px, transparent 2px 4px)`,zIndex:20,pointerEvents:'none'}}/>}
  <AbsoluteFill style={{background:'radial-gradient(130% 90% at 50% 40%, transparent 60%, rgba(0,0,0,.55) 100%)',zIndex:19,pointerEvents:'none'}}/>
  <div style={{position:'absolute',left:80,right:80,top:84,display:'flex',justifyContent:'space-between',alignItems:'baseline',paddingBottom:22,borderBottom:`2px solid ${d==='teletext'?t.accent:'#333'}`}}>
-  <div style={{fontFamily:'BVPX',fontSize:50,lineHeight:1,color:'#F2F2F2',letterSpacing:1}}>DAN TECH<span style={{color:t.accent}}>{d==='teletext'?'':'.'}</span></div>
+  <div style={{fontFamily:'BVPX',fontSize:fitSize(B.wordmark,520,50,.66,1),lineHeight:1,color:'#F2F2F2',letterSpacing:1,whiteSpace:'nowrap'}}>{B.wordmark}<span style={{color:t.accent}}>{d==='teletext'?'':'.'}</span></div>
   <div style={{fontFamily:'JBM',fontSize:28,lineHeight:1,color:'#9A9A9A'}}>{date}</div></div></>};
 
 const Block:React.FC<{p:any;d:string;g:number;f:number;tint?:string}>=({p,d,g,f,tint})=>{const {t}=useS();const F=FONT[d];const A0=t.accent,ON0=(t as any).onAccent;const A=tint?'transparent':A0,ON=tint??ON0;

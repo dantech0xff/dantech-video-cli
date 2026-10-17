@@ -28,7 +28,7 @@ Không humanize để rút ngắn video, và không viết lại sau khi đã c�
 
 ## Không được đổi
 - Sự kiện, con số, tên riêng, trích dẫn, `sources`.
-- Câu kết có **"follow Dan Tech"**.
+- Câu kết có **`ctaPhrase` của kênh** (mặc định "follow Dan Tech"; xem `channels/<id>.json`).
 - **Anchor `@chữ`**: nếu sửa/xoá một chữ đang được anchor dùng (trong `props` hoặc `sfx` của cảnh đó), cập nhật anchor sang chữ mới (kể cả `#n` nếu số lần xuất hiện thay đổi). Sau khi sửa luôn chạy `python3 scripts/validate_script.py <script>`.
 
 ## Không đọc cấu trúc (meta signposting)

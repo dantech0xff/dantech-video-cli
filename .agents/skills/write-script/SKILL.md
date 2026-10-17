@@ -23,7 +23,7 @@ description: Viết videos/<slug>/script.json cho video Dan Tech từ một spec
    - **Hook trực diện:** câu đầu cảnh 1 nêu thẳng chủ đề trong ~3 s (xem mục "Hook trực diện"), có thể kèm xung đột/con số. Đặt vấn đề tối đa 2 câu. Một ý lõi.
    - Câu nói đầy đủ, có từ nối. Code/lệnh chỉ lấy từ nguồn.
    - Độ dài: **rõ ràng trước, độ dài theo nội dung.** Không có mục tiêu thời lượng. Chỉ bỏ câu thừa, lặp hoặc lạc đề. `validate_script.py` in ước lượng thời lượng theo từng style giọng, chỉ để biết.
-   - Câu cuối phải có **"follow Dan Tech"** (nút Follow bật ở "follow", bấm ở "Dan"). Handle do outro lo, không viết vào props.
+   - Câu cuối phải có **`ctaPhrase` của kênh** (`channels/<id>.json`, mặc định `dantech`: "follow Dan Tech"; nút Follow bật ở `ctaInWord`, bấm ở `ctaPressWord`). Kênh khác thì đặt `"channel": "<id>"`. Handle do outro lo, không viết vào props.
    - Số và tên riêng viết sao cho TTS đọc đúng.
 5. **Props + nhấn nhịp bằng `@chữ`:** chỉ dùng scene type và khoá props trong SCHEMA.md. Mọi mốc xuất hiện (keycap, popup, tick, stamp, sfx) đặt bằng `"@chữ"` của chính cảnh đó, không đếm frame tay. SFX chỉ đặt ở khoảnh khắc có nghĩa (click, pop, stamp), volume 0.35–0.5.
 6. **Hình ảnh:** chỉ infographics/UI mockup. **Không có người hay mặt người.** `media` chỉ dùng clip faceless trong `assets/broll/`.
@@ -124,7 +124,7 @@ Video giải thích code phải **dẫn chuyện** để người xem hiểu và
 4. **Giải thích từng bước**, dùng từ nối: *vì vậy, lúc này, nói cách khác, thử tưởng tượng, tức là, thay vì*.
 5. **Ví dụ so sánh** (analogy), và **nối ngược lại về code** ("món bạn gọi chính là GameManager").
 6. **Một câu chốt** (takeaway).
-7. **CTA** nhẹ nhàng, rồi "follow Dan Tech".
+7. **CTA** nhẹ nhàng, rồi `ctaPhrase` của kênh ("follow Dan Tech").
 
 **Quy tắc:**
 - Câu nói đầy đủ, đúng ngữ pháp. Không viết kiểu ghi chú hay liệt kê từ khoá.

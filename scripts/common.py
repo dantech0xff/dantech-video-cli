@@ -17,3 +17,13 @@ def duration(path): return float(subprocess.check_output(['ffprobe','-v','error'
 def log(line):
     p=os.path.join(ROOT,'logs','voice_log.md'); os.makedirs(os.path.dirname(p),exist_ok=True)
     with open(p,'a',encoding='utf-8') as f: f.write(f"- {datetime.datetime.now().strftime('%Y-%m-%d %H:%M')} {line}\n")
+
+def load_channel(cid="dantech"):
+    import sys
+    """Brand config: channels/<id>.json (name, wordmark, tagline, handles, follow texts, ctaPhrase/ctaInWord/ctaPressWord)."""
+    f=os.path.join(ROOT,'channels',f'{cid}.json')
+    if not os.path.isfile(f): sys.exit(f'channel "{cid}" not found: {f} (have: {sorted(x[:-5] for x in os.listdir(os.path.join(ROOT,"channels")))})')
+    C=json.load(open(f,encoding='utf-8'))
+    miss=[k for k in ['name','wordmark','handles','followLabel','followDone','ctaPhrase','ctaInWord','ctaPressWord'] if not C.get(k)]
+    if miss: sys.exit(f'channel {cid}: missing {miss}')
+    return C

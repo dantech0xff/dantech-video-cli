@@ -1,3 +1,4 @@
+import {useBrand,fitSize} from './brand';
 import React from 'react';import {interpolate,random} from 'remotion';
 import {useS,It,H,Bd,AccentBar,Kicker,Stamp,Media,EO,cl} from './sys';
 export const Headline:React.FC<{kicker:string;l1:string;bar:string;l3:string;deck?:[string,string];sizes?:[number,number,number]}>=({kicker,l1,bar,l3,deck,sizes=[250,168,180]})=>{const {t}=useS();return <div>
@@ -42,10 +43,10 @@ export const Evidence:React.FC<{n:string;kick:string;media?:string;pos?:string;b
  <It i={4}><div style={{display:'grid',gridTemplateColumns:'repeat(7,1fr)',gap:10}}>{Array.from({length:count}).map((_,k)=>{const at=start+k*5;const s=f>=at;return <div key={k} style={{height:150,border:`3px solid ${t.ink}`,position:'relative',background:s?t.muted+'33':'transparent',transform:`rotate(${(random('t'+k)-.5)*4}deg)`}}>
   <div style={{...Bd(t,19,t.muted),padding:6}}>{label}</div><div style={{...H(t,54),textAlign:'center'}}>#{String(k+1).padStart(2,'0')}</div>
   {s&&<div style={{position:'absolute',bottom:10,left:6,right:6,border:`3px solid ${t.accent}`,color:t.accent,...H(t,22,t.accent),textAlign:'center',transform:`rotate(-8deg) scale(${interpolate(f,[at,at+5],[1.6,1],{...cl,easing:EO})})`}}>{tag}</div>}</div>})}</div></It></div>};
-export const CTA:React.FC<{n:string;kick:string;lead:string;big:string;opts?:string[];hint?:string;ctaAt:number;src?:string;noFollow?:boolean}>=({n,kick,lead,big,opts,hint,ctaAt,src,noFollow})=>{const {t,f}=useS();return <div><Kicker n={n} txt={kick}/>
+export const CTA:React.FC<{n:string;kick:string;lead:string;big:string;opts?:string[];hint?:string;ctaAt:number;src?:string;noFollow?:boolean}>=({n,kick,lead,big,opts,hint,ctaAt,src,noFollow})=>{const {t,f}=useS();const B=useBrand();return <div><Kicker n={n} txt={kick}/>
  <It i={1}><div style={{...Bd(t,44)}}>{lead}</div></It>
  <It i={2}><div style={{marginTop:20}}>{(()=>{const ls=big.split('|');const L=Math.max(...ls.map(x=>x.length));const sz=Math.min(240,Math.floor(894/(L*(t.head==='Anton'?.47:.7))));return ls.map((x,k)=><div key={k} style={{...H(t,sz),whiteSpace:'nowrap'}}>{x}</div>)})()}</div></It>
  {opts&&<div style={{display:'flex',gap:30,marginTop:30}}>{opts.map((o,k)=><It key={o} at={20+k*4} style={{flex:1}}><div style={{border:`6px solid ${t.ink}`,padding:'24px 28px',display:'flex',alignItems:'center',gap:24,borderRadius:t.id==='quick-tips'?24:0}}><div style={{width:80,height:80,border:`6px solid ${t.ink}`,...H(t,86,t.accent),display:'flex',alignItems:'center',justifyContent:'center'}}>{f>=44+k*14?'✕':''}</div><span style={{...H(t,84)}}>{o}</span></div></It>)}</div>}
  {hint&&<It at={34}><div style={{...Bd(t,40),marginTop:24}}>{hint}</div></It>}
- {!noFollow&&<It at={ctaAt} style={{marginTop:60}}><div style={{transform:'rotate(-2deg)'}}><AccentBar size={t.head==='Anton'?116:76}>FOLLOW DAN TECH</AccentBar></div></It>}
+ {!noFollow&&<It at={ctaAt} style={{marginTop:60}}><div style={{transform:'rotate(-2deg)'}}><AccentBar size={fitSize(B.followLabel,850,t.head==='Anton'?116:76,t.head==='Anton'?.47:.7)}>{B.followLabel}</AccentBar></div></It>}
  {src&&<It at={ctaAt+8}><div style={{...Bd(t,30,t.muted),marginTop:noFollow?40:22}}>{src}</div></It>}</div>};

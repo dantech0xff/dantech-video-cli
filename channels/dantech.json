@@ -1,0 +1,45 @@
+{
+ "id": "dantech",
+ "name": "Dan Tech",
+ "wordmark": "DAN TECH",
+ "tagline": {
+  "default": "Tin công nghệ mỗi ngày",
+  "hot-news": "Tin công nghệ mỗi ngày",
+  "quick-tips": "MẸO CÔNG NGHỆ MỖI NGÀY",
+  "tech-explain": "Code & công nghệ mỗi ngày",
+  "tech-explain-cyber": "Code & công nghệ mỗi ngày",
+  "hot-news-glitch": "Tin công nghệ mỗi ngày"
+ },
+ "handles": [
+  {
+   "p": "YOUTUBE",
+   "icon": "youtube",
+   "h": "@dantech-0xff"
+  },
+  {
+   "p": "FACEBOOK",
+   "icon": "facebook",
+   "h": "@dantech0xff"
+  },
+  {
+   "p": "TIKTOK",
+   "icon": "tiktok",
+   "h": "@dantech_0xff"
+  }
+ ],
+ "followLabel": "FOLLOW DAN TECH",
+ "followDone": "ĐÃ FOLLOW ✓",
+ "followSub": {
+  "default": "BẬT CHUÔNG ĐỂ KHÔNG LỠ TIN",
+  "hot-news": "BẬT CHUÔNG ĐỂ KHÔNG LỠ TIN",
+  "quick-tips": "BẬT CHUÔNG ĐỂ NHẬN MẸO MỚI",
+  "tech-explain": "BẬT CHUÔNG ĐỂ KHÔNG LỠ BÀI",
+  "tech-explain-cyber": "BẬT CHUÔNG ĐỂ KHÔNG LỠ BÀI",
+  "hot-news-glitch": "BẬT CHUÔNG ĐỂ KHÔNG LỠ TIN"
+ },
+ "ctaPhrase": "follow Dan Tech",
+ "ctaInWord": "follow",
+ "ctaPressWord": "Dan",
+ "site": "dantech.academy",
+ "course": "khoá học trên dantech.academy (nhắc nhẹ ở cảnh cuối nếu video có bài học gốc)"
+}

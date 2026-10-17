@@ -48,7 +48,20 @@ Ví dụ đi từ đầu đến cuối: [docs/WALKTHROUGH.md](docs/WALKTHROUGH.m
 | `tech-explain` | dev explainer (editor sáng/vàng) | `videos/git-merge-vs-rebase`, `videos/inversion-of-control` |
 | `tech-explain-cyber` | dev explainer (blueprint tối, lime) | `videos/flutter-mvvm` |
 
-Script mới dùng `"voice": {"style":"random"}`. Không đặt `voice.file`. Câu cuối có "follow Dan Tech". Outro tự lo handle.
+Script mới dùng `"voice": {"style":"random"}`. Không đặt `voice.file`. Câu cuối có `ctaPhrase` của kênh (mặc định "follow Dan Tech"). Outro tự lo handle.
+
+## Kênh / brand (`channels/<id>.json`)
+Mọi chữ thương hiệu trên màn hình lấy từ file kênh, không hardcode trong `remotion/src`. Gồm: wordmark ở top bar, rail, wipe chuyển cảnh, `DAN/TECH.git`; end card; nút Follow; thanh follow trong cảnh CTA. Script chọn kênh bằng `"channel": "<id>"`, mặc định `dantech`.
+| Khoá | Ý nghĩa |
+|---|---|
+| `id`, `name`, `wordmark` | id file; tên hiển thị ("Dan Tech", end card cyber); wordmark chữ hoa ("DAN TECH", top bar/rail/end card). Tên dài sẽ tự co cho vừa |
+| `tagline` | chuỗi, hoặc map `{default, <theme id>: …}` cho dòng dưới wordmark ở end card |
+| `handles` | `[{p, icon: youtube\|facebook\|tiktok, h}]`, 3 dòng có logo ở end card |
+| `followLabel`, `followDone`, `followSub` | chữ trên nút Follow, chữ sau khi bấm, dòng nhỏ dưới nút (chuỗi hoặc map theo theme) |
+| `ctaPhrase`, `ctaInWord`, `ctaPressWord` | câu kết bắt buộc trong lời đọc (validator kiểm), chữ làm nút hiện ra, chữ làm nút bị bấm |
+| `site`, `course` | tuỳ chọn: website/khoá học để nhắc nhẹ ở cảnh cuối |
+
+**Thêm kênh mới:** copy `channels/dantech.json` thành `channels/<id>.json`, sửa các khoá trên, đặt `"channel": "<id>"` trong script, câu kết dùng đúng `ctaPhrase`. Rồi chạy validator và render still top bar, nút Follow, end card cho mọi theme, kiểm bằng safezone.py. Mẫu kênh giả để thử: `channels/example.json` (Mobile Hub). Icon mới (ngoài youtube/facebook/tiktok) thì vendor SVG simple-icons vào `assets/icons/` và thêm path vào `remotion/src/brand.tsx`.
 
 ## Theme ids
 `hot-news` (TIN NÓNG · hot news), `quick-tips` (MẸO NHANH · quick tips), `tech-explain` (GIẢI THÍCH · tech explain). Id cũ `tin-nong`, `meo-nhanh`, `commit` vẫn chạy (alias, deprecated, có cảnh báo); script mới dùng id mới. Hashtag như #TinNong, #MeoNhanh giữ nguyên.
@@ -80,7 +93,7 @@ Script mới dùng `"voice": {"style":"random"}`. Không đặt `voice.file`. C�
 - **Caption:** karaoke phân trang (mọi theme). Hết câu thì xoá trang, hiện trọn câu mới, highlight từng chữ. Tối đa 2 dòng. Câu dài cắt ở dấu phẩy/ranh giới tự nhiên. Mỗi chữ là một chip có nền. Chữ đang đọc đổi sang nền accent + text tương phản, pop nhẹ. Không gạch chân. Font và màu chip lấy từ `theme.json → look.caption`. Không sửa thành chạy cuộn.
 - **Safe zone bắt buộc:** hằng số ở `remotion/src/safezone.ts`. Nội dung x 136–860, y 290–~1360. Caption y 1366–1500. Follow y 1150–1350. Trên y 250 chỉ để brand. Kiểm bằng `scripts/safezone.py`.
 - **Trên màn hình:** không tên theme, không meta label, không nhãn kỹ thuật giả (FIG./SHEET/§/"END OF SHEET"…). Brand "Dan Tech" thì giữ. **Không người, mặt người AI.** B-roll faceless.
-- **Outro/end card:** 3 dòng có logo: **YouTube @dantech-0xff**, **Facebook @dantech0xff**, **TikTok @dantech_0xff**. Nguồn duy nhất là `channel.json`, sửa handle ở đó. Logo vendored từ simple-icons, CC0, nằm ở `assets/icons/` và `remotion/src/brand.tsx`. Nút Follow do code lo.
+- **Outro/end card:** 3 dòng có logo: **YouTube @dantech-0xff**, **Facebook @dantech0xff**, **TikTok @dantech_0xff**. Nguồn duy nhất là `channels/<id>.json` (mặc định `channels/dantech.json`), sửa handle ở đó. Logo vendored từ simple-icons, CC0, nằm ở `assets/icons/` và `remotion/src/brand.tsx`. Nút Follow do code lo.
 - Không sửa theme đã duyệt nếu không được yêu cầu. Theme mới/sửa theme: làm theo skill `theme`.
 
 ## 4. QC: Definition of done / quality bar
