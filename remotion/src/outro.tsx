@@ -20,8 +20,8 @@ export const FollowCTA:React.FC<{t:Theme;inAt:number;pressAt:number;outAt:number
    <div style={{display:'flex',border:`1.5px solid ${pressed?t.accent:'#4A4A4A'}`,background:'#222222',height:150,overflow:'hidden'}}>
     <div style={{width:150,display:'flex',alignItems:'center',justifyContent:'center',borderRight:`1.5px solid ${pressed?t.accent:'#4A4A4A'}`,background:pressed?t.accent:'transparent'}}><Bell c={pressed?t.onAccent:t.accent} s={74} rot={wig}/></div>
     <div style={{flex:1,position:'relative',overflow:'hidden'}}>
-     <div style={{position:'absolute',inset:0,display:'flex',alignItems:'center',paddingLeft:40,transform:`translateY(${-flip*100}%)`}}><span style={{fontFamily:'BVPX',fontSize:58,color:t.ink,letterSpacing:1,whiteSpace:'nowrap'}}>{label}</span></div>
-     <div style={{position:'absolute',inset:0,display:'flex',alignItems:'center',paddingLeft:40,background:t.accent,transform:`translateY(${(1-flip)*100}%)`}}><span style={{fontFamily:'BVPX',fontSize:58,color:t.onAccent,whiteSpace:'nowrap'}}>{done}</span></div>
+     <div style={{position:'absolute',inset:0,display:'flex',alignItems:'center',paddingLeft:40,transform:`translateY(${-flip*100}%)`}}><span style={{fontFamily:'BVPX',fontSize:46,color:t.ink,letterSpacing:1,whiteSpace:'nowrap'}}>{label}</span></div>
+     <div style={{position:'absolute',inset:0,display:'flex',alignItems:'center',paddingLeft:40,background:t.accent,transform:`translateY(${(1-flip)*100}%)`}}><span style={{fontFamily:'BVPX',fontSize:46,color:t.onAccent,whiteSpace:'nowrap'}}>{done}</span></div>
     </div></div>
    <div style={{fontFamily:'JBM',fontSize:22,letterSpacing:4,color:'#8C8C8C',marginTop:22,display:'flex',alignItems:'center',gap:12,opacity:interpolate(f,[pressAt+4,pressAt+10],[0,1],cl)}}><span style={{width:12,height:12,background:t.accent,display:'inline-block'}}/>{sub}</div>
   </div>
@@ -29,13 +29,13 @@ export const FollowCTA:React.FC<{t:Theme;inAt:number;pressAt:number;outAt:number
  </AbsoluteFill>;
  return <AbsoluteFill style={{zIndex:30,pointerEvents:'none'}}>
   <div style={{position:'absolute',left:136,right:SZ.cta.right,top,transform:`translate(${sh/2*0+dn*8}px,${dn*8+(1-pin)*60-ex*80}px) scale(${1.15-0.15*pin}) rotate(${-1.5*pin}deg)`,opacity:pin*(1-ex),transformOrigin:'left center'}}>
-   <div style={{display:'flex',border:`6px solid ${t.ink}`,boxShadow:`${sh}px ${sh}px 0 ${t.ink}`,borderRadius:r(t,26),overflow:'hidden',height:190}}>
-    <div style={{width:190,background:pressed?t.accent:t.ink,display:'flex',alignItems:'center',justifyContent:'center',borderRight:`6px solid ${t.ink}`}}><Bell c={pressed?t.onAccent:t.bg} s={110} rot={wig}/></div>
+   <div style={{display:'flex',border:`6px solid ${t.ink}`,boxShadow:`${sh}px ${sh}px 0 ${t.ink}`,borderRadius:r(t,26),overflow:'hidden',height:150}}>
+    <div style={{width:150,background:pressed?t.accent:t.ink,display:'flex',alignItems:'center',justifyContent:'center',borderRight:`6px solid ${t.ink}`}}><Bell c={pressed?t.onAccent:t.bg} s={86} rot={wig}/></div>
     <div style={{flex:1,position:'relative',background:t.accent,overflow:'hidden'}}>
-     <div style={{position:'absolute',inset:0,display:'flex',alignItems:'center',justifyContent:'center',transform:`translateY(${-flip*100}%)`}}><span style={{...H(t,t.head==='Anton'?108:72,t.onAccent),whiteSpace:'nowrap',paddingTop:t.head==='Anton'?10:0}}>{label}</span></div>
-     <div style={{position:'absolute',inset:0,display:'flex',alignItems:'center',justifyContent:'center',background:t.ink,transform:`translateY(${(1-flip)*100}%)`}}><span style={{...H(t,t.head==='Anton'?108:72,t.bg),whiteSpace:'nowrap',paddingTop:t.head==='Anton'?10:0}}>{done}</span></div>
+     <div style={{position:'absolute',inset:0,display:'flex',alignItems:'center',justifyContent:'center',transform:`translateY(${-flip*100}%)`}}><span style={{...H(t,t.head==='Anton'?76:48,t.onAccent),whiteSpace:'nowrap',paddingTop:t.head==='Anton'?8:0}}>{label}</span></div>
+     <div style={{position:'absolute',inset:0,display:'flex',alignItems:'center',justifyContent:'center',background:t.ink,transform:`translateY(${(1-flip)*100}%)`}}><span style={{...H(t,t.head==='Anton'?88:58,t.bg),whiteSpace:'nowrap',paddingTop:t.head==='Anton'?10:0}}>{done}</span></div>
     </div></div>
-   <div style={{...Bd(t,30,t.ink),letterSpacing:4,marginTop:26,display:'flex',alignItems:'center',gap:12,opacity:interpolate(f,[pressAt+4,pressAt+10],[0,1],cl)}}><span style={{width:18,height:18,background:t.accent,display:'inline-block'}}/>{sub}</div>
+   <div style={{...Bd(t,24,t.ink),letterSpacing:2,marginTop:14,display:'flex',alignItems:'center',gap:12,opacity:interpolate(f,[pressAt+4,pressAt+10],[0,1],cl)}}><span style={{width:18,height:18,background:t.accent,display:'inline-block'}}/>{sub}</div>
   </div>
   <div style={{position:'absolute',left:cx,top:cy,opacity:cOp*(1-ex),transform:`scale(${1-0.18*dn})`,transformOrigin:'10% 5%'}}><Cursor t={t}/></div>
  </AbsoluteFill>};

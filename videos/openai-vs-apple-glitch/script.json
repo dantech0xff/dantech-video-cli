@@ -1,8 +1,8 @@
 {
  "theme": "hot-news-glitch",
- "title": "OpenAI xuống nước trước Apple",
+ "title": "Apple kiện OpenAI vì 14 cựu nhân viên: OpenAI đã xuống nước",
  "date": "16 · 10 · 2026",
- "caption": "Apple kiện OpenAI vì 14 cựu nhân viên, OpenAI đã xuống nước. Phe Apple hay phe OpenAI? #DanTech #TinNong",
+ "caption": "Apple kiện OpenAI vì 14 cựu nhân viên nhảy việc, và OpenAI đã phải nhượng bộ. Cuối video: thứ OpenAI phải giao nộp cho Apple. Bạn phe Apple hay phe OpenAI? #DanTech #TinNong #OpenAI #Apple",
  "sources": [
   "The Verge, Bloomberg (15.10.2026)"
  ],
@@ -35,13 +35,13 @@
      "label": "PHE OPENAI",
      "line": "Nhân tài có quyền nhảy việc"
     },
-    "sidesAt": "@Phe",
+    "sidesAt": 30,
     "payoff": "Cuối video: thứ OpenAI phải giao nộp",
     "payoffAt": "@Cuối"
    },
    "sfx": [
     {
-     "at": "@Phe",
+     "at": 32,
      "s": "impactPlank_medium_000",
      "v": 0.45
     }
