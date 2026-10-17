@@ -142,8 +142,8 @@ MAXN={'Meter':5,'DataFlow':5,'Layers':5,'Loop':6,'Debug':8,'Timeline':5,'Rating'
 MINN={'Loop':3,'DataFlow':2,'Layers':2}
 OBJ={'Scale':({'title','a','b'},{'tiltAt','verdict'},{'a':({'s','w','at'},{'sub','kw'}),'b':({'s','w','at'},{'sub','kw'}),'verdict':({'s','at'},set())}),
  'Debug':(set(),set(),{'err':({'s','at'},{'kw'}),'bad':({'line','at'},set()),'fix':({'s','at'},{'kw'}),'ok':({'s','at'},{'kw'})}),
- 'BigStat':({'big','label'},{'kick','unit','at','src','sub'},{'sub':({'s','at'},set())}),
- 'QuoteCard':({'q','who'},{'role','at','hl','kw'},{'hl':({'w','at'},set())}),
+ 'BigStat':({'big'},{'label','n','kick','media','pos','unit','at','src','sub','tally'},{'sub':({'s','at'},set()),'tally':({'count','label','tag','start'},{'every'})}),
+ 'QuoteCard':({'q','who'},{'n','kick','media','pos','pull','role','at','hl','kw'},{'hl':({'w','at'},set())}),
  'BeforeAfter':({'title','before','after'},{'tags','note'},{'before':({'s'},{'lines','code','at','kw'}),'after':({'s','at'},{'lines','code','kw'})})}
 for i,sc in enumerate(sc_list,1):
     t=sc.get('type');pr=sc.get('props',{});tag=f'scene {i} ({t})'
@@ -168,6 +168,9 @@ for i,sc in enumerate(sc_list,1):
         if t=='BeforeAfter':
             for k in ('before','after'):
                 if isinstance(pr.get(k),dict) and pr[k].get('lines') is not None and not (isinstance(pr[k]['lines'],list) and len(pr[k]['lines'])<=5): err(f'{tag}: {k}.lines is a list of ≤ 5 strings')
+        if t=='QuoteCard' and 'pull' in pr and not (isinstance(pr['pull'],list) and 1<=len(pr['pull'])<=2 and all(isinstance(x,str) for x in pr['pull'])): err(f'{tag}: pull is a list of 1–2 short words (2nd one on the accent bar)')
+        if t=='BigStat' and isinstance(pr.get('tally'),dict) and not (isinstance(pr['tally'].get('count'),int) and 1<=pr['tally']['count']<=21): err(f'{tag}: tally.count must be an int 1..21 (3 rows of 7)')
+        if t in ('QuoteCard','BigStat') and pr.get('media') and not os.path.exists(os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','remotion','public',pr['media'])): warn(f'{tag}: media {pr["media"]} not found under remotion/public')
         if t=='QuoteCard' and len(str(pr.get('q','')))>180: warn(f'{tag}: quote is {len(pr["q"])} chars; ≤ ~180 keeps it reel-readable')
     if t in MAXN and isinstance(pr.get(ITEMS.get(t,('',))[0]),list):
         n=len(pr[ITEMS[t][0]])
