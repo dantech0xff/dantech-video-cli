@@ -101,6 +101,14 @@
     "file": "build.gradle.kts",
     "lines": [
      {
+      "s": "// Android Studio — bản stable",
+      "at": "@stable"
+     },
+     {
+      "s": "// SDK Manager: tick Platform 36",
+      "at": "@tick"
+     },
+     {
       "s": "compileSdk = 36",
       "at": "@compileSdk"
      },
@@ -110,8 +118,8 @@
      }
     ],
     "hl": {
-     "from": 0,
-     "to": 0,
+     "from": 2,
+     "to": 2,
      "at": "@compileSdk"
     },
     "note": {
@@ -163,7 +171,38 @@
    ]
   },
   {
-   "say": "Tóm lại, cần JDK mười bảy cộng, Android Studio stable, SDK Platform ba mươi sáu, plugin Kotlin Multiplatform và một chỗ chạy app. Dùng Windows hay Linux vẫn học được bình thường, chỉ thiếu phần bấm chạy iOS trên macOS thôi. Follow Dan Tech để học Android mỗi ngày nhé!",
+   "say": "Tóm lại, cần JDK mười bảy cộng, Android Studio stable, SDK Platform ba mươi sáu, plugin Kotlin Multiplatform và một chỗ chạy app.",
+   "type": "AtSteps",
+   "section": "Tóm tắt",
+   "out": "sharedx",
+   "props": {
+    "title": "Checklist đầy đủ",
+    "steps": [
+     {
+      "s": "JDK 17 trở lên",
+      "at": "@JDK"
+     },
+     {
+      "s": "Android Studio stable",
+      "at": "@Android"
+     },
+     {
+      "s": "SDK Platform 36",
+      "at": "@Platform"
+     },
+     {
+      "s": "Plugin Kotlin Multiplatform",
+      "at": "@Multiplatform"
+     },
+     {
+      "s": "Một chỗ chạy app",
+      "at": "@chỗ"
+     }
+    ]
+   }
+  },
+  {
+   "say": "Dùng Windows hay Linux vẫn học được bình thường, chỉ thiếu phần bấm chạy iOS trên macOS thôi. Follow Dan Tech để học Android mỗi ngày nhé!",
    "type": "AtTake",
    "section": "Checklist",
    "props": {
