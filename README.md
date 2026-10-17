@@ -11,6 +11,7 @@ Có 3 theme:
 | `tech-explain` | Dev explainer: git, code, terminal (thanh tab vàng, gutter số dòng, lệnh gõ chữ, git graph, git log, chuyển cảnh `scroll`) | ✅ Đã duyệt |
 | `tech-explain-cyber` | GIẢI THÍCH CYBER: dev explainer kiểu blueprint tối (nền #1C1C1C, accent lime, sơ đồ tự vẽ, terminal, cây thư mục); ví dụ `videos/flutter-mvvm` | ✅ Đã duyệt |
 | `hot-news-glitch` | TIN NÓNG GLITCH: tin nóng nền tối #1C1C1C, đỏ tín hiệu #FF2D2D, glitch "tín hiệu vỡ" chỉ ở khoảnh khắc nhấn + chuyển cảnh `signal`; ví dụ `videos/openai-vs-apple-glitch` | ✅ Đã duyệt |
+| `android-tutor` | ANDROID TUTOR: chỉ cho dev Android. Studio Dark (nền #1E1F22, card #2B2D30, màu cú pháp Kotlin kiểu IDE, tab editor, Logcat D/I/W/E) + Compose Preview (code cạnh khung điện thoại chạy @Preview), accent xanh Android #3DDC84 / M3 #7DDB9F, chuyển cảnh `cookie` (shape morph + spring M3 Expressive). Font Google Sans Flex + JetBrains Mono (OFL, `assets/fonts/licenses/`). Ví dụ `videos/compose-remember-saveable` | 🧪 Chờ Dan duyệt |
 
 Id cũ `tin-nong`, `meo-nhanh`, `commit` vẫn được chấp nhận (alias, deprecated). Giao diện `~/commit` / `DAN/TECH.git` của GIẢI THÍCH là phong cách editor, không phải tên theme.
 

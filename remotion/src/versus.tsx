@@ -5,7 +5,7 @@ import React from 'react';import {interpolate,spring} from 'remotion';
 import {useS,H,Bd,cl,EO} from './sys';
 type Side={label:string;line:string};
 // avg UPPERCASE glyph width / font size per head font (measured; uppercase ~15% wider than mixed)
-const UW:Record<string,number>={Anton:.47,BVPX:.72,BVPM:.7,JBM:.62,Barlow:.58};
+const UW:Record<string,number>={Anton:.47,BVPX:.72,BVPM:.7,JBM:.62,Barlow:.58,GSF:.66};
 const fit=(s:string,w:number,max:number,k=.5)=>Math.min(max,Math.floor(w/(Math.max(4,s.length)*k)));
 export const VersusHook:React.FC<{kicker?:string;claim:string[];hl?:number;a:Side;b:Side;sidesAt?:number;payoff?:string;payoffAt?:number}>=
 ({kicker,claim,hl=1,a,b,sidesAt=24,payoff,payoffAt=60})=>{const {t,f}=useS();const gl=t.id==='hot-news-glitch';const A=t.accent;

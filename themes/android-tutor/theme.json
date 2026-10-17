@@ -1,0 +1,81 @@
+{
+ "look": {
+  "id": "android-tutor",
+  "label": "ANDROID TUTOR",
+  "subtitle": "android dev · studio dark + compose preview",
+  "bg": "#1E1F22",
+  "ink": "#DFE1E5",
+  "onAccent": "#00391C",
+  "accent": "#3DDC84",
+  "accent2": "#7DDB9F",
+  "muted": "#6F737A",
+  "head": "GSF",
+  "body": "GSF",
+  "upper": false,
+  "step": 1,
+  "video": "clean",
+  "entry": "rise",
+  "rule": "#393B40",
+  "pal": {
+   "card": "#2B2D30",
+   "line": "#393B40",
+   "dim": "#868A91"
+  },
+  "sfx": {
+   "trans": "whoosh_soft",
+   "stamp": "select_003",
+   "tick": "tick_002",
+   "entry": "tick_002"
+  },
+  "trans": [
+   "cookie",
+   "stack",
+   "push"
+  ],
+  "caption": {
+   "font": "GSF",
+   "size": 48,
+   "upper": false,
+   "weight": 800,
+   "chipBg": "rgba(43,45,48,.94)",
+   "chipText": "#EDEFF2",
+   "upcomingText": "rgba(237,239,242,.58)",
+   "activeBg": "#3DDC84",
+   "activeText": "#00391C",
+   "radius": 14,
+   "pop": 1.06
+  }
+ },
+ "tail_hold": 40,
+ "cta": {
+  "top": 1150,
+  "in_offset": -6,
+  "sub": "BẬT CHUÔNG ĐỂ HỌC ANDROID MỖI NGÀY"
+ },
+ "outro": {
+  "dur": 90,
+  "tagline": "Android mỗi ngày"
+ },
+ "voice": {
+  "voice": "vi-vn-concierge-2",
+  "model": "gemini-3.8-flash-tts",
+  "styles": {
+   "hao-hung": "hào hứng, tràn đầy năng lượng, nhịp nhanh như dẫn bản tin drama công nghệ nóng hổi",
+   "ke-chuyen": "kể chuyện kịch tính, hồi hộp, có ngắt nghỉ tạo căng thẳng",
+   "tu-nhien": "tự nhiên, thoải mái như đang nói chuyện với bạn bè, phong cách YouTuber"
+  }
+ },
+ "music": {
+  "pool": [
+   {
+    "id": "sappheiros-perspective",
+    "start": 0
+   },
+   {
+    "id": "alexi-action-ghost",
+    "start": 0
+   }
+  ],
+  "rel": -10
+ }
+}

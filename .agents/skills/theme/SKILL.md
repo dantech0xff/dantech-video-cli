@@ -19,7 +19,7 @@ description: Tạo theme mới hoặc chỉnh theme Dan Tech từ một spec (mo
 - Không có composition riêng cho từng theme: `remotion/src/Video.tsx` dùng chung, chọn scene qua bảng `SCENES`. `./dt` lấy theme từ `script.json → theme`, nên **không cần sửa dt hay build_props**.
 
 ## Các bước
-1. Chọn theme gần nhất (hot-news: báo in; quick-tips: UI sáng, keycap; tech-explain: dark mono; tech-explain-cyber: blueprint tối, scene trong `remotion/src/cyber.tsx`; hot-news-glitch: tin nóng tối, glitch chỉ trên nhịp/chuyển cảnh, `remotion/src/glitch.tsx`, transition `signal` trong sys.tsx). `cp -r themes/<gần nhất> themes/<id>`.
+1. Chọn theme gần nhất (hot-news: báo in; quick-tips: UI sáng, keycap; tech-explain: dark mono; tech-explain-cyber: blueprint tối, scene trong `remotion/src/cyber.tsx`; hot-news-glitch: tin nóng tối, glitch chỉ trên nhịp/chuyển cảnh, `remotion/src/glitch.tsx`, transition `signal` trong sys.tsx; android-tutor: IDE tối + Compose Preview + Logcat, spring M3 Expressive `m3()`, shape cookie, transition `cookie`, scene/chrome/end card trong `remotion/src/android.tsx`). `cp -r themes/<gần nhất> themes/<id>`.
 2. Sửa `theme.json` theo spec: màu (kiểm độ tương phản chữ/nền), font, `sfx` (chỉ file trong `assets/sfx`, ý nghĩa rõ, nhẹ), `trans` (motion mượt, có thiết kế), `music.pool` (track có licence trong tracks.json; thêm track mới thì ghi vào `tracks.json` + `LIBRARY.md`, không commit mp3), `outro.tagline`, `cta.sub`. Giữ `music.rel` gần theme gốc (-9…-11).
 3. Font mới: thêm file vào `assets/fonts/` (licence OFL/miễn phí) + `@font-face` trong `FONTS` ở `remotion/src/sys.tsx`.
 4. Đăng ký:
@@ -36,7 +36,7 @@ description: Tạo theme mới hoặc chỉnh theme Dan Tech từ một spec (mo
 ## Caption karaoke (mọi theme)
 Caption = karaoke **chip** (mọi theme): mỗi chữ là một chip có nền (`chipBg`/`chipText`). Chữ sắp đọc thì text mờ hơn (`upcomingText`). Chữ đang đọc: nền đổi sang `activeBg`, text sang `activeText`, pop nhẹ (`pop` ~1.06, spring, không rung). Đọc xong thì về chip thường. **Không gạch chân.** Cấu hình ở `theme.json → look.caption`: `font,size,upper,weight,chipBg,chipText,upcomingText,activeBg,activeText,radius,padX,padY,gap,pop`. Size phải để 2 dòng chip lọt dải y 1366–1500 (Anton 50, BVPX/BVPM 44, JBM 38). Chip trên nền tối phải sáng hơn nền để còn thấy. Ước lượng 2 dòng trong `Captions` đã trừ padding + gap của chip.
 - Font caption khai báo trong `theme.json` → `look.caption` `{font, size, upper, weight?}`; mặc định = font chính (`head`) của theme. Caption phải cùng font với video.
-- Hiện tại: hot-news Anton 72 (in hoa) · quick-tips BVPX 62 · tech-explain JBM 52 (700) · tech-explain-cyber BVPM 60 · hot-news-glitch Anton 72 (in hoa).
+- Hiện tại: hot-news Anton 72 (in hoa) · quick-tips BVPX 62 · tech-explain JBM 52 (700) · tech-explain-cyber BVPM 60 · hot-news-glitch Anton 72 (in hoa) · android-tutor GSF (Google Sans Flex) 48 (800), chip bo 14.
 - Component `Captions` (remotion/src/sys.tsx) dùng chung, không viết caption riêng cho theme mới.
 
 ## Safe zone (BẮT BUỘC — tạo / sửa / cập nhật theme)
@@ -61,3 +61,11 @@ Khung 1080x1920 bị UI TikTok / Reels / Shorts / Facebook Reels che. Hằng s�
 
 ## End card handles
 Brand (wordmark, tên, handle, logo, chữ nút Follow) lấy từ `channels/<id>.json` qua `useBrand()` / `BrandTile` / `fitSize` (`remotion/src/brand.tsx`, props.channel). **Không hardcode "DAN TECH", handle hay chữ follow trong theme.** Chữ brand phải dùng `fitSize` để tên dài tự co. Theme mới phải render thử với `channels/example.json`. End card gồm 3 dòng canh trái, mỗi dòng là ô trắng có logo màu thương hiệu rồi tới handle, mép phải ≤ 860.
+
+## Theme cho một nền tảng / thương hiệu thứ ba (bài học từ android-tutor)
+- Màu, font, design system có thể mượn tinh thần (Android: #3DDC84, Material 3 Expressive springs + shape morph, Google Sans Flex), nhưng **không dùng logo/wordmark chính thức, lockup, robot 3D, logo IDE (Android Studio/IntelliJ) hay artwork thiết bị (Pixel)**. Tự vẽ bản đơn giản (robot xanh trong `android.tsx`), khung điện thoại chung chung.
+- Robot Android dùng theo CC BY 3.0: end card phải có đúng dòng "The Android robot is reproduced or modified from work created and shared by Google and used according to terms described in the Creative Commons 3.0 Attribution License." + "Android is a trademark of Google LLC." Chữ "Android" nổi bật đầu tiên trên màn hình gắn ™.
+- Font mới phải có licence OFL trong `assets/fonts/licenses/`.
+- Motion spring M3E (material3 ExpressiveMotionTokens): spatial fast .6/800, default .8/380, slow .8/200; effects (màu/opacity) critically damped, không overshoot. Helper `m3(f,at,'fast'|'def'|'slow'|'fx')`.
+- Code trong props bắt đầu bằng `@` (vd `@Composable`) bị hiểu là anchor: viết `"\\@Composable"` (component bỏ dấu `\`).
+- Code card: dòng dài > ~34 ký tự ở fs 40 sẽ tràn; tách dòng như IDE format. Phone frame + code phải nằm gọn trong canvas 1320 (không chạm dải caption).
