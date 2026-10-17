@@ -69,3 +69,17 @@ Brand (wordmark, tên, handle, logo, chữ nút Follow) lấy từ `channels/<id
 - Motion spring M3E (material3 ExpressiveMotionTokens): spatial fast .6/800, default .8/380, slow .8/200; effects (màu/opacity) critically damped, không overshoot. Helper `m3(f,at,'fast'|'def'|'slow'|'fx')`.
 - Code trong props bắt đầu bằng `@` (vd `@Composable`) bị hiểu là anchor: viết `"\\@Composable"` (component bỏ dấu `\`).
 - Code card: dòng dài > ~34 ký tự ở fs 40 sẽ tràn; tách dòng như IDE format. Phone frame + code phải nằm gọn trong canvas 1320 (không chạm dải caption).
+- **Màu thương hiệu dùng đúng mã chính thức** (Android: #3DDC84 theo developer.android.com/distribute/marketing-tools/brand-guidelines) cho accent chính ở mọi chỗ: chip caption, highlight, robot, transition, nút. Không thay bằng tông pastel M3 (#7DDB9F) cho "dịu mắt", Dan thấy nhạt.
+- **Nền tối kiểu IDE nên gần đen** (#0B0C0E), surface/card nâng từng bậc (#101114 panel, #121316 tab, #17181B card, viền #2A2C31) để vẫn tách lớp.
+
+## Chống chồng lấn (BẮT BUỘC, mọi theme)
+- Mọi hộp nội dung (title, card, phone, nhãn, pill, hàng, note, brand, end card) gắn `{...bb('tên')}` (`data-bb`). Lớp scene có `data-layer`, caption + nút Follow là lớp `g`.
+- Chạy `scripts/bbcheck.sh videos/<slug>/script.json` sau mỗi lần đổi layout: render lại mọi frame với `debugBB` (`remotion/src/bbcheck.tsx` tô magenta phần giao nhau của 2 hộp cùng lớp, hoặc hộp scene × caption/CTA), in frame + cặp hộp bị chồng. Phải ra `frames with overlaps: 0`. Không tốn TTS.
+- Vật thể xoay/biến hình (vd phone xoay ngang) phải có **slot vuông ≥ đường chéo** của nó, để mọi góc xoay không chạm hộp khác. Đừng đặt cột chữ cạnh vật thể theo kích thước lúc đứng yên.
+- Tiêu đề dài trên cảnh nhiều nội dung: `one` (1 dòng, `fitSize`) để không đẩy layout xuống dải caption.
+
+## SFX chuyển cảnh
+- Mềm, ngắn, nhỏ: low-pass (năng lượng > 4 kHz < ~0.5%, centroid vài trăm Hz), fade vào/ra raised-cosine, mẫu đầu/cuối = 0 (không click), peak ≤ -12 dBFS trong file (Timeline còn phát 0.5). Đỉnh tiếng phải trùng khoảnh khắc chuyển (sfx bắt đầu ở `start - T/2 - 2` = 10 frame trước ranh giới → đỉnh ở 0.333 s). Mẫu: `scripts/sfx_morph_soft.py` → `assets/sfx/morph_soft.wav` (in số đo khi chạy). Ghi vào `SFX_LIST.md` + `sfx.json`.
+
+## Hình mid-ground
+- Theme có thể có 2–3 hình trang trí giữa nền và nội dung, biến đổi **chậm và liên tục** theo frame toàn cục (không nhảy khi đổi cảnh): xoay ~6°/s, số cánh/cạnh morph liên tục (crossfade giữa n và n+1), độ bo tròn dao động chu kỳ 10–30 s. Alpha thấp (fill ≤ 0.08, stroke ≤ 0.16), không gắn `data-bb`, không đặt dưới chữ chính với độ tương phản cao. Mẫu: `MidShapes` / `morphPath` trong `android.tsx`.

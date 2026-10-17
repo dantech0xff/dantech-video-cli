@@ -134,5 +134,13 @@
   "license": "own work",
   "url": "",
   "use": "end card sting"
+ },
+ "morph_soft": {
+  "source": "own",
+  "pack": "",
+  "orig": "synthesised with numpy (scripts/sfx_morph_soft.py)",
+  "license": "own work",
+  "url": "",
+  "use": "ANDROID TUTOR transitions (cookie morph), peak synced to the cover moment"
  }
 }

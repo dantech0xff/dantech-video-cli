@@ -75,7 +75,7 @@ export const Captions:React.FC<{words:Wd[]}>=({words})=>{const {t}=useS();const 
  if(ci<0)return null;const ch=chunks[ci];
  const lh=Math.round(c.size*1.12);
  let cur=-1;ch.forEach((k,j)=>{if(tm>=words[k].s-0.05)cur=j});if(cur>=0&&tm>words[ch[cur]].e+0.25)cur=-1; // exactly one active chip
- return <div style={{position:'absolute',left:SZ.captions.x,width:SZ.captions.w,top:SZ.captions.top,display:'flex',flexWrap:'wrap',columnGap:c.gap,rowGap:6,alignItems:'center'}}>{ch.map((k,j)=>{const w=words[k];
+ return <div data-layer="g" data-bb="caption" style={{position:'absolute',left:SZ.captions.x,maxWidth:SZ.captions.w,top:SZ.captions.top,display:'flex',flexWrap:'wrap',columnGap:c.gap,rowGap:6,alignItems:'center'}}>{ch.map((k,j)=>{const w=words[k];
   const on=spring({frame:f-Math.round((w.s-0.05)*30),fps:30,config:{damping:20,stiffness:260,mass:.6}});
   const isA=j===cur;const act=isA?on:0;const up=tm<w.s-0.05;
   return <span key={k} style={{fontFamily:c.font,fontWeight:c.weight,fontSize:c.size,lineHeight:`${lh}px`,textTransform:c.upper?'uppercase':'none',
@@ -115,7 +115,7 @@ export const Timeline:React.FC<{t:Theme;scenes:Scene[];words:any[];voice:string;
    else if(kin==='signal'){const g=Math.sin(Math.PI*inP);st={...st,opacity:inP>=.5?1:0,...sig(g,f+7)}}
    else if(kin==='bar'||kin==='morph'||kin==='cookie'){st={...st,opacity:inP>=.5?1:0}}}
   const lf=f-starts[i];
-  layers.push(<AbsoluteFill key={i} style={{zIndex:z,background:t.bg,backgroundImage:t.texture?`url(${staticFile(t.texture)})`:'none',...st}}>
+  layers.push(<AbsoluteFill key={i} data-layer={String(i)} style={{zIndex:z,background:t.bg,backgroundImage:t.texture?`url(${staticFile(t.texture)})`:'none',...st}}>
    <Ctx.Provider value={{t,f:lf,exit:exitStag}}>{t.id==='android-tutor'?<AtChrome section={s.section} page={`${String(i+1).padStart(2,'0')} / ${String(scenes.length).padStart(2,'0')}`}/>:t.id==='hot-news-glitch'?<GlChrome date={date}/>:t.id==='tech-explain-cyber'?<BpChrome section={s.section} page={`${String(i+1).padStart(2,'0')} / ${String(scenes.length).padStart(2,'0')}`}/>:t.id==='tech-explain'?<TermChrome section={s.section} page={`${i+1}/${scenes.length}`} idx={i}/>:<Chrome section={s.section} page={`TRANG ${i+1}/${scenes.length}`} date={date}/>}
    <div style={{position:'absolute',left:SZ.content.x,top:SZ.content.y,width:SZ.content.w,height:SZ.content.h,transform:`scale(${SZ.content.scale})`,transformOrigin:'top left'}}>{s.el}</div></Ctx.Provider></AbsoluteFill>);
   if(i<scenes.length-1&&(kout==='bar')&&outP>0&&outP<1){const p=outP;const w=p<.5?interpolate(p,[0,.5],[96,1080]):1080;const x=p<.5?0:interpolate(p,[.5,1],[0,1080],{easing:EIO});

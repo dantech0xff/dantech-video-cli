@@ -47,7 +47,7 @@ Ví dụ đi từ đầu đến cuối: [docs/WALKTHROUGH.md](docs/WALKTHROUGH.m
 | `quick-tips` | mẹo, tool, tutorial, listicle | `videos/android-studio-shortcuts` |
 | `tech-explain` | dev explainer (editor sáng/vàng) | `videos/git-merge-vs-rebase`, `videos/inversion-of-control` |
 | `tech-explain-cyber` | dev explainer (blueprint tối, lime) | `videos/flutter-mvvm` |
-| `android-tutor` | chỉ cho dev Android: Kotlin/Compose/lifecycle (IDE tối + Compose Preview + Logcat, xanh Android, chuyển cảnh `cookie`) 🧪 | `videos/compose-remember-saveable` |
+| `android-tutor` | chỉ cho dev Android: Kotlin/Compose/lifecycle (IDE gần đen #0B0C0E + Compose Preview + Logcat, đúng xanh Android #3DDC84, chuyển cảnh `cookie`, hình mid-ground morph chậm) 🧪 | `videos/compose-remember-saveable` |
 
 Script mới dùng `"voice": {"style":"random"}`. Không đặt `voice.file`. Câu cuối có `ctaPhrase` của kênh (mặc định "follow Dan Tech"). Outro tự lo handle.
 
@@ -105,6 +105,7 @@ Video chỉ "xong" khi tất cả đều ✅:
 - [ ] Log mix: I ≈ -14 LUFS, peak ≤ -1 dBTP, `voice/music while speaking: median` 18–22 dB. Đo lại: `ffmpeg -i <mp4> -af ebur128=peak=true -f null - 2>&1 | tail -12`.
 - [ ] **Contact sheet:** mỗi cảnh một still + outro, vd. `ffmpeg -i <mp4> -vf "fps=1/3,scale=270:-1,tile=6x2" -frames:v 1 sheet.png`. Phải mở ra xem bằng mắt.
 - [ ] **Frame inspection:** still ở 0.5 s, giữa mỗi cảnh, lúc bấm Follow, end card (`ffmpeg -ss <t> -i <mp4> -frames:v 1 f.png`). Chữ không tràn, không chồng, baseline top bar thẳng, code đọc được.
+- [ ] **Overlap audit** (theme có gắn `data-bb`, hiện tại android-tutor): `scripts/bbcheck.sh videos/<slug>/script.json` → `frames with overlaps: 0`.
 - [ ] **Safe zone:** `python3 scripts/safezone.py f*.png -o qc/` + `--sheet`. Chữ, caption, nút, handle không nằm trong vùng đỏ. Nền, lưới, rail trang trí thì bỏ qua.
 - [ ] Caption khớp giọng, mỗi trang ≤ 2 dòng. Anchor `@chữ` bật đúng lúc.
 - [ ] Không mặt người, không tên theme, không label giả. End card có 3 handle có logo.

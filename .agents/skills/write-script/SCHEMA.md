@@ -85,7 +85,7 @@ Ví dụ: `videos/flutter-mvvm/script.json`. Không hiển thị tên theme; kh�
 Canvas 894x1320 như mọi theme. Code dòng bắt đầu bằng `@` viết `"\\@Composable"` (để không bị hiểu là anchor). Dòng code ≤ ~34 ký tự.
 - **AtHook** `{tag, a, b, line, why?:{s,at}}`: tag pill (gắn ™ cho "Android" đầu tiên), `a` vs `b` chữ code to ở frame 0, `line` câu chốt, robot trên shape cookie. Dùng cho hook explainer kiểu "X vs Y". Hook controversy/news thì dùng VersusHook.
 - **AtCode** `{title, file, lines:[{s,at}], hl?:{from,to,at}, note?:{s,at}}`: card editor (tab file, gutter, gõ từng dòng, highlight dòng from..to, 0-based).
-- **AtPreview** `{title, file, lines, hl?, taps:[at], rotateAt, keep, label:"…{n}…", btn, verdict?:{s,at}}`: code + điện thoại chạy @Preview. Mỗi `tap` tăng `{n}`; `rotateAt` xoay máy (activity tạo lại): `keep:false` → n về 0, `keep:true` giữ.
+- **AtPreview** `{title, file, lines, hl?, taps:[at], rotateAt, keep, label:"…{n}…", btn, verdict?:{s,at}}`: code (≤ 9 dòng) ở trên, dưới là slot vuông cho điện thoại (xoay không chạm gì) + cột readout bên phải. Title 1 dòng tự co. Mỗi `tap` tăng `{n}`; `rotateAt` xoay máy (activity tạo lại): `keep:false` → n về 0, `keep:true` giữ.
 - **AtLogcat** `{title, lines:[{lvl:D|I|W|E, tag, msg, at}], note?:{s,at}}`.
 - **AtTake** `{title, head?:[colA,colB], rows:[{k,a,b,at}], rule?:{s,at}}`: hàng pill so sánh, ô bắt đầu bằng "giữ/có/✓" tô xanh, còn lại tô đỏ nhạt.
 - `out: "cookie"`: shape cookie xanh mọc từ `focus` (mặc định [760,1150]) morph thành hình tròn phủ khung rồi thu lại (M3 Expressive). Có thể xen `stack`/`push`.
