@@ -47,7 +47,7 @@ Ví dụ đi từ đầu đến cuối: [docs/WALKTHROUGH.md](docs/WALKTHROUGH.m
 | `quick-tips` | mẹo, tool, tutorial, listicle | `videos/android-studio-shortcuts` |
 | `tech-explain` | dev explainer (editor sáng/vàng) | `videos/git-merge-vs-rebase`, `videos/inversion-of-control` |
 | `tech-explain-cyber` | dev explainer (blueprint tối, lime) | `videos/flutter-mvvm` |
-| `android-tutor` | chỉ cho dev Android: Kotlin/Compose/lifecycle (IDE gần đen #0B0C0E + Compose Preview + Logcat, đúng xanh Android #3DDC84, chuyển cảnh `sharedx` (shared-axis X), hình mid-ground morph chậm) 🧪 | `videos/compose-remember-saveable` |
+| `android-tutor` | chỉ cho dev Android: Kotlin/Compose/lifecycle (IDE gần đen #0B0C0E + Compose Preview + Logcat, đúng xanh Android #3DDC84, chuyển cảnh `sharedx` (shared-axis X), hình mid-ground morph chậm) | `videos/compose-remember-saveable` |
 
 Script mới dùng `"voice": {"style":"random"}`. Không đặt `voice.file`. Câu cuối có `ctaPhrase` của kênh (mặc định "follow Dan Tech"). Outro tự lo handle.
 
@@ -65,7 +65,7 @@ Mọi chữ thương hiệu trên màn hình lấy từ file kênh, không hardc
 **Thêm kênh mới:** copy `channels/dantech.json` thành `channels/<id>.json`, sửa các khoá trên, đặt `"channel": "<id>"` trong script, câu kết dùng đúng `ctaPhrase`. Rồi chạy validator và render still top bar, nút Follow, end card cho mọi theme, kiểm bằng safezone.py. Mẫu kênh giả để thử: `channels/example.json` (Mobile Hub). Icon mới (ngoài youtube/facebook/tiktok) thì vendor SVG simple-icons vào `assets/icons/` và thêm path vào `remotion/src/brand.tsx`.
 
 ## Theme ids
-`hot-news` (TIN NÓNG · hot news), `quick-tips` (MẸO NHANH · quick tips), `tech-explain` (GIẢI THÍCH · tech explain), `tech-explain-cyber` (GIẢI THÍCH CYBER), `hot-news-glitch` (TIN NÓNG GLITCH), `android-tutor` (ANDROID TUTOR, 🧪). Id cũ `tin-nong`, `meo-nhanh`, `commit` vẫn chạy (alias, deprecated, có cảnh báo); script mới dùng id mới. Hashtag như #TinNong, #MeoNhanh giữ nguyên.
+`hot-news` (TIN NÓNG · hot news), `quick-tips` (MẸO NHANH · quick tips), `tech-explain` (GIẢI THÍCH · tech explain), `tech-explain-cyber` (GIẢI THÍCH CYBER), `hot-news-glitch` (TIN NÓNG GLITCH), `android-tutor` (ANDROID TUTOR). Id cũ `tin-nong`, `meo-nhanh`, `commit` vẫn chạy (alias, deprecated, có cảnh báo); script mới dùng id mới. Hashtag như #TinNong, #MeoNhanh giữ nguyên.
 
 ## Skills (đọc SKILL.md tương ứng rồi làm theo)
 
