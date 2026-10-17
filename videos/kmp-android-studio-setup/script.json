@@ -41,7 +41,7 @@
      },
      {
       "s": "Một chỗ chạy app",
-      "at": "@chạy"
+      "at": "@chỗ"
      }
     ]
    }
@@ -154,7 +154,7 @@
     ],
     "note": {
      "s": "Windows và Linux chưa có kdoctor, kiểm bằng adb devices.",
-     "at": "@chắc"
+     "at": "@kiểm"
     }
    },
    "sfx": [
