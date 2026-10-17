@@ -93,12 +93,16 @@ Brand (wordmark, tên, handle, logo, chữ nút Follow) lấy từ `channels/<id
 - Vật thể xoay/biến hình (vd phone xoay ngang) phải có **slot vuông ≥ đường chéo** của nó, để mọi góc xoay không chạm hộp khác. Đừng đặt cột chữ cạnh vật thể theo kích thước lúc đứng yên.
 - Tiêu đề dài trên cảnh nhiều nội dung: `one` (1 dòng, `fitSize`) để không đẩy layout xuống dải caption.
 
+## Scenario packs + palette sống `AT` (mọi theme)
+- `remotion/src/packs.tsx` (Meter, Scale, DataFlow, Layers, Loop, Debug, Timeline, BigStat, QuoteCard, BeforeAfter, Rating, TopN) và At* của android (đăng ký thêm tên trung tính Steps/Terminal/Packages/Specs/Devices/Table) đọc màu/font/bo góc từ `AT` trong `android.tsx`. `Video.tsx` gọi `setPal(theme)` mỗi lần render: android-tutor giữ nguyên `AT_ANDROID` (pixel-identical); theme khác suy ra từ `look` (sáng/tối theo bg, accent, tint nền nhạt hơn ×0.8 trên nền sáng, góc vuông cho hot-news, head font/weight/uppercase của theme, mono GSC cho flutter, JBM cho còn lại). `AT.good`/`onGood` = xanh cho "đúng/sau/fix/thắng", tách khỏi accent (theme accent đỏ không làm "fix" trông như lỗi).
+- Theme mới: chỉ cần `look` đúng; cần chỉnh thì thêm nhánh trong `setPal`, không hardcode màu trong pack. Kiểm: render pack fixture (mỗi pack 1 cảnh) qua safezone + bbcheck.
+
 ## Universal overlays (mọi theme, `remotion/src/overlay.tsx`)
 - 6 phần tử dùng chung, render bởi `Overlays` trong `sys.tsx` từ `scene.ov` (do autofill hoặc `overlays` trong script sinh ra): term chip + gloss, số lớn đếm lên + nhãn, icon + nhãn, focus (push-in ≤ 1.06 + viền + spotlight làm tối phần còn lại), progress n/m, sơ đồ 2–3 hộp có mũi tên. Chi tiết khoá: SCHEMA "Universal overlays".
 - **Token:** overlay không có màu riêng. `tok()` lấy từ palette của theme (`pal`, hoặc suy ra từ bg/ink/accent/muted của `look`), font head/body của theme, bo góc theo theme (hot-news/glitch vuông 0, quick-tips 24, còn lại 26). Theme mới chỉ cần `look` đúng; muốn chỉnh riêng thì thêm nhánh trong `tok()`, không hardcode màu trong component.
 - **Dock:** card nằm đáy hộp nội dung (x 136–860, đáy ~y 1352, trên caption 1366), gắn `data-bb="ov-<kind>"` + `data-ov-dock` nên bbcheck kiểm được. Scene phải bọc nội dung trong wrapper `data-content` (sys.tsx đã làm) và gắn `data-bb` cho mọi hộp, vì squeeze/focus đo bbox từ đó.
 - **Squeeze:** nội dung chạm dock thì wrapper scale từ góc trên trái (min 0.72) trong ~8 frame trước khi card vào, nhả ra sau khi card đi. Không bao giờ phủ đè nội dung, không zoom toàn khung.
-- **Focus:** tìm phần tử theo chữ (`match`/`kw`), leo lên hàng chứa nó (dừng ở hộp `data-bb`), viền accent + phủ `bg` 65% ngoài phần tử. Spotlight bắt đầu từ x 100 để không làm tối rail trái của theme.
+- **Focus:** tìm phần tử theo chữ (`match`/`kw`), leo lên hàng chứa nó (dừng ở hộp `data-bb`), viền accent + phủ `bg` 50% ngoài phần tử. Spotlight bắt đầu từ x 100 để không làm tối rail trái của theme.
 - **Motion:** M3 emphasized-decelerate `(.05,.7,.1,1)`, card trượt lên 34 px + fade ~10 frame, ra nhanh hơn vào. Không pop/bounce.
 - **`data-deco`:** mọi trang trí chuyển động liên tục (caption, hình mid-ground, con trỏ nháy, dải nền trôi) phải gắn `data-deco="…"`. Gate hình tĩnh (`static_gate.py`) render với `qc:true` ẩn `[data-deco]`, để trang trí không "giả" thay đổi hình. Theme mới quên gắn thì gate pass sai: kiểm bằng `./dt gate` trên một script tĩnh thử (phải ❌).
 - Kiểm theme mới: render sheet 6 phần tử (mẫu `/workspace/dantech-style/elements/universal_sheet.png`), `safezone.py` 0 flag, `bbcheck.sh` 0 overlap.

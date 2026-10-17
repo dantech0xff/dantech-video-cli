@@ -119,9 +119,9 @@ Dùng scene của hot-news (Flow, Quote, Checklist, Evidence, CTA); cảnh mở 
 
 ## Universal overlays + autofill (mọi theme; `remotion/src/overlay.tsx`, `scripts/autofill.py`)
 Mục tiêu: **giọng đang đọc thì màn hình không bao giờ đứng yên** quá ~2.5 s. 3 lớp:
-1. **Lớp 1 autofill** (build_props, sau align): dựng timeline thay đổi hình của từng cảnh (anchor, `*at`, `ok`/`warn`/`hl`, `taps`, `kw`, overlay; **SFX không tính**). Đoạn trống > 2.5 s trong lúc đọc được chèn filler lấy từ chính câu đang đọc, theo thứ tự **focus > number > term chip > progress / diagram**. Tất định (cùng script + words → cùng kết quả), in log `autofill: scene N (Type) a-b s kind "…" ← lý do` và `static gaps > 2.5s: X before -> Y after`, lưu `out/autofill.json`.
+1. **Lớp 1 autofill** (build_props, sau align): dựng timeline thay đổi hình của từng cảnh (anchor, `*at`, `ok`/`warn`/`hl`, `taps`, `kw`, overlay; **SFX không tính**). Đoạn trống > 2.5 s trong lúc đọc được chèn filler lấy từ chính câu đang đọc, theo thứ tự **focus > number > term chip > progress / diagram**. Filler không bao giờ bịa nội dung: **term chip chỉ khi từ đó có trong `glossary`** (gloss ≤ 70 ký tự; không có gloss → không chip trơn), **số chỉ khi cảnh khai báo trong `numbers`** (có `label`; không tự đặt nhãn). Số đang đọc mà đã có trên màn hình → không chèn thẻ số, focus phần tử chứa số đó. Fallback cuối: focus lại item đang hiện → focus title (**tối đa 1 lần / cảnh**) → diagram → progress `cảnh n/m`. Focus làm tối phần còn lại ~50%. Tất định (cùng script + words → cùng kết quả), in log `autofill: scene N (Type) a-b s kind "…" ← lý do` và `static gaps > 2.5s: X before -> Y after`, lưu `out/autofill.json`.
 2. **Lớp 2 `kw`**: item/dòng code khai báo từ khoá; khi chữ đó được đọc (sau lúc item hiện) thì item được focus + highlight.
-3. **Lớp 3 gate** (`scripts/static_gate.py`, stage `gate` của `./dt render`): render lại frame low-res (mỗi 3 frame, scale 0.25, `qc:true` ẩn caption, hình mid-ground, con trỏ nháy = mọi `[data-deco]`), vùng y 290–1500; mọi cửa sổ 3 s trong khoảng giọng đọc (chữ đầu → chữ cuối, trước outro) phải có thay đổi (≥ 45 px lệch > 18 mức xám). Fail → exit 1, in mốc giây + cảnh, không ra mp4 cuối.
+3. **Lớp 3 gate** (`scripts/static_gate.py`, stage `gate` của `./dt render`): render lại frame low-res (mỗi 3 frame, scale 0.25, `qc:true` ẩn caption, hình mid-ground, con trỏ nháy = mọi `[data-deco]`), vùng y 290–1500; mọi cửa sổ 3 s trong khoảng giọng đọc (chữ đầu → chữ cuối, trước outro) phải có thay đổi (≥ 45 px lệch > 18 mức xám). Fail → exit 1, in mốc giây + cảnh, không ra mp4 cuối. Cảnh có `"still": true` (đứng yên có chủ đích, vd quote cần đọc) được miễn **tối đa 5 s** cho đoạn tĩnh nằm trong cảnh đó (autofill cũng chỉ chèn khi trống > 4.5 s); dài hơn 5 s vẫn fail. Gate in `gate: still:true exempt …`, ghi `exempt` vào `out/gate.json`.
 
 Khoá mới (validator biết hết; sai kiểu → ❌, nghi vấn → ⚠️):
 ```jsonc
@@ -130,10 +130,12 @@ Khoá mới (validator biết hết; sai kiểu → ❌, nghi vấn → ⚠️):
  "glossary": {"JDK": "bộ công cụ để build Java/Kotlin"},   // gloss ≤ ~70 ký tự; term chip CHỈ hiện gloss từ đây (không tự bịa nghĩa)
  "scenes": [{
    "autofill": false,                   // cảnh: tắt autofill riêng cảnh này
+   "still": true,                       // cảnh cố ý đứng yên: gate miễn ≤ 5 s (dài hơn vẫn fail); dùng hiếm, vd QuoteCard
+   "numbers": [{"n":"36","label":"compileSdk"}],   // số được phép thành thẻ số khi đọc tới (label ≤ 40 ký tự); không khai báo → không thẻ số
    "diagram": {"nodes": ["View","ViewModel","Model"], "label": "phụ thuộc đi một chiều"},   // gợi ý sơ đồ 2–3 hộp cho autofill
    "overlays": [                        // overlay viết tay; at = frame hoặc anchor, dur = giây (1–6, mặc định 2.2)
      {"kind":"term", "w":"ValueNotifier", "g":"giữ một giá trị, báo widget khi đổi", "icon?":"bolt", "at":"@ValueNotifier"},
-     {"kind":"num", "n":"36", "label":"compileSdk", "at":"@ba", "dur":2.5},     // đếm lên từ 0 trong ~0.6 s
+     {"kind":"num", "n":"36", "label":"compileSdk", "at":"@ba", "dur":2.5},     // label bắt buộc; đếm lên từ 0 trong ~0.6 s
      {"kind":"icon", "icon":"download", "label":"Cài Android Studio bản stable", "at":"@Cài"},
      {"kind":"focus", "match":"minSdk", "at":"@minSdk"},                       // phóng nhẹ + viền + làm tối phần còn lại quanh phần tử có chữ khớp
      {"kind":"progress", "n":3, "m":7, "label":"Cài SDK", "at":40},
@@ -146,3 +148,22 @@ Khoá mới (validator biết hết; sai kiểu → ❌, nghi vấn → ⚠️):
 - **icon** chỉ lấy từ bộ glyph tự vẽ (stroke 24px): `bolt book bug check clock cloud code download laptop layers link lock phone play refresh search settings terminal warn`. Không logo/brand bên thứ ba trong overlay.
 - **Vị trí:** dock dưới cùng của hộp nội dung (x 136–860, đáy ~y 1352, ngay trên caption 1366), không bao giờ ra ngoài safe zone. Nội dung cảnh chạm dock thì cả cảnh **co nhẹ từ góc trên trái** (tối thiểu 0.72) trong lúc overlay hiện rồi trả lại; focus push-in ≤ 1.06 và bị kẹp trong hộp nội dung. Đang có nút Follow (cửa sổ CTA) thì autofill chỉ dùng focus.
 - Ưu tiên viết anchor/`kw`/`overlays` có chủ đích; autofill là lưới an toàn, không thay cho nhịp hình tốt. Validator tính overlay và `kw` có đọc là beat.
+
+## Scenario packs (mọi theme; `remotion/src/packs.tsx` + At* trong `android.tsx`)
+Scene trung tính theme: màu/font/bo góc lấy từ palette sống `AT` (`setPal(theme)` trong `android.tsx`; android-tutor giữ nguyên giá trị Studio Dark, theme khác suy ra từ look: sáng/tối, accent, font head/body; `good` = xanh cho "đúng/sau/fix" kể cả theme accent đỏ). Nằm trong hộp nội dung (x 136–847, y 340–~1359), cỡ chữ tối thiểu kiểu reel, mọi hộp có `data-bb`, chuyển động M3 emphasized-decelerate, không zoom/pop toàn màn. Item nào có `s`/`d`/`q` đều nhận `kw` (Lớp 2) và là mục tiêu focus của autofill. `N` = `{s, at}`; `at` nhận frame hoặc `@word`. Giới hạn số item validator cảnh báo (≤), thiếu tối thiểu → ❌.
+- Tên trung tính cho At* (chạy ở mọi theme, props như mục android-tutor): **Steps**=AtSteps, **Terminal**=AtTerm, **Packages**=AtPackages, **Specs**=AtSpec, **Devices**=AtDevice, **Table**=AtTake.
+- **Table** `{title, head?:[A,B], rows:[{k,a,b,at,win?:"a"|"b"|"both"|"none",kw?}], rule?:N}` (≤ 5 hàng): bảng 2 cột. `win` chọn ô thắng (tô `good`); không có `win` thì ô bắt đầu bằng "giữ/có/✓" thắng. Ô 1 dòng, tự co.
+- **Meter** `{title, bars:[{s,v:0–100,at,val?,best?,kw?}], note?:N}` (≤ 5): thanh đo chạy lên tới `v`%; `val` = nhãn số hiển thị ("120 ms"); `best` tô `good`.
+- **Scale** `{title, a:{s,w,at,sub?}, b:{s,w,at,sub?}, tiltAt?, verdict?:N}`: cân 2 đĩa; nghiêng về bên `w` lớn hơn tại `tiltAt`, `verdict` = kết luận.
+- **DataFlow** `{title, nodes:[{s,at,sub?,via?,icon?}], note?:N}` (2–5): chuỗi hộp nối mũi tên, `via` = nhãn trên mũi tên vào node, `icon` từ bộ glyph overlay; gói tin chạy dọc mũi tên mới nhất.
+- **Layers** `{title, layers:[{s,at,sub?}], dir?:"down"|"up", note?:N}` (2–5): kiến trúc phân tầng, dải xếp chồng, mũi tên phụ thuộc theo `dir`.
+- **Loop** `{title, nodes:[{s,at}], center?, cur?:[{i,at}], note?:N}` (3–6): vòng đời / vòng lặp; `cur` di con trỏ tới node `i` tại `at`.
+- **Debug** `{title, err:N, file?, lines:[{s,kw?}], codeAt?, bad:{line,at}, fix:N, ok?:N, note?:N}` (≤ 8 dòng): lỗi → dòng thủ phạm (`bad.line` 0-based, gạch đỏ) → dòng fix (`good`) → kết quả `ok`. Kèm **Terminal** khi cần chạy lệnh.
+- **Timeline** `{title, events:[{d,s,at}], note?:N}` (≤ 5): mốc sự kiện dọc, `d` = ngày/mốc ngắn.
+- **BigStat** `{kick?, big, unit?, label, at?, src?, sub?:N}`: một con số rất to (đếm lên nếu là số), `src` = nguồn (bắt buộc về nội dung với tin tức).
+- **QuoteCard** `{q (≤ 180 ký tự), who, role?, at?, hl?:{w,at}}`: trích dẫn, `hl` gạch chân cụm từ. Thường cần `"still": true` nếu cảnh dài.
+- **BeforeAfter** `{title, before:{s,lines?,code?,at?}, after:{s,at,lines?,code?}, tags?:[a,b], note?:N}`: 2 thẻ trước/sau (`lines` ≤ 5; `code:true` = chữ mono).
+- **Rating** `{title, items:[{s,v,at}], max?:5, verdict?:N}` (≤ 4): điểm sao/thanh, `v ≤ max`.
+- **TopN** `{title, items:[{s,at,sub?}], countdown?:true, note?:N}` (≤ 5): top-N, `countdown` đánh số ngược (N…1).
+- Theme hot-news vẫn giữ Quote/Evidence/Flow riêng; QuoteCard/BigStat là bản trung tính dùng chung.
+
