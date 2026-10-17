@@ -44,6 +44,16 @@ props={'theme':theme_id(S['theme']),'look':look,'date':S['date'],'voice':f'rende
  'cta':{'inAt':resolve(cta.get('in',f"@{CH['ctaInWord']}{C['in_offset']:+d}"),0,len(W),0),'pressAt':resolve(cta.get('press','@'+CH['ctaPressWord']),0,len(W),0),'outAt':end-6,'top':C['top'],'sub':cta.get('sub',pick(CH.get('followSub'),C['sub']))},
  'outro':{'start':end,'dur':T['outro']['dur'],'tagline':pick(CH.get('tagline'),T['outro']['tagline']),'pal':T['outro'].get('pal'),'handles':brand['handles']},'channel':brand,
  'durationInFrames':end+T['outro']['dur']}
+# Layer 1/2: overlay events (script "overlays", item "kw" highlights, auto-filler for static stretches) -> scenes[i].ov
+import autofill
+ranges_=ranges
+def _rw(ref,k): lo,hi=ranges_[k]; return frame(ref,lo,hi,starts[k])
+ovs,alog,tl=autofill.plan(S,W,ranges,starts,[s_['dur'] for s_ in scenes],[sc.get('props',{}) for sc in S['scenes']],[s_['props'] for s_ in scenes],props['cta'],_rw)
+for s_,o in zip(scenes,ovs): s_['ov']=o
+for l in alog: print(l)
+nb=sum(len(t['gaps_before']) for t in tl);na=sum(len(t['gaps_after']) for t in tl)
+print(f"autofill: {sum(1 for o in sum(ovs,[]) if o.get('auto'))} filler(s), static gaps > {autofill.GAP_S}s: {nb} before -> {na} after")
+save({'gap_s':autofill.GAP_S,'fps':FPS,'timeline':tl,'log':alog,'overlays':[[o for o in x] for x in ovs]},os.path.join(out,'autofill.json'))
 save(props,os.path.join(out,'props.json'))
 os.makedirs(os.path.join(ROOT,'remotion/public/render'),exist_ok=True)
 shutil.copy(os.path.join(out,'voice.mp3'),os.path.join(ROOT,f'remotion/public/render/{slug}.mp3'))
