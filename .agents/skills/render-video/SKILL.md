@@ -1,21 +1,21 @@
 ---
 name: render-video
-description: Render một videos/<slug>/script.json thành MP4 hoàn chỉnh (TTS Gemini → align → props → Remotion → mix nhạc → description) rồi QC. Input là đường dẫn script, tuỳ chọn --from <stage> để chạy lại một phần.
+description: Render một videos/<slug>/script.json thành MP4 hoàn chỉnh (TTS Gemini hoặc Edge → align → props → Remotion → mix nhạc → description) rồi QC. Input là đường dẫn script, tuỳ chọn --from <stage> để chạy lại một phần.
 ---
 
 # render-video
 
-**Input:** `videos/<slug>/script.json` (+ tuỳ chọn `--from tts|align|props|render|mix|describe`).
+**Input:** `videos/<slug>/script.json` (+ tuỳ chọn `--from tts|align|props|render|mix|describe`, `--tts edge|gemini`, `--voice/--rate/--pitch/--volume` cho Edge).
 **Output:** `videos/<slug>/out/<slug>.mp4` + `description.txt`, kèm báo cáo QC.
 
 ## Các bước
 
-1. `./dt doctor` phải toàn ✅ (node, ffmpeg, faster_whisper, node_modules, GEMINI_API_KEY, nhạc). Gặp ❌ thì làm theo gợi ý in ra.
+1. `./dt doctor` phải toàn ✅ (node, ffmpeg, faster_whisper, edge_tts, node_modules, nhạc). Gặp ❌ thì làm theo gợi ý in ra. Thiếu `GEMINI_API_KEY` chỉ là ⚠️: render sẽ dùng Edge TTS.
 2. `python3 scripts/validate_script.py <script>` phải ✅.
 3. Render: `make video SCRIPT=videos/<slug>/script.json` (= `./dt render <script>`). Các stage chạy lần lượt, mỗi stage ghi vào `videos/<slug>/out/`:
    | stage | script | ra |
    |---|---|---|
-   | tts | `scripts/tts.py` | `voice.mp3` + `voice_meta.json`. Lời không đổi thì dùng lại cache `.cache/tts/` (cùng style, không gọi API). Gemini `vi-vn-concierge-2`, style chọn ngẫu nhiên từ `theme.json → voice.styles` khi `style: random`, rồi ghi vào `logs/voice_log.md` |
+   | tts | `scripts/tts.py` | `voice.mp3` (44.1 kHz, -16 LUFS, mọi engine giống nhau) + `voice_meta.json`. Lời không đổi thì dùng lại cache `.cache/tts/` (không gọi API). Gemini `vi-vn-concierge-2`, style ngẫu nhiên từ `theme.json → voice.styles` khi `style: random`; hoặc Edge (xem mục "Chọn engine TTS"). Ghi vào `logs/voice_log.md` |
    | align | `scripts/align.py` | `words.json` (faster-whisper, lần đầu tải ~1.5 GB) |
    | props | `scripts/build_props.py` | `props.json` (giải `@chữ` → frame, thời lượng cảnh, outro) |
    | render | Remotion + `loudnorm.sh` | `raw.mp4`, `voice_sfx.mp4` |
@@ -34,7 +34,16 @@ description: Render một videos/<slug>/script.json thành MP4 hoàn chỉnh (TT
 6. **Báo Dan:** đường dẫn mp4 + description, style giọng + bài nhạc (dòng mới trong `logs/voice_log.md`), số đo QC. Commit `logs/voice_log.md` (không commit `out/`, nhạc, key).
 
 ## Giọng đọc: một lần cho mỗi video
-**Đúng một request TTS cho mỗi video. Không gọi TTS để test hay benchmark. Lỗi thì dừng, không retry.** Style rút ngẫu nhiên lần đầu được giữ nguyên. **Không bao giờ gọi lại TTS (hay `--new-voice`) để video dài/ngắn hơn.** Chạy lại từ `tts` với lời không đổi sẽ dùng lại cache. Chỉ dùng `--new-voice` khi Dan yêu cầu rõ.
+**Gemini: đúng một request TTS cho mỗi video. Không gọi TTS để test hay benchmark. Lỗi thì dừng, không retry.** Style rút ngẫu nhiên lần đầu được giữ nguyên. **Không bao giờ gọi lại TTS (hay `--new-voice`) để video dài/ngắn hơn.** Chạy lại từ `tts` với lời không đổi sẽ dùng lại cache. Chỉ dùng `--new-voice` khi Dan yêu cầu rõ.
+
+## Chọn engine TTS (Gemini / Edge)
+Thứ tự: `--tts edge|gemini` (CLI) > `script.json → "tts": {"engine": "edge"|"gemini"|"auto"}` > auto. Auto: có `GEMINI_API_KEY` (env hoặc `.env`) → Gemini, y như cũ; không có key → **Edge**. Dòng đầu stage tts in engine + lý do, vd. `tts: engine=edge (no GEMINI_API_KEY -> Edge)` hoặc `tts: engine=gemini (GEMINI_API_KEY set, no engine requested -> Gemini)`. Báo Dan engine nào đã dùng.
+- `./dt render <script> --tts edge`: dùng Edge dù có key. `--tts gemini`: bắt Gemini (không có key thì dừng, không tự đổi).
+- Edge mặc định `vi-VN-NamMinhNeural`, `rate +10%` (nhịp reel), `pitch +0Hz`, `volume +0%`. Đổi trong script: `"tts": {"engine":"edge","voice":"vi-VN-HoaiMyNeural","rate":"+5%","pitch":"-2Hz","volume":"+0%"}`, hoặc CLI `--voice vi-VN-HoaiMyNeural --rate +5%` (CLI thắng). Danh sách giọng: `python3 -m edge_tts --list-voices`. Tiếng Việt chuẩn: NamMinh (nam), HoaiMy (nữ); `*MultilingualNeural` đọc lơ lớ.
+- Edge không có style. `voice.style` khác `random` bị bỏ qua, có in `note`. Edge miễn phí: test thoải mái, lỗi mạng tự thử lại 3 lần. Quy tắc 1 request/video **chỉ áp cho Gemini**.
+- Cache Edge theo `edge|voice|rate|pitch|volume|lời`; đổi một tham số là một take mới (vẫn miễn phí). Cache Gemini không đổi.
+- Xem trước, không gọi mạng: `python3 scripts/tts.py <script> [--tts edge] --dry-run` (in engine, lý do, cache hit hay sẽ gọi).
+- Sau TTS mọi thứ như nhau: whisper căn chữ, mix -14 LUFS / -2 dBTP, giọng hơn nhạc ~21 dB.
 
 ## Chạy lại một phần (`--from`)
 - Sửa props/sfx/section (không đổi `say`): `./dt render <script> --from props`
@@ -48,7 +57,9 @@ description: Render một videos/<slug>/script.json thành MP4 hoàn chỉnh (TT
 | `words.json does not match the script; re-run align` | đã sửa `say` sau align → chạy lại từ `tts` (hoặc `--from align` nếu dùng voice.file) |
 | `anchor @x: word not found in this scene` | chữ trong anchor không có trong `say` của cảnh, hoặc whisper nghe khác → đổi anchor sang chữ khác/`#n` |
 | `Unknown scene type` | sai `type`, xem `SCENES` trong `remotion/src/Video.tsx` |
-| Lỗi TTS 401/403/429/5xx | **dừng, không retry** (quota 100 req/ngày dùng chung). Báo lại người điều khiển, kiểm `GEMINI_API_KEY`/quota |
+| `Gemini requested … but GEMINI_API_KEY is not set` | đặt key, hoặc bỏ `--tts gemini` / dùng `--tts edge` |
+| `Edge failed` | mạng chặn `speech.platform.bing.com`; thử lại sau, hoặc dùng Gemini nếu có key |
+| Lỗi TTS 401/403/429/5xx (Gemini) | **dừng, không retry** (quota 100 req/ngày dùng chung). Báo lại người điều khiển, kiểm `GEMINI_API_KEY`/quota |
 | `music file not found` / mix lỗi | thiếu mp3: `./dt fetch-music` hoặc tải tay Pixabay vào `assets/music/pixabay/` |
 | Nhạc lấn giọng | **không sửa chuỗi mix**; báo Dan số đo median, chỉ đổi `music.rel` khi Dan đồng ý |
 

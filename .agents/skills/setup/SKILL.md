@@ -1,6 +1,6 @@
 ---
 name: setup
-description: Cài đặt máy mới (macOS/Linux/Windows) để chạy pipeline video Dan Tech: Node 18+, Python 3.10+ (.venv), ffmpeg, npm install, model faster-whisper "medium", .env với GEMINI_API_KEY, nhạc. Kết thúc khi ./dt doctor toàn ✅.
+description: Cài đặt máy mới (macOS/Linux/Windows) để chạy pipeline video Dan Tech: Node 18+, Python 3.10+ (.venv), ffmpeg, npm install, model faster-whisper "medium", edge-tts, .env với GEMINI_API_KEY (tuỳ chọn: không có thì dùng Edge TTS miễn phí), nhạc. Kết thúc khi ./dt doctor toàn ✅.
 ---
 
 # setup
@@ -25,14 +25,15 @@ Chưa có Homebrew: `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.co
 
 ## 3. Chạy `./dt setup`
 Script sẽ:
-- Python: dùng `.venv` nếu có. Nếu chưa có và python hệ thống thiếu `faster_whisper` thì tạo `.venv` (`python3 -m venv .venv`) rồi `pip install -r requirements.txt`. Muốn luôn dùng venv: `SETUP_FORCE_VENV=1 ./dt setup`. `./dt` và `make` tự ưu tiên `.venv/bin` khi có.
+- Python: dùng `.venv` nếu có. Nếu chưa có và python hệ thống thiếu `faster_whisper` thì tạo `.venv` (`python3 -m venv .venv`) rồi `pip install -r requirements.txt` (faster-whisper, numpy, edge-tts; thiếu `edge_tts` cũng cài lại). Muốn luôn dùng venv: `SETUP_FORCE_VENV=1 ./dt setup`. `./dt` và `make` tự ưu tiên `.venv/bin` khi có.
 - `cd remotion && npm install` (nếu chưa có `node_modules`).
 - Tải trước model faster-whisper **`medium`** (đúng tên trong `scripts/align.py`, ~1.5 GB, cache ở `~/.cache/huggingface/hub/models--Systran--faster-whisper-medium`).
 - Tạo `.env` từ `.env.example` nếu chưa có và key chưa có trong môi trường.
 - Thiếu nhạc Commons → `./dt fetch-music`. Liệt kê bài Pixabay còn thiếu.
 - Chạy `./dt doctor`.
 
-## 4. GEMINI_API_KEY
+## 4. GEMINI_API_KEY (tuỳ chọn)
+Không có key vẫn render được: TTS tự dùng **Edge** (`edge-tts` trong `requirements.txt`, miễn phí, giọng mặc định `vi-VN-NamMinhNeural`); `./dt doctor` chỉ báo ⚠️. Edge cần mạng tới `speech.platform.bing.com`. Muốn giọng Gemini (có style kể chuyện/hào hứng):
 Nhờ **Dan tự dán key** vào `.env` (dòng `GEMINI_API_KEY=...`) bằng editor, hoặc tự chạy trong terminal của Dan:
 `read -rs -p "GEMINI_API_KEY: " k && printf 'GEMINI_API_KEY=%s\n' "$k" > .env && unset k`
 Không yêu cầu Dan gửi key vào chat. Chỉ kiểm bằng `./dt doctor` (in độ dài, không in key).

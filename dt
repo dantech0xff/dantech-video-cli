@@ -3,6 +3,8 @@
 #   ./dt render videos/<slug>/script.json   full pipeline: TTS → align → props → Remotion → mix → description
 #   ./dt render <script> --from render      resume from a step (tts|align|props|render|mix|describe)
 #   ./dt render <script> --new-voice        force a fresh TTS take (otherwise unchanged narration reuses .cache/tts)
+#   ./dt render <script> --tts edge         free Edge TTS (no key); --tts gemini forces Gemini. Default: key -> Gemini, no key -> Edge
+#     Edge options: --voice vi-VN-HoaiMyNeural --rate +10% --pitch +0Hz --volume +0%   (or script.json "tts": {...})
 #   ./dt fetch-music                        download the Commons music library
 #   ./dt doctor                             check this machine has everything needed
 #   ./dt setup                              install deps (venv, npm, whisper model, music); idempotent
@@ -18,13 +20,21 @@ case "$cmd" in
  doctor) exec scripts/doctor.sh ;;
  setup) exec scripts/setup.sh ;;
  render)
-  SCRIPT=$1; FROM=tts; for a in "$@"; do [ "$a" = --new-voice ] && export NEW_VOICE=1; done; [ "$2" = --from ] && FROM=$3; [ -f "$SCRIPT" ] || { echo "script not found: $SCRIPT"; exit 1; }
+  SCRIPT=$1; shift || true; FROM=tts; TTS_ARGS=()
+  while [ $# -gt 0 ]; do case "$1" in
+   --from) FROM=$2; shift 2 ;;
+   --new-voice) export NEW_VOICE=1; shift ;;
+   --tts|--voice|--rate|--pitch|--volume) [ $# -ge 2 ] || { echo "$1 needs a value"; exit 1; }; TTS_ARGS+=("$1=$2"); shift 2 ;;
+   --tts=*|--voice=*|--rate=*|--pitch=*|--volume=*) TTS_ARGS+=("$1"); shift ;;
+   *) echo "unknown option: $1"; exit 1 ;;
+  esac; done
+  [ -f "$SCRIPT" ] || { echo "script not found: $SCRIPT"; exit 1; }
   DIR=$(dirname "$SCRIPT"); OUT=$DIR/out; SLUG=$(basename "$DIR"); mkdir -p "$OUT"
   THEME=$(cd scripts && python3 -c "import json,sys;from common import theme_id;print(theme_id(json.load(open('$ROOT/$SCRIPT'))['theme']))")
   steps=(tts align props render mix describe); run=0
   for s in "${steps[@]}"; do [ "$s" = "$FROM" ] && run=1; [ $run = 1 ] || continue; echo "── $s"
    case $s in
-    tts)    python3 scripts/tts.py "$SCRIPT" ;;
+    tts)    python3 scripts/tts.py "$SCRIPT" ${TTS_ARGS[@]+"${TTS_ARGS[@]}"} ;;
     align)  python3 scripts/align.py "$SCRIPT" ;;
     props)  python3 scripts/build_props.py "$SCRIPT" ;;
     render) (cd remotion && npx remotion render src/index.ts "$THEME" "$ROOT/$OUT/raw.mp4" --props="$ROOT/$OUT/props.json" --log=error)
@@ -37,5 +47,5 @@ case "$cmd" in
     describe) python3 scripts/describe.py "$SCRIPT" ;;
    esac; done
   echo "✓ $OUT/$SLUG.mp4" ;;
- *) sed -n 2,9p "$0"; exit 1 ;;
+ *) sed -n 2,11p "$0"; exit 1 ;;
 esac

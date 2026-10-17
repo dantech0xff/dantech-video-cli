@@ -7,7 +7,10 @@
  "date": "16 · 10 · 2026",     // hiện trên masthead
  "caption": "… #DanTech #TinNong",
  "sources": ["Tên báo, tiêu đề: https://… (ngày)"],   // bắt buộc, nguồn thật
- "voice": {"style": "random"},          // hoặc "hao-hung" | "ke-chuyen" | "tu-nhien"; "file" = ghim audio (bỏ qua TTS)
+ "voice": {"style": "random"},          // hoặc "hao-hung" | "ke-chuyen" | "tu-nhien" (style chỉ có ở Gemini); "file" = ghim audio (bỏ qua TTS)
+ "tts": {"engine": "auto"},             // tuỳ chọn. "auto" (mặc định: có GEMINI_API_KEY → gemini, không → edge) | "gemini" | "edge"
+                                        // Edge: "voice": "vi-VN-NamMinhNeural" (mặc định) | "vi-VN-HoaiMyNeural" | "*MultilingualNeural",
+                                        //       "rate": "+10%" (mặc định), "pitch": "+0Hz", "volume": "+0%". CLI --tts/--voice/--rate… thắng script
  "music": {"track": "random"},          // hoặc id trong assets/music/tracks.json, + "start": giây
  "variant": "red",                     // tuỳ chọn: biến thể trong theme.json → variants (GIẢI THÍCH: "red" = accent YouTube đỏ)
  "look": {"accent": "#…"},             // tuỳ chọn: ghi đè màu look cho riêng video (sau variant)

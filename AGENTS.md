@@ -8,13 +8,14 @@ Repo này dựng video dọc 9:16 cho kênh **Dan Tech** (thị trường Việt
 git clone https://github.com/dantech0xff/dantech-video && cd dantech-video
 # cần: Node 18+, Python 3.10+, ffmpeg + ffprobe
 cd remotion && npm install && cd ..
-pip install -r requirements.txt     # faster-whisper; lần chạy đầu tải model "medium" ~1.5 GB
-export GEMINI_API_KEY=...           # chỉ đặt trong env / .env (đã gitignore). KHÔNG ghi vào file nào trong repo
+pip install -r requirements.txt     # faster-whisper + edge-tts; lần chạy đầu tải model "medium" ~1.5 GB
+export GEMINI_API_KEY=...           # tuỳ chọn. Chỉ đặt trong env / .env (đã gitignore). KHÔNG ghi vào file nào trong repo
+                                    # không có key → TTS tự dùng Edge (miễn phí, giọng vi-VN-NamMinhNeural)
 ./dt fetch-music                    # tải nhạc Wikimedia Commons vào assets/music/
 # 7 bài Pixabay (TIN NÓNG) phải tải tay từ pixabay.com, đặt đúng tên vào assets/music/pixabay/
 #   (tên file + id: assets/music/tracks.json, assets/music/LIBRARY.md, themes/hot-news/theme.json → music.pool)
 ./dt setup                          # (macOS/Linux) tự làm các bước trên, chạy lại được; ưu tiên .venv
-./dt doctor                         # kiểm tra mọi thứ, phải toàn ✅ trước khi render
+./dt doctor                         # kiểm tra mọi thứ, phải toàn ✅ trước khi render (⚠️ thiếu key = sẽ dùng Edge)
 ```
 
 ## 2. Quy trình end-to-end (agent mới, không có ngữ cảnh chat: đọc hết mục này)
@@ -33,7 +34,7 @@ Nguồn chủ đề, lịch đăng, mức tự động đăng do **người đi�
    - **Chỉ dùng code, lệnh, đường dẫn có thật trong nguồn.** Không bịa sự kiện, số, quote, URL. `sources` ghi đủ.
    - Pass **humanizer** (`humanizer/VI.md`), rồi chạy validator.
 4. **Validate:** `python3 scripts/validate_script.py videos/<slug>/script.json` → `✅ OK`. Không có cảnh báo hook.
-5. **Render:** `./dt render videos/<slug>/script.json` (skill `render-video`).
+5. **Render:** `./dt render videos/<slug>/script.json` (skill `render-video`). Không có `GEMINI_API_KEY` thì TTS tự dùng Edge (miễn phí). Muốn chọn rõ: `--tts edge` / `--tts gemini`. Xem mục "TTS engine" bên dưới.
 6. **QC** (mục 4), sửa layout bằng `--from props` (không tốn TTS).
 7. **Giao:** `videos/<slug>/out/<slug>.mp4`, contact sheet PNG, `description.txt`, cùng báo cáo: style giọng, bài nhạc, thời lượng, LUFS/peak, median voice/music, kết quả safe zone.
 
@@ -89,6 +90,10 @@ Mọi chữ thương hiệu trên màn hình lấy từ file kênh, không hardc
   - **Lỗi TTS (401/403/429/5xx) thì dừng, không retry**, báo lại người điều khiển.
   - Giọng mới chỉ khi `say` đổi, hoặc khi có yêu cầu rõ (`--new-voice`).
 - **Giọng:** `gemini-3.8-flash-tts`, voice `vi-vn-concierge-2`, style ngẫu nhiên từ `voice.styles`, ghi vào `logs/voice_log.md` (commit file này).
+- **TTS engine (Gemini hoặc Edge):** chọn theo thứ tự: CLI `--tts edge|gemini` > script `"tts": {"engine": …}` > auto (có `GEMINI_API_KEY` → Gemini y như trên; không có key → Edge). `tts.py` in ra engine và lý do, vd. `tts: engine=edge (no GEMINI_API_KEY -> Edge)`.
+  - **Edge** (`edge-tts`, miễn phí, không key, không quota): mặc định `vi-VN-NamMinhNeural` (nam, Dan chọn), rate `+10%` (nhịp reel, ~3.1 chữ/s), pitch `+0Hz`, volume `+0%`. Đổi bằng `"tts": {"engine":"edge","voice":"vi-VN-HoaiMyNeural","rate":"+5%"}` hoặc `--voice/--rate/--pitch/--volume`. Giọng tiếng Việt chuẩn chỉ có NamMinh (nam) và HoaiMy (nữ). Giọng `*MultilingualNeural` (Andrew, Ava…) đọc được nhưng lơ lớ.
+  - Edge **không có style**: `voice.style` (ke-chuyen…) bị bỏ qua, có in ghi chú. Cache riêng theo engine+voice+rate+pitch+volume+lời. Lỗi mạng thì Edge thử lại tối đa 3 lần (miễn phí); Gemini vẫn **không retry**.
+  - Xem trước engine mà không gọi gì: `python3 scripts/tts.py <script> [--tts …] --dry-run`.
 - **Nhạc:** `track: random` nghĩa là LRU theo pool của theme (`pick_music.py`). Có thể ghim bài bằng id trong `music.track` để re-render không đổi nhạc (vd. flutter-mvvm ghim `sappheiros-perspective`). Explainer nên dùng nhạc êm, tin nóng dùng nhạc căng.
   - **Content ID (YouTube):** bài Pixabay có thể bị claim. `description.txt` có cảnh báo/credit. Bài Commons CC BY bắt buộc credit. Không dùng nhạc ngoài `assets/music/LIBRARY.md`.
 - **Mix:** -14 LUFS, true peak -2 dBTP (AAC cuối ≤ -1), giọng cao hơn nhạc ~21 dB (18–22). Không sửa chuỗi mix nếu không được yêu cầu.
@@ -102,7 +107,7 @@ Mọi chữ thương hiệu trên màn hình lấy từ file kênh, không hardc
 
 Video chỉ "xong" khi tất cả đều ✅:
 - [ ] Validator `✅ OK`. Câu đầu nêu chủ đề. Trong frame 0–3 s thấy tiêu đề chủ đề.
-- [ ] Đúng 1 lần gọi TTS (hoặc 0 nếu dùng cache). Style đã ghi log.
+- [ ] Đúng 1 lần gọi TTS Gemini (hoặc 0 nếu dùng cache / Edge). Engine + style/giọng đã ghi log, đã báo engine nào được dùng.
 - [ ] Log mix: I ≈ -14 LUFS, peak ≤ -1 dBTP, `voice/music while speaking: median` 18–22 dB. Đo lại: `ffmpeg -i <mp4> -af ebur128=peak=true -f null - 2>&1 | tail -12`.
 - [ ] **Contact sheet:** mỗi cảnh một still + outro, vd. `ffmpeg -i <mp4> -vf "fps=1/3,scale=270:-1,tile=6x2" -frames:v 1 sheet.png`. Phải mở ra xem bằng mắt.
 - [ ] **Frame inspection:** still ở 0.5 s, giữa mỗi cảnh, lúc bấm Follow, end card (`ffmpeg -ss <t> -i <mp4> -frames:v 1 f.png`). Chữ không tràn, không chồng, baseline top bar thẳng, code đọc được.

@@ -20,7 +20,7 @@ Id cũ `tin-nong`, `meo-nhanh`, `commit` vẫn được chấp nhận (alias, de
 
 ```mermaid
 flowchart LR
-  S[videos/slug/script.json] --> T[1. tts.py<br/>Gemini TTS, chọn style ngẫu nhiên]
+  S[videos/slug/script.json] --> T[1. tts.py<br/>Gemini TTS, style ngẫu nhiên<br/>hoặc Edge TTS miễn phí]
   T --> A[2. align.py<br/>faster-whisper → thời gian từng chữ]
   A --> P[3. build_props.py<br/>tính thời lượng cảnh, giải '@chữ' → frame]
   P --> R[4. Remotion render<br/>theme + scene templates]
@@ -39,7 +39,7 @@ cd remotion && npm install && cd ..
 pip install -r requirements.txt          # faster-whisper (tải model "medium" ~1.5 GB lần đầu)
 ./dt fetch-music                         # tải nhạc Wikimedia Commons về assets/music/
 # Nhạc Pixabay (7 bài TIN NÓNG) phải tải tay từ pixabay.com vào assets/music/pixabay/ (xem assets/music/LIBRARY.md)
-export GEMINI_API_KEY=...                # chỉ đọc từ biến môi trường, KHÔNG bao giờ ghi vào repo
+export GEMINI_API_KEY=...                # tuỳ chọn, chỉ đọc từ biến môi trường, KHÔNG bao giờ ghi vào repo. Không có key → Edge TTS miễn phí
 ./dt setup                               # (hoặc make setup) tự cài phần còn lại: .venv, npm, model whisper, .env, nhạc
 ./dt doctor                              # (hoặc make doctor) kiểm tra máy: ✅/❌ kèm cách sửa
 ```
@@ -75,6 +75,7 @@ Nhờ vậy khi đổi giọng (thời lượng khác), keycap, popup, SFX vẫn
 |---|---|
 | Giọng (voice id, model, danh sách style) | `themes/<theme>/theme.json` → `voice` |
 | Chọn style cho một video | `script.json` → `"voice": {"style": "random" \| "hao-hung" \| "ke-chuyen" \| "tu-nhien"}` |
+| Engine TTS (Gemini / Edge miễn phí) | `./dt render <script> --tts edge\|gemini`, hoặc `"tts": {"engine":"edge","voice":"vi-VN-NamMinhNeural","rate":"+10%"}`. Mặc định: có key → Gemini, không → Edge |
 | Dùng file ghi âm có sẵn (không gọi TTS) | `"voice": {"file": "voice_approved.mp3"}` (đường dẫn trong thư mục video) |
 | Danh sách nhạc xoay vòng của theme + đoạn bắt đầu | `themes/<theme>/theme.json` → `music.pool` |
 | Nhạc cho một video | `"music": {"track": "random" \| "<id trong tracks.json>", "start": 7}` (random = bài lâu chưa dùng nhất trong pool, theo log) |
@@ -123,4 +124,4 @@ logs/voice_log.md       nhật ký giọng + nhạc
 - **SFX Kenney**: CC0 1.0, không bắt buộc credit. `whoosh_soft`, `outro_sting`: tự tổng hợp bằng ffmpeg. Chi tiết: `assets/sfx/SFX_LIST.md`.
 - **B-roll** (`assets/broll/`: búa toà án, ổ cứng): clip AI, không có người/khuôn mặt. Quy tắc kênh: không dùng người hay khuôn mặt AI.
 - **Fonts**: Anton, Barlow, Be Vietnam Pro, JetBrains Mono (SIL Open Font License).
-- **Giọng đọc**: Gemini TTS (`vi-vn-concierge-2`).
+- **Giọng đọc**: Gemini TTS (`vi-vn-concierge-2`), hoặc Edge TTS miễn phí (`edge-tts`, `vi-VN-NamMinhNeural`) khi không có key / `--tts edge`.

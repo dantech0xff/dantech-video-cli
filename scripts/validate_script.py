@@ -2,7 +2,7 @@
 """Check a videos/<slug>/script.json before rendering (no API calls).
 usage: python3 scripts/validate_script.py videos/<slug>/script.json   → exit 1 on errors; warnings don't fail.
 Checks: required keys, theme exists, scene types registered in remotion/src/Video.tsx, transitions, sfx files,
-@word anchors present in the scene's "say", music track id, voice style, sources, the channel CTA phrase close (channels/<id>.json).
+@word anchors present in the scene's "say", music track id, voice style, tts engine/Edge params, sources, the channel CTA phrase close (channels/<id>.json).
 Prop keys are compared with the example scripts (videos/*/script.json) for the same scene type (warning only)."""
 import glob,json,os,re,sys
 ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -22,6 +22,16 @@ v=S.get('voice',{})
 if T and v.get('style','random')!='random' and v['style'] not in T['voice']['styles']: err(f'voice.style "{v["style"]}" not in {list(T["voice"]["styles"])}')
 if v.get('file') and not os.path.isfile(os.path.join(os.path.dirname(os.path.abspath(p)),v['file'])): err(f'voice.file {v["file"]} not found')
 if v.get('file'): warn('voice.file is pinned: TTS is skipped (new videos should use style "random" without file)')
+tt=S.get('tts',{}) or {}
+if not isinstance(tt,dict): err('tts must be an object, e.g. {"engine": "edge"}'); tt={}
+if tt.get('engine','auto') not in ('auto','gemini','edge'): err(f'tts.engine "{tt.get("engine")}" must be auto | gemini | edge')
+for k,rx,ex in [('rate',r'[+-]\d+%','+10%'),('pitch',r'[+-]\d+Hz','+0Hz'),('volume',r'[+-]\d+%','+0%')]:
+    if k in tt and not re.fullmatch(rx,str(tt[k])): err(f'tts.{k} "{tt[k]}" must look like {ex}')
+if tt.get('voice') and not re.fullmatch(r'[a-z]{2,3}-[A-Z]{2}-\w+Neural',tt['voice']): err(f'tts.voice "{tt["voice"]}" is not an Edge voice name (e.g. vi-VN-NamMinhNeural; list: python3 -m edge_tts --list-voices)')
+elif tt.get('voice') and not tt['voice'].startswith('vi-VN-'): warn(f'tts.voice {tt["voice"]} is not a Vietnamese voice: multilingual voices read Vietnamese with a foreign accent')
+for k in set(tt)-{'engine','voice','rate','pitch','volume'}: warn(f'tts.{k} is unknown (engine, voice, rate, pitch, volume)')
+if tt.get('engine')=='gemini' and set(tt)&{'voice','rate','pitch','volume'}: warn('tts voice/rate/pitch/volume are Edge options, ignored under Gemini')
+if tt.get('engine')=='edge' and v.get('style','random')!='random': warn(f'voice.style "{v["style"]}" is Gemini-only, ignored under Edge')
 TR={t['id']:t for t in json.load(open(os.path.join(ROOT,'assets/music/tracks.json')))}; tracks=set(TR)
 tid=S.get('music',{}).get('track','random')
 if tid!='random' and tid not in tracks: err(f'music.track "{tid}" not in assets/music/tracks.json; valid: random, '+', '.join(sorted(tracks)))
@@ -103,8 +113,8 @@ for i,sc in enumerate(sc_list,1):
     low=sc.get('say','').lower()
     for m in META:
         if m in low: warn(f'scene {i}: meta signposting "{m}"; say the fact itself / ask naturally (write-script "Không đọc cấu trúc kịch bản")')
-# info only (no warnings): rough voice length per Gemini style, words/second measured from past renders
-RATE={'hao-hung':3.8,'tu-nhien':3.1,'ke-chuyen':2.55}
+# info only (no warnings): rough voice length per Gemini style (and Edge default rate), words/second measured from past renders
+RATE={'hao-hung':3.8,'tu-nhien':3.1,'ke-chuyen':2.55,'edge +10%':3.1}
 n=len(allw)
 print('⏱  voice estimate (info): '+', '.join(f'{k} ~{n/r:.0f}s' for k,r in RATE.items()))
 for m in W: print('⚠️ ',m)

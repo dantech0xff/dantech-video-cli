@@ -8,11 +8,12 @@ if has node && [ "$(node -p 'process.versions.node.split(".")[0]')" -ge 18 ]; th
 has npm && ok "npm $(npm -v)" || bad "npm" "cài npm (đi kèm Node)"
 if has python3 && python3 -c "import sys;sys.exit(sys.version_info<(3,10))"; then ok "$(python3 --version) ($(command -v python3))"
  python3 -c "import faster_whisper" 2>/dev/null && ok "faster_whisper import được" || bad "faster_whisper" "./dt setup (tạo .venv + pip install -r requirements.txt)"
+ python3 -c "import edge_tts" 2>/dev/null && ok "edge_tts import được (TTS miễn phí, dùng khi không có key hoặc --tts edge)" || bad "edge_tts" "./dt setup (hoặc pip install -r requirements.txt)"
 else bad "python3 3.10+" "cài Python 3.10+, rồi ./dt setup"; fi
 for b in ffmpeg ffprobe; do has $b && ok "$b" || bad "$b" "cài ffmpeg (brew install ffmpeg / apt install ffmpeg / winget install ffmpeg)"; done
 [ -d remotion/node_modules/remotion ] && [ -d remotion/node_modules/@remotion/cli ] && ok "remotion node_modules" || bad "remotion node_modules" "cd remotion && npm install"
 [ -z "$GEMINI_API_KEY" ] && [ -f .env ] && set -a && . ./.env && set +a
-[ -n "$GEMINI_API_KEY" ] && ok "GEMINI_API_KEY đã đặt (${#GEMINI_API_KEY} ký tự)" || bad "GEMINI_API_KEY chưa đặt" "export GEMINI_API_KEY=... (hoặc ghi vào .env, đã gitignore)"
+[ -n "$GEMINI_API_KEY" ] && ok "GEMINI_API_KEY đã đặt (${#GEMINI_API_KEY} ký tự) → TTS mặc định Gemini" || echo "⚠️  GEMINI_API_KEY chưa đặt → render dùng Edge TTS miễn phí (vi-VN-NamMinhNeural). Muốn Gemini: export GEMINI_API_KEY=... hoặc ghi vào .env"
 python3 - <<'PY' || F=1
 import json,os,glob
 ids={p['id'] for t in glob.glob('themes/*/theme.json') for p in json.load(open(t))['music']['pool']}
