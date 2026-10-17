@@ -27,7 +27,7 @@
    "say": "remember và rememberSaveable trong Jetpack Compose: cả hai đều giữ state, nhưng chỉ một cái còn sống khi bạn xoay màn hình.",
    "type": "AtHook",
    "section": "Counter.kt",
-   "out": "cookie",
+   "out": "sharedx",
    "props": {
     "tag": "Android™ · Jetpack Compose",
     "a": "remember",
@@ -43,7 +43,7 @@
    "say": "Thử một bộ đếm dùng remember. Bấm một, hai, ba lần, số đếm lên ba. Giờ xoay ngang điện thoại, và số đếm quay về không.",
    "type": "AtPreview",
    "section": "Counter.kt",
-   "out": "stack",
+   "out": "sharedx",
    "props": {
     "title": "Bộ đếm dùng remember",
     "file": "Counter.kt",
@@ -109,7 +109,7 @@
    "say": "Lý do là remember chỉ cất giá trị trong Composition. Khi xoay màn hình, Android huỷ activity cũ rồi tạo activity mới, nên Composition chạy lại từ đầu với số không.",
    "type": "AtLogcat",
    "section": "Logcat",
-   "out": "cookie",
+   "out": "sharedx",
    "props": {
     "title": "Xoay máy = activity mới",
     "lines": [
@@ -148,7 +148,7 @@
    "say": "Đổi remember thành rememberSaveable. Bấm một, hai, ba lần rồi xoay máy, số ba vẫn còn nguyên, vì giá trị đã được lưu vào Bundle.",
    "type": "AtPreview",
    "section": "Counter.kt",
-   "out": "push",
+   "out": "sharedx",
    "props": {
     "title": "Đổi sang rememberSaveable",
     "file": "Counter.kt",
@@ -214,7 +214,7 @@
    "say": "Mà rememberSaveable chỉ tự lưu những kiểu bỏ vào Bundle được, như số, chuỗi hay Parcelable. Với data class của bạn, thêm Parcelize là xong, hoặc tự viết một Saver.",
    "type": "AtCode",
    "section": "City.kt",
-   "out": "cookie",
+   "out": "sharedx",
    "props": {
     "title": "Kiểu nào lưu được?",
     "file": "City.kt",

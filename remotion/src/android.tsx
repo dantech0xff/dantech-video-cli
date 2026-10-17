@@ -1,10 +1,11 @@
 // android-tutor (ANDROID TUTOR): Android-dev explainer.
 // Studio Dark (near-black bg #0B0C0E, cards #17181B, Kotlin syntax colours, editor tab bar, Logcat) + Compose Preview
 // (code card beside a generic phone frame running the @Preview) + Material 3 Expressive motion: spring physics with the
-// M3E spatial/effects tokens and a cookie (scallop) shape that morphs to a circle (scene transition `cookie`, accents).
+// M3E spatial/effects tokens and a cookie (scallop) shape for small accents only. Scene transition = Material shared-axis X (`sharedx`, sys.tsx);
+// no full-screen zoom/pop shapes (Dan found the old cookie wipe jarring).
 // Legal: no official Android logo/wordmark/3D head, no Android Studio/IntelliJ/Pixel art. The robot below is our own
 // simplified drawing; the end card carries the CC BY 3.0 attribution line.
-import React from 'react';import {AbsoluteFill,Audio,Sequence,staticFile,interpolate,spring,useCurrentFrame} from 'remotion';
+import React from 'react';import {AbsoluteFill,Audio,Sequence,staticFile,interpolate,spring,useCurrentFrame,Easing} from 'remotion';
 import {useS,FONTS} from './sys';import {useBrand,fitSize,BrandTile,Handle} from './brand';import {SZ} from './safezone';
 const cl={extrapolateLeft:'clamp',extrapolateRight:'clamp'} as const;
 // Main accent is exactly the official Android green #3DDC84 (developer.android.com brand guidelines) everywhere; no pastel M3 tones.
@@ -139,21 +140,15 @@ export const AtChrome:React.FC<{section:string;page:string}>=({section,page})=>{
   <span style={{...lbl(24,AT.ink),padding:'0 4px 12px',borderBottom:`3px solid ${AT.blue}`,whiteSpace:'nowrap'}}>{section}</span>
   <span style={{flex:1}}/><span style={{...lbl(22,AT.str),paddingBottom:14}}>▶ app</span></div>
  <div style={{position:'absolute',left:30,top:300,width:56}}>{Array.from({length:24},(_,k)=><div key={k} style={{height:50,textAlign:'right',...lbl(20,k%5===4?'#4A4D53':'#2C2E33')}}>{k+1}</div>)}</div></>};
-/* cookie transition overlay: a green cookie grows from `focus`, morphing to a circle as it covers the frame, then exits as a shrinking cookie */
-export const CookieWipe:React.FC<{p:number;fx?:number;fy?:number;c:string}>=({p,fx=760,fy=1150,c})=>{
- const grow=p<.5?p/.5:1,shrink=p<.5?0:(p-.5)/.5;const e=(x:number)=>1-Math.pow(1-x,3);
- const R=p<.5?40+e(grow)*2200:2240*(1-e(shrink));const amp=p<.5?.12*(1-grow)+.01:.12*shrink+.01;
- const cx=p<.5?fx:fx+(540-fx)*shrink,cy=p<.5?fy:fy+(960-fy)*shrink;
- return <AbsoluteFill style={{zIndex:10,pointerEvents:'none'}}><svg width={1080} height={1920}><path d={cookiePath(cx,cy,Math.max(0,R),amp,9,p*1.4)} fill={c}/></svg></AbsoluteFill>};
 const PN:Record<string,string>={youtube:'YouTube',facebook:'Facebook',tiktok:'TikTok'};
 /* end card: robot, brand, tagline, 3 handle tiles, CC BY 3.0 attribution (end ≤ y 1480) */
 export const AtEndCard:React.FC<{dur?:number;handles?:Handle[];tagline?:string}>=({dur=90,handles,tagline=''})=>{const f=useCurrentFrame();const B=useBrand();handles=handles??B.handles;
  const S=(at:number,k:keyof typeof SPR='def')=>m3(f,at,k);const op=(at:number)=>Math.min(1,S(at,'fx'));const out=interpolate(f,[dur-10,dur],[1,0],cl);
- const bgR=S(0,'slow')*2300;
+ const ein=interpolate(f,[0,14],[0,1],{...cl,easing:Easing.bezier(.05,.7,.1,1)});
  return <AbsoluteFill data-layer="end" style={{zIndex:40,opacity:out}}><style>{FONTS}</style>
-  <svg width={1080} height={1920} style={{position:'absolute'}}><path d={cookiePath(540,700,bgR,.02+.1*Math.max(0,1-S(0,'slow')),9,f*.003)} fill={AT.bg}/></svg>
-  <div style={{opacity:Math.min(1,S(0,'slow'))}}><MidShapes/></div>
-  <div style={{position:'absolute',left:SZ.end.x,right:SZ.end.right,top:430}}>
+  <AbsoluteFill style={{background:AT.bg,opacity:interpolate(f,[0,8],[0,1],cl)}}/>
+  <div style={{opacity:interpolate(f,[0,8],[0,1],cl)}}><MidShapes/></div>
+  <div style={{position:'absolute',left:SZ.end.x,right:SZ.end.right,top:430,transform:`translateX(${120*(1-ein)}px)`,opacity:interpolate(ein,[.2,.7],[0,1],cl)}}>
    <div {...bb('e-robot')} style={{transform:`scale(${S(4,'slow')})`,transformOrigin:'left bottom',width:150}}><Robot s={150}/></div>
    <div {...bb('e-kick')} style={{display:'table',fontFamily:SANS,fontWeight:500,fontSize:46,color:AT.dim,marginTop:30,opacity:op(8)}}>Theo dõi để học</div>
    <div {...bb('e-tag')} style={{display:'table',fontFamily:SANS,fontWeight:800,fontSize:fitSize(tagline,724,92,.56),color:AT.ink,lineHeight:1.1,whiteSpace:'nowrap',opacity:op(10),transform:`translateY(${(1-S(10))*30}px)`}}>{tagline}</div>

@@ -138,9 +138,17 @@
  "morph_soft": {
   "source": "own",
   "pack": "",
-  "orig": "synthesised with numpy (scripts/sfx_morph_soft.py)",
+  "orig": "synthesised with numpy (scripts/sfx_soft.py morph)",
   "license": "own work",
   "url": "",
-  "use": "ANDROID TUTOR transitions (cookie morph), peak synced to the cover moment"
+  "use": "spare (old android-tutor cookie transition, removed)"
+ },
+ "slide_soft": {
+  "source": "own",
+  "pack": "",
+  "orig": "synthesised with numpy (scripts/sfx_soft.py)",
+  "license": "own work",
+  "url": "",
+  "use": "ANDROID TUTOR shared-axis X slide: barely audible air, peak at the fastest part of the slide"
  }
 }

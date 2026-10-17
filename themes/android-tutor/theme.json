@@ -24,15 +24,13 @@
    "dim": "#8B8F96"
   },
   "sfx": {
-   "trans": "morph_soft",
+   "trans": "slide_soft",
    "stamp": "select_003",
    "tick": "tick_002",
    "entry": "tick_002"
   },
   "trans": [
-   "cookie",
-   "stack",
-   "push"
+   "sharedx"
   ],
   "caption": {
    "font": "GSF",
@@ -46,7 +44,8 @@
    "activeText": "#00391C",
    "radius": 14,
    "pop": 1.06
-  }
+  },
+  "defaultOut": "sharedx"
  },
  "tail_hold": 40,
  "cta": {
