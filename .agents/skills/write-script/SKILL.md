@@ -11,7 +11,7 @@ description: Viết videos/<slug>/script.json cho video Dan Tech từ một spec
 ## Các bước
 
 1. **Nghiên cứu, kiểm chứng.** Mở và đọc nguồn thật (link Dan đưa, báo lớn, tài liệu chính thức). Mỗi sự kiện, con số, trích dẫn phải lấy từ một nguồn bạn đã đọc. **Không bịa** sự kiện, số liệu, quote hay URL. Thông tin chưa chắc thì bỏ, hoặc ghi rõ "chưa xác nhận" và hỏi Dan.
-2. **Chọn theme:** drama/tin → `hot-news` (báo in sáng) hoặc `hot-news-glitch` (nền tối, glitch tín hiệu vỡ, mẫu `videos/openai-vs-apple-glitch/`); mẹo/tool/tutorial/listicle → `quick-tips`; code/dev explainer → `tech-explain` (editor sáng/vàng, mẫu `videos/git-merge-vs-rebase/`) hoặc `tech-explain-cyber` (blueprint tối, lime, mẫu `videos/flutter-mvvm/`); video chỉ cho dev Android (Kotlin, Compose, lifecycle, Android API) → `android-tutor` (mẫu `videos/compose-remember-saveable/`). Nếu spec **không ghi theme**: đề xuất một theme kèm lý do một câu và **chờ Dan xác nhận** trước khi viết. Chỉ khi chạy không tương tác (không ai trả lời được) mới tự chọn, và ghi rõ lý do trong phần tóm tắt.
+2. **Chọn theme:** drama/tin → `hot-news` (báo in sáng) hoặc `hot-news-glitch` (nền tối, glitch tín hiệu vỡ, mẫu `videos/openai-vs-apple-glitch/`); mẹo/tool/tutorial/listicle → `quick-tips`; code/dev explainer → `tech-explain` (editor sáng/vàng, mẫu `videos/git-merge-vs-rebase/`) hoặc `tech-explain-cyber` (blueprint tối, lime, mẫu `videos/flutter-mvvm/`); video chỉ cho dev Android (Kotlin, Compose, lifecycle, Android API) → `android-tutor` (mẫu `videos/compose-remember-saveable/`); video chỉ cho dev Flutter (widget, state, Dart, API Flutter) → `flutter-tutor` (🧪 chờ duyệt, mẫu `videos/flutter-setstate-valuenotifier/`). Flutter kiến trúc/sơ đồ tổng quát vẫn có thể dùng `tech-explain-cyber`. Nếu spec **không ghi theme**: đề xuất một theme kèm lý do một câu và **chờ Dan xác nhận** trước khi viết. Chỉ khi chạy không tương tác (không ai trả lời được) mới tự chọn, và ghi rõ lý do trong phần tóm tắt.
 3. **Tạo slug** dạng kebab-case không dấu (`openai-vs-apple`). Copy mẫu cùng theme:
    - hot-news: `videos/openai-vs-apple/script.json`
    - hot-news-glitch: `videos/openai-vs-apple-glitch/script.json`
@@ -19,6 +19,7 @@ description: Viết videos/<slug>/script.json cho video Dan Tech từ một spec
    - tech-explain: `videos/git-merge-vs-rebase/script.json`
    - tech-explain-cyber: `videos/flutter-mvvm/script.json`
    - android-tutor: `videos/compose-remember-saveable/script.json`
+   - flutter-tutor: `videos/flutter-setstate-valuenotifier/script.json`
    Schema đầy đủ và props từng scene: [SCHEMA.md](SCHEMA.md). Bản khởi đầu: [template.json](template.json).
 4. **Viết `say` từng cảnh** (tiếng Việt nói, câu ngắn):
    - **Hook trực diện:** câu đầu cảnh 1 nêu thẳng chủ đề trong ~3 s (xem mục "Hook trực diện"), có thể kèm xung đột/con số. Đặt vấn đề tối đa 2 câu. Một ý lõi.

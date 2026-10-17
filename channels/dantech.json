@@ -9,7 +9,8 @@
   "tech-explain": "Code & công nghệ mỗi ngày",
   "tech-explain-cyber": "Code & công nghệ mỗi ngày",
   "hot-news-glitch": "Tin công nghệ mỗi ngày",
-  "android-tutor": "Android mỗi ngày"
+  "android-tutor": "Android mỗi ngày",
+  "flutter-tutor": "Flutter mỗi ngày"
  },
  "handles": [
   {
@@ -37,7 +38,8 @@
   "tech-explain": "BẬT CHUÔNG ĐỂ KHÔNG LỠ BÀI",
   "tech-explain-cyber": "BẬT CHUÔNG ĐỂ KHÔNG LỠ BÀI",
   "hot-news-glitch": "BẬT CHUÔNG ĐỂ KHÔNG LỠ TIN",
-  "android-tutor": "BẬT CHUÔNG ĐỂ HỌC ANDROID MỖI NGÀY"
+  "android-tutor": "BẬT CHUÔNG ĐỂ HỌC ANDROID MỖI NGÀY",
+  "flutter-tutor": "BẬT CHUÔNG ĐỂ HỌC FLUTTER MỖI NGÀY"
  },
  "ctaPhrase": "follow Dan Tech",
  "ctaInWord": "follow",

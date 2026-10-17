@@ -90,6 +90,15 @@ Canvas 894x1320 như mọi theme. Code dòng bắt đầu bằng `@` viết `"\\
 - **AtTake** `{title, head?:[colA,colB], rows:[{k,a,b,at}], rule?:{s,at}}`: hàng pill so sánh, ô bắt đầu bằng "giữ/có/✓" tô xanh, còn lại tô đỏ nhạt.
 - `out: "sharedx"` (mặc định của theme qua `look.defaultOut`): Material shared-axis X như điều hướng activity/fragment Android: cảnh cũ lùi trái 120 px, scale 0.96, mờ dần; cảnh mới trượt vào từ phải 120 px + fade, easing emphasized-decelerate, không bounce, ~470 ms. Không dùng zoom / shape phủ toàn khung cho theme này.
 
+## Theme `flutter-tutor` (FLUTTER TUTOR, 🧪 chờ duyệt) — scene types (`remotion/src/flutter.tsx`)
+Canvas 894x1320. Code dùng Google Sans Code (monospace, 0.6 em) fs 30: dòng ≤ ~44 ký tự. Mọi scene có `hero` = chip từ khoá (chữ code, nền Sky): chip này bay sang vị trí chip của cảnh sau khi `out:"hero"` (mặc định theme). Chip ở góc trên trái (to ở FlHook), title ngay dưới.
+- **FlHook** `{hero, tag, vs, line, why?:{s,at}, lit?}`: tag (gắn ™ cho "Flutter" đầu tiên, vd `"Flutter™ · State"`) + logomark Flutter nhỏ góc phải, chip `hero` to ở frame 0, "vs `vs`", `line` câu chốt (≤ 2 dòng), `why`, 3 card widget lồng nhau Scaffold → Column → Text; `lit` (frame/@word) làm card Text sáng lên.
+- **FlTree** `{hero, title, mode:"setState"|"notifier", taps:[at], readout:{k,at}, note?:{s,at}}`: cây widget kiểu Widget Inspector (Scaffold > AppBar, Column > [Text, ListView, Text 'Đã bấm {n}'], FAB). Mỗi `tap` tăng n và làm widget build lại sáng viền Sky + badge `build()` (lan theo độ sâu): `setState` → cả 7 widget, `notifier` → chỉ ValueListenableBuilder + Text. Readout = số widget build lại. Đây là minh hoạ, ghi rõ trong note/lời.
+- **FlCode** `{hero, title, file, lines:[{s,at}], hl?:{from,to,at,label?}, note?:{s,at}}`: card editor Dart (tab file, gutter, gõ từng dòng, `hl` = khung Sky quanh dòng from..to 0-based, `label` pill dưới khung). ≤ 9 dòng.
+- **FlStat** `{hero, title, a:{k,v,unit,at}, b:{k,v,unit,at}, note?:{s,at}}`: 2 card số đếm lên (b nổi bật navy + viền Sky).
+- **FlTake** `{hero, title, rows:[{k,v,at}], rule?:{s,at}}`: hàng "trường hợp → chọn gì" + rule card. Là cảnh cuối: ≤ 3 hàng để nội dung dừng trên y ~1060 (nút Follow).
+- `out: "hero"` (mặc định qua `look.defaultOut`): cảnh cũ đứng yên, cảnh mới fade + nâng 12 px (Curves.fastOutSlowIn, 533 ms), chip `hero` bay theo cung nhẹ (MaterialRectArcTween-like) từ chỗ cũ sang chỗ mới, đổi chữ thì cross-fade chữ. Cảnh không có `hero` (vd VersusHook) thì chỉ cross-fade.
+
 ## Theme `hot-news-glitch` (TIN NÓNG GLITCH)
 Dùng scene của hot-news (Flow, Quote, Checklist, Evidence, CTA); cảnh mở dùng **GlHeadline** `{kicker,l1,bar,l3,deck[],hits?:[frame|@word]}` (glitch RGB split + cắt lát tại các `hits`). `out: "signal"` = chuyển cảnh tín hiệu vỡ (ngắn). `kick` nên là nhãn có nghĩa (vd "TOÀ ÁN"), không nhãn kiểu báo/trang.
 

@@ -150,5 +150,13 @@
   "license": "own work",
   "url": "",
   "use": "ANDROID TUTOR shared-axis X slide: barely audible air, peak at the fastest part of the slide"
+ },
+ "hero_soft": {
+  "source": "own",
+  "pack": "",
+  "orig": "synthesised with numpy (scripts/sfx_soft.py hero)",
+  "license": "own work",
+  "url": "",
+  "use": "FLUTTER TUTOR Hero transition: barely audible air, peak at the fastest part of the flight"
  }
 }
