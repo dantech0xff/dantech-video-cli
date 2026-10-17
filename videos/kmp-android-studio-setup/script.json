@@ -55,7 +55,7 @@
     "tag": "Chạy được ở đâu",
     "a": "Android",
     "b": "iOS",
-    "line": "Setup đúng một lần là đủ.",
+    "line": "Máy nào cũng chạy được Android.",
     "why": {
      "s": "Build iOS bắt buộc máy chạy macOS.",
      "at": "@bắt"
@@ -82,7 +82,9 @@
      {
       "s": "openjdk \"21.0.5\"",
       "at": "@java",
-      "out": true
+      "out": true,
+      "ok": "@java+18",
+      "hl": "@java+18"
      }
     ]
    }
@@ -96,13 +98,14 @@
     "title": "Nếu chưa đủ JDK 17",
     "steps": [
      {
-      "s": "Từ 17 trở lên → xong",
+      "s": "Từ 17 trở lên → đủ, xong",
       "at": "@mười",
       "ok": "@đủ"
      },
      {
       "s": "Nhỏ hơn, hoặc báo không có lệnh",
-      "at": "@nhỏ"
+      "at": "@nhỏ",
+      "warn": "@nhỏ"
      },
      {
       "s": "Cài Temurin JDK 21",
@@ -229,35 +232,41 @@
   },
   {
    "say": "Xong thì đừng đoán máy đã sẵn sàng chưa — chạy adb devices, hoặc kdoctor trên macOS, để kiểm chắc chắn.",
-   "type": "AtLogcat",
+   "type": "AtTerm",
    "section": "Kiểm tra",
    "out": "sharedx",
    "props": {
     "title": "Kiểm máy trước khi chạy",
     "lines": [
      {
-      "lvl": "W",
-      "tag": "check",
-      "msg": "máy đã sẵn sàng chưa?",
-      "at": "@máy"
+      "s": "# đừng đoán, kiểm cho chắc",
+      "at": "@đoán",
+      "out": true
      },
      {
-      "lvl": "D",
-      "tag": "shell",
-      "msg": "$ adb devices",
+      "s": "adb devices",
       "at": "@adb"
      },
      {
-      "lvl": "I",
-      "tag": "adb",
-      "msg": "emulator-5554  device",
-      "at": "@devices"
+      "s": "emulator-5554   device",
+      "at": "@devices",
+      "out": true,
+      "ok": "@devices+10",
+      "hl": "@devices+10"
      },
      {
-      "lvl": "I",
-      "tag": "kdoctor",
-      "msg": "✓ Android toolchain · ✓ Xcode",
+      "s": "kdoctor",
       "at": "@kdoctor"
+     },
+     {
+      "s": "[✓] Android Studio",
+      "at": "@kdoctor+14",
+      "out": true
+     },
+     {
+      "s": "[✓] Xcode",
+      "at": "@kdoctor+20",
+      "out": true
      }
     ],
     "note": {
