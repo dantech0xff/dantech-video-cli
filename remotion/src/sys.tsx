@@ -1,9 +1,9 @@
 import {useBrand,fitSize} from './brand';
 import React,{createContext,useContext} from 'react';
 import {AbsoluteFill,Audio,OffthreadVideo,Sequence,staticFile,useCurrentFrame,interpolate,Easing,random,spring} from 'remotion';
-import {Theme} from './themes';import {BpChrome} from './cyber';import {SZ} from './safezone';import {GlChrome} from './glitch';import {AtChrome} from './android';import {Overlays,Ov} from './overlay';import {FlChrome,HeroFlight,FOSI} from './flutter';
+import {Theme} from './themes';import {BpChrome} from './cyber';import {SZ} from './safezone';import {GlChrome} from './glitch';import {AtChrome} from './android';import {Overlays,Ov} from './overlay';import {FlChrome,HeroFlight,FOSI} from './flutter';import {roomFor} from './fill';
 export const FONTS=`@font-face{font-family:Anton;src:url(${staticFile('fonts/anton.ttf')})}@font-face{font-family:Barlow;src:url(${staticFile('fonts/barlow.ttf')})}@font-face{font-family:JBM;src:url(${staticFile('fonts/jbm.ttf')});font-weight:100 800}@font-face{font-family:BVPX;src:url(${staticFile('fonts/bvp_xb.ttf')})}@font-face{font-family:BVPM;src:url(${staticFile('fonts/bvp_md.ttf')})}@font-face{font-family:GSF;src:url(${staticFile('fonts/gsf_md.ttf')});font-weight:100 600}@font-face{font-family:GSF;src:url(${staticFile('fonts/gsf_xb.ttf')});font-weight:700 900}@font-face{font-family:GSC;src:url(${staticFile('fonts/gsc_md.ttf')});font-weight:100 600}@font-face{font-family:GSC;src:url(${staticFile('fonts/gsc_bd.ttf')});font-weight:700 900}`;
-export const Ctx=createContext<{t:Theme;f:number;exit:number;hx?:boolean}>(null as any);
+export const Ctx=createContext<{t:Theme;f:number;exit:number;hx?:boolean;room?:number}>(null as any);
 export const useS=()=>useContext(Ctx);
 const EO=Easing.bezier(.16,1,.3,1),EIO=Easing.bezier(.7,0,.2,1);
 // Material 3 emphasized-decelerate (no overshoot); shared-axis X uses it over ~470 ms of the 533 ms window
@@ -19,7 +19,7 @@ export const It:React.FC<{i?:number;at?:number;children:React.ReactNode;style?:R
  if(t.entry==='slam'){const p=interpolate(lf,[0,7],[0,1],{...cl,easing:EO});tr=`scale(${1.25-0.25*p})`;op=interpolate(lf,[0,2],[0,1],cl);clip=`inset(0 ${100-interpolate(lf,[0,5],[0,100],{...cl,easing:EO})}% 0 0)`}
  else if(t.entry==='rise'){const p=interpolate(lf,[0,14],[0,1],{...cl,easing:EO});tr=`translateY(${(1-p)*80}px) rotate(${(1-p)*-3}deg)`;op=p}
  else {const p=interpolate(lf,[0,10],[0,1],{...cl,easing:EO});clip=`inset(0 ${100-p*100}% 0 0)`;tr=`translateX(${(1-p)*-20}px)`}
- tr+=` translateY(${-ex*120}px)`;op*=1-ex;
+ tr+=` translateY(${-ex*120}px)`;op*=interpolate(ex,[0,.3],[1,0],cl); // gone before a top row rises into the no-text zone (y < 290)
  return <div style={{transform:tr,opacity:op,clipPath:clip,transformOrigin:origin,...style}}>{children}</div>};
 export const Media:React.FC<{src:string;h:number;pos?:string;label?:string}>=({src,h,pos='center',label})=>{const {t}=useS();
  const filt=t.video==='halftone'?'grayscale(1) contrast(1.9) brightness(1.3)':t.video==='mono'?'grayscale(1) contrast(1.25)':'saturate(1.1)';
@@ -97,7 +97,7 @@ const SignalBreak:React.FC<{g:number;f:number;c:string}>=({g,f,c})=>{const fr=Ma
 /* ---------- timeline with designed transitions ---------- */
 export type Scene={dur:number;el:React.ReactNode;section:string;ov?:Ov[];out?:'page'|'bar'|'zoom'|'push'|'stack'|'morph'|'scroll'|'signal'|'sharedx'|'hero';hero?:{txt:string;big:boolean};focus?:[number,number];morph?:{from:number[];to:number[];txt:string}};
 const T=16;
-export const Timeline:React.FC<{t:Theme;scenes:Scene[];words:any[];voice:string;sfx:{at:number;s:string;v?:number}[];date:string}>=({t,scenes,words,voice,sfx,date})=>{const f=useCurrentFrame();const B=useBrand();
+export const Timeline:React.FC<{t:Theme;scenes:Scene[];words:any[];voice:string;sfx:{at:number;s:string;v?:number}[];date:string;cta?:{inAt:number;outAt:number}}>=({t,scenes,words,voice,sfx,date,cta})=>{const f=useCurrentFrame();const B=useBrand();
  const starts=scenes.reduce<number[]>((a,s,i)=>[...a,(a[i]??0)+s.dur],[0]);
  const layers:React.ReactNode[]=[];let overlay:React.ReactNode=null;
  scenes.forEach((s,i)=>{const a=starts[i]-(i>0?T/2:0),b=starts[i+1]+(i<scenes.length-1?T/2:0);if(f<a||f>=b)return;
@@ -131,7 +131,7 @@ export const Timeline:React.FC<{t:Theme;scenes:Scene[];words:any[];voice:string;
   const hIn=i>0&&kin==='hero'&&!!s.hero&&!!scenes[i-1].hero&&f<starts[i]+T/2;
   if(hOut&&f<starts[i+1]+T/2)overlay=<HeroFlight a={s.hero!} b={scenes[i+1].hero!} p={interpolate(f,[starts[i+1]-T/2,starts[i+1]+T/2],[0,1],cl)}/>;
   layers.push(<AbsoluteFill key={i} data-layer={String(i)} style={{zIndex:z,background:t.bg,backgroundImage:t.texture?`url(${staticFile(t.texture)})`:'none',...st}}>
-   <Ctx.Provider value={{t,f:lf,exit:exitStag,hx:hOut||hIn}}>{t.id==='flutter-tutor'?<FlChrome section={s.section} page={`${String(i+1).padStart(2,'0')} / ${String(scenes.length).padStart(2,'0')}`}/>:t.id==='android-tutor'?<AtChrome section={s.section} page={`${String(i+1).padStart(2,'0')} / ${String(scenes.length).padStart(2,'0')}`}/>:t.id==='hot-news-glitch'?<GlChrome date={date}/>:t.id==='tech-explain-cyber'?<BpChrome section={s.section} page={`${String(i+1).padStart(2,'0')} / ${String(scenes.length).padStart(2,'0')}`}/>:t.id==='tech-explain'?<TermChrome section={s.section} page={`${i+1}/${scenes.length}`} idx={i}/>:<Chrome section={s.section} page={`TRANG ${i+1}/${scenes.length}`} date={date}/>}
+   <Ctx.Provider value={{t,f:lf,exit:exitStag,hx:hOut||hIn,room:roomFor(s.ov,!!cta&&starts[i]<cta.outAt&&starts[i+1]>cta.inAt)}}>{t.id==='flutter-tutor'?<FlChrome section={s.section} page={`${String(i+1).padStart(2,'0')} / ${String(scenes.length).padStart(2,'0')}`}/>:t.id==='android-tutor'?<AtChrome section={s.section} page={`${String(i+1).padStart(2,'0')} / ${String(scenes.length).padStart(2,'0')}`}/>:t.id==='hot-news-glitch'?<GlChrome date={date}/>:t.id==='tech-explain-cyber'?<BpChrome section={s.section} page={`${String(i+1).padStart(2,'0')} / ${String(scenes.length).padStart(2,'0')}`}/>:t.id==='tech-explain'?<TermChrome section={s.section} page={`${i+1}/${scenes.length}`} idx={i}/>:<Chrome section={s.section} page={`TRANG ${i+1}/${scenes.length}`} date={date}/>}
    <div data-content="1" style={{position:'absolute',left:SZ.content.x,top:SZ.content.y,width:SZ.content.w,height:SZ.content.h,transform:`scale(${SZ.content.scale})`,transformOrigin:'top left'}}>{s.el}</div>{s.ov&&s.ov.length>0&&<Overlays ov={s.ov} section={s.section}/>}</Ctx.Provider></AbsoluteFill>);
   if(i<scenes.length-1&&(kout==='bar')&&outP>0&&outP<1){const p=outP;const w=p<.5?interpolate(p,[0,.5],[96,1080]):1080;const x=p<.5?0:interpolate(p,[.5,1],[0,1080],{easing:EIO});
    overlay=<div style={{position:'absolute',top:0,bottom:0,left:x,width:w-(p<.5?0:0),background:t.accent,zIndex:10,display:'flex',alignItems:'center',justifyContent:'center',overflow:'hidden'}}><div style={{transform:`rotate(-90deg) translateY(${(p-.5)*400}px)`,fontFamily:t.id==='tech-explain'?'JBM':'Anton',fontWeight:t.id==='tech-explain'?800:400,fontSize:t.id==='tech-explain'?150:fitSize(B.wordmark+' ■',1000,200,.47,1),color:t.onAccent,whiteSpace:'nowrap'}}>{t.id==='tech-explain'?'git commit ▸':B.wordmark+' ■'}</div></div>}

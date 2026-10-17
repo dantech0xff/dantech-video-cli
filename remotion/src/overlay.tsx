@@ -14,7 +14,7 @@ const DOCK_B=SZ.content.y+SZ.content.h*SZ.content.scale-6;  // ~1353: lower edge
 const X0=SZ.content.x,X1=SZ.right,GAP=26;
 const lum=(hex:string)=>{const m=hex.replace('#','');if(m.length<6)return 0;const [r,g,b]=[0,2,4].map(i=>parseInt(m.slice(i,i+2),16)/255);return .2126*r+.7152*g+.0722*b};
 // theme tokens -> overlay palette (pal.* when the theme has one, else derived from bg/ink)
-export const tok=(t:Theme)=>{const pal=(t as any).pal||{};const light=lum(t.bg)>.5;const sharp=t.id==='hot-news'||t.id==='hot-news-glitch';
+export const tok=(t:Theme)=>{const pal={...((t as any).pack||{}),...((t as any).pal||{})};const light=lum(t.bg)>.5;const sharp=t.id==='hot-news'||t.id==='hot-news-glitch';
  return {A:t.accent,on:t.onAccent,ink:t.ink,bg:t.bg,light,card:pal.card??(light?'#FFFFFF':'#16171A'),line:pal.line??(light?'rgba(17,17,17,.22)':'rgba(255,255,255,.16)'),
   dim:pal.dim??t.muted,head:t.head,body:t.body,mono:t.id==='flutter-tutor'?'GSC':'JBM',r:sharp?0:t.id==='quick-tips'?24:26,upper:t.upper,
   hw:t.head==='Anton'?400:800,shadow:light?'0 10px 30px rgba(0,0,0,.12)':'0 14px 40px rgba(0,0,0,.45)'}};
@@ -71,7 +71,8 @@ const ELS:Record<string,React.FC<{o:Ov;t:ReturnType<typeof tok>;f:number}>>={ter
 const norm=(s:string)=>s.toLowerCase().replace(/\\@/g,'@').replace(/\s+/g,' ').trim();
 /* 4. focus: find the scene element whose text contains `match`, spotlight it (rest dims), ring it, push in <= 6% within the content box */
 const findEl=(root:HTMLElement,needle:string):HTMLElement|null=>{const nd=norm(needle);if(!nd)return null;let best:HTMLElement|null=null,ba=1e12;
- root.querySelectorAll<HTMLElement>('*').forEach(el=>{if(el.closest('[data-ov]'))return;const tx=norm(el.textContent||'');if(!tx.includes(nd))return;const r=el.getBoundingClientRect();const a=r.width*r.height;if(a>0&&a<ba){ba=a;best=el}});
+ root.querySelectorAll<HTMLElement>('*').forEach(el=>{if(el.closest('[data-ov]'))return;if(getComputedStyle(el).visibility==='hidden')return; // rows laid out but not arrived yet (fill.tsx)
+ const tx=norm(el.textContent||'');if(!tx.includes(nd))return;const r=el.getBoundingClientRect();const a=r.width*r.height;if(a>0&&a<ba){ba=a;best=el}});
  if(!best)return null;let el:HTMLElement=best;  // climb to the row/line that holds the match: stop at a data-bb box, or when the parent is a list (many children) or much taller
  for(let k=0;k<4&&!el.hasAttribute('data-bb');k++){const p=el.parentElement;if(!p||p===root)break;if(p.hasAttribute('data-bb')){if(p.getBoundingClientRect().height<=el.getBoundingClientRect().height*2.6+60)el=p;break}
   const a=el.getBoundingClientRect(),b=p.getBoundingClientRect();if(p.children.length<=3&&b.height<=a.height*1.6+30)el=p;else break}
