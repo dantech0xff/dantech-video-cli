@@ -68,16 +68,55 @@ for i,sc in enumerate(sc_list,1):
     words=[norm(w) for w in sc.get('say','').split()]
     for x in sc.get('sfx',[]):
         if x.get('s') not in sfx: err(f'{tag}: sfx "{x.get("s")}" not in assets/sfx')
-    for a in anchors({'p':sc.get('props',{}),'s':sc.get('sfx',[])}):
+    for a in anchors({'p':sc.get('props',{}),'s':sc.get('sfx',[]),'o':sc.get('overlays',[])}):
         m=AN.match(a)
         if not m: err(f'{tag}: bad anchor {a}'); continue
         n=int(m.group(2) or 1)
         if words.count(norm(m.group(1)))<n: err(f'{tag}: anchor {a}: word "{m.group(1)}" (x{n}) not in this scene\'s say')
 allw=[norm(w) for sc in sc_list for w in sc.get('say','').split()]
+# overlays (universal elements), kw highlights, autofill switches, glossary (SCHEMA.md "Universal overlays")
+def kw_lists(x):
+    if isinstance(x,dict):
+        if 'kw' in x: yield x['kw'] if isinstance(x['kw'],list) else [x['kw']]
+        for v in x.values(): yield from kw_lists(v)
+    elif isinstance(x,list):
+        for v in x: yield from kw_lists(v)
+GLYPHS=set(re.findall(r"^ ?(\w+):'",open(os.path.join(ROOT,'remotion/src/overlay.tsx')).read().split('export const GLYPH')[1].split('};')[0],re.M)) if os.path.isfile(os.path.join(ROOT,'remotion/src/overlay.tsx')) else set()
+GLYPHS|=set(re.findall(r"(\w+):'M",open(os.path.join(ROOT,'remotion/src/overlay.tsx')).read())) if os.path.isfile(os.path.join(ROOT,'remotion/src/overlay.tsx')) else set()
+OVK={'term':({'w'},{'g','icon'}),'num':({'n'},{'label'}),'icon':({'icon','label'},set()),'focus':({'match'},set()),'progress':({'n','m'},{'label'}),'diagram':({'nodes'},{'label'})}
+if 'autofill' in S and not isinstance(S['autofill'],bool): err('"autofill" must be true or false')
+if S.get('autofill') is False: warn('autofill is off for the whole script: static stretches > 2.5 s will not be filled (the render gate still fails on 3 s)')
+g=S.get('glossary',{})
+if g and (not isinstance(g,dict) or not all(isinstance(k,str) and isinstance(v,str) for k,v in g.items())): err('glossary must map term -> short gloss (strings)')
+elif g:
+    for k_,v_ in g.items():
+        if len(v_)>70: warn(f'glossary "{k_}": gloss is {len(v_)} chars; keep it ≤ ~70 (2 lines on the term card)')
+for i,sc in enumerate(sc_list,1):
+    tag=f'scene {i} ({sc.get("type")})';words=[norm(w) for w in sc.get('say','').split()]
+    if 'autofill' in sc and not isinstance(sc['autofill'],bool): err(f'{tag}: "autofill" must be true or false')
+    d=sc.get('diagram')
+    if d is not None and not (isinstance(d,dict) and isinstance(d.get('nodes'),list) and 2<=len(d['nodes'])<=3): err(f'{tag}: diagram hint must be {{nodes:[2-3 labels], label?}}')
+    for kws in kw_lists(sc.get('props',{})):
+        if not all(isinstance(x,str) for x in kws): err(f'{tag}: kw must be a list of words'); continue
+        for kwd in kws:
+            if norm(kwd) not in words: warn(f'{tag}: kw "{kwd}" is never spoken in this scene (no highlight will fire)')
+    texts_=json.dumps(sc.get('props',{}),ensure_ascii=False).replace('\\\\@','@').lower()
+    for j,o in enumerate(sc.get('overlays',[]) or [],1):
+        ot=f'{tag}: overlays[{j}]'
+        if not isinstance(o,dict) or o.get('kind') not in OVK: err(f'{ot}: kind must be one of {sorted(OVK)}'); continue
+        req,opt=OVK[o['kind']];miss=req-set(o);bad=set(o)-req-opt-{'kind','at','dur'}
+        if 'at' not in o: err(f'{ot}: needs "at" (@word or frame)')
+        if miss: err(f'{ot}: {o["kind"]} needs {sorted(miss)}')
+        if bad: err(f'{ot}: unknown keys {sorted(bad)}')
+        if 'dur' in o and not (isinstance(o['dur'],(int,float)) and 1<=o['dur']<=6): err(f'{ot}: dur is seconds, 1–6')
+        if o.get('icon') and GLYPHS and o['icon'] not in GLYPHS: err(f'{ot}: icon "{o["icon"]}" not in the glyph set {sorted(GLYPHS)}')
+        if o['kind']=='diagram' and not (isinstance(o.get('nodes'),list) and 2<=len(o['nodes'])<=3): err(f'{ot}: diagram takes 2–3 nodes')
+        if o['kind']=='focus' and isinstance(o.get('match'),str) and o['match'].lower() not in texts_: warn(f'{ot}: focus match "{o["match"]}" not found in this scene\'s props text (nothing to highlight)')
+        if o['kind']=='term' and o.get('g') and len(o['g'])>70: warn(f'{ot}: gloss > 70 chars')
 # item-level props for list scenes (SCHEMA.md): a misspelt item key renders an empty row or crashes the render
-ITEMS={'AtSteps':('steps',{'s','at'},{'ok','warn'}),'AtTerm':('lines',{'s','at'},{'out','ok','hl'}),
- 'AtPackages':('rows',{'s','at'},{'meta','ok'}),'AtDevice':('devices',{'name','at'},{'kind','badge','ok','screen'}),
- 'AtSpec':('tiles',{'big','small','at'},{'ok'})}
+ITEMS={'AtSteps':('steps',{'s','at'},{'ok','warn','kw'}),'AtTerm':('lines',{'s','at'},{'out','ok','hl','kw'}),
+ 'AtPackages':('rows',{'s','at'},{'meta','ok','kw'}),'AtDevice':('devices',{'name','at'},{'kind','badge','ok','screen','kw'}),
+ 'AtSpec':('tiles',{'big','small','at'},{'ok','kw'})}
 TOP={'AtSteps':{'title','steps','note'},'AtTerm':{'title','dir','shell','lines','note'},'AtPackages':{'title','head','rows','note'},
  'AtDevice':{'title','devices','note'},'AtSpec':{'title','tiles','note'}}
 for i,sc in enumerate(sc_list,1):
@@ -124,13 +163,15 @@ for i,sc in enumerate(sc_list,1):
     tag=f'scene {i} ({sc.get("type")})'
     words=[norm(w) for w in sc.get('say','').split()]; n=len(words)
     pos=[]
-    for a in anchors(sc.get('props',{})):  # visual beats only: an sfx alone changes nothing on screen
+    for a in anchors({'p':sc.get('props',{}),'o':sc.get('overlays',[])}):  # visual beats only: an sfx alone changes nothing on screen
         m=AN.match(a)
         if not m: continue
         nth=int(m.group(2) or 1); tgt=norm(m.group(1))
         idx=[k for k,w in enumerate(words) if w==tgt]
         if len(idx)>=nth: pos.append(idx[nth-1])
     if press_w in words: pos.append(words.index(press_w))
+    for kws in kw_lists(sc.get('props',{})):
+        for kwd in kws: pos+=[k for k,w in enumerate(words) if w==norm(kwd)]
     for v in sc.get('props',{}).values():
         if not timed(v): pos.append(0)
     pos=sorted(set(pos)); hasnum=numts(sc.get('props',{})) or numts(sc.get('sfx',[]))
