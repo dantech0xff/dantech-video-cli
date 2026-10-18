@@ -1,0 +1,248 @@
+{
+  "theme": "loot-crypto",
+  "channel": "loot-crypto",
+  "title": "Market cap: vì sao giá coin rẻ chưa chắc là 'rẻ'",
+  "date": "18 · 10 · 2026",
+  "topic": [
+    "giá coin",
+    "vốn hoá"
+  ],
+  "caption": "Giá một đồng coin không nói lên coin đó đắt hay rẻ — vốn hoá (giá × cung lưu hành) mới đo quy mô. BTC $82.140 vs XRP $1,30: giá chênh ~63.000 lần nhưng vốn hoá chỉ chênh ~20 lần. Nội dung mang tính kiến thức, không phải lời khuyên đầu tư. #LootCrypto #Crypto #MarketCap #Bitcoin",
+  "sources": [
+    "CoinGecko API, /coins/markets — giá, % 24h, vốn hoá, cung lưu hành của Bitcoin và XRP lúc đọc: https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd (đọc 18/10/2026)",
+    "Wikipedia, Bitcoin — tổng cung tối đa 21 triệu BTC: https://en.wikipedia.org/wiki/Bitcoin (đọc 18/10/2026)",
+    "XRPL.org, What is XRP — 100 tỉ XRP được tạo ngay từ đầu: https://xrpl.org/docs/introduction/what-is-xrp (đọc 18/10/2026)"
+  ],
+  "hook": {
+    "kind": "explainer",
+    "claim": "Giá một đồng coin không nói lên coin đó đắt hay rẻ",
+    "why": "vốn hoá — giá nhân cung lưu hành — mới đo quy mô một mạng"
+  },
+  "glossary": {
+    "vốn hoá thị trường": "giá một đồng nhân số coin đang lưu hành; đo quy mô cả mạng",
+    "cung lưu hành": "số coin đã phát hành và đang được giao dịch trên thị trường",
+    "tổng cung tối đa": "số coin nhiều nhất một mạng có thể có, đặt sẵn từ thiết kế",
+    "XRP": "đồng coin của mạng XRP Ledger, phát hành từ năm 2012"
+  },
+  "tts": {
+    "engine": "edge"
+  },
+  "voice": {
+    "style": "random"
+  },
+  "music": {
+    "track": "random"
+  },
+  "scenes": [
+    {
+      "say": "Giá coin không nói lên rẻ đắt, vốn hoá mới nói. Bitcoin hơn tám mươi hai nghìn đô một đồng, XRP chưa tới một đô rưỡi, nhưng hai mạng không lệch nhau tới vậy.",
+      "type": "LcHook",
+      "section": "giá vs vốn hoá",
+      "props": {
+        "kick": "GIÁ VS VỐN HOÁ",
+        "big": "Giá rẻ chưa chắc rẻ",
+        "hl": "rẻ",
+        "line": "Vốn hoá mới đo quy mô mạng.",
+        "lineAt": "@Bitcoin",
+        "cards": [
+          {
+            "s": "Bitcoin",
+            "sub": "$82.140 / đồng",
+            "coin": "Bitcoin",
+            "tone": "ink"
+          },
+          {
+            "s": "XRP",
+            "sub": "$1,30 / đồng",
+            "coin": "XRP",
+            "tone": "mint"
+          }
+        ],
+        "cardsAt": "@XRP"
+      }
+    },
+    {
+      "say": "Vốn hoá thị trường, hay market cap, bằng giá một đồng nhân với số coin đang lưu hành. Nói cách khác, đó là tổng số tiền thị trường trả cho cả mạng.",
+      "type": "DataFlow",
+      "section": "khái niệm",
+      "props": {
+        "title": "Vốn hoá là gì?",
+        "nodes": [
+          {
+            "s": "Giá 1 đồng",
+            "sub": "mệnh giá",
+            "at": "@giá"
+          },
+          {
+            "s": "Cung lưu hành",
+            "sub": "số coin đang có",
+            "via": "nhân",
+            "at": "@lưu"
+          },
+          {
+            "s": "Vốn hoá",
+            "sub": "quy mô cả mạng",
+            "via": "bằng",
+            "at": "@Nói"
+          }
+        ]
+      }
+    },
+    {
+      "say": "Thử hai đồng tưởng tượng. Đồng A giá một đô, đồng B giá một nghìn đô. A có một tỉ đồng lưu hành, B chỉ có một triệu. Nghe thì A rẻ hơn nhiều, nhưng vốn hoá hai bên đều đúng một tỉ đô.",
+      "type": "LcVersus",
+      "section": "minh hoạ",
+      "disc": true,
+      "props": {
+        "title": "Hai đồng, cùng một tỉ đô vốn hoá",
+        "kick": "MINH HỌA",
+        "a": {
+          "s": "Đồng A",
+          "sub": "$1 / đồng"
+        },
+        "b": {
+          "s": "Đồng B",
+          "sub": "$1.000 / đồng"
+        },
+        "rows": [
+          {
+            "k": "Giá 1 đồng",
+            "a": "$1",
+            "b": "$1.000",
+            "at": "@nghìn"
+          },
+          {
+            "k": "Cung lưu hành",
+            "a": "1 tỉ",
+            "b": "1 triệu",
+            "at": "@triệu"
+          },
+          {
+            "k": "Vốn hoá",
+            "a": "$1 tỉ",
+            "b": "$1 tỉ",
+            "at": "@vốn"
+          }
+        ],
+        "label": "MINH HỌA"
+      }
+    },
+    {
+      "say": "Quay lại số thật. Bitcoin đang hơn tám mươi hai nghìn đô một đồng, vốn hoá khoảng một phẩy sáu lăm nghìn tỉ đô, đứng đầu bảng. Tối đa chỉ có hai mươi mốt triệu đồng.",
+      "type": "LcPrice",
+      "section": "số thật",
+      "props": {
+        "kick": "SỐ THẬT",
+        "coin": "Bitcoin",
+        "sym": "BTC",
+        "price": 82140,
+        "dec": 0,
+        "chg": 0.68,
+        "at": "@Bitcoin",
+        "spark": [82974, 83581, 83438, 83011, 83518, 83359, 83367, 81706, 81282, 82013, 82161, 81640, 81619, 81570],
+        "stats": [
+          {
+            "k": "Vốn hoá",
+            "v": "$1,65 nghìn tỉ"
+          },
+          {
+            "k": "Cung lưu hành",
+            "v": "20,1 triệu"
+          },
+          {
+            "k": "Tối đa",
+            "v": "21 triệu"
+          }
+        ],
+        "src": "CoinGecko"
+      }
+    },
+    {
+      "say": "XRP thì ngược lại. Mạng này phát hành một trăm tỉ đồng ngay từ đầu, nên một đồng chỉ hơn một đô, dù vốn hoá vẫn hơn tám mươi tỉ.",
+      "type": "LcCoin",
+      "section": "số thật",
+      "props": {
+        "coin": "XRP",
+        "sym": "XRP",
+        "rank": 5,
+        "price": "$1,30",
+        "chg": -0.28,
+        "stats": [
+          {
+            "k": "Tổng phát hành",
+            "v": "~100 tỉ",
+            "at": "@trăm"
+          },
+          {
+            "k": "Lưu hành nay",
+            "v": "~63 tỉ",
+            "at": "@đầu"
+          },
+          {
+            "k": "Vốn hoá",
+            "v": "~$82 tỉ",
+            "at": "@vốn"
+          }
+        ],
+        "src": "CoinGecko · XRPL",
+        "note": {
+          "s": "Cung lớn, mỗi đồng rẻ",
+          "at": "@nên"
+        }
+      }
+    },
+    {
+      "say": "Giá hai đồng chênh hơn sáu mươi ba nghìn lần, nhưng vốn hoá chỉ chênh khoảng hai mươi lần. Khoảng cách đó gần hết đến từ số lượng coin, không phải quy mô mạng.",
+      "type": "Scale",
+      "section": "chênh bao nhiêu",
+      "props": {
+        "title": "Chênh bao nhiêu lần?",
+        "a": {
+          "s": "Giá 1 đồng",
+          "w": 63185,
+          "at": "@sáu",
+          "sub": "~63.000×"
+        },
+        "b": {
+          "s": "Vốn hoá",
+          "w": 20,
+          "at": "@hai",
+          "sub": "~20×"
+        },
+        "tiltAt": "@lần#2",
+        "verdict": {
+          "s": "Khoảng cách chủ yếu do số coin",
+          "at": "@Khoảng"
+        }
+      }
+    },
+    {
+      "say": "Tóm lại, so hai coin thì so vốn hoá, đừng so giá một đồng. Theo dõi Loot Crypto để hiểu crypto rõ hơn.",
+      "type": "LcHook",
+      "section": "tóm lại",
+      "props": {
+        "kick": "TÓM LẠI",
+        "big": "So vốn hoá, đừng so giá.",
+        "hl": "vốn hoá",
+        "line": "Giá chỉ là bề mặt của một đồng.",
+        "lineAt": "@giá",
+        "cards": [
+          {
+            "s": "Giá 1 đồng",
+            "sub": "chỉ là bề mặt",
+            "icon": "wallet",
+            "tone": "ink"
+          },
+          {
+            "s": "Vốn hoá",
+            "sub": "quy mô mạng",
+            "icon": "exchange",
+            "tone": "mint"
+          }
+        ],
+        "cardsAt": "@vốn",
+        "cardsFlow": true
+      }
+    }
+  ]
+}
