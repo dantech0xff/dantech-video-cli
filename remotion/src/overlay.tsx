@@ -74,6 +74,8 @@ const BrandChip:React.FC<{o:Ov;t:ReturnType<typeof tok>;f:number}>=({o,t,f})=>{c
   <BrandMark b={b} size={sz} on={t.card}/><span style={{fontFamily:t.head,fontWeight:t.hw,fontSize:fitSize(b.name,w,n===1?60:46,t.head==='Anton'?.48:.56),lineHeight:1.1,color:t.ink,textTransform:t.upper?'uppercase':'none',whiteSpace:'nowrap'}}>{b.name}</span></div>)}</div></Card>};
 const ELS:Record<string,React.FC<{o:Ov;t:ReturnType<typeof tok>;f:number}>>={term:Term,num:Num,icon:Icon,progress:Progress,diagram:Diagram,brand:BrandChip};
 const norm=(s:string)=>s.toLowerCase().replace(/\\@/g,'@').replace(/\s+/g,' ').trim();
+// themes on a photographic plate (look.softSpot, loot-crypto): the spotlight dim fades out at its edges, so no hard rectangle shows
+const SOFT:React.CSSProperties={WebkitMaskImage:'linear-gradient(to right, transparent 0, #000 90px, #000 calc(100% - 90px), transparent 100%), linear-gradient(to bottom, transparent 0, #000 70px, #000 calc(100% - 90px), transparent 100%)',WebkitMaskComposite:'source-in',maskComposite:'intersect'} as any;
 /* 4. focus: find the scene element whose text contains `match`, spotlight it (rest dims), ring it, push in <= 6% within the content box */
 const findEl=(root:HTMLElement,needle:string):HTMLElement|null=>{const nd=norm(needle);if(!nd)return null;let best:HTMLElement|null=null,ba=1e12;
  root.querySelectorAll<HTMLElement>('*').forEach(el=>{if(el.closest('[data-ov]'))return;if(getComputedStyle(el).visibility==='hidden')return; // rows laid out but not arrived yet (fill.tsx)
@@ -89,7 +91,8 @@ export const Overlays:React.FC<{ov:Ov[];section:string}>=({ov})=>{const {t,f}=us
  useEffect(()=>{if(fok)continueRender(fh)},[fok]);const T=tok(t);const me=useRef<HTMLDivElement>(null);const ring=useRef<HTMLDivElement>(null);const spot=useRef<HTMLDivElement>(null);
  const live=ov.filter(o=>f>=o.at-10&&f<o.end+10);const dock=live.find(o=>o.kind!=='focus');const foc=live.find(o=>o.kind==='focus');
  useLayoutEffect(()=>{const layer=me.current?.closest('[data-layer]') as HTMLElement|null;const wrap=layer?.querySelector('[data-content]') as HTMLElement|null;if(!layer||!wrap)return;
-  const base=`scale(${SZ.content.scale})`;wrap.style.transform=base;  // reset before measuring (imperative transforms persist between frames)
+  const pre=wrap.dataset.pre||''; // Timeline transition rotation (loot-crypto quarter), kept outermost
+  const base=`${pre} scale(${SZ.content.scale})`;wrap.style.transform=base;  // reset before measuring (imperative transforms persist between frames)
   const L=layer.getBoundingClientRect();const k=L.width/layer.offsetWidth||1;const R=(el:Element)=>{const r=el.getBoundingClientRect();return {x:(r.left-L.left)/k,y:(r.top-L.top)/k,r:(r.right-L.left)/k,b:(r.bottom-L.top)/k}};
   let boxes=[...wrap.querySelectorAll('[data-bb]')].map(R).filter(b=>b.r-b.x>2&&b.b-b.y>2);
   if(!boxes.length){ // theme without data-bb boxes: measure what is drawn (text, media, filled/bordered boxes), not the wrapper itself
@@ -111,7 +114,7 @@ export const Overlays:React.FC<{ov:Ov[];section:string}>=({ov})=>{const {t,f}=us
    const lim=(lo:number,hi:number,pv:number,v1:number,v2:number)=>Math.min(v1<pv?(pv-lo)/Math.max(1,pv-v1):9,v2>pv?(hi-pv)/Math.max(1,v2-pv):9);
    const dockTop=card&&dock?DOCK_B-card.offsetHeight-GAP:DOCK_B;
    const zmax=Math.max(1,Math.min(1.06,lim(72,X1,P.x,c.x,c.r),lim(SZ.content.y,dockTop,P.y,c.y,c.b)));z=1+(zmax-1)*fp}}
-  const S=SZ.content.scale*sq*z;const dx=(1-z)*(P.x-O.x),dy=(1-z)*(P.y-O.y);wrap.style.transformOrigin='top left';wrap.style.transform=`translate(${dx}px,${dy}px) scale(${S})`;
+  const S=SZ.content.scale*sq*z;const dx=(1-z)*(P.x-O.x),dy=(1-z)*(P.y-O.y);wrap.style.transformOrigin='top left';wrap.style.transform=`${pre} translate(${dx}px,${dy}px) scale(${S})`;
   if(ring.current&&spot.current){if(target&&fp>0){const m=(v:number,o:number)=>P[o===0?'x':'y']+(v-P[o===0?'x':'y'])*z;const x=m(target.x,0)-14,y=m(target.y,1)-12,w=m(target.r,0)-m(target.x,0)+28,h=m(target.b,1)-m(target.y,1)+24;
     Object.assign(ring.current.style,{display:'block',left:`${x}px`,top:`${y}px`,width:`${w}px`,height:`${h}px`,opacity:String(fp)});
     Object.assign(spot.current.style,{display:'block',opacity:String(fp),clipPath:`polygon(evenodd,0 0,1080px 0,1080px 1920px,0 1920px,0 0,${x}px ${y}px,${x+w}px ${y}px,${x+w}px ${y+h}px,${x}px ${y+h}px,${x}px ${y}px)`});}
@@ -120,6 +123,6 @@ export const Overlays:React.FC<{ov:Ov[];section:string}>=({ov})=>{const {t,f}=us
  // spotlight dims the content box only (header, captions, Follow stay untouched); ring has no data-bb (it frames an existing box)
  const C=SZ.content;
  return <div ref={me} data-ov="1" style={{position:'absolute',inset:0,pointerEvents:'none',zIndex:5}}>
-  <div style={{position:'absolute',left:C.x-36,top:C.y-8,width:1080-(C.x-36),height:DOCK_B-C.y+14,overflow:'hidden'}}><div ref={spot} style={{position:'absolute',left:-(C.x-36),top:-(C.y-8),width:1080,height:1920,background:/^#[0-9a-fA-F]{6}$/.test(T.bg)?T.bg+'80':'rgba(0,0,0,.5)',display:'none'}}/></div>
-  <div ref={ring} style={{position:'absolute',display:'none',border:`4px solid ${T.A}`,borderRadius:T.r?22:0,boxShadow:`0 0 0 8px ${T.light?'rgba(0,0,0,.05)':'rgba(255,255,255,.04)'}`}}/>
+  <div style={{position:'absolute',left:C.x-36,top:C.y-8,width:1080-(C.x-36),height:DOCK_B-C.y+14,overflow:'hidden',...((t as any).softSpot?SOFT:{})}}><div ref={spot} style={{position:'absolute',left:-(C.x-36),top:-(C.y-8),width:1080,height:1920,background:/^#[0-9a-fA-F]{6}$/.test(T.bg)?T.bg+'80':'rgba(0,0,0,.5)',display:'none'}}/></div>
+  <div ref={ring} style={{position:'absolute',display:'none',border:`${(t as any).softSpot?3:4}px solid ${T.A}`,borderRadius:(t as any).lc?'30px 8px 30px 30px':T.r?22:0,boxShadow:`0 0 0 8px ${T.light?'rgba(0,0,0,.05)':'rgba(255,255,255,.04)'}`}}/>
   {dock&&React.createElement(ELS[dock.kind],{o:dock,t:T,f})}</div>};

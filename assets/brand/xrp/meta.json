@@ -1,0 +1,16 @@
+{
+ "name": "XRP",
+ "slug": "xrp",
+ "fetched_at": "2026-10-18T06:04:02Z",
+ "status": "ok",
+ "file": "logo.svg",
+ "kind": "vector",
+ "mono": false,
+ "color": "#25A768",
+ "source": "simple-icons",
+ "source_url": "https://simpleicons.org/?q=xrp",
+ "match": "Simple Icons title \"XRP\"",
+ "attrib": null,
+ "license": "trademark of its owner. Used only to identify the product being discussed (nominative use); no endorsement implied.",
+ "tried": []
+}

@@ -20,10 +20,11 @@ def log(line):
 
 def load_channel(cid="dantech"):
     import sys
-    """Brand config: channels/<id>.json (name, wordmark, tagline, handles, follow texts, ctaPhrase/ctaInWord/ctaPressWord)."""
+    """Brand config: channels/<id>.json (name, wordmark, tagline, handles, follow texts, ctaPhrase/ctaInWord/ctaPressWord;
+    optional: logo, page (page display name), disclaimer, legal)."""
     f=os.path.join(ROOT,'channels',f'{cid}.json')
     if not os.path.isfile(f): sys.exit(f'channel "{cid}" not found: {f} (have: {sorted(x[:-5] for x in os.listdir(os.path.join(ROOT,"channels")))})')
     C=json.load(open(f,encoding='utf-8'))
-    miss=[k for k in ['name','wordmark','handles','followLabel','followDone','ctaPhrase','ctaInWord','ctaPressWord'] if not C.get(k)]
+    miss=[k for k in ['name','wordmark','followLabel','followDone','ctaPhrase','ctaInWord','ctaPressWord'] if not C.get(k)]+([] if isinstance(C.get('handles'),list) else ['handles'])  # handles may be [] (client page with no handles yet)
     if miss: sys.exit(f'channel {cid}: missing {miss}')
     return C

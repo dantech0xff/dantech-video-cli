@@ -1,0 +1,16 @@
+{
+ "name": "Solana",
+ "slug": "solana",
+ "fetched_at": "2026-10-18T06:04:01Z",
+ "status": "ok",
+ "file": "logo.svg",
+ "kind": "vector",
+ "mono": false,
+ "color": "#9945FF",
+ "source": "simple-icons",
+ "source_url": "https://simpleicons.org/?q=solana",
+ "match": "Simple Icons title \"Solana\"",
+ "attrib": null,
+ "license": "trademark of its owner; brand guidelines: https://solana.com/branding. Used only to identify the product being discussed (nominative use); no endorsement implied.",
+ "tried": []
+}

@@ -1,0 +1,67 @@
+<!doctype html><html><head><style>html,body{margin:0;background:transparent}</style>
+<script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script></head>
+<body><pre id="out"></pre>
+<script type="module">
+import * as THREE from 'three';
+import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
+import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
+import {RectAreaLightUniformsLib} from 'three/addons/lights/RectAreaLightUniformsLib.js';
+const P=Object.fromEntries(new URLSearchParams(location.hash.slice(1)));
+const W=+(P.w||1200),H=+(P.h||1200);
+const r=new THREE.WebGLRenderer({antialias:true,alpha:true,preserveDrawingBuffer:true});r.setSize(W,H);r.setPixelRatio(1);
+r.toneMapping=THREE.ACESFilmicToneMapping;r.toneMappingExposure=+(P.exp||1);r.outputColorSpace=THREE.SRGBColorSpace;r.setClearColor(0x000000,0);
+r.shadowMap.enabled=true;r.shadowMap.type=THREE.PCFSoftShadowMap;
+document.body.appendChild(r.domElement);RectAreaLightUniformsLib.init();
+const sc=new THREE.Scene();const pm=new THREE.PMREMGenerator(r);sc.environment=pm.fromScene(new RoomEnvironment(),0.04).texture;sc.environmentIntensity=+(P.env||.35);
+const cam=new THREE.PerspectiveCamera(+(P.fov||26),W/H,.1,100);cam.position.set(+(P.cx||0),+(P.cy||2.4),+(P.cz||7.5));cam.lookAt(0,+(P.ly||0),0);
+// studio lights: soft key softbox above-front-left, cool rim from behind-right, faint fill
+const key=new THREE.RectAreaLight(0xffffff,+(P.key||5),5,5);key.position.set(-2.5,5,3);key.lookAt(0,0,0);sc.add(key);
+const rim=new THREE.DirectionalLight(0xA9C8FF,+(P.rim||5));rim.position.set(4,3,-5);sc.add(rim);
+const rim2=new THREE.DirectionalLight(0xC7DAFF,+(P.rim2||1.6));rim2.position.set(-5,2,-4);sc.add(rim2);
+const fill=new THREE.HemisphereLight(0x8a9099,0x050506,+(P.fill||.25));sc.add(fill);
+const mat=(kind)=>{
+ if(kind==='mint')return new THREE.MeshPhysicalMaterial({color:0x3BE08F,roughness:.28,metalness:0,clearcoat:1,clearcoatRoughness:.12,sheen:.2});
+ if(kind==='white')return new THREE.MeshPhysicalMaterial({color:0xF5F5F2,roughness:.42,metalness:0,clearcoat:.6,clearcoatRoughness:.25});
+ if(kind==='red')return new THREE.MeshPhysicalMaterial({color:0xE6322D,roughness:.3,clearcoat:1,clearcoatRoughness:.15});
+ if(kind==='glass')return new THREE.MeshPhysicalMaterial({color:0x1a1c20,roughness:.08,metalness:0,transmission:.0,clearcoat:1,clearcoatRoughness:.05,reflectivity:.8});
+ return new THREE.MeshPhysicalMaterial({color:0x17181b,roughness:.3,metalness:.15,clearcoat:1,clearcoatRoughness:.1}); // graphite gloss
+};
+const ext=(shape,depth,bev)=>{const g=new THREE.ExtrudeGeometry(shape,{depth,bevelEnabled:true,bevelThickness:bev,bevelSize:bev,bevelSegments:10,curveSegments:96});g.center();return g};
+// 3/4 disc (logomark circle): top-right quadrant removed
+const wedge=(R=1,depth=.42,bev=.06)=>{const s=new THREE.Shape();s.moveTo(0,0);s.lineTo(0,R);s.absarc(0,0,R,Math.PI/2,2*Math.PI,false);s.lineTo(0,0);
+ const g=new THREE.ExtrudeGeometry(s,{depth,bevelEnabled:true,bevelThickness:bev,bevelSize:bev,bevelSegments:10,curveSegments:128});g.translate(0,0,-depth/2);return g};
+const quarter=(R=1,depth=.42,bev=.06)=>{const s=new THREE.Shape();s.moveTo(0,0);s.lineTo(R,0);s.absarc(0,0,R,0,Math.PI/2,false);s.lineTo(0,0);
+ const g=new THREE.ExtrudeGeometry(s,{depth,bevelEnabled:true,bevelThickness:bev,bevelSize:bev,bevelSegments:10,curveSegments:96});g.translate(0,0,-depth/2);return g};
+const grp=new THREE.Group();sc.add(grp);
+const o=P.obj||'hero';
+const add=(geo,m,pos=[0,0,0])=>{const x=new THREE.Mesh(geo,mat(m));x.position.set(...pos);x.castShadow=true;x.receiveShadow=true;grp.add(x);return x};
+if(o==='hero'){ // logomark in 3D: off-white 3/4 disc + mint cube in the cut quadrant (logo proportions: R40, square 24 at x66..90,y10..34 from centre 50,50)
+ const R=1;add(wedge(R,.34,+(P.bev||.025)),P.m||'white');const s=24/40*R;add(new RoundedBoxGeometry(s,s,s*.9,6,.05),'mint',[(78-50)/40*R,(50-22)/40*R,0]);}
+if(o==='wedge')add(wedge(1,+(P.d||.42),.06),P.m||'graphite');
+if(o==='quarter')add(quarter(1,+(P.d||.42),.06),P.m||'graphite');
+if(o==='cube')add(new RoundedBoxGeometry(1,1,1,8,+(P.rb||.1)),P.m||'mint');
+if(o==='slab')add(new RoundedBoxGeometry(2.2,1.3,.18,8,.07),P.m||'graphite');
+if(o==='coin'){const g=new THREE.CylinderGeometry(1,1,.22,128,1);add(g,P.m||'graphite');}
+if(o==='plate'){ // studio floor: one soft light pool, objects resting out of focus
+ sc.environmentIntensity=+(P.env||.12);key.intensity=+(P.key||0);fill.intensity=+(P.fill||.08);
+ rim.intensity=+(P.rim||0);rim2.intensity=+(P.rim2||0);
+ const rs=new THREE.SpotLight(0xA9C8FF,+(P.rs||90),0,.35,.8,1.4);rs.position.set(+(P.rsx||5),+(P.rsy||4),+(P.rsz||-9));rs.target.position.set(0,0,-1.5);sc.add(rs.target);sc.add(rs);
+ const fl=new THREE.Mesh(new THREE.PlaneGeometry(60,60),new THREE.MeshStandardMaterial({color:+(P.fc||0x0d0d10),roughness:+(P.fr||.8),metalness:0}));fl.rotation.x=-Math.PI/2;fl.position.y=0;fl.receiveShadow=true;sc.add(fl);
+ const sp=new THREE.SpotLight(0xF2F0EA,+(P.sp||140),0,+(P.ang||.42),+(P.pen||1),+(P.dec||1.6));sp.position.set(+(P.spx||.6),+(P.spy||7),+(P.spz||-.5));sp.target.position.set(+(P.tx||.5),0,+(P.tz||-1));sc.add(sp.target);sp.castShadow=true;sp.shadow.mapSize.set(4096,4096);sp.shadow.radius=8;sp.shadow.bias=-.0004;sc.add(sp);
+ const L=(geo,m,pos,rot,s=1)=>{const x=new THREE.Mesh(geo,mat(m));x.position.set(...pos);x.rotation.set(...rot);x.scale.setScalar(s);x.castShadow=true;x.receiveShadow=true;sc.add(x);return x};
+ const lay=JSON.parse(decodeURIComponent(P.lay||'[]'));
+ for(const it of lay){const g=it.o==='wedge'?wedge(1,it.d??.42,.06):it.o==='quarter'?quarter(1,it.d??.42,.06):it.o==='cube'?new RoundedBoxGeometry(1,1,1,8,.1):it.o==='hero'?null:null;
+  if(it.o==='hero'){const G=new THREE.Group();const m1=new THREE.Mesh(wedge(1,.34,.025),mat('white'));const sq=24/40;const m2=new THREE.Mesh(new RoundedBoxGeometry(sq,sq,sq*.9,6,.05),mat('mint'));m2.position.set(28/40,28/40,0);[m1,m2].forEach(m=>{m.castShadow=true;m.receiveShadow=true;G.add(m)});G.position.set(...it.p);G.rotation.set(...it.r);G.scale.setScalar(it.s??1);sc.add(G);continue}
+  L(g,it.m||'graphite',it.p,it.r,it.s??1)}
+}
+if(P.ks){const k2=new THREE.SpotLight(0xffffff,+(P.ks),0,.5,1,1.2);k2.position.set(-3,4,4);k2.target.position.set(0,0,0);sc.add(k2.target);sc.add(k2);}
+grp.rotation.set(+(P.rx||-0.55),+(P.ry||0.55),+(P.rz||0));grp.scale.setScalar(+(P.s||1));
+if(P.floor){const fl=new THREE.Mesh(new THREE.PlaneGeometry(40,40),new THREE.ShadowMaterial({opacity:.55}));fl.rotation.x=-Math.PI/2;fl.position.y=+(P.fy||-1.1);fl.receiveShadow=true;sc.add(fl);
+ const sp=new THREE.SpotLight(0xffffff,+(P.sp||60),0,.5,.9);sp.position.set(-1,7,2);sp.castShadow=true;sp.shadow.mapSize.set(2048,2048);sp.shadow.radius=12;sc.add(sp);}
+if(P.depth){sc.background=null;sc.environment=null;const dm=new THREE.ShaderMaterial({uniforms:{n:{value:+(P.dn||5)},fz:{value:+(P.df||16)}},
+ vertexShader:'varying float vz;void main(){vec4 mv=modelViewMatrix*vec4(position,1.);vz=-mv.z;gl_Position=projectionMatrix*mv;}',
+ fragmentShader:'varying float vz;uniform float n;uniform float fz;void main(){float d=clamp((vz-n)/(fz-n),0.,1.);gl_FragColor=vec4(vec3(d),1.);}'});
+ sc.overrideMaterial=dm;r.toneMapping=THREE.NoToneMapping;r.outputColorSpace=THREE.LinearSRGBColorSpace;r.setClearColor(0xffffff,1);}
+r.render(sc,cam);
+document.getElementById('out').textContent=r.domElement.toDataURL('image/png');
+</script></body></html>

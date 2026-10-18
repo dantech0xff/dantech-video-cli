@@ -36,10 +36,10 @@ cta=S.get('cta',{}); C=T['cta']
 # look override: theme.json "variants"[script.variant], then script "look" (colours etc.); default theme look otherwise
 look={**T.get('variants',{}).get(S['variant'],{}).get('look',{}),**S.get('look',{})} if S.get('variant') else S.get('look',{})
 if S.get('variant') and S['variant'] not in T.get('variants',{}): sys.exit(f"variant {S['variant']} not in theme {S['theme']} (have: {list(T.get('variants',{}))})")
-# channel / brand (channels/<id>.json, default dantech): wordmark, handles, follow texts, CTA phrase
-CH=load_channel(S.get('channel','dantech'));tid_=theme_id(S['theme'])
+# channel / brand (channels/<id>.json; script "channel", else theme.json "channel" (client themes), else dantech): wordmark, handles, follow texts, CTA phrase
+CH=load_channel(S.get('channel',T.get('channel','dantech')));tid_=theme_id(S['theme'])
 pick=lambda v,fb:(v.get(tid_,v.get('default',fb)) if isinstance(v,dict) else (v or fb))
-brand={'id':CH['id'],'name':CH['name'],'wordmark':CH['wordmark'],'followLabel':CH['followLabel'],'followDone':CH['followDone'],'handles':S.get('handles',CH['handles'])}
+brand={'id':CH['id'],'name':CH['name'],'wordmark':CH['wordmark'],'followLabel':CH['followLabel'],'followDone':CH['followDone'],'handles':S.get('handles',CH['handles']),**{k:CH[k] for k in ['logo','page','disclaimer'] if CH.get(k)}}
 props={'theme':theme_id(S['theme']),'look':look,'date':S['date'],'voice':f'render/{slug}.mp3','words':W,'scenes':scenes,'sfx':sfx,
  'cta':{'inAt':resolve(cta.get('in',f"@{CH['ctaInWord']}{C['in_offset']:+d}"),0,len(W),0),'pressAt':resolve(cta.get('press','@'+CH['ctaPressWord']),0,len(W),0),'outAt':end-6,'top':C['top'],'sub':cta.get('sub',pick(CH.get('followSub'),C['sub']))},
  'outro':{'start':end,'dur':T['outro']['dur'],'tagline':pick(CH.get('tagline'),T['outro']['tagline']),'pal':T['outro'].get('pal'),'handles':brand['handles']},'channel':brand,

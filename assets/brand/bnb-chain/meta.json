@@ -1,0 +1,16 @@
+{
+ "name": "BNB Chain",
+ "slug": "bnb-chain",
+ "fetched_at": "2026-10-18T06:04:01Z",
+ "status": "ok",
+ "file": "logo.svg",
+ "kind": "vector",
+ "mono": false,
+ "color": "#F0B90B",
+ "source": "simple-icons",
+ "source_url": "https://simpleicons.org/?q=bnbchain",
+ "match": "Simple Icons title \"BNB Chain\"",
+ "attrib": null,
+ "license": "trademark of its owner. Used only to identify the product being discussed (nominative use); no endorsement implied.",
+ "tried": []
+}

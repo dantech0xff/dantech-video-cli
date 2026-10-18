@@ -1,9 +1,10 @@
 # Generates soft transition air (own work). Prints listening metrics: high-band energy, centroid, edge samples.
 #   python3 scripts/sfx_soft.py            -> assets/sfx/slide_soft.wav (android-tutor shared-axis slide, default)
 #   python3 scripts/sfx_soft.py morph      -> assets/sfx/morph_soft.wav (spare)
+#   python3 scripts/sfx_soft.py quarter    -> assets/sfx/quarter_soft.wav (loot-crypto quarter sweep: 0.56 s, peak -23 dBFS at 0.2 s = fastest part of the sweep, dark air, no whistle)
 #   python3 scripts/sfx_soft.py hero       -> assets/sfx/hero_soft.wav (flutter-tutor Hero flight: 0.5 s, peak -22 dBFS at 0.24 s = fastest part of the flight)
 import sys
-P={'slide':dict(D=0.45,pk=0.17,lo=300,hi=600,lo2=320,hi2=520,peak=-20),'morph':dict(D=0.72,pk=0.333,lo=500,hi=1300,lo2=550,hi2=1250,peak=-12),'hero':dict(D=0.5,pk=0.24,lo=260,hi=480,lo2=280,hi2=420,peak=-22)}
+P={'slide':dict(D=0.45,pk=0.17,lo=300,hi=600,lo2=320,hi2=520,peak=-20),'morph':dict(D=0.72,pk=0.333,lo=500,hi=1300,lo2=550,hi2=1250,peak=-12),'hero':dict(D=0.5,pk=0.24,lo=260,hi=480,lo2=280,hi2=420,peak=-22),'quarter':dict(D=0.56,pk=0.2,lo=380,hi=760,lo2=400,hi2=620,peak=-22)}
 KIND=sys.argv[1] if len(sys.argv)>1 else 'slide';P=P[KIND];NAME=KIND+'_soft'
 # pink-ish noise through a swept 3-pole low-pass, raised-cosine envelope peaking at pk (synced to the visual peak of the transition)
 import numpy as np,wave,os

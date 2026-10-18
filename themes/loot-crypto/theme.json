@@ -1,0 +1,124 @@
+{
+ "channel": "loot-crypto",
+ "look": {
+  "id": "loot-crypto",
+  "label": "LOOT CRYPTO",
+  "subtitle": "client: LOOT CRYPTO · studio-lit 3D + quarter geometry",
+  "bg": "#08080A",
+  "ink": "#F5F5F2",
+  "onAccent": "#04140B",
+  "accent": "#3BE08F",
+  "accent2": "#F5F5F2",
+  "muted": "#AAAAAC",
+  "head": "BVPX",
+  "body": "BVPM",
+  "upper": false,
+  "step": 1,
+  "video": "clean",
+  "entry": "rise",
+  "rule": "rgba(245,245,242,.10)",
+  "lc": {
+   "red": "signal",
+   "redBar": true,
+   "studio": "textures/loot/plate_main.jpg",
+   "endPlate": "textures/loot/plate_end.jpg",
+   "discTypes": [
+    "LcPrice",
+    "LcChart",
+    "LcCoin",
+    "LcFlow",
+    "LcVersusCoin"
+   ]
+  },
+  "pal": {
+   "card": "rgba(20,20,23,.82)",
+   "card2": "#16161A",
+   "panel": "#0E0E11",
+   "line": "rgba(245,245,242,.10)",
+   "dim": "#AAAAAC",
+   "mint": "#3BE08F",
+   "red": "#E6322D"
+  },
+  "sfx": {
+   "trans": "quarter_soft",
+   "stamp": "select_003",
+   "tick": "tick_002",
+   "entry": "tick_002"
+  },
+  "trans": [
+   "quarter"
+  ],
+  "caption": {
+   "font": "BVPX",
+   "size": 46,
+   "upper": false,
+   "weight": 400,
+   "chipBg": "rgba(16,16,19,.94)",
+   "chipText": "#F5F5F2",
+   "upcomingText": "rgba(245,245,242,.5)",
+   "activeBg": "#3BE08F",
+   "activeText": "#04140B",
+   "radius": 14,
+   "pop": 1.04
+  },
+  "defaultOut": "quarter",
+  "pack": {
+   "card": "rgba(20,20,23,.84)",
+   "card2": "#16161A",
+   "panel": "#0E0E11",
+   "line": "rgba(245,245,242,.12)",
+   "dim": "#AAAAAC",
+   "sub": "#D6D6D3",
+   "out": "#AAAAAC",
+   "term": "#0B0B0D",
+   "hl": "accent",
+   "onHl": "#04140B",
+   "good": "#3BE08F",
+   "onGood": "#04140B",
+   "bad": "#E6322D",
+   "badBg": "rgba(230,50,45,.10)",
+   "badInk": "#AAAAAC",
+   "badRow": "#FF6B66",
+   "warn": "#E6322D",
+   "warnBg": "rgba(230,50,45,.08)",
+   "onWarn": "#FFFFFF",
+   "tint": "accent",
+   "tintK": 0.8,
+   "bar": "#E6322D",
+   "mono": "BVPS",
+   "r": "30px 6px 30px 30px"
+  },
+  "softSpot": true
+ },
+ "tail_hold": 40,
+ "cta": {
+  "top": 1150,
+  "in_offset": -6,
+  "sub": "BẬT THÔNG BÁO ĐỂ KHÔNG LỠ BÀI MỚI"
+ },
+ "outro": {
+  "dur": 96,
+  "tagline": "Kiến thức crypto, nói rõ ràng"
+ },
+ "voice": {
+  "voice": "vi-vn-concierge-2",
+  "model": "gemini-3.8-flash-tts",
+  "styles": {
+   "tu-nhien": "điềm tĩnh, rõ ràng, tin cậy như chuyên gia tài chính giải thích cho người mới; không cường điệu",
+   "ke-chuyen": "kể chuyện điềm đạm, có ngắt nghỉ, nghiêm túc"
+  }
+ },
+ "music": {
+  "pool": [
+   {
+    "id": "raspberrymusic-technology-background-music",
+    "start": 0
+   },
+   {
+    "id": "kuromaru-ft-hereafter-laxin",
+    "start": 0
+   }
+  ],
+  "rel": -11
+ }
+}

@@ -60,8 +60,8 @@ for i,sc in enumerate(sc_list,1):
     for k in ['say','type','section']:
         if not sc.get(k): err(f'{tag}: missing "{k}"')
     if sc.get('type') not in types: err(f'{tag}: unknown type, use one of {sorted(types)}')
-    if sc.get('out') and sc['out'] not in ['page','bar','zoom','push','stack','morph','scroll','signal','sharedx','hero']: err(f'{tag}: bad out "{sc["out"]}"')
-    if i<len(sc_list) and not sc.get('out'): warn(f'{tag}: no "out" transition (defaults to bar)')
+    if sc.get('out') and sc['out'] not in ['page','bar','zoom','push','stack','morph','scroll','signal','sharedx','hero','quarter']: err(f'{tag}: bad out "{sc["out"]}"')
+    if i<len(sc_list) and not sc.get('out') and not (T or {}).get('look',{}).get('defaultOut'): warn(f'{tag}: no "out" transition (defaults to bar)')  # themes with look.defaultOut (flutter hero, loot quarter) need none
     if sc.get('out')=='morph' and not sc.get('morph'): err(f'{tag}: out "morph" needs a "morph" {{from,to,txt}}')
     extra=set(sc.get('props',{}))-known.get(sc.get('type'),set())
     if sc.get('type') in known and extra: warn(f'{tag}: props not used in examples: {sorted(extra)} (check the .tsx)')
@@ -222,7 +222,7 @@ def numts(x):
     if isinstance(x,list): return any(isinstance(y,(int,float)) and not isinstance(y,bool) or numts(y) for y in x)
     return False
 press_w=''
-try: press_w=norm(json.load(open(os.path.join(ROOT,'channels',f"{S.get('channel','dantech')}.json"),encoding='utf-8'))['ctaPressWord'])
+try: press_w=norm(json.load(open(os.path.join(ROOT,'channels',f"{S.get('channel',(T or {}).get('channel','dantech'))}.json"),encoding='utf-8'))['ctaPressWord'])
 except Exception: pass
 WPS=3.2
 for i,sc in enumerate(sc_list,1):
@@ -255,7 +255,7 @@ for i,sc in enumerate(sc_list,1):
     if beats and n-1-beats[-1]<3: err(f'{tag}: last beat lands at word {beats[-1]+1}/{n}, <~3 words before the scene exits — anchor it earlier so viewers can read it')
 # channel CTA phrase (channels/<id>.json): Follow button pops on ctaInWord, is pressed on ctaPressWord
 try:
-    CHN=json.load(open(os.path.join(ROOT,'channels',f"{S.get('channel','dantech')}.json"),encoding='utf-8'))
+    CHN=json.load(open(os.path.join(ROOT,'channels',f"{S.get('channel',(T or {}).get('channel','dantech'))}.json"),encoding='utf-8'))
     ph=[norm(w) for w in CHN['ctaPhrase'].split()]
     if not any(allw[i:i+len(ph)]==ph for i in range(len(allw))): err(f'script must say the channel CTA "{CHN["ctaPhrase"]}" (Follow pops on "{CHN["ctaInWord"]}", pressed on "{CHN["ctaPressWord"]}")')
 except FileNotFoundError: err(f'channel "{S.get("channel")}" not found in channels/')

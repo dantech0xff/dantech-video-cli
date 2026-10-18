@@ -34,3 +34,11 @@
 - **Nguồn:** Simple Icons đã gỡ VS Code, Windows, LinkedIn, OpenAI theo yêu cầu chủ sở hữu → lấy file Wikimedia Commons cụ thể (registry `commons`). Simple Icons có bản cũ/đơn sắc của IntelliJ, Kotlin, Flutter → lấy asset chính chủ (registry `official`: trang brand JetBrains, flutter.dev; Flutter trùng sha256 với `flutter_logomark.svg`).
 - **Bẫy:** trang chủ VS Code có `<img alt="VS Code on Github" src="github-icon.svg">` → fetcher lấy nhầm logo GitHub. Giờ bỏ `<img>` có tên file nói tới thứ khác hoặc alt kiểu "X on/for Y".
 - **macOS, iOS:** logo chính thức chỉ là wordmark chữ → bỏ (registry `wordmark`), vì đặt cạnh tên thành "macOS macOS".
+
+## 2026-10-18 · Theme khách hàng đầu tiên: loot-crypto (LOOT CRYPTO)
+- **Brand theo kênh:** theme.json `"channel"` là kênh mặc định (build_props + validator), kênh có `logo`/`page`/`disclaimer`, `handles` được rỗng. Không còn chỗ nào trong theme mới in "Dan Tech".
+- **Sora không có tiếng Việt** (thiếu ạ/ọ/ệ/ữ, có Đ/à/á nên dễ tưởng là đủ): nhãn tiếng Việt dùng Be Vietnam Pro SemiBold 0.06em, Sora chỉ cho chuỗi Latin (`lab()`).
+- **3D tĩnh + trôi chậm** đủ cảm giác studio cao cấp, không tốn render: plate từ three.js headless (tools/loot-3d). Ánh sáng spot hẹp + sàn nhám tối mới ra "product shot"; directional rim làm cảnh phẳng, xanh.
+- **Chuyển cảnh quét (`quarter`):** nếu cảnh mới bắt đầu đúng ở mốc, giữa sweep chỉ thấy plate trống → bắt đầu sớm T/2. Overlay focus/squeeze ghi đè transform của wrapper → rotation đi qua `data-pre`.
+- **Spotlight focus trên nền ảnh** lộ cạnh hình chữ nhật → `look.softSpot` (mask mờ mép).
+- **Nội dung tiền:** disclaimer header tự động trên cảnh giá/biểu đồ/coin/flow, tag MINH HỌA khi không có nguồn, end card luôn có disclaimer.

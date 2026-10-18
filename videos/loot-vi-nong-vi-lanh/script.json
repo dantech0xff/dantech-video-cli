@@ -1,0 +1,287 @@
+{
+  "theme": "loot-crypto",
+  "channel": "loot-crypto",
+  "title": "Ví nóng vs ví lạnh + 3 cách giữ seed phrase an toàn",
+  "date": "18 · 10 · 2026",
+  "topic": [
+    "ví nóng",
+    "ví lạnh"
+  ],
+  "caption": "Ví nóng hay ví lạnh? Khác nhau ở chỗ khóa riêng nằm online hay offline. Và dù dùng ví nào, seed phrase mới là thứ phải giữ kỹ nhất: chép tay, cất ở hơn một nơi, không gõ vào web lạ. Nội dung mang tính kiến thức, không phải lời khuyên đầu tư. #LootCrypto #Crypto #BaoMat #SeedPhrase",
+  "sources": [
+    "Coinbase Learn, What is a crypto wallet? (private keys; paper / hardware / online wallets; offline harder to attack, online more exposed to phishing; larger amounts offline): https://www.coinbase.com/learn/crypto-basics/what-is-a-crypto-wallet (đọc 18/10/2026)",
+    "Ledger Academy, What is a Seed Phrase? (12–24 words, backup of all private keys; never store on cloud, record on paper/physical; store away from thieves and accidents; never share, nobody legit will ask): https://www.ledger.com/academy/crypto/what-is-a-recovery-phrase (đọc 18/10/2026)",
+    "Bitcoin.org, Securing your wallet (small amounts for everyday use; offline wallet for savings; offline transaction signing; hardware wallets; use many secure locations for backups): https://bitcoin.org/en/secure-your-wallet (đọc 18/10/2026)"
+  ],
+  "hook": {
+    "kind": "explainer",
+    "claim": "Ví nóng, ví lạnh khác nhau ở chỗ khóa riêng nằm đâu",
+    "why": "dù dùng ví nào, ai có seed phrase là có toàn bộ coin"
+  },
+  "glossary": {
+    "khóa riêng": "chuỗi bí mật dùng để ký giao dịch; ai có nó là dùng được coin",
+    "seed phrase": "cụm 12–24 từ sao lưu mọi khóa riêng của một ví",
+    "ví phần cứng": "thiết bị nhỏ giữ khóa riêng offline và ký giao dịch ngay trên máy",
+    "blockchain": "sổ cái công khai ghi lại mọi giao dịch, nơi coin thật sự nằm"
+  },
+  "tts": {
+    "engine": "edge"
+  },
+  "voice": {
+    "style": "random"
+  },
+  "music": {
+    "track": "random"
+  },
+  "scenes": [
+    {
+      "say": "Ví nóng, ví lạnh khác nhau ở chỗ khóa riêng nằm đâu. Một bên nằm online, một bên nằm offline.",
+      "type": "LcHook",
+      "section": "ví nóng vs ví lạnh",
+      "props": {
+        "kick": "KIẾN THỨC VÍ",
+        "big": "Ví nóng hay ví lạnh?",
+        "hl": "nóng lạnh",
+        "line": "Khác nhau ở chỗ khóa riêng nằm online hay offline.",
+        "lineAt": "@chỗ",
+        "cards": [
+          {
+            "s": "Ví nóng",
+            "sub": "Khóa nằm online",
+            "icon": "wifi",
+            "tone": "ink"
+          },
+          {
+            "s": "Ví lạnh",
+            "sub": "Khóa nằm offline",
+            "icon": "nowifi",
+            "tone": "mint"
+          }
+        ],
+        "cardsAt": "@Một"
+      }
+    },
+    {
+      "say": "Coin nằm trên blockchain, ví chỉ giữ khóa riêng để ký giao dịch. Mọi khóa riêng sinh ra từ một cụm mười hai đến hai mươi bốn từ, gọi là seed phrase.",
+      "type": "DataFlow",
+      "section": "ví giữ gì",
+      "props": {
+        "title": "Ví thật ra giữ gì?",
+        "nodes": [
+          {
+            "s": "Blockchain",
+            "sub": "Nơi coin thật sự nằm",
+            "at": "@blockchain"
+          },
+          {
+            "s": "Khóa riêng",
+            "sub": "Ký giao dịch",
+            "via": "ai giữ khóa mới dùng được coin",
+            "at": "@khóa"
+          },
+          {
+            "s": "Seed phrase",
+            "sub": "12 đến 24 từ",
+            "via": "mọi khóa sinh ra từ",
+            "at": "@cụm"
+          }
+        ]
+      }
+    },
+    {
+      "say": "Ví nóng là app hay tiện ích trình duyệt, luôn online nên gửi nhận rất tiện. Ví lạnh như ví phần cứng giữ khóa offline, nên khó bị tấn công từ xa hơn.",
+      "type": "LcVersus",
+      "section": "so sánh",
+      "props": {
+        "title": "Ví nóng vs ví lạnh",
+        "kick": "SO SÁNH",
+        "a": {
+          "s": "Ví nóng",
+          "sub": "App, tiện ích",
+          "icon": "wifi"
+        },
+        "b": {
+          "s": "Ví lạnh",
+          "sub": "Phần cứng, giấy",
+          "icon": "nowifi"
+        },
+        "rows": [
+          {
+            "k": "Kết nối mạng",
+            "a": "Luôn online",
+            "b": "Offline",
+            "at": "@online"
+          },
+          {
+            "k": "Gửi nhận",
+            "a": "Rất tiện",
+            "b": "Chậm hơn",
+            "win": "a",
+            "at": "@tiện"
+          },
+          {
+            "k": "Tấn công từ xa",
+            "a": "Dễ hơn",
+            "b": "Khó hơn",
+            "win": "b",
+            "at": "@tấn"
+          }
+        ]
+      }
+    },
+    {
+      "say": "Ví phần cứng ký giao dịch ngay trên máy, khóa riêng không phải rời thiết bị.",
+      "type": "LcGuide",
+      "section": "ví phần cứng",
+      "props": {
+        "title": "Ký giao dịch ngay trên máy",
+        "kick": "VÍ PHẦN CỨNG",
+        "device": "hw",
+        "checks": [
+          {
+            "s": "Ký ngay trên máy",
+            "at": "@ký"
+          },
+          {
+            "s": "Khóa riêng không rời thiết bị",
+            "at": "@khóa"
+          }
+        ]
+      }
+    },
+    {
+      "say": "Vì vậy nhiều người giữ một ít trong ví nóng để tiêu, còn phần lớn cất ở ví lạnh.",
+      "type": "LcFlow",
+      "section": "chia đôi",
+      "props": {
+        "title": "Ít để tiêu, nhiều để cất",
+        "kick": "CÁCH CHIA",
+        "disc": false,
+        "from": {
+          "s": "Ví nóng",
+          "kind": "wifi",
+          "sub": "Một ít, tiêu hằng ngày"
+        },
+        "to": {
+          "s": "Ví lạnh",
+          "kind": "nowifi",
+          "sub": "Phần lớn, cất lâu dài"
+        },
+        "amount": {
+          "s": "Phần lớn",
+          "at": "@phần"
+        },
+        "at": 0
+      }
+    },
+    {
+      "say": "Nhưng dù dùng ví nào, ai có seed phrase là có toàn bộ coin. Không ai chính danh hỏi cụm từ này, kể cả bộ phận hỗ trợ.",
+      "type": "LcWarn",
+      "section": "seed phrase",
+      "props": {
+        "title": "Ai có seed phrase là có toàn bộ coin",
+        "s": "Không ai chính danh hỏi cụm từ này, kể cả bộ phận hỗ trợ.",
+        "items": [
+          {
+            "s": "Trang web đòi nhập 12 từ",
+            "at": "@hỏi"
+          },
+          {
+            "s": "Người tự xưng hỗ trợ xin seed",
+            "at": "@kể"
+          }
+        ]
+      }
+    },
+    {
+      "say": "Cách giữ seed thứ nhất, đừng chụp màn hình, đừng lưu lên cloud, mà chép tay ra giấy hoặc tấm kim loại.",
+      "type": "LcGuide",
+      "section": "giữ seed · 1",
+      "props": {
+        "title": "Chép tay, không chụp",
+        "kick": "GIỮ SEED · 1",
+        "device": "phone",
+        "screen": "seed",
+        "checks": [
+          {
+            "s": "Chụp màn hình",
+            "ok": false,
+            "at": "@chụp"
+          },
+          {
+            "s": "Lưu lên cloud",
+            "ok": false,
+            "at": "@cloud"
+          },
+          {
+            "s": "Chép ra giấy hoặc kim loại",
+            "at": "@chép"
+          }
+        ]
+      }
+    },
+    {
+      "say": "Cách thứ hai, cất bản sao ở hơn một nơi kín đáo, để một sự cố không lấy đi tất cả. Cách thứ ba, không gõ seed vào trang web hay gửi cho ai.",
+      "type": "LcSteps",
+      "section": "giữ seed · 2 · 3",
+      "props": {
+        "title": "3 cách giữ seed an toàn",
+        "kick": "BẢO MẬT",
+        "steps": [
+          {
+            "s": "Chép tay, không chụp",
+            "sub": "Giấy hoặc kim loại, không cloud",
+            "icon": "paper",
+            "at": 0
+          },
+          {
+            "s": "Cất ở hơn một nơi",
+            "sub": "Một sự cố không lấy đi tất cả",
+            "icon": "home",
+            "at": "@hai"
+          },
+          {
+            "s": "Không gõ, không gửi",
+            "sub": "Không nhập vào web, không gửi ai",
+            "icon": "shield",
+            "at": "@ba"
+          }
+        ]
+      }
+    },
+    {
+      "say": "Tóm lại, ví nóng để tiêu, ví lạnh để cất, seed phrase chỉ mình bạn giữ. Theo dõi Loot Crypto để hiểu crypto rõ hơn.",
+      "type": "LcHook",
+      "section": "tóm lại",
+      "props": {
+        "kick": "TÓM LẠI",
+        "big": "Nóng để tiêu, lạnh để cất.",
+        "hl": "tiêu cất",
+        "line": "Seed phrase thì chỉ mình bạn giữ.",
+        "lineAt": "@seed",
+        "cards": [
+          {
+            "s": "Ví nóng",
+            "sub": "Ít, để tiêu",
+            "icon": "hot",
+            "tone": "ink"
+          },
+          {
+            "s": "Ví lạnh",
+            "sub": "Phần lớn, để cất",
+            "icon": "cold",
+            "tone": "mint"
+          },
+          {
+            "s": "Seed",
+            "sub": "Chỉ bạn giữ",
+            "icon": "key",
+            "tone": "red"
+          }
+        ],
+        "cardsAt": "@seed",
+        "cardsFlow": true
+      }
+    }
+  ]
+}

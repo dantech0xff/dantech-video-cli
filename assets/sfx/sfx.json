@@ -158,5 +158,13 @@
   "license": "own work",
   "url": "",
   "use": "FLUTTER TUTOR Hero transition: barely audible air, peak at the fastest part of the flight"
+ },
+ "quarter_soft": {
+  "source": "own",
+  "pack": "",
+  "orig": "synthesised with numpy (scripts/sfx_soft.py quarter)",
+  "license": "own work",
+  "url": "",
+  "use": "LOOT CRYPTO quarter-sweep transition: soft dark air (centroid ~270 Hz), 0.56 s, peak -22 dBFS at the fastest part of the sweep"
  }
 }

@@ -551,5 +551,153 @@
   "si": "meta",
   "case": true,
   "cat": "company"
+ },
+ "bitcoin": {
+  "name": "Bitcoin",
+  "aliases": [
+   "bitcoin",
+   "btc"
+  ],
+  "si": "bitcoin",
+  "cat": "crypto"
+ },
+ "ethereum": {
+  "name": "Ethereum",
+  "aliases": [
+   "ethereum",
+   "eth",
+   "ether"
+  ],
+  "si": "ethereum",
+  "cat": "crypto"
+ },
+ "solana": {
+  "name": "Solana",
+  "aliases": [
+   "solana",
+   "sol"
+  ],
+  "si": "solana",
+  "case": true,
+  "cat": "crypto"
+ },
+ "tether": {
+  "name": "Tether",
+  "aliases": [
+   "tether",
+   "usdt"
+  ],
+  "si": "tether",
+  "cat": "crypto"
+ },
+ "bnb-chain": {
+  "name": "BNB Chain",
+  "aliases": [
+   "bnb chain",
+   "bnb"
+  ],
+  "si": "bnbchain",
+  "cat": "crypto"
+ },
+ "xrp": {
+  "name": "XRP",
+  "aliases": [
+   "xrp"
+  ],
+  "si": "xrp",
+  "cat": "crypto"
+ },
+ "cardano": {
+  "name": "Cardano",
+  "aliases": [
+   "cardano"
+  ],
+  "si": "cardano",
+  "cat": "crypto"
+ },
+ "dogecoin": {
+  "name": "Dogecoin",
+  "aliases": [
+   "dogecoin",
+   "doge"
+  ],
+  "si": "dogecoin",
+  "cat": "crypto"
+ },
+ "chainlink": {
+  "name": "Chainlink",
+  "aliases": [
+   "chainlink"
+  ],
+  "si": "chainlink",
+  "cat": "crypto"
+ },
+ "litecoin": {
+  "name": "Litecoin",
+  "aliases": [
+   "litecoin",
+   "ltc"
+  ],
+  "si": "litecoin",
+  "cat": "crypto"
+ },
+ "polygon": {
+  "name": "Polygon",
+  "aliases": [
+   "polygon"
+  ],
+  "si": "polygon",
+  "case": true,
+  "cat": "crypto"
+ },
+ "binance": {
+  "name": "Binance",
+  "aliases": [
+   "binance"
+  ],
+  "si": "binance",
+  "cat": "crypto"
+ },
+ "coinbase": {
+  "name": "Coinbase",
+  "aliases": [
+   "coinbase"
+  ],
+  "si": "coinbase",
+  "cat": "crypto"
+ },
+ "okx": {
+  "name": "OKX",
+  "aliases": [
+   "okx"
+  ],
+  "si": "okx",
+  "cat": "crypto"
+ },
+ "trezor": {
+  "name": "Trezor",
+  "aliases": [
+   "trezor"
+  ],
+  "si": "trezor",
+  "cat": "crypto"
+ },
+ "ledger": {
+  "name": "Ledger",
+  "aliases": [
+   "ledger"
+  ],
+  "case": true,
+  "homepage": "https://www.ledger.com",
+  "cat": "crypto"
+ },
+ "metamask": {
+  "name": "MetaMask",
+  "aliases": [
+   "metamask"
+  ],
+  "homepage": "https://metamask.io",
+  "github": "MetaMask",
+  "cat": "crypto"
  }
 }

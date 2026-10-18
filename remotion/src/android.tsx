@@ -37,11 +37,12 @@ export const setPal=(t:any)=>{
   tint:(a:number)=>`rgba(${r},${g},${b},${light?a*.8:a})`,good:redA?(light?'#1E7F3C':'#3DDC84'):t.accent,onGood:redA?(light?'#FFFFFF':'#00391C'):t.onAccent,r:sharp?0:t.id==='quick-tips'?24:28,rp:sharp?0:999,
   head:t.head,hw:t.head==='Anton'||t.head==='BVPX'?400:800,up:!!t.upper,light});
  // hand-tuned per-theme pack palette (themes/<id>/theme.json look.pack) overrides the derived tokens above
- AT.news=false;const P=t.pack||{};const map:Record<string,string>={hl:'green',onHl:'onPrim',bad:'err',badBg:'errBg',badInk:'errInk',badRow:'errRow'};
+ AT.news=false;(AT as any).bar=undefined;const P=t.pack||{};const map:Record<string,string>={hl:'green',onHl:'onPrim',bad:'err',badBg:'errBg',badInk:'errInk',badRow:'errRow'};
  const res=(v:any)=>v==='accent'?t.accent:v==='onAccent'?t.onAccent:v==='accent2'?t.accent2:v; // follow the theme (and its variants) accent
  Object.entries(P).forEach(([k,v])=>{if(k==='tint'||k==='tintK')return;(AT as any)[map[k]??k]=res(v)});
+ if(t.lc&&t.lc.redBar===false&&P.bar)(AT as any).bar=t.accent; // loot-crypto knob: mint title bar instead of red
  if(P.tint){const [tr,tg,tb]=hx(res(P.tint));const K=P.tintK??1;AT.tint=(a:number)=>`rgba(${tr},${tg},${tb},${a*K})`}
- SANS=t.body==='JBM'?'JBM':t.body;MONO=t.id==='flutter-tutor'?'GSC':'JBM'};
+ SANS=t.body==='JBM'?'JBM':t.body;MONO=t.id==='flutter-tutor'?'GSC':P.mono??'JBM'}; // pack.mono: label font for packs (loot-crypto: BVPS)
 // overlap audit: every content box carries data-bb (see bbcheck.tsx, props.debugBB)
 export const bb=(n:string)=>({'data-bb':n} as any);
 // M3 Expressive springs (material3 1.4 ExpressiveMotionTokens): spatial fast .6/800, default .8/380, slow .8/200; effects critically damped.
@@ -75,7 +76,7 @@ export const kt=(line:string)=>{const c=line.indexOf('//');const code=c>=0?line.
  if(cm)out.push(<span key="c" style={{color:AT.cmt}}>{cm}</span>);return out};
 export const lbl=(size=24,c=AT.dim):React.CSSProperties=>({fontFamily:MONO,fontSize:size,color:c,fontWeight:500});
 export const Title:React.FC<{s:string;at?:number;size?:number;one?:boolean}>=({s,at=0,size=80,one})=>{const {f}=useS();const p=m3(f,at,'def'),o=m3(f,at,'fx');if(one)size=fitSize(s,880,size,AT.head==='Anton'?.47:AT.head==='JBM'||AT.head==='BVPX'||AT.head==='BVPM'?.62:.54);
- return <div {...bb('title')} style={{whiteSpace:one?'nowrap':'normal',fontFamily:AT.head,fontWeight:AT.hw,textTransform:AT.up?'uppercase':'none',fontSize:size,lineHeight:AT.head==='Anton'?1.05:1.12,color:AT.ink,letterSpacing:AT.head==='Anton'?0:-1,marginBottom:34,opacity:o,transform:`translateY(${(1-p)*40}px)`}}>{s}</div>};
+ return <>{(AT as any).bar&&<div style={{width:64,height:8,background:(AT as any).bar,marginBottom:22,opacity:o}}/>}<div {...bb('title')} style={{whiteSpace:one?'nowrap':'normal',fontFamily:AT.head,fontWeight:AT.hw,textTransform:AT.up?'uppercase':'none',fontSize:size,lineHeight:AT.head==='Anton'?1.05:1.12,color:AT.ink,letterSpacing:AT.head==='Anton'?0:-1,marginBottom:34,opacity:o,transform:`translateY(${(1-p)*40}px)`}}>{s}</div></>};
 export const Pill:React.FC<{children:React.ReactNode;bg?:string;fg?:string;size?:number}>=({children,bg=AT.green,fg=AT.onPrim,size=30})=><span style={{display:'inline-flex',alignItems:'center',gap:10,background:bg,color:fg,borderRadius:AT.rp,padding:`8px ${size*.8}px`,fontFamily:SANS,fontWeight:800,fontSize:size,whiteSpace:'nowrap'}}>{children}</span>;
 /* editor card: file tab + gutter + typed Kotlin lines + optional highlighted range */
 const Editor:React.FC<{file:string;lines:{s:string;at:number}[];hl?:{from:number;to:number;at:number};fs?:number;lh?:number;at?:number}>=({file,lines,hl,fs=40,lh=62,at=0})=>{const {f}=useS();const p=m3(f,at,'def');

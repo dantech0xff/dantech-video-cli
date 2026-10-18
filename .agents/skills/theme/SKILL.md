@@ -36,7 +36,7 @@ description: Tạo theme mới hoặc chỉnh theme Dan Tech từ một spec (mo
 ## Caption karaoke (mọi theme)
 Caption = karaoke **chip** (mọi theme): mỗi chữ là một chip có nền (`chipBg`/`chipText`). Chữ sắp đọc thì text mờ hơn (`upcomingText`). Chữ đang đọc: nền đổi sang `activeBg`, text sang `activeText`, pop nhẹ (`pop` ~1.06, spring, không rung). Đọc xong thì về chip thường. **Không gạch chân.** Cấu hình ở `theme.json → look.caption`: `font,size,upper,weight,chipBg,chipText,upcomingText,activeBg,activeText,radius,padX,padY,gap,pop`. Size phải để 2 dòng chip lọt dải y 1366–1500 (Anton 50, BVPX/BVPM 44, JBM 38). Chip trên nền tối phải sáng hơn nền để còn thấy. Ước lượng 2 dòng trong `Captions` đã trừ padding + gap của chip.
 - Font caption khai báo trong `theme.json` → `look.caption` `{font, size, upper, weight?}`; mặc định = font chính (`head`) của theme. Caption phải cùng font với video.
-- Hiện tại: hot-news Anton 72 (in hoa) · quick-tips BVPX 62 · tech-explain JBM 52 (700) · tech-explain-cyber BVPM 60 · hot-news-glitch Anton 72 (in hoa) · android-tutor GSF (Google Sans Flex) 48 (800), chip bo 14 · flutter-tutor GSF 48 (800), chip active Sky #027DFD chữ trắng, bo 18, pop 1.06, không gạch chân.
+- Hiện tại: hot-news Anton 72 (in hoa) · quick-tips BVPX 62 · tech-explain JBM 52 (700) · tech-explain-cyber BVPM 60 · hot-news-glitch Anton 72 (in hoa) · android-tutor GSF (Google Sans Flex) 48 (800), chip bo 14 · flutter-tutor GSF 48 (800), chip active Sky #027DFD chữ trắng, bo 18, pop 1.06 · loot-crypto BVPX 46, chip active mint #3BE08F chữ #04140B, bo 14, pop 1.04, không gạch chân.
 - Component `Captions` (remotion/src/sys.tsx) dùng chung, không viết caption riêng cho theme mới.
 
 ## Safe zone (BẮT BUỘC — tạo / sửa / cập nhật theme)
@@ -86,6 +86,15 @@ Brand (wordmark, tên, handle, logo, chữ nút Follow) lấy từ `channels/<id
 - Mid-ground Flutter: chỉ các **dải song song cùng một hướng** (−36° ± 5°, trượt ±70 px, bo 6–75 px dao động), để không bao giờ ghép thành hình chữ F/chevron của logo.
 - SFX `hero_soft` (`scripts/sfx_soft.py hero`): 0.5 s, peak −22 dBFS, centroid ~220 Hz: gần như chỉ là hơi gió.
 - Card label + badge trong hộp hẹp (FAB) dễ đè nhau mà bbcheck không bắt (hộp lồng nhau không tính overlap): nhìn still phóng to các hộp lồng. Label của highlight code đặt **dưới** khung (không đè dòng dài), và chừa thêm padding nếu highlight ở dòng cuối (editor overflow hidden).
+
+### Bài học từ loot-crypto (theme khách hàng)
+- **Theme khách hàng = brand từ kênh, không hardcode Dan Tech.** `themes/<id>/theme.json` có `"channel": "<id>"` → `build_props.py` / `validate_script.py` dùng `channels/<id>.json` khi script không ghi `channel`. Kênh có thể thêm `logo` (symbol trong header + end card), `page` (tên fanpage), `disclaimer`; `handles` được phép rỗng (end card chỉ hiện tên page).
+- **Studio 3D mà không tốn render:** dựng plate bằng three.js headless (tools/loot-3d, README có lệnh tái tạo) rồi Remotion chỉ Ken Burns chậm + vũng sáng thở + 1 khối mờ tiền cảnh, tất cả `data-deco`. Plate giống hệt nhau ở mọi layer (theo frame toàn cục), nên chuyển cảnh chỉ đổi nội dung. Ánh sáng: spot key hẹp + sàn nhám tối + rim spot lạnh, đừng dùng directional rim (ra bóng đều, xanh, phẳng); DoF nhẹ (cocK ~2.2) + vignette + grain.
+- **Font brand thiếu tiếng Việt:** Sora không có ạ/ọ/ệ/ữ. Chỉ dùng cho chuỗi Latin (logo, số, ticker); helper `lab(s)` tự đổi sang Be Vietnam Pro SemiBold (0.06em) khi chuỗi có ký tự ngoài ASCII. Luôn soi glyph font brand trước khi dùng cho nhãn.
+- **Hình học từ logomark:** card 3 góc tròn + 1 góc nhọn phải-trên (đúng chỗ ô vuông mint của logo), ô vuông mint làm bullet/accent. Pack dùng chung nhận góc này qua `look.pack.r` (chuỗi border-radius), vạch đỏ trên title qua `look.pack.bar`, font nhãn qua `look.pack.mono`.
+- **Chuyển cảnh `quarter`:** sector 90° quét quanh góc dưới-trái (clip-path polygon), nội dung mới xoay −5°→0 quanh góc, cũ +3° và tối dần, mép mint mảnh + ô vuông mint chạy theo cung. Cảnh mới bắt đầu sớm T/2 (`lf` +8) để lúc quét đã có nội dung (nếu không, giữa sweep chỉ thấy plate trống). Rotation đi qua `data-pre` để overlay focus/squeeze (set transform bằng tay) giữ được nó.
+- **Spotlight trên nền ảnh:** dim hình chữ nhật cứng lộ cạnh trên plate → `look.softSpot` làm mờ mép (mask gradient), viền focus theo góc QR.
+- **Nội dung tiền:** disclaimer ở header phải (vừa 724 px cùng số trang) chỉ trên cảnh giá/biểu đồ/coin/flow (`look.lc.discTypes`, `props.disc`), tag MINH HỌA trên số liệu không nguồn, end card luôn có disclaimer. Đỏ chỉ cho giảm/cảnh báo/vạch tiêu đề (`look.lc.red: "signal"`; `"equal"` cho đỏ làm accent thứ hai), `look.lc.redBar: false` đổi vạch tiêu đề sang mint.
 
 ## Chống chồng lấn (BẮT BUỘC, mọi theme)
 - Mọi hộp nội dung (title, card, phone, nhãn, pill, hàng, note, brand, end card) gắn `{...bb('tên')}` (`data-bb`). Lớp scene có `data-layer`, caption + nút Follow là lớp `g`.

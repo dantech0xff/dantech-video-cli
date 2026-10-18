@@ -2,7 +2,7 @@
 
 ```jsonc
 {
- "theme": "hot-news" | "quick-tips" | "tech-explain",   // = thư mục themes/<id>/
+ "theme": "hot-news" | "quick-tips" | "tech-explain" | … | "loot-crypto",   // = thư mục themes/<id>/
  "title": "…",                 // tiêu đề nội bộ / description
  "date": "16 · 10 · 2026",     // hiện trên masthead
  "caption": "… #DanTech #TinNong",
@@ -14,14 +14,14 @@
  "music": {"track": "random"},          // hoặc id trong assets/music/tracks.json, + "start": giây
  "variant": "red",                     // tuỳ chọn: biến thể trong theme.json → variants (GIẢI THÍCH: "red" = accent YouTube đỏ)
  "look": {"accent": "#…"},             // tuỳ chọn: ghi đè màu look cho riêng video (sau variant)
- "channel": "dantech",   // tuỳ chọn: id file channels/<id>.json (brand, handle, nút Follow, ctaPhrase). Mặc định dantech
+ "channel": "dantech",   // tuỳ chọn: id file channels/<id>.json (brand, handle, nút Follow, ctaPhrase). Mặc định: theme.json "channel" (theme khách hàng, vd loot-crypto), rồi dantech
  "handles": [...],  // tuỳ chọn, KHÔNG nên đặt: mặc định lấy từ channels/<id>.json
  "cta": {"in": "@follow-6", "press": "@Dan", "sub": "…"}, // tuỳ chọn, mặc định từ theme.json → cta
  "scenes": [{
    "say": "Câu giọng đọc nói trong cảnh này.",   // cảnh bắt đầu ở chữ đầu tiên của say
    "type": "<scene template>",
    "section": "DÒNG NHỎ TRÊN ĐẦU",
-   "out": "page|bar|zoom|push|stack|morph|scroll",      // chuyển cảnh sang cảnh sau (cảnh cuối bỏ trống)
+   "out": "page|bar|zoom|push|stack|morph|scroll|signal|sharedx|hero|quarter",      // chuyển cảnh sang cảnh sau (cảnh cuối bỏ trống)
    "focus": [x, y],                               // tâm zoom khi out = zoom
    "morph": {"from":[x,y,w,h,font],"to":[…],"txt":"14"},  // bắt buộc khi out = morph; toạ độ px màn hình 1080x1920 (hộp nội dung SZ.content: y 340–1359, scale 0.795)
    "props": {…},                                  // theo template bên dưới
@@ -109,6 +109,22 @@ Canvas rộng 894, dùng được tới y ~1280. Code dùng Google Sans Code (mo
 - **FlStat** `{hero, title, a:{k,v,unit,at}, b:{k,v,unit,at}, note?:{s,at}}`: 2 card số đếm lên (b nổi bật navy + viền Sky).
 - **FlTake** `{hero, title, rows:[{k,v,at}], rule?:{s,at}}`: hàng "trường hợp → chọn gì" + rule card. Là cảnh cuối: ≤ 3 hàng để nội dung dừng trên y ~1060 (nút Follow).
 - `out: "hero"` (mặc định qua `look.defaultOut`): cảnh cũ đứng yên, cảnh mới fade + nâng 12 px (Curves.fastOutSlowIn, 533 ms), chip `hero` bay theo cung nhẹ (MaterialRectArcTween-like) từ chỗ cũ sang chỗ mới, đổi chữ thì cross-fade chữ. Cảnh không có `hero` (vd VersusHook) thì chỉ cross-fade.
+
+## Theme `loot-crypto` (LOOT CRYPTO, fanpage khách hàng, 🧪 chờ duyệt) — scene types (`remotion/src/loot.tsx`)
+Kênh = `channels/loot-crypto.json` (theme.json `"channel"`, không cần đặt trong script): header "LOOT CRYPTO", nút "THEO DÕI LOOT CRYPTO", câu cuối phải có **"theo dõi Loot Crypto"** (bật ở "theo", bấm ở "Loot"). Không nhắc Dan Tech. Canvas rộng 894, dùng tới y ~1280; `out` mặc định `quarter` (không cần khai báo).
+**Luật nội dung tiền:** không lời khuyên đầu tư, không hype, không dự đoán giá. Giá/biểu đồ/số coin không có nguồn → để tag mặc định `MINH HỌA` (`label`); có nguồn thì `src` (hiện "NGUỒN · …"). Header tự hiện "Không phải lời khuyên đầu tư" trên LcPrice/LcChart/LcCoin/LcFlow (tắt riêng cảnh bằng `"disc": false`, bật cho cảnh khác bằng `"disc": true`); end card luôn có dòng này.
+- **LcHook** `{kick?, big, hl?, line?, lineAt?, coins?:[tên], coinsAt?, cards?:[{s,sub?,icon?,coin?,tone?:"mint"|"ink"|"red"}], cardsAt?, cardsFlow?}`: `big` to hiện từ frame 0 (`hl` = các chữ tô mint), chip coin có logo tự động (Bitcoin, Ethereum, Solana…), `line` subline, `cards` 2 thẻ ở đáy (icon/logo). Cũng dùng làm cảnh chốt (kick "TÓM LẠI"). `cardsFlow:true` đặt thẻ ngay dưới `line` (dùng cho cảnh tóm tắt cuối, khi Follow CTA chiếm đáy); mặc định thẻ neo đáy vùng nội dung.
+- **LcPrice** `{title?, kick?, coin, sym, price, from?, dec?, cur?, chg, at?, spark?:[n], label?, src?, stats?:[{k,v}]}`: giá đếm lên (Sora), % đổi ▲ mint / ▼ đỏ, sparkline vẽ dần, ≤ 3 stat.
+- **LcChart** `{title, kick?, kind:"line"|"candle", data?:[n], candles?:[[o,h,l,c]], at?, dur?, marks?:[{i,at:"@chữ",s,tone?:"up"|"down"|"flat"}], yl?, xl?, label?, src?}`: vẽ dần trong `dur` frame; `marks` = marker phát sáng ở điểm `i` đúng lúc lời đọc nói tới + chú thích.
+- **LcCoin** `{coin, sym, rank?, price?, chg?, stats:[{k,v,at?}], label?, src?, note?:{s,at}}`: thẻ coin (logo, tên, rank ô mint, các hàng số liệu).
+- **LcFlow** `{title, kick?, from:{s,kind?,coin?,sub?}, to:{…}, at?, amount?:{s,at}, tag?:{s,tone,at}, ratio?:{a,la,lb,at,tone?}, label?, src?}`: dòng on-chain (sàn → ví, cá voi mua/bán): gói mint chạy giữa 2 node, pill số lượng, tag, thanh tỉ lệ. `kind`: exchange, wallet, cold, whale, wifi, nowifi, shield, key, phone, paper, hot, lock, home.
+- **LcVersus** `{title?, kick?, a:{s,sub?,coin?,icon?}, b:{…}, rows:[{k,a,b,win?:"a"|"b",at}], label?}`: đối đầu 2 cột + bảng chỉ số (ô thắng mint).
+- **LcGuide** `{title, kick?, device:"phone"|"hw"|"paper", screen?:"seed"|"wallet", words?, checks:[{s,at,ok?:false}]}`: khung điện thoại (màn seed phrase che chữ / ví) hoặc ví phần cứng hoặc tờ seed giấy + checklist (✓ mint, ✕ đỏ). ≤ 3 check.
+- **LcWarn** `{kick?, title, s?, items?:[{s,at}]}`: thẻ cảnh báo đỏ (lừa đảo, rủi ro).
+- **LcNews** `{kick?, head, src?, date?, ticker?:[{sym,chg}], points?:[{s,at}]}`: dải ticker chạy, tiêu đề tin, nguồn, các điểm tin.
+- **LcSteps** `{title, kick?, steps:[{s,sub?,at,icon?}]}`: các bước đánh số (ô mint góc QR).
+- Pack dùng chung đã tô theo theme (`look.pack`: vạch đỏ trên title, góc QR): DataFlow (khái niệm), Steps, QuoteCard, Timeline, Table…
+- Logo coin: gọi đúng tên (Bitcoin/BTC, Ethereum/ETH, Solana, Tether/USDT, BNB, XRP…; registry `cat: crypto`), logo tự động như mọi theme.
 
 ## Theme `hot-news-glitch` (TIN NÓNG GLITCH)
 Dùng scene của hot-news (Flow, QuoteCard/Quote, Checklist, BigStat/Evidence, CTA); cảnh mở dùng **GlHeadline** `{kicker,l1,bar,l3,deck[],hits?:[frame|@word]}` (glitch RGB split + cắt lát tại các `hits`). `out: "signal"` = chuyển cảnh tín hiệu vỡ (ngắn). `kick` nên là nhãn có nghĩa (vd "TOÀ ÁN"), không nhãn kiểu báo/trang.

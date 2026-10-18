@@ -60,6 +60,7 @@ Ví dụ đi từ đầu đến cuối: [docs/WALKTHROUGH.md](docs/WALKTHROUGH.m
 | `tech-explain-cyber` | dev explainer (blueprint tối, lime) | `videos/flutter-mvvm` |
 | `android-tutor` | chỉ cho dev Android: Kotlin/Compose/lifecycle (IDE gần đen #0B0C0E + Compose Preview + Logcat, đúng xanh Android #3DDC84, chuyển cảnh `sharedx` (shared-axis X), hình mid-ground morph chậm) | `videos/compose-remember-saveable` |
 | `flutter-tutor` | chỉ cho dev Flutter: widget/state/Dart (nền navy #050A14, Navy/Blue/Sky #042B59/#0553B1/#027DFD, card widget lồng nhau + highlight build lại, chuyển cảnh `hero` (chip từ khoá bay sang cảnh sau), dải xanh chéo mid-ground, logomark Flutter chính thức nhỏ) | `videos/flutter-setstate-valuenotifier` |
+| `loot-crypto` | chỉ cho fanpage khách hàng LOOT CRYPTO: tin crypto, phân tích coin, kiến thức, ví & bảo mật, giá/on-chain (studio 3D tối + hình học logomark, mint #3BE08F / đỏ #E6322D, chuyển cảnh `quarter`, kênh `channels/loot-crypto.json`, disclaimer tự động, số liệu MINH HỌA nếu không có nguồn; không lời khuyên đầu tư, không dự đoán giá) | `videos/loot-vi-nong-vi-lanh` |
 
 Script mới dùng `"voice": {"style":"random"}`. Không đặt `voice.file`. Câu cuối có `ctaPhrase` của kênh (mặc định "follow Dan Tech"). Outro tự lo handle.
 
@@ -79,7 +80,7 @@ Mọi chữ thương hiệu trên màn hình lấy từ file kênh, không hardc
 **Thêm kênh mới:** copy `channels/dantech.json` thành `channels/<id>.json`, sửa các khoá trên, đặt `"channel": "<id>"` trong script, câu kết dùng đúng `ctaPhrase`. Rồi chạy validator và render still top bar, nút Follow, end card cho mọi theme, kiểm bằng safezone.py. Mẫu kênh giả để thử: `channels/example.json` (Mobile Hub). Icon mới (ngoài youtube/facebook/tiktok) thì vendor SVG simple-icons vào `assets/icons/` và thêm path vào `remotion/src/brand.tsx`.
 
 ## Theme ids
-`hot-news` (TIN NÓNG · hot news), `quick-tips` (MẸO NHANH · quick tips), `tech-explain` (GIẢI THÍCH · tech explain), `tech-explain-cyber` (GIẢI THÍCH CYBER), `hot-news-glitch` (TIN NÓNG GLITCH), `android-tutor` (ANDROID TUTOR), `flutter-tutor` (FLUTTER TUTOR). Id cũ `tin-nong`, `meo-nhanh`, `commit` vẫn chạy (alias, deprecated, có cảnh báo); script mới dùng id mới. Hashtag như #TinNong, #MeoNhanh giữ nguyên.
+`hot-news` (TIN NÓNG · hot news), `quick-tips` (MẸO NHANH · quick tips), `tech-explain` (GIẢI THÍCH · tech explain), `tech-explain-cyber` (GIẢI THÍCH CYBER), `hot-news-glitch` (TIN NÓNG GLITCH), `android-tutor` (ANDROID TUTOR), `flutter-tutor` (FLUTTER TUTOR), `loot-crypto` (LOOT CRYPTO, theme khách hàng). Id cũ `tin-nong`, `meo-nhanh`, `commit` vẫn chạy (alias, deprecated, có cảnh báo); script mới dùng id mới. Hashtag như #TinNong, #MeoNhanh giữ nguyên.
 
 ## Skills (đọc SKILL.md tương ứng rồi làm theo)
 
@@ -128,7 +129,7 @@ Video chỉ "xong" khi tất cả đều ✅:
 - [ ] **Contact sheet:** mỗi cảnh một still + outro, vd. `ffmpeg -i <mp4> -vf "fps=1/3,scale=270:-1,tile=6x2" -frames:v 1 sheet.png`. Phải mở ra xem bằng mắt.
 - [ ] **Frame inspection:** still ở 0.5 s, giữa mỗi cảnh, lúc bấm Follow, end card (`ffmpeg -ss <t> -i <mp4> -frames:v 1 f.png`). Chữ không tràn, không chồng, baseline top bar thẳng, code đọc được.
 - [ ] **Static-screen gate:** `./dt gate videos/<slug>/script.json` → `gate: ✅ PASS` (trong `./dt render` đã tự chạy). Không có cửa sổ 3 s nào trong lúc giọng đọc mà màn hình đứng yên (caption, hình mid-ground, con trỏ nháy không tính). Fail thì in đúng mốc giây + cảnh: thêm anchor/`kw`/`overlays` hoặc bật lại autofill, không lách gate. Ngoại lệ duy nhất: cảnh `"still": true` (cố ý đứng yên) được miễn ≤ 5 s; dài hơn vẫn fail.
-- [ ] **Overlap audit** (theme có gắn `data-bb`, hiện tại android-tutor, flutter-tutor): `scripts/bbcheck.sh videos/<slug>/script.json` → `frames with overlaps: 0`.
+- [ ] **Overlap audit** (theme có gắn `data-bb`, hiện tại android-tutor, flutter-tutor, loot-crypto): `scripts/bbcheck.sh videos/<slug>/script.json` → `frames with overlaps: 0`.
 - [ ] **Safe zone:** `python3 scripts/safezone.py f*.png -o qc/` + `--sheet` → `0 with text in a no-text zone` (exit 0). Không có chữ nào trên y 290 (kể cả brand, số trang, tab), dưới y 1500, ở x < 60, hay ở cột nút x ≥ 880 từ y 700. Nền, lưới, rail màu trơn, hình mid-ground thì được. Vẫn nhìn overlay bằng mắt.
 - [ ] Caption khớp giọng, mỗi trang ≤ 2 dòng. Anchor `@chữ` bật đúng lúc.
 - [ ] Không mặt người, không tên theme, không label giả. End card có 3 handle có logo.

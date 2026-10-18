@@ -3,7 +3,7 @@ import React,{createContext,useContext} from 'react';
 import channel from '../../channels/dantech.json';
 export type Handle={p:string;h:string;icon?:string};
 export const HANDLES:Handle[]=channel.handles;
-export type Brand={id:string;name:string;wordmark:string;followLabel:string;followDone:string;handles:Handle[]};
+export type Brand={id:string;name:string;wordmark:string;followLabel:string;followDone:string;handles:Handle[];logo?:string;page?:string;disclaimer?:string}; // logo/page/disclaimer: optional client-channel fields (channels/loot-crypto.json)
 export const DEFAULT_BRAND:Brand={id:channel.id,name:channel.name,wordmark:channel.wordmark,followLabel:channel.followLabel,followDone:channel.followDone,handles:channel.handles};
 export const BrandCtx=createContext<Brand>(DEFAULT_BRAND);
 export const useBrand=()=>useContext(BrandCtx);
