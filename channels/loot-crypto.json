@@ -5,7 +5,12 @@
  "page": "LOOT CRYPTO",
  "logo": "brand/loot-crypto/loot-crypto-symbol.svg",
  "tagline": "Kiến thức crypto cho mọi người",
- "handles": [],
+ "handles": [
+  {
+   "p": "",
+   "h": "@lootcrypto"
+  }
+ ],
  "followLabel": "THEO DÕI LOOT CRYPTO",
  "followDone": "ĐÃ THEO DÕI ✓",
  "followSub": "BẬT THÔNG BÁO ĐỂ KHÔNG LỠ BÀI MỚI",
