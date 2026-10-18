@@ -293,6 +293,8 @@ export const LcSteps:React.FC<{title:string;kick?:string;steps:{s:string;sub?:st
    {s.icon&&<Glyph k={s.icon} s={z(52) as any} c={LC.grey}/>}</div>})}</div></Fill>};
 /* ================= 11. end card: hero plate (3D logomark in the light pool), page name, handles, disclaimer ================= */
 const PN:Record<string,string>={youtube:'YouTube',facebook:'Facebook',tiktok:'TikTok'};
+// handle with no platform (channels/<id>.json handles[] entry without "icon"): channel logomark tile instead of a platform icon, no platform label
+const GenTile:React.FC<{logo?:string}>=({logo})=><div style={{width:52,height:52,borderRadius:'14px 4px 14px 14px',background:'#141417',boxShadow:'0 0 0 2px rgba(255,255,255,.08)',display:'flex',alignItems:'center',justifyContent:'center',flex:'none'}}>{logo?<Img src={staticFile(logo)} style={{width:34,height:34}}/>:<span style={{...NUM(30,LC.mint)}}>@</span>}</div>;
 export const LcEndCard:React.FC<{dur?:number;handles?:Handle[];tagline?:string;tm?:string;plate?:string;ms?:number}>=({dur=96,handles,tagline='',tm,plate,ms})=>{const f=useCurrentFrame();const B=useBrand();handles=handles??B.handles;
  const op=(at:number)=>ease(f,at,14);const out=interpolate(f,[dur-10,dur],[1,0],cl);const fade=interpolate(f,[0,10],[0,1],cl);
  const page=B.page??B.name;const top=SZ.end.top+470;
@@ -304,8 +306,9 @@ export const LcEndCard:React.FC<{dur?:number;handles?:Handle[];tagline?:string;t
     {B.logo&&<Img src={staticFile(B.logo)} style={{width:70,height:70}}/>}<span style={{fontFamily:lab(page),fontWeight:600,fontSize:fitSize(page,600,72,.8),letterSpacing:'.06em',color:LC.ink,whiteSpace:'nowrap',lineHeight:1}}>{page}</span></div>
    <div {...bb('e-tag')} style={{display:'table',...HX(fitSize(tagline,724,56,.58)),marginTop:30,whiteSpace:'nowrap',opacity:op(13)}}>{tagline}</div>
    <div {...bb('e-fb')} style={{display:'inline-flex',alignItems:'center',gap:16,marginTop:30,...glass({borderRadius:QRs(24),padding:'12px 24px 12px 12px'}),opacity:op(16)}}><BrandTile icon="facebook" size={52} radius={14}/><span style={{...L('FACEBOOK · '+page,24,LC.ink,false)}}>Facebook · {page}</span></div>
-   {handles.length>0&&<div style={{marginTop:22,display:'flex',flexDirection:'column',gap:14}}>{handles.map((h,k)=>{const q=op(19+k*3);return <div key={k} {...bb('e-handle')} style={{display:'flex',alignItems:'center',gap:22,...glass({borderRadius:QRs(24),padding:'10px 26px 10px 12px'}),opacity:q,transform:`translateY(${(1-q)*18}px)`}}>
-    <BrandTile icon={h.icon} size={52} radius={14}/><span style={{...L(PN[h.icon??'']??h.p,22)}}>{PN[h.icon??'']??h.p}</span><span style={{marginLeft:'auto',...NUM(fitSize(h.h,330,34,.62))}}>{h.h}</span></div>})}</div>}
+   {handles.length>0&&<div style={{marginTop:22,display:'flex',flexDirection:'column',gap:14}}>{handles.map((h,k)=>{const q=op(19+k*3);return <div key={k} {...bb('e-handle')} style={{display:'flex',alignItems:'center',gap:22,...(h.icon?{}:{alignSelf:'flex-start',gap:18}),...glass({borderRadius:QRs(24),padding:'10px 26px 10px 12px'}),opacity:q,transform:`translateY(${(1-q)*18}px)`}}>
+    {h.icon?<><BrandTile icon={h.icon} size={52} radius={14}/><span style={{...L(PN[h.icon]??h.p,22)}}>{PN[h.icon]??h.p}</span><span style={{marginLeft:'auto',...NUM(fitSize(h.h,330,34,.62))}}>{h.h}</span></>
+     :<><GenTile logo={B.logo}/>{h.p&&<span style={{...L(h.p,22)}}>{h.p}</span>}<span style={{...NUM(fitSize(h.h,h.p?330:520,34,.62))}}>{h.h}</span></>}</div>})}</div>}
    <div style={{marginTop:34,opacity:op(24)}}><LcDisclaimer size={22}/></div>
    {tm&&<div {...bb('e-tm')} style={{marginTop:10,...BM(20,LC.dim),opacity:op(26)}}>{tm}</div>}
   </div>

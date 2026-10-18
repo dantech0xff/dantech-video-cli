@@ -2,18 +2,22 @@
  "Android toolchain": "Android SDK và công cụ đi kèm mà Flutter dùng để build app Android",
  "API key": "chuỗi khoá bí mật cho phép app khác thao tác trên tài khoản của bạn",
  "AppBar": "thanh tiêu đề trên cùng của màn hình",
+ "blockchain": "sổ cái công khai ghi lại mọi giao dịch, nơi coin thật sự nằm",
  "builder": "hàm trong ValueListenableBuilder, dựng lại phần UI khi giá trị đổi",
  "Docker Compose": "công cụ chạy nhiều container cùng lúc từ một file cấu hình",
  "emulator": "máy Android ảo chạy ngay trên máy tính",
  "flutter doctor": "lệnh kiểm tra máy, báo mục nào ổn, thiếu một phần hoặc chưa có",
  "JDK": "bộ công cụ Java; Gradle cần nó để chạy và build project Kotlin",
  "kdoctor": "công cụ kiểm tra môi trường KMP, chỉ chạy trên macOS",
+ "khóa riêng": "chuỗi bí mật dùng để ký giao dịch; ai có nó là dùng được coin",
  "MCP": "giao thức chuẩn để AI agent gọi công cụ của một app khác",
  "PATH": "danh sách thư mục terminal tìm tới khi bạn gõ một lệnh",
  "Postiz": "công cụ mã nguồn mở lên lịch và đăng bài lên nhiều mạng xã hội",
  "Program Files": "thư mục cài app mặc định của Windows, ghi vào cần quyền admin",
  "reverse proxy": "máy chủ đứng trước app, nhận tên miền, HTTPS rồi chuyển request vào",
+ "seed phrase": "cụm 12–24 từ sao lưu mọi khóa riêng của một ví",
  "USB debugging": "chế độ cho máy tính cài, chạy và debug app qua cáp USB",
  "ValueListenableBuilder": "widget chỉ dựng lại phần builder khi giá trị ValueNotifier đổi",
- "VPS": "máy chủ ảo thuê riêng, chạy liên tục, bạn toàn quyền cài đặt"
+ "VPS": "máy chủ ảo thuê riêng, chạy liên tục, bạn toàn quyền cài đặt",
+ "ví phần cứng": "thiết bị nhỏ giữ khóa riêng offline và ký giao dịch ngay trên máy"
 }
