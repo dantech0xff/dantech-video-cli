@@ -12,10 +12,10 @@
   "Dan Tech Academy, Kotlin Mobile 101 — bài 01: Android Studio, JDK và KMP plugin (đọc ngày 17/10/2026): https://dantech.academy/courses/kotlin-mobile-101/00-setup-first-run/lesson-01-install-android-studio"
  ],
  "glossary": {
-  "JDK": "bộ công cụ Java để Gradle build và chạy Kotlin",
-  "emulator": "máy Android ảo chạy ngay trên laptop",
-  "USB debugging": "cho phép máy tính cài và chạy app qua cáp USB",
-  "kdoctor": "công cụ kiểm môi trường KMP trên macOS"
+  "JDK": "bộ công cụ Java; Gradle cần nó để chạy và build project Kotlin",
+  "emulator": "máy Android ảo chạy ngay trên máy tính",
+  "USB debugging": "chế độ cho máy tính cài, chạy và debug app qua cáp USB",
+  "kdoctor": "công cụ kiểm tra môi trường KMP, chỉ chạy trên macOS"
  },
  "voice": {
   "style": "random"

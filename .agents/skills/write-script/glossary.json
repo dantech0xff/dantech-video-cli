@@ -1,0 +1,13 @@
+{
+ "Android toolchain": "Android SDK và công cụ đi kèm mà Flutter dùng để build app Android",
+ "AppBar": "thanh tiêu đề trên cùng của màn hình",
+ "builder": "hàm trong ValueListenableBuilder, dựng lại phần UI khi giá trị đổi",
+ "emulator": "máy Android ảo chạy ngay trên máy tính",
+ "flutter doctor": "lệnh kiểm tra máy, báo mục nào ổn, thiếu một phần hoặc chưa có",
+ "JDK": "bộ công cụ Java; Gradle cần nó để chạy và build project Kotlin",
+ "kdoctor": "công cụ kiểm tra môi trường KMP, chỉ chạy trên macOS",
+ "PATH": "danh sách thư mục terminal tìm tới khi bạn gõ một lệnh",
+ "Program Files": "thư mục cài app mặc định của Windows, ghi vào cần quyền admin",
+ "USB debugging": "chế độ cho máy tính cài, chạy và debug app qua cáp USB",
+ "ValueListenableBuilder": "widget chỉ dựng lại phần builder khi giá trị ValueNotifier đổi"
+}

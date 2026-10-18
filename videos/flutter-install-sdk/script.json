@@ -12,11 +12,11 @@
   "Flutter docs, Get started / Install (link trong bài học): https://docs.flutter.dev/get-started/install"
  ],
  "glossary": {
-  "PATH": "danh sách thư mục mà terminal tìm lệnh để chạy",
-  "flutter doctor": "lệnh khám máy, in từng hạng mục ổn, thiếu hoặc chưa có",
-  "Android toolchain": "SDK và công cụ Android mà Flutter dùng để build app",
-  "emulator": "máy Android ảo chạy ngay trên laptop",
-  "USB debugging": "cho phép máy tính cài và chạy app qua cáp USB"
+  "PATH": "danh sách thư mục terminal tìm tới khi bạn gõ một lệnh",
+  "flutter doctor": "lệnh kiểm tra máy, báo mục nào ổn, thiếu một phần hoặc chưa có",
+  "Android toolchain": "Android SDK và công cụ đi kèm mà Flutter dùng để build app Android",
+  "emulator": "máy Android ảo chạy ngay trên máy tính",
+  "USB debugging": "chế độ cho máy tính cài, chạy và debug app qua cáp USB"
  },
  "voice": {
   "style": "random"

@@ -292,6 +292,11 @@ for i,sc in enumerate(sc_list,1):
     low=sc.get('say','').lower()
     for m in META:
         if m in low: warn(f'scene {i}: meta signposting "{m}"; say the fact itself / ask naturally (write-script "Không đọc cấu trúc kịch bản")')
+# canonical glosses: one text per term across all videos (.agents/skills/write-script/glossary.json)
+_gp=os.path.join(ROOT,'.agents/skills/write-script/glossary.json')
+CANON=json.load(open(_gp,encoding='utf-8')) if os.path.isfile(_gp) else {}
+for term,gl in (S.get('glossary') or {}).items():
+    if term in CANON and gl!=CANON[term]: warn(f'glossary "{term}": differs from the canonical gloss "{CANON[term]}" (glossary.json); reuse it verbatim')
 # voice length per Gemini style / Edge default rate; words/second measured from real renders (voice_log.md + out/words.json:
 # Edge NamMinh +10%: 341 words -> 113.5 s = 3.0; Gemini tu-nhien: 166 -> 53.5 s = 3.1)
 RATE={'hao-hung':3.8,'tu-nhien':3.1,'ke-chuyen':2.55,'edge +10%':3.0}

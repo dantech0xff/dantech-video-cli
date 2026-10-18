@@ -14,9 +14,9 @@
   "Flutter API, ValueListenableBuilder class (rebuilds builder when value changes; child is pre-built; đọc ngày 17/10/2026): https://api.flutter.dev/flutter/widgets/ValueListenableBuilder-class.html"
  ],
  "glossary": {
-  "ValueListenableBuilder": "widget chỉ build lại khi ValueNotifier nó nghe đổi giá trị",
+  "ValueListenableBuilder": "widget chỉ dựng lại phần builder khi giá trị ValueNotifier đổi",
   "AppBar": "thanh tiêu đề trên cùng của màn hình",
-  "builder": "hàm vẽ lại phần UI khi giá trị đổi"
+  "builder": "hàm trong ValueListenableBuilder, dựng lại phần UI khi giá trị đổi"
  },
  "voice": {
   "style": "random"

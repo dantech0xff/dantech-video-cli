@@ -11,9 +11,9 @@
   "Dan Tech Academy, Flutter Mobile 101 — bài 01: Cài Flutter SDK và flutter doctor (đọc ngày 18/10/2026): https://dantech.academy/courses/flutter-mobile-101/00-foundations-setup/lesson-01-install-flutter-sdk"
  ],
  "glossary": {
-  "flutter doctor": "lệnh khám máy, in từng hạng mục ổn, thiếu hoặc chưa có",
-  "PATH": "danh sách thư mục mà terminal tìm lệnh để chạy",
-  "Program Files": "thư mục cài app của Windows, cần quyền admin"
+  "flutter doctor": "lệnh kiểm tra máy, báo mục nào ổn, thiếu một phần hoặc chưa có",
+  "PATH": "danh sách thư mục terminal tìm tới khi bạn gõ một lệnh",
+  "Program Files": "thư mục cài app mặc định của Windows, ghi vào cần quyền admin"
  },
  "voice": {
   "style": "random"
