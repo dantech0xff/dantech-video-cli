@@ -40,6 +40,8 @@ cli=opt('--tts') or os.environ.get('TTS_ENGINE'); req=(cli or tcfg.get('engine')
 src='--tts '+req if cli else (('script' if (S.get('tts') or {}).get('engine') else 'theme')+' tts.engine='+req if tcfg.get('engine') else '')
 if req not in ('auto','gemini','edge'): sys.exit(f'tts: unknown engine "{req}" (auto | gemini | edge)')
 has_key=bool(os.environ.get('GEMINI_API_KEY'))
+# a theme that pins its engine (duoly: Edge only, client decision) refuses any other engine, CLI included
+if TTS_T.get('engine') and req!=TTS_T['engine']: sys.exit(f"tts: theme {S['theme']} pins engine={TTS_T['engine']} (theme.json tts); refusing {req}")
 if req=='gemini':
     if not has_key: sys.exit(f'tts: Gemini requested ({src}) but GEMINI_API_KEY is not set. Set the key, or use --tts edge')
     engine,why='gemini',src

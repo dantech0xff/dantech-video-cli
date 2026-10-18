@@ -38,13 +38,19 @@
     "hl": "200k|nhớ lâu",
     "line": "Ba kiểu buổi hẹn rẻ mà hai đứa còn nhắc lại.",
     "lineAt": "@Có",
+    "chips": [
+     "Picnic",
+     "Xe buýt",
+     "Nấu chung"
+    ],
+    "chipsAt": "@thôi",
     "art": "ring",
     "artAt": 6,
     "stickers": [
      {
       "k": "sparkle",
-      "x": 90,
-      "y": 560,
+      "x": 790,
+      "y": 190,
       "s": 70,
       "at": "@ba"
      }

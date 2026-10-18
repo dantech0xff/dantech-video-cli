@@ -16,6 +16,7 @@ description: Tạo theme mới hoặc chỉnh theme Dan Tech từ một spec (mo
   - `tail_hold`, `cta{top,in_offset,sub}`, `outro{dur,tagline,pal?}`: đọc bởi `scripts/build_props.py`.
   - `voice{voice,model,styles}`: `tts.py`. Giữ `vi-vn-concierge-2` + 3 style.
   - `music{pool[{id,start}],rel}`: `pick_music.py`, `mix_bgm.sh`. id phải có trong `assets/music/tracks.json`.
+  - (tuỳ chọn) `tts{engine,voice,…}` khoá giọng theo theme, `autofill{progress:false}` tắt chip tiến độ, `brand_notes` (ghi chú duyệt brand, không ảnh hưởng render).
 - Không có composition riêng cho từng theme: `remotion/src/Video.tsx` dùng chung, chọn scene qua bảng `SCENES`. `./dt` lấy theme từ `script.json → theme`, nên **không cần sửa dt hay build_props**.
 
 ## Các bước
@@ -105,6 +106,9 @@ Brand (wordmark, tên, handle, logo, chữ nút Follow) lấy từ `channels/<id
 - **Chuyển cảnh `drift`:** hai lớp cùng một nền nên chỉ nội dung + số trang chuyển: cũ mờ **tại chỗ** (đẩy lên làm tiêu đề lấn vào dải header, bbcheck bắt `header×title`), mới mờ vào + nhích lên 44 px, cảnh mới bắt đầu sớm T/2, `data-pre` mang translateY. Tim nhỏ bay qua (`dl.driftHeart`). Không zoom, SFX −24 dBFS.
 - **Helper style nhận size làm tham số đầu:** `LB(s, 32, c)` (truyền nhầm chuỗi) làm fontSize không hợp lệ → chữ rơi về 16 px mà không lỗi. Soi still phóng to mọi nhãn nhỏ (kick, múi giờ, tag MINH HỌA).
 - **Brand khách:** end card chỉ logo + tên (tagline rỗng, handles []), không UI app, không link; `brands_off: true` trong script vì chữ thường (Picnic…) bị nhận là thương hiệu.
+- **Logo = mark trơn, không ô bo góc kiểu icon app** (Dan 18/10): ô vuông bo góc + viền trắng trên end card trông như icon app (trái luật "không nhắc app"). `tools/duoly-3d/mark.py` tách hai vòng nhẫn khỏi nền hồng của logo gốc (fit nền bậc 2 từ viền; matte = max(độ sáng kênh G so với nền → vòng trắng, độ lệch G−B so với nền → vòng đào); giữ màu gốc, glow trắng mềm) → `duoly-mark.png`, dùng cho header (42 px) và end card (360 px, drop-shadow). Keying "un-premultiply" làm vòng đào thành màu ô-liu: đừng dùng. Nếu khách gửi PNG nền trong suốt chính thức thì thay file đó.
+- **Knob theme cho trang khách:** `"autofill": {"progress": false}` tắt chip "section n/m" (đọc như bài học; script `autofill_progress` ghi đè); `"tts": {...}` khoá engine/giọng: tts.py từ chối engine khác (kể cả `--tts`), validator báo lỗi nếu script ghi engine khác; `"brand_notes"` ghi các quyết định brand đã duyệt (màu chữ #5B1F33 ngoài palette được duyệt để dễ đọc, logo, end card, CTA, số liệu, nhạc, giọng).
+- **Nhạc trang khách:** một bài cố định (`music.pool` 1 phần tử), ưu tiên licence không ràng buộc (CC0) và ghi rõ Content ID chưa kiểm vào `tracks.json` + `LIBRARY.md`. duoly: `luisalvaz-lofi-music-001` (CC0, từ 30 s).
 
 ## Chống chồng lấn (BẮT BUỘC, mọi theme)
 - Mọi hộp nội dung (title, card, phone, nhãn, pill, hàng, note, brand, end card) gắn `{...bb('tên')}` (`data-bb`). Lớp scene có `data-layer`, caption + nút Follow là lớp `g`.

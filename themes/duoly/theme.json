@@ -18,7 +18,10 @@
   "entry": "rise",
   "rule": "rgba(216,11,70,.12)",
   "plateScale": 1.03,
-  "plates": ["textures/duoly/plate_soft.jpg", "textures/duoly/plate_bold.jpg"],
+  "plates": [
+   "textures/duoly/plate_soft.jpg",
+   "textures/duoly/plate_bold.jpg"
+  ],
   "focusPush": 1,
   "softSpot": true,
   "dimFade": true,
@@ -41,7 +44,9 @@
    "tick": "bubble_soft",
    "entry": "bubble_soft"
   },
-  "trans": ["drift"],
+  "trans": [
+   "drift"
+  ],
   "defaultOut": "drift",
   "caption": {
    "font": "BVPX",
@@ -105,10 +110,23 @@
  },
  "music": {
   "pool": [
-   {"id": "kuromaru-ft-hereafter-laxin", "start": 0},
-   {"id": "sappheiros-perspective", "start": 0},
-   {"id": "raspberrymusic-lofi-hip-hop-upbeat", "start": 0}
+   {
+    "id": "luisalvaz-lofi-music-001",
+    "start": 30
+   }
   ],
   "rel": -11
+ },
+ "autofill": {
+  "progress": false
+ },
+ "brand_notes": {
+  "ink": "#5B1F33 body text is outside the brand palette, approved by Dan 18/10/2026 as the readability colour on the light pink plate",
+  "logo": "plain ring mark (assets/brand/duoly/duoly-mark.png) in header + end card; never the rounded app-icon badge",
+  "end_card": "logo mark + 'Duoly in Love' only; tagline off, no handles, no CTA",
+  "cta": "follow button 'Theo dõi Duoly in Love' + closing line 'theo dõi Duoly' approved; no app / download / link CTA",
+  "numbers": "prices as 'khoảng'/'~'/'dưới' estimates; unsourced poll % only with the MINH HỌA tag (validator enforces)",
+  "music": "one fixed track: luisalvaz-lofi-music-001 (CC0 1.0); Content ID status not verified",
+  "voice": "Edge vi-VN-HoaiMyNeural only, never Gemini"
  }
 }

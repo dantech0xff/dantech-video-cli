@@ -21,6 +21,8 @@ Setup once: `npm install` (three only). Intermediate renders land in `out/`.
       python3 build.py           # sprites + plates
       python3 build.py plates    # plates only
 
+- `mark.py`: plain logo mark (no app-icon tile) matted from `assets/brand/duoly/duoly-logo.jpg` -> `duoly-mark.png` (see the theme skill for the method).
+
 Rules: plates carry no objects behind text; floaters live only in the top (y < 290) / bottom (y >= 1500) bands, are
 `data-deco`, and get a 1.3 px depth blur (1.8 px on the bold end-card plate) so scripts/safezone.py does not read their
 glossy highlights as text. No large blurred foreground objects, no dim panels.

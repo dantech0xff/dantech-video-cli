@@ -75,7 +75,7 @@ export const DlBackdrop:React.FC<{plate?:string;ms?:number;float?:boolean;push?:
 /* ---------- header: badge + wordmark left, page right (one line, SZ.header) ---------- */
 export const DlChrome:React.FC<{section:string;page:string}>=({page})=>{const B=useBrand();return <>
  <DlBackdrop/>
- <HeadLine rule={`1.5px solid ${DL.raspT(.12)}`} style={{alignItems:'center'}} left={<span style={{display:'flex',alignItems:'center',gap:12}}>{B.logo&&<Img src={staticFile(B.logo)} style={{width:30,height:30,borderRadius:8,display:'block',boxShadow:'0 2px 6px rgba(216,11,70,.25)'}}/>}
+ <HeadLine rule={`1.5px solid ${DL.raspT(.12)}`} style={{alignItems:'center'}} left={<span style={{display:'flex',alignItems:'center',gap:12}}>{B.logo&&<Img src={staticFile(B.logo)} style={{width:42,height:'auto',display:'block',filter:'drop-shadow(0 2px 3px rgba(216,11,70,.35))'}}/>}
    <span style={{fontFamily:'BVPX',fontSize:fitSize(B.wordmark,360,27,.6),color:DL.rasp,whiteSpace:'nowrap',lineHeight:1,letterSpacing:-.3}}>{B.wordmark}</span></span>}
   right={<span style={{fontFamily:'BVPS',fontSize:20,color:DL.soft,lineHeight:1,letterSpacing:'.06em'}}>{page}</span>}/></>};
 /* ---------- title block: optional kicker (small heart + label) + raspberry ExtraBold title; hl words in hot pink on a blush marker ---------- */
@@ -96,13 +96,14 @@ export const DTitle:React.FC<{s:string;kick?:string;hl?:string;at?:number;size?:
 /* stage: relative box of the full room so stickers can sit anywhere on the canvas */
 const Stage:React.FC<{st?:St[];children:React.ReactNode}>=({st,children})=>{const room=useRoom();return <div style={{position:'relative',height:room}}>{children}<Stickers st={st}/></div>};
 /* ================= 1. hook: topic at frame 0, optional line + 3D ring-heart art ================= */
-export const DlHook:React.FC<{kick?:string;big:string;hl?:string;line?:string;lineAt?:number;art?:'ring'|'heart'|'none';artAt?:number;stickers?:St[]}>=({kick,big,hl,line,lineAt=8,art='ring',artAt=4,stickers})=>{const {f}=useS();const g=useCurrentFrame();const room=useRoom();
+export const DlHook:React.FC<{kick?:string;big:string;hl?:string;line?:string;lineAt?:number;chips?:string[];chipsAt?:number;art?:'ring'|'heart'|'none';artAt?:number;stickers?:St[]}>=({kick,big,hl,line,lineAt=8,chips,chipsAt=20,art='ring',artAt=4,stickers})=>{const {f}=useS();const g=useCurrentFrame();const room=useRoom();
  const words=big.split(' ');const longest=Math.max(...words.map(w=>w.length));const n=big.length;const size=Math.min(n<=18?132:n<=30?112:n<=44?96:84,Math.floor(860/(longest*.6)));
  const a=ease(f,artAt,20);const aw=art==='ring'?540:320;
  return <Stage st={stickers}>
   {kick&&<Kick s={kick}/>}
   <div {...bb('big')} style={{...HX(size),lineHeight:1.08,letterSpacing:-2.5}}><HlText s={big} hl={hl}/></div>
   {line&&<In at={lineAt} n="line" style={{...BM(48),marginTop:38,maxWidth:840}}><BrandText s={line}/></In>}
+  {chips&&<div style={{display:'flex',flexWrap:'wrap',gap:16,marginTop:34,maxWidth:860}}>{chips.map((c,k)=><In key={k} at={chipsAt+k*7} n={'chip-'+k} style={{display:'inline-flex',alignItems:'center',gap:12,background:DL.white,borderRadius:999,padding:'14px 28px 14px 20px',boxShadow:'0 10px 22px rgba(216,11,70,.10)'}}><Heart s={28} c={k%2?DL.peach:DL.pink}/><span style={LB(36,DL.ink)}>{c}</span></In>)}</div>}
   {art!=='none'&&<div {...(a>0?bb('art'):{})} style={{position:'absolute',right:10,bottom:60,width:aw,opacity:a,transform:`translateY(${(1-a)*30}px)`}}>
    <Img data-deco="art" src={tex(art==='ring'?'ring_hero':'puffy_pink')} style={{width:aw,height:'auto',display:'block',transform:`translateY(${10*osc(g,6.5)}px) rotate(${3*osc(g,8.3,1)}deg)`,filter:'drop-shadow(0 26px 30px rgba(216,11,70,.18))'}}/></div>}
  </Stage>};
@@ -208,30 +209,32 @@ export const DlDistance:React.FC<{kick?:string;title?:string;hl?:string;a:Place;
  </Fill></Stage>};
 /* ================= 8. "phe chị em" debate: versus cards + poll bar (sides with the girls; sarcastic, never insulting) ================= */
 type VSide={s:string;sub?:string};
-export const DlVersus:React.FC<{kick?:string;title?:string;hl?:string;a:VSide;b:VSide;at?:number;poll?:{a:number;at:number;la?:string;lb?:string};line?:{s:string;at:number};label?:string;stickers?:St[]}>=({kick,title,hl,a,b,at=2,poll,line,label,stickers})=>{const {f}=useS();
+export const DlVersus:React.FC<{kick?:string;title?:string;hl?:string;a:VSide;b:VSide;at?:number;poll?:{a:number;at:number;la?:string;lb?:string};line?:{s:string;at:number};label?:string;src?:string;stickers?:St[]}>=({kick,title,hl,a,b,at=2,poll,line,label,src,stickers})=>{const {f}=useS();
  const side=(s:VSide,k:number)=>{const q=ease(f,at+k*5);const A=k===0;return <div key={k} {...(q>.5?bb('side-'+k):{})} style={{flex:1,...card({borderRadius:44,padding:`${z(40)} ${z(30)}`,...(A?{background:DL.grad,border:'none',boxShadow:'0 22px 44px rgba(216,11,70,.25)'}:{})}),textAlign:'center',opacity:q,transform:`translateY(${(1-q)*28}px)`}}>
   <div style={{display:'flex',justifyContent:'center',marginBottom:z(16)}}><Heart s={z(56) as any} c={A?'#fff':DL.peach}/></div>
   <div style={{...HX(z(54),A?'#fff':DL.ink),lineHeight:1.1}}>{s.s}</div>{s.sub&&<div style={{...BM(z(32),A?'rgba(255,255,255,.88)':DL.mute),marginTop:z(10)}}>{s.sub}</div>}</div>};
  const vq=ease(f,at+9,12);const pq=poll?ease(f,poll.at+4,30):0;
+ // poll numbers: sourced -> 'NGUỒN · src', otherwise always tagged MINH HỌA (Dan 18/10; validate_script.py rejects hiding it)
+ const tag=src?`NGUỒN · ${src}`:(label||'MINH HỌA');
  return <Stage st={stickers}><Fill head={title?<DTitle s={title} kick={kick} hl={hl}/>:kick?<Kick s={kick}/>:null}>
   <div style={{display:'flex',gap:z(28),position:'relative'}}>{side(a,0)}{side(b,1)}
    <div style={{position:'absolute',left:'50%',top:'50%',transform:`translate(-50%,-50%) scale(${.85+.15*vq})`,opacity:vq,width:z(92),height:z(92),borderRadius:999,background:DL.white,boxShadow:'0 10px 24px rgba(216,11,70,.2)',display:'flex',alignItems:'center',justifyContent:'center',...HX(z(34),DL.rasp),lineHeight:1}}>VS</div></div>
   {poll&&<div style={{...hid(f>=poll.at),marginTop:zg(40)}}><In at={poll.at} n="poll">
    <div style={{display:'flex',justifyContent:'space-between',alignItems:'baseline',marginBottom:z(14)}}><span style={{...HX(z(40),DL.pink)}}>{poll.la??a.s} · {Math.round(poll.a*pq)}%</span><span style={{...HX(z(34),DL.soft)}}>{Math.round((100-poll.a)*pq)}%</span></div>
    <div style={{height:z(40),borderRadius:999,background:DL.white,boxShadow:'inset 0 0 0 2px rgba(243,85,112,.14)',overflow:'hidden',display:'flex'}}><div style={{width:`${poll.a*pq}%`,background:DL.grad,borderRadius:999}}/></div>
-   {label&&<div style={{display:'flex',justifyContent:'flex-end',marginTop:z(12)}}><span {...bb('tag')} style={{...LB(z(22) as any,DL.mute),border:`1.5px solid ${DL.raspT(.18)}`,borderRadius:999,padding:'6px 14px'}}>{label}</span></div>}</In></div>}
+   <div style={{display:'flex',justifyContent:'flex-end',marginTop:z(12)}}><span {...bb('tag')} style={{...LB(z(22) as any,DL.mute),border:`1.5px solid ${DL.raspT(.18)}`,borderRadius:999,padding:'6px 14px'}}>{tag}</span></div></In></div>}
   {line&&<div style={{...hid(f>=line.at),marginTop:zg(34)}}><In at={line.at} n="line" style={{...card({borderRadius:`${z(40)} ${z(40)} ${z(40)} ${z(10)}`,padding:`${z(26)} ${z(32)}`}),display:'flex',gap:z(16),alignItems:'flex-start'}}>
    <span style={{...HX(z(70),DL.blush),lineHeight:.8}}>“</span><span style={{...HX(z(44),DL.rasp),lineHeight:1.2}}><BrandText s={line.s}/></span></In></div>}
  </Fill></Stage>};
-/* ================= end card: bold plate, logo badge + page name only (no handles, no CTA, no tagline unless approved) ================= */
+/* ================= end card: bold plate, plain logo mark (no app-icon tile, Dan 18/10) + page name only (no handles, no CTA, no tagline unless approved) ================= */
 export const DlEndCard:React.FC<{dur?:number;handles?:Handle[];tagline?:string;tm?:string;plate?:string;ms?:number}>=({dur=90,tagline='',tm,plate,ms})=>{const f=useCurrentFrame();const B=useBrand();
  const op=(at:number)=>ease(f,at,16);const out=interpolate(f,[dur-10,dur],[1,0],cl);const fade=interpolate(f,[0,12],[0,1],cl);const page=B.page??B.name;
  const top=SZ.end.top+300;const bq=op(4);
  return <AbsoluteFill data-layer="end" style={{zIndex:40,opacity:out}}><style>{FONTS}</style>
   <AbsoluteFill style={{opacity:fade}}><DlBackdrop end plate={plate??'textures/duoly/plate_bold.jpg'} ms={ms} push={ease(f,0,dur)}/></AbsoluteFill>
   <div style={{position:'absolute',left:SZ.end.x,right:SZ.end.right,top,opacity:fade}}>
-   {B.logo&&<div {...bb('e-logo')} style={{width:260,height:260,opacity:bq,transform:`translateY(${(1-bq)*26}px)`}}>
-    <Img data-deco="e-logo-bob" src={staticFile(B.logo)} style={{width:260,height:260,borderRadius:68,display:'block',border:'6px solid rgba(255,255,255,.95)',boxSizing:'border-box',boxShadow:'0 30px 60px rgba(120,0,40,.30)',transform:`translateY(${6*osc(f,4.8)}px)`}}/></div>}
+   {B.logo&&<div {...bb('e-logo')} style={{width:360,opacity:bq,transform:`translateY(${(1-bq)*26}px)`}}>
+    <Img data-deco="e-logo-bob" src={staticFile(B.logo)} style={{width:360,height:'auto',display:'block',filter:'drop-shadow(0 26px 34px rgba(120,0,40,.28))',transform:`translateY(${6*osc(f,4.8)}px)`}}/></div>}
    <div {...bb('e-name')} style={{marginTop:52,display:'table',...HX(fitSize(page,724,112,.58),'#FFFFFF'),lineHeight:1.05,letterSpacing:-2,whiteSpace:'nowrap',opacity:op(10),transform:`translateY(${(1-op(10))*20}px)`,textShadow:'0 6px 24px rgba(120,0,40,.25)'}}>{page}</div>
    {tagline&&<div {...bb('e-tag')} style={{display:'table',marginTop:22,...BM(fitSize(tagline,724,44,.55),'rgba(255,255,255,.92)'),whiteSpace:'nowrap',opacity:op(14)}}>{tagline}</div>}
    {tm&&<div {...bb('e-tm')} style={{marginTop:40,...BM(20,'rgba(255,255,255,.82)'),opacity:op(20)}}>{tm}</div>}
