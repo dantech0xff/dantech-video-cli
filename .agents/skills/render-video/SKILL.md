@@ -35,7 +35,7 @@ description: Render một videos/<slug>/script.json thành MP4 hoàn chỉnh (TT
    - So với bản đã duyệt nếu cần: `scripts/compare.sh <new.mp4> <ref.mp4> sheet.png <frame> …`.
    - `description.txt` có nguồn và credit CC BY (nhạc Commons); bài Pixabay 4–7 có cảnh báo Content ID.
 5. **Giao:** mp4 + `<slug>_sheet.png` + `description.txt`. Definition of done ở `AGENTS.md` mục 4.
-6. **Báo Dan:** đường dẫn mp4 + description, style giọng + bài nhạc (dòng mới trong `logs/voice_log.md`), số đo QC. Commit `logs/voice_log.md` (không commit `out/`, nhạc, key).
+6. **Báo Dan:** đường dẫn mp4 + description, style giọng + bài nhạc (dòng mới trong `logs/voice_log.md`), số đo QC. Thuật ngữ glossary chưa có trong `glossary.json` (validator `ℹ️ glossary cần duyệt`) → liệt kê term + gloss để Dan duyệt; chỉ thêm vào `glossary.json` sau khi được duyệt. Commit `logs/voice_log.md` (không commit `out/`, nhạc, key).
 
 ## Giọng đọc: một lần cho mỗi video
 **Gemini: đúng một request TTS cho mỗi video. Không gọi TTS để test hay benchmark. Lỗi thì dừng, không retry.** Style rút ngẫu nhiên lần đầu được giữ nguyên. **Không bao giờ gọi lại TTS (hay `--new-voice`) để video dài/ngắn hơn.** Chạy lại từ `tts` với lời không đổi sẽ dùng lại cache. Chỉ dùng `--new-voice` khi Dan yêu cầu rõ.

@@ -33,6 +33,17 @@ description: Viết videos/<slug>/script.json cho video Dan Tech từ một spec
    - **Hình theo nghĩa, không chỉ theo giờ:** mỗi câu `say` phải có thứ tương ứng trên màn hình. Câu liệt kê N mục → scene type phải liệt kê được (vd câu "cần A, B và C" không được đi kèm hình "A vs B" tĩnh). Một cảnh nói hai ý mà hình chỉ vẽ được một → **tách cảnh ngay ranh giới câu**: chia `say` thành 2 cảnh không đổi lời đọc, không tốn TTS, chỉ khác `type`/`section`/props.
    - **Lời nói và chữ trên màn hình cùng một ý:** dòng chữ to (vd `line` của AtHook) phải nói đúng điều câu `say` đang nói, không phải một slogan khác ("Setup đúng một lần là đủ" trên câu "Android máy nào cũng được, iOS cần Mac" là lệch). Lệnh shell (`adb`, `kdoctor`, `java -version`) đặt trong `AtTerm`, không giả làm dòng Logcat.
    - **Overlay, `kw`, glossary, autofill** (SCHEMA "Universal overlays"): **mọi script có `glossary` với 3–6 thuật ngữ chính** (gloss ngắn ≤ 70 ký tự, đúng nguồn; **thuật ngữ đã có trong [glossary.json](glossary.json) thì copy nguyên văn gloss chuẩn**, thuật ngữ mới đã được Dan duyệt thì thêm vào file đó để video sau dùng lại; validator ⚠️ khi gloss khác bản chuẩn): autofill chỉ hiện term chip cho từ có gloss ở đây, không có thì không chip. Con số đáng làm thẻ → khai báo trong `numbers` của cảnh (`[{"n":"36","label":"compileSdk"}]`, label bắt buộc; số không khai báo không bao giờ thành thẻ; số đã hiện trên màn hình thì autofill focus phần tử đó thay vì chèn thẻ). Chip / sơ đồ 2–3 hộp → `overlays` neo vào chữ; item hay dòng code sẽ được nhắc lại trong lời → `kw`. Autofill (mặc định bật) lấp phần còn trống > 2.5 s; đọc log `autofill:` sau `--from props` và sửa script nếu filler chọn sai ý. Cảnh cố ý đứng yên (quote cần đọc) → `"still": true`, gate miễn tối đa 5 s, dài hơn vẫn fail (dùng hiếm). Chỉ đặt `autofill:false` khi có lý do (ghi vào báo cáo); gate sau render vẫn bắt buộc pass.
+   - **Viết gloss cho thuật ngữ CHƯA có trong [glossary.json](glossary.json)** (validator in `ℹ️ glossary cần duyệt: …`):
+     1. **Đúng kỹ thuật ở phần lõi**; không rút gọn tới mức sai.
+     2. **Tiếng Việt tự nhiên, có chủ ngữ rõ**, không dịch từng chữ.
+     3. **Không thu hẹp nghĩa**, và phải khớp điều lời đọc của video đó nói.
+     4. **≤ 70 ký tự**, vừa 2 dòng trên thẻ term.
+     5. **Thuật ngữ mới phải được liệt kê trong báo cáo render** (term + gloss) để người dùng duyệt; chỉ thêm vào `glossary.json` sau khi được duyệt. Không bao giờ đưa gloss chưa duyệt vào file chuẩn.
+     | ❌ Trước | ✅ Đã duyệt | Lỗi |
+     |---|---|---|
+     | JDK: "bộ công cụ Java để Gradle build và chạy Kotlin" | "bộ công cụ Java; Gradle cần nó để chạy và build project Kotlin" | sai kỹ thuật (JDK không "chạy Kotlin") |
+     | ValueListenableBuilder: "widget chỉ build lại khi ValueNotifier nó nghe đổi giá trị" | "widget chỉ dựng lại phần builder khi giá trị ValueNotifier đổi" | dịch từng chữ, lủng củng; thiếu ý chỉ phần builder dựng lại |
+     | emulator: "máy Android ảo chạy ngay trên laptop" | "máy Android ảo chạy ngay trên máy tính" | thu hẹp nghĩa (máy bàn cũng chạy được) |
    - **Chọn scene theo loại nội dung** (scenario packs, chạy ở mọi theme, props ở SCHEMA "Scenario packs"):
      | Nội dung | Scene khuyến nghị |
      |---|---|

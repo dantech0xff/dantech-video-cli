@@ -129,7 +129,7 @@ Khoá mới (validator biết hết; sai kiểu → ❌, nghi vấn → ⚠️):
 ```jsonc
 {
  "autofill": true,                      // script: tắt toàn bộ autofill (⚠️ khi false; gate vẫn chạy)
- "glossary": {"JDK": "bộ công cụ Java; Gradle cần nó để chạy và build project Kotlin"},   // gloss ≤ ~70 ký tự; term chip CHỈ hiện gloss từ đây (không tự bịa nghĩa); thuật ngữ có trong .agents/skills/write-script/glossary.json → dùng nguyên văn bản chuẩn
+ "glossary": {"JDK": "bộ công cụ Java; Gradle cần nó để chạy và build project Kotlin"},   // gloss ≤ ~70 ký tự; term chip CHỈ hiện gloss từ đây (không tự bịa nghĩa); thuật ngữ có trong .agents/skills/write-script/glossary.json → dùng nguyên văn bản chuẩn; thuật ngữ mới: theo luật viết gloss ở write-script (đúng kỹ thuật, tự nhiên, không thu hẹp nghĩa, ≤ 70), báo cáo để duyệt trước khi thêm vào glossary.json
  "scenes": [{
    "autofill": false,                   // cảnh: tắt autofill riêng cảnh này
    "still": true,                       // cảnh cố ý đứng yên: gate miễn ≤ 5 s (dài hơn vẫn fail); dùng hiếm, vd QuoteCard
