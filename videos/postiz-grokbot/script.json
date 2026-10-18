@@ -1,0 +1,341 @@
+{
+ "theme": "tech-explain",
+ "title": "Postiz tự host + đội Grok Bot",
+ "date": "18 · 10 · 2026",
+ "topic": [
+  "Postiz",
+  "Grok Bot"
+ ],
+ "caption": "Tự host Postiz trên VPS rồi giao cho đội Grok Bot: bot soạn và chỉnh bài theo nền tảng, Postiz giữ lịch, bạn duyệt trước khi đăng. Tự host không giới hạn số kênh theo gói, dữ liệu nằm trên máy chủ của bạn. #DanTech #Postiz #GrokBot #AIAgent",
+ "sources": [
+  "Postiz README (open source AGPL-3.0, self-host, public API, MCP, Grok Bot): https://github.com/gitroomhq/postiz-app",
+  "Postiz docs, Introduction (one calendar, many platforms): https://docs.postiz.com/general/introduction",
+  "Postiz docs, Docker Compose self-host (postiz-docker-compose, docker compose up, Postgres/Redis/Temporal): https://docs.postiz.com/installation/docker-compose",
+  "Postiz docs, System requirements (4 GB+ RAM for scheduled workflows): https://docs.postiz.com/installation/requirements",
+  "Postiz docs, Reverse proxies (Caddy/Nginx/Traefik) + Providers (developer app per platform, Facebook): https://docs.postiz.com/self-host/providers/facebook",
+  "Postiz docs, Cloud vs self-hosted (channel cap set by plan vs effectively unlimited): https://docs.postiz.com/cloud/overview",
+  "Postiz docs, MCP introduction (AI agents list channels, schedule posts; self-host /mcp endpoint, API key): https://docs.postiz.com/mcp/introduction",
+  "Postiz x Grok Bot (bots schedule posts, you approve before anything goes live, human in the loop): https://postiz.com/grok-bot"
+ ],
+ "hook": {
+  "kind": "tips",
+  "claim": "Postiz tự host cộng một đội Grok Bot: một người lo phần đăng bài của cả team",
+  "promise": "biết cách dựng Postiz trên VPS và nối đội Grok Bot qua MCP để quản lý nhiều fanpage"
+ },
+ "glossary": {
+  "Postiz": "công cụ mã nguồn mở lên lịch và đăng bài lên nhiều mạng xã hội",
+  "VPS": "máy chủ ảo thuê riêng, chạy liên tục, bạn toàn quyền cài đặt",
+  "MCP": "giao thức chuẩn để AI agent gọi công cụ của một app khác",
+  "Docker Compose": "công cụ chạy nhiều container cùng lúc từ một file cấu hình",
+  "reverse proxy": "máy chủ đứng trước app, nhận tên miền, HTTPS rồi chuyển request vào",
+  "API key": "chuỗi khoá bí mật cho phép app khác thao tác trên tài khoản của bạn"
+ },
+ "voice": {
+  "style": "random"
+ },
+ "music": {
+  "track": "random"
+ },
+ "scenes": [
+  {
+   "say": "Postiz tự host cộng một đội Grok Bot: một người lo phần đăng bài của cả team, cho nhiều fanpage cùng lúc.",
+   "type": "VersusHook",
+   "section": "postiz + grok bot",
+   "props": {
+    "kicker": "TỰ HOST · AI AGENT",
+    "claim": [
+     "POSTIZ + GROK BOT",
+     "MỘT NGƯỜI",
+     "NHIỀU FANPAGE"
+    ],
+    "hl": 2,
+    "a": {
+     "label": "LÀM TAY",
+     "line": "Cả team đăng từng page"
+    },
+    "b": {
+     "label": "CÓ ĐỘI BOT",
+     "line": "Một người duyệt bài"
+    },
+    "sidesAt": "@đội",
+    "payoff": "Dựng thế nào, chạy ra sao…",
+    "payoffAt": "@nhiều"
+   },
+   "out": "scroll"
+  },
+  {
+   "say": "Làm tay, mỗi bài phải viết lại cho từng nền tảng, đăng từng page, canh từng khung giờ. Có Postiz và Grok Bot thì bot soạn bài, Postiz tự đăng đúng lịch, bạn chỉ duyệt.",
+   "type": "BeforeAfter",
+   "section": "làm tay vs có bot",
+   "props": {
+    "title": "Một bài, nhiều page",
+    "before": {
+     "s": "Làm tay",
+     "at": "@Làm",
+     "lines": [
+      "Viết lại cho từng nền tảng",
+      "Đăng từng page một",
+      "Canh từng khung giờ"
+     ]
+    },
+    "after": {
+     "s": "Postiz + Grok Bot",
+     "at": "@Có",
+     "lines": [
+      "Bot soạn, chỉnh theo nền tảng",
+      "Postiz tự đăng đúng lịch",
+      "Bạn chỉ duyệt"
+     ]
+    },
+    "tags": [
+     "trước",
+     "sau"
+    ]
+   },
+   "out": "push"
+  },
+  {
+   "say": "Postiz là công cụ lên lịch mạng xã hội mã nguồn mở, một lịch chung cho hơn ba mươi nền tảng. Nó có public API và MCP server, để AI agent gọi thẳng.",
+   "type": "Specs",
+   "section": "postiz là gì",
+   "props": {
+    "title": "Postiz là gì",
+    "tiles": [
+     {
+      "big": "OSS",
+      "small": "mã nguồn mở · AGPL",
+      "at": "@mã"
+     },
+     {
+      "big": "30+",
+      "small": "nền tảng, một lịch",
+      "at": "@ba"
+     },
+     {
+      "big": "API",
+      "small": "public API",
+      "at": "@API"
+     },
+     {
+      "big": "MCP",
+      "small": "cho AI agent",
+      "at": "@MCP",
+      "ok": "@server"
+     }
+    ]
+   },
+   "out": "scroll"
+  },
+  {
+   "say": "Tự host khác bản cloud ở ba điểm: số kênh không bị giới hạn theo gói, chi phí chính là tiền VPS, và dữ liệu nằm trên máy chủ của bạn.",
+   "type": "Table",
+   "section": "cloud vs tự host",
+   "props": {
+    "title": "Cloud hay tự host",
+    "head": [
+     "Cloud",
+     "Tự host"
+    ],
+    "rows": [
+     {
+      "k": "Số kênh",
+      "a": "theo gói",
+      "b": "tự do",
+      "at": "@kênh",
+      "win": "b"
+     },
+     {
+      "k": "Chi phí",
+      "a": "gói tháng",
+      "b": "tiền VPS",
+      "at": "@phí",
+      "win": "b"
+     },
+     {
+      "k": "Dữ liệu",
+      "a": "ở Postiz",
+      "b": "của bạn",
+      "at": "@dữ",
+      "win": "b"
+     }
+    ]
+   },
+   "out": "stack"
+  },
+  {
+   "say": "Dựng trên VPS: chọn máy từ bốn GB RAM, clone repo docker compose chính thức của Postiz, rồi chạy docker compose up. Postgres và Redis đều có sẵn trong gói.",
+   "type": "Terminal",
+   "section": "dựng trên vps",
+   "props": {
+    "title": "Dựng Postiz trên VPS",
+    "dir": "~",
+    "shell": "bash",
+    "lines": [
+     {
+      "s": "# VPS: 4 GB RAM trở lên",
+      "out": true,
+      "at": "@bốn"
+     },
+     {
+      "s": "git clone …/postiz-docker",
+      "at": "@clone"
+     },
+     {
+      "s": "cd postiz-docker-compose",
+      "at": "@của"
+     },
+     {
+      "s": "docker compose up",
+      "at": "@chạy",
+      "ok": "@up"
+     },
+     {
+      "s": "# kèm Postgres, Redis",
+      "out": true,
+      "at": "@Postgres",
+      "hl": "@Redis"
+     }
+    ]
+   },
+   "out": "scroll"
+  },
+  {
+   "say": "Sau đó gắn domain có HTTPS qua reverse proxy. Mỗi nền tảng như Facebook cần một app developer riêng, có key rồi mới kết nối được page.",
+   "type": "Steps",
+   "section": "domain + kênh",
+   "props": {
+    "title": "Mở ra ngoài, nối kênh",
+    "steps": [
+     {
+      "s": "Domain + HTTPS qua reverse proxy",
+      "at": "@domain",
+      "ok": "@proxy"
+     },
+     {
+      "s": "App developer cho từng nền tảng",
+      "at": "@Mỗi",
+      "ok": "@key"
+     },
+     {
+      "s": "Kết nối page vào Postiz",
+      "at": "@rồi",
+      "ok": "@kết"
+     }
+    ]
+   },
+   "out": "push"
+  },
+  {
+   "say": "Rồi nối Grok Bot vào Postiz qua MCP bằng API key. Bot liệt kê kênh, soạn bài, gọi Postiz lên lịch, và bài tự lên từng page đúng khung giờ đã đặt.",
+   "type": "DataFlow",
+   "section": "nối grok bot",
+   "props": {
+    "title": "Grok Bot → Postiz → page",
+    "nodes": [
+     {
+      "s": "Đội Grok Bot",
+      "sub": "soạn bài",
+      "icon": "bolt",
+      "at": "@Grok"
+     },
+     {
+      "s": "Postiz trên VPS",
+      "via": "MCP + API key",
+      "icon": "cloud",
+      "at": "@MCP"
+     },
+     {
+      "s": "Lịch đăng",
+      "sub": "đúng khung giờ",
+      "icon": "clock",
+      "at": "@lịch"
+     },
+     {
+      "s": "Fanpage · Threads · X",
+      "icon": "link",
+      "at": "@page"
+     }
+    ]
+   },
+   "out": "scroll"
+  },
+  {
+   "say": "Như mình đang chạy, mỗi bot một việc: bot cho fanpage và Threads, bot cho X, bot cho video ngắn, tất cả cùng đẩy bài vào một Postiz.",
+   "type": "Layers",
+   "section": "đội bot của mình",
+   "props": {
+    "title": "Đội bot của mình",
+    "dir": "down",
+    "layers": [
+     {
+      "s": "Bot fanpage + Threads",
+      "at": "@fanpage"
+     },
+     {
+      "s": "Bot X",
+      "at": "@X"
+     },
+     {
+      "s": "Bot video ngắn",
+      "at": "@video"
+     },
+     {
+      "s": "Một Postiz trên VPS",
+      "sub": "giữ lịch cho mọi kênh",
+      "at": "@đẩy"
+     }
+    ]
+   },
+   "out": "bar"
+  },
+  {
+   "say": "Kết quả là bài lên đúng lịch cho nhiều page, kể cả lúc bạn ngủ, còn bạn giữ khâu duyệt trước khi đăng. Ai dựng sớm thì mở page mới nhanh hơn người còn đăng tay.",
+   "type": "Steps",
+   "section": "lợi thế thật",
+   "payoff": true,
+   "props": {
+    "title": "Bạn được gì",
+    "steps": [
+     {
+      "s": "Bài lên đúng lịch, cả lúc bạn ngủ",
+      "at": "@lịch",
+      "ok": "@ngủ"
+     },
+     {
+      "s": "Bạn duyệt trước khi đăng",
+      "at": "@duyệt",
+      "ok": "@đăng"
+     },
+     {
+      "s": "Mở page mới nhanh hơn",
+      "at": "@sớm",
+      "ok": "@nhanh"
+     }
+    ]
+   },
+   "out": "push"
+  },
+  {
+   "say": "Bạn đang quản lý mấy page, và khâu nào ngốn thời gian nhất? Comment cho mình biết, và follow Dan Tech để xem thêm cách dùng AI agent nhé!",
+   "type": "KeyPoint",
+   "section": "key --takeaway",
+   "props": {
+    "n": "09",
+    "kick": "còn bạn?",
+    "l1": "Khâu nào",
+    "l2": "ngốn giờ nhất?",
+    "at": "@Bạn",
+    "chips": [
+     {
+      "s": "bạn quản lý mấy page?",
+      "at": "@quản"
+     },
+     {
+      "s": "comment cho mình biết",
+      "at": "@Comment"
+     }
+    ]
+   }
+  }
+ ]
+}

@@ -63,14 +63,18 @@ def term_at(ws,i,gloss):
 def texts(props):
     """(text, at|None, path) of every prop item that shows text; at None = visible from the scene start"""
     out=[]
-    def walk(x,path):
+    num=lambda v:isinstance(v,(int,float)) and not isinstance(v,bool)
+    def walk(x,path,inh=None):
+        # inh: reveal frame inherited from the parent (e.g. VersusHook a/b appear at the parent's sidesAt, before/after at their own at)
         if isinstance(x,dict):
             s=next((x[k] for k in ('s','name','k','label','big','msg','w','line') if isinstance(x.get(k),str)),None)
-            at=x.get('at') if isinstance(x.get('at'),(int,float)) else None
+            at=x.get('at') if num(x.get('at')) else inh
             if s and not s.startswith('@'): out.append((s.replace('\\@','@'),at,path))
-            for k,v in x.items(): walk(v,f'{path}.{k}')
+            for k,v in x.items():
+                ci=x.get(k+'At') if num(x.get(k+'At')) else x.get('sidesAt') if k in('a','b') and num(x.get('sidesAt')) else at
+                walk(v,f'{path}.{k}',ci)
         elif isinstance(x,list):
-            for k,v in enumerate(x): walk(v,f'{path}[{k}]')
+            for k,v in enumerate(x): walk(v,f'{path}[{k}]',inh)
     walk(props,'props'); return out
 def beats(raw,res,acc,key=''):
     """frames of every timed thing in a scene's props: anchors (strings '@..') and numeric *at / list-of-number timings"""
