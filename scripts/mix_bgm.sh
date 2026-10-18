@@ -13,7 +13,7 @@ REL=${REL:--9}; D=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "
 FS=${FS:-$(python3 -c "print(round($D-2.3,2))")}; FD=$(python3 -c "print(round($D-$FS,2))")
 VI=$(ffmpeg -i "$V" -af ebur128 -f null - 2>&1 | grep -E '^\s+I:' | tail -1 | awk '{print $2}')
 MT=$(python3 -c "print(round($VI+$REL,1))")
-ffmpeg -v error -y -ss $S -i "$T" -af "atrim=0:$D,asetpts=PTS-STARTPTS,aresample=48000,aformat=channel_layouts=stereo,highpass=f=70:p=2,equalizer=f=2200:t=o:w=1.5:g=-4,dynaudnorm=f=400:g=31:m=4:p=0.7,loudnorm=I=$MT:TP=-6:linear=true,alimiter=limit=0.5:attack=3:release=80:level=false,afade=t=in:d=0.4,afade=t=out:st=$FS:d=$FD,aresample=48000" -c:a pcm_s16le "$W/music_preduck.wav"
+ffmpeg -v error -y -ss $S -i "$T" -af "atrim=0:$D,asetpts=PTS-STARTPTS,aresample=48000,aformat=channel_layouts=stereo,highpass=f=70:p=2,equalizer=f=2200:t=o:w=1.5:g=-4,dynaudnorm=f=400:g=31:m=4:p=0.7,loudnorm=I=$MT:TP=-6:linear=true,aformat=channel_layouts=stereo,alimiter=limit=0.5:attack=3:release=80:level=false,afade=t=in:d=0.4,afade=t=out:st=$FS:d=$FD,aresample=48000" -c:a pcm_s16le "$W/music_preduck.wav"
 ffmpeg -v error -y -i "$V" -vn -ar 48000 -ac 2 -c:a pcm_s16le "$W/key.wav"
 FC="[1:a]asplit[k][v];[0:a][k]sidechaincompress=threshold=0.025:ratio=2.5:attack=7:release=250:knee=2:detection=rms:makeup=1,asplit[md1][md2];[v][md1]amix=inputs=2:normalize=0:duration=first[a]"
 ffmpeg -v error -y -i "$W/music_preduck.wav" -i "$W/key.wav" -filter_complex "$FC" -map "[a]" -c:a pcm_s16le "$W/mix.wav" -map "[md2]" -c:a pcm_s16le "$W/music_ducked.wav"
