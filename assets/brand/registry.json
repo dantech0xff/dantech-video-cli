@@ -1,0 +1,559 @@
+{
+ "_doc": "Brand registry for automatic logos (scripts/brands.py detects, scripts/brand_logo.py fetches into assets/brand/<slug>/). Keys = slug. aliases are matched case/diacritic-insensitively on word boundaries in narration + on-screen text. case:true = only when written with a capital first letter (common words: Threads, Make, Go, Medium). ctx:'social' = only when the same sentence/label also names another social platform (single letter X). logo:false = never fetch (why says the reason; shown as 'logo bỏ qua'). si = Simple Icons slug, homepage/github = where the fetcher looks when Simple Icons has no icon.",
+ "grok-bot": {
+  "name": "Grok Bot",
+  "aliases": [
+   "grok bot",
+   "grokbot"
+  ],
+  "homepage": "https://x.ai/bot",
+  "cat": "ai"
+ },
+ "postiz": {
+  "name": "Postiz",
+  "aliases": [
+   "postiz"
+  ],
+  "si": "postiz",
+  "homepage": "https://postiz.com",
+  "github": "gitroomhq",
+  "cat": "social-tool"
+ },
+ "docker": {
+  "name": "Docker",
+  "aliases": [
+   "docker",
+   "docker compose",
+   "docker desktop"
+  ],
+  "si": "docker",
+  "cat": "dev"
+ },
+ "facebook": {
+  "name": "Facebook",
+  "aliases": [
+   "facebook",
+   "facebook page"
+  ],
+  "si": "facebook",
+  "cat": "social"
+ },
+ "threads": {
+  "name": "Threads",
+  "aliases": [
+   "threads"
+  ],
+  "si": "threads",
+  "case": true,
+  "cat": "social"
+ },
+ "x": {
+  "name": "X",
+  "aliases": [
+   "x",
+   "twitter"
+  ],
+  "si": "x",
+  "ctx": "social",
+  "case": true,
+  "cat": "social"
+ },
+ "instagram": {
+  "name": "Instagram",
+  "aliases": [
+   "instagram"
+  ],
+  "si": "instagram",
+  "cat": "social"
+ },
+ "tiktok": {
+  "name": "TikTok",
+  "aliases": [
+   "tiktok",
+   "tik tok"
+  ],
+  "si": "tiktok",
+  "cat": "social"
+ },
+ "youtube": {
+  "name": "YouTube",
+  "aliases": [
+   "youtube"
+  ],
+  "si": "youtube",
+  "cat": "social"
+ },
+ "telegram": {
+  "name": "Telegram",
+  "aliases": [
+   "telegram"
+  ],
+  "si": "telegram",
+  "cat": "social"
+ },
+ "discord": {
+  "name": "Discord",
+  "aliases": [
+   "discord"
+  ],
+  "si": "discord",
+  "cat": "social"
+ },
+ "pinterest": {
+  "name": "Pinterest",
+  "aliases": [
+   "pinterest"
+  ],
+  "si": "pinterest",
+  "cat": "social"
+ },
+ "reddit": {
+  "name": "Reddit",
+  "aliases": [
+   "reddit"
+  ],
+  "si": "reddit",
+  "cat": "social"
+ },
+ "bluesky": {
+  "name": "Bluesky",
+  "aliases": [
+   "bluesky"
+  ],
+  "si": "bluesky",
+  "cat": "social"
+ },
+ "mastodon": {
+  "name": "Mastodon",
+  "aliases": [
+   "mastodon"
+  ],
+  "si": "mastodon",
+  "cat": "social"
+ },
+ "zalo": {
+  "name": "Zalo",
+  "aliases": [
+   "zalo"
+  ],
+  "si": "zalo",
+  "cat": "social"
+ },
+ "whatsapp": {
+  "name": "WhatsApp",
+  "aliases": [
+   "whatsapp"
+  ],
+  "si": "whatsapp",
+  "cat": "social"
+ },
+ "messenger": {
+  "name": "Messenger",
+  "aliases": [
+   "messenger"
+  ],
+  "si": "messenger",
+  "case": true,
+  "cat": "social"
+ },
+ "wordpress": {
+  "name": "WordPress",
+  "aliases": [
+   "wordpress"
+  ],
+  "si": "wordpress",
+  "cat": "social"
+ },
+ "linkedin": {
+  "name": "LinkedIn",
+  "aliases": [
+   "linkedin"
+  ],
+  "logo": false,
+  "why": "LinkedIn đã yêu cầu gỡ logo khỏi Simple Icons; không tự lấy logo",
+  "cat": "social"
+ },
+ "github": {
+  "name": "GitHub",
+  "aliases": [
+   "github"
+  ],
+  "si": "github",
+  "cat": "dev"
+ },
+ "gitlab": {
+  "name": "GitLab",
+  "aliases": [
+   "gitlab"
+  ],
+  "si": "gitlab",
+  "cat": "dev"
+ },
+ "git": {
+  "name": "Git",
+  "aliases": [
+   "git"
+  ],
+  "si": "git",
+  "cat": "dev",
+  "attrib": "Git Logo by Jason Long, CC BY 3.0"
+ },
+ "flutter": {
+  "name": "Flutter",
+  "aliases": [
+   "flutter"
+  ],
+  "logo": false,
+  "why": "luật thương hiệu Flutter: logomark chỉ dùng qua FlutterMark của flutter-tutor (khoảng trống, không đứng cạnh logo khác)",
+  "cat": "dev"
+ },
+ "dart": {
+  "name": "Dart",
+  "aliases": [
+   "dart"
+  ],
+  "si": "dart",
+  "case": true,
+  "cat": "dev"
+ },
+ "android": {
+  "name": "Android",
+  "aliases": [
+   "android"
+  ],
+  "logo": false,
+  "why": "logo Android chính thức (đầu robot) có luật thương hiệu riêng; engine không dùng (như android-tutor)",
+  "cat": "dev"
+ },
+ "android-studio": {
+  "name": "Android Studio",
+  "aliases": [
+   "android studio"
+  ],
+  "logo": false,
+  "why": "art Android Studio/IntelliJ không dùng (như android-tutor)",
+  "cat": "dev"
+ },
+ "kotlin": {
+  "name": "Kotlin",
+  "aliases": [
+   "kotlin"
+  ],
+  "si": "kotlin",
+  "cat": "dev"
+ },
+ "jetpack-compose": {
+  "name": "Jetpack Compose",
+  "aliases": [
+   "jetpack compose"
+  ],
+  "si": "jetpackcompose",
+  "cat": "dev"
+ },
+ "gradle": {
+  "name": "Gradle",
+  "aliases": [
+   "gradle"
+  ],
+  "si": "gradle",
+  "cat": "dev"
+ },
+ "intellij": {
+  "name": "IntelliJ IDEA",
+  "aliases": [
+   "intellij",
+   "intellij idea"
+  ],
+  "logo": false,
+  "why": "art Android Studio/IntelliJ không dùng (như android-tutor)",
+  "cat": "dev"
+ },
+ "xcode": {
+  "name": "Xcode",
+  "aliases": [
+   "xcode"
+  ],
+  "cat": "dev",
+  "logo": false,
+  "why": "Apple không cho bên thứ ba dùng logo/biểu tượng Apple (Apple Trademark Guidelines); không tự lấy logo"
+ },
+ "swift": {
+  "name": "Swift",
+  "aliases": [
+   "swift"
+  ],
+  "case": true,
+  "cat": "dev",
+  "logo": false,
+  "why": "Apple không cho bên thứ ba dùng logo/biểu tượng Apple (Apple Trademark Guidelines); không tự lấy logo"
+ },
+ "vs-code": {
+  "name": "VS Code",
+  "aliases": [
+   "vs code",
+   "vscode",
+   "visual studio code"
+  ],
+  "logo": false,
+  "why": "Microsoft đã yêu cầu gỡ logo VS Code khỏi Simple Icons; không tự lấy logo",
+  "cat": "dev"
+ },
+ "windows": {
+  "name": "Windows",
+  "aliases": [
+   "windows"
+  ],
+  "logo": false,
+  "why": "Microsoft đã yêu cầu gỡ logo Windows khỏi Simple Icons; không tự lấy logo",
+  "case": true,
+  "cat": "os"
+ },
+ "macos": {
+  "name": "macOS",
+  "aliases": [
+   "macos",
+   "mac os"
+  ],
+  "cat": "os",
+  "logo": false,
+  "why": "Apple không cho bên thứ ba dùng logo/biểu tượng Apple (Apple Trademark Guidelines); không tự lấy logo"
+ },
+ "ios": {
+  "name": "iOS",
+  "aliases": [
+   "ios"
+  ],
+  "cat": "os",
+  "logo": false,
+  "why": "Apple không cho bên thứ ba dùng logo/biểu tượng Apple (Apple Trademark Guidelines); không tự lấy logo"
+ },
+ "linux": {
+  "name": "Linux",
+  "aliases": [
+   "linux"
+  ],
+  "si": "linux",
+  "cat": "os",
+  "attrib": "Tux: Larry Ewing (lewing@isc.tamu.edu) and The GIMP"
+ },
+ "ubuntu": {
+  "name": "Ubuntu",
+  "aliases": [
+   "ubuntu"
+  ],
+  "si": "ubuntu",
+  "cat": "os"
+ },
+ "homebrew": {
+  "name": "Homebrew",
+  "aliases": [
+   "homebrew"
+  ],
+  "si": "homebrew",
+  "cat": "dev"
+ },
+ "nodejs": {
+  "name": "Node.js",
+  "aliases": [
+   "node.js",
+   "nodejs"
+  ],
+  "si": "nodedotjs",
+  "cat": "dev"
+ },
+ "npm": {
+  "name": "npm",
+  "aliases": [
+   "npm"
+  ],
+  "si": "npm",
+  "cat": "dev"
+ },
+ "typescript": {
+  "name": "TypeScript",
+  "aliases": [
+   "typescript"
+  ],
+  "si": "typescript",
+  "cat": "dev"
+ },
+ "javascript": {
+  "name": "JavaScript",
+  "aliases": [
+   "javascript"
+  ],
+  "si": "javascript",
+  "cat": "dev"
+ },
+ "python": {
+  "name": "Python",
+  "aliases": [
+   "python"
+  ],
+  "si": "python",
+  "cat": "dev"
+ },
+ "react": {
+  "name": "React",
+  "aliases": [
+   "react",
+   "react native"
+  ],
+  "si": "react",
+  "case": true,
+  "cat": "dev"
+ },
+ "postgresql": {
+  "name": "PostgreSQL",
+  "aliases": [
+   "postgresql",
+   "postgres"
+  ],
+  "si": "postgresql",
+  "cat": "infra"
+ },
+ "redis": {
+  "name": "Redis",
+  "aliases": [
+   "redis"
+  ],
+  "si": "redis",
+  "cat": "infra"
+ },
+ "nginx": {
+  "name": "NGINX",
+  "aliases": [
+   "nginx"
+  ],
+  "si": "nginx",
+  "cat": "infra"
+ },
+ "caddy": {
+  "name": "Caddy",
+  "aliases": [
+   "caddy"
+  ],
+  "si": "caddy",
+  "cat": "infra"
+ },
+ "traefik": {
+  "name": "Traefik",
+  "aliases": [
+   "traefik"
+  ],
+  "si": "traefikproxy",
+  "cat": "infra"
+ },
+ "cloudflare": {
+  "name": "Cloudflare",
+  "aliases": [
+   "cloudflare"
+  ],
+  "si": "cloudflare",
+  "cat": "infra"
+ },
+ "supabase": {
+  "name": "Supabase",
+  "aliases": [
+   "supabase"
+  ],
+  "si": "supabase",
+  "cat": "infra"
+ },
+ "firebase": {
+  "name": "Firebase",
+  "aliases": [
+   "firebase"
+  ],
+  "si": "firebase",
+  "cat": "infra"
+ },
+ "vercel": {
+  "name": "Vercel",
+  "aliases": [
+   "vercel"
+  ],
+  "si": "vercel",
+  "cat": "infra"
+ },
+ "n8n": {
+  "name": "n8n",
+  "aliases": [
+   "n8n"
+  ],
+  "si": "n8n",
+  "cat": "social-tool"
+ },
+ "make": {
+  "name": "Make",
+  "aliases": [
+   "make.com"
+  ],
+  "si": "make",
+  "cat": "social-tool"
+ },
+ "openai": {
+  "name": "OpenAI",
+  "aliases": [
+   "openai",
+   "chatgpt"
+  ],
+  "logo": false,
+  "why": "OpenAI không có trong Simple Icons (đã gỡ theo yêu cầu); không tự lấy logo",
+  "cat": "ai"
+ },
+ "anthropic": {
+  "name": "Anthropic",
+  "aliases": [
+   "anthropic"
+  ],
+  "si": "anthropic",
+  "cat": "ai"
+ },
+ "claude": {
+  "name": "Claude",
+  "aliases": [
+   "claude"
+  ],
+  "si": "claude",
+  "case": true,
+  "cat": "ai"
+ },
+ "gemini": {
+  "name": "Gemini",
+  "aliases": [
+   "gemini",
+   "google gemini"
+  ],
+  "si": "googlegemini",
+  "case": true,
+  "cat": "ai"
+ },
+ "apple": {
+  "name": "Apple",
+  "aliases": [
+   "apple"
+  ],
+  "case": true,
+  "cat": "company",
+  "logo": false,
+  "why": "Apple không cho bên thứ ba dùng logo/biểu tượng Apple (Apple Trademark Guidelines); không tự lấy logo"
+ },
+ "google": {
+  "name": "Google",
+  "aliases": [
+   "google"
+  ],
+  "si": "google",
+  "cat": "company"
+ },
+ "meta": {
+  "name": "Meta",
+  "aliases": [
+   "meta"
+  ],
+  "si": "meta",
+  "case": true,
+  "cat": "company"
+ }
+}

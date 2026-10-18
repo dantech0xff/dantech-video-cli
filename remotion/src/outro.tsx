@@ -44,7 +44,7 @@ export const FollowCTASfx:React.FC<{pressAt:number;click?:string;bell?:string}>=
  <Sequence from={pressAt-1}><Audio src={staticFile(`sfx/${click}.wav`)} volume={0.9}/></Sequence>
  <Sequence from={pressAt+5}><Audio src={staticFile(`sfx/${bell}.wav`)} volume={0.45}/></Sequence></>;
 /* Branded end card. Render inside <Sequence from={start} durationInFrames={dur}> */
-export const EndCard:React.FC<{t:Theme;dur?:number;handles?:Handle[];tagline?:string;sting?:string;pal?:{panel?:string;fg?:string;tagBg?:string;tagFg?:string;mark?:string;rail?:string}}>=({t,dur=75,handles,tagline='Tin công nghệ mỗi ngày',sting='outro_sting',pal})=>{const B=useBrand();handles=handles??B.handles;const P={panel:t.ink,fg:t.bg,tagBg:t.accent,tagFg:t.onAccent,mark:t.accent,rail:t.accent,...(pal||{})};
+export const EndCard:React.FC<{t:Theme;dur?:number;handles?:Handle[];tagline?:string;tm?:string;sting?:string;pal?:{panel?:string;fg?:string;tagBg?:string;tagFg?:string;mark?:string;rail?:string}}>=({t,dur=75,handles,tagline='Tin công nghệ mỗi ngày',tm,sting='outro_sting',pal})=>{const B=useBrand();handles=handles??B.handles;const P={panel:t.ink,fg:t.bg,tagBg:t.accent,tagFg:t.onAccent,mark:t.accent,rail:t.accent,...(pal||{})};
  const f=useCurrentFrame();const O=dur-14;
  const wipe=interpolate(f,[0,9],[100,0],{...cl,easing:EIO});
  const it=(at:number,k:number)=>{const p=interpolate(f,[at,at+8],[0,1],{...cl,easing:EO});const o=interpolate(f,[O+k*2,O+8+k*2],[0,1],{...cl,easing:EIO});return {opacity:p*(1-o),transform:`translateY(${(1-p)*40-o*90}px) scale(${1.12-0.12*p})`,transformOrigin:'left center'} as React.CSSProperties};
@@ -59,6 +59,7 @@ export const EndCard:React.FC<{t:Theme;dur?:number;handles?:Handle[];tagline?:st
     <div style={{marginTop:60,display:'flex',flexDirection:'column',gap:22}}>{handles.map((x,k)=><div key={x.p} style={{...it(20+k*5,2+k),display:'flex',alignItems:'center',gap:26}}>
      <BrandTile icon={x.icon} size={t.head==='Anton'?76:64} radius={Math.max(10,r(t,14))}/>
      <span style={{...H(t,t.head==='Anton'?74:56,P.fg),textTransform:'none'}}>{x.h}</span></div>)}</div>
+    {tm&&<div data-bb="e-tm" style={{...it(30,5),marginTop:44,fontFamily:t.body,fontWeight:500,fontSize:24,lineHeight:1.35,color:P.fg,opacity:(it(30,5).opacity as number)*.72}}>{tm}</div>}
    </div>
    {/* footer dropped: it sat in the bottom UI zone */}
   </AbsoluteFill>

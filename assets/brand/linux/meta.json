@@ -1,0 +1,16 @@
+{
+ "name": "Linux",
+ "slug": "linux",
+ "fetched_at": "2026-10-18T04:10:05Z",
+ "status": "ok",
+ "file": "logo.svg",
+ "kind": "vector",
+ "mono": false,
+ "color": "#FCC624",
+ "source": "simple-icons",
+ "source_url": "https://simpleicons.org/?q=linux",
+ "match": "Simple Icons title \"Linux\"",
+ "attrib": "Tux: Larry Ewing (lewing@isc.tamu.edu) and The GIMP",
+ "license": "trademark of its owner. Used only to identify the product being discussed (nominative use); no endorsement implied.",
+ "tried": []
+}

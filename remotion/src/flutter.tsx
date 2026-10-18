@@ -162,7 +162,7 @@ export const FlChrome:React.FC<{section:string;page:string}>=({section,page})=>{
   right={<span style={{...mono(22),lineHeight:1}}>{page}</span>}/></>};
 const PN:Record<string,string>={youtube:'YouTube',facebook:'Facebook',tiktok:'TikTok'};
 /* end card: logomark (clear space), kicker, tagline, name, 3 handle tiles, trademark disclaimer. Ends above y 1480. */
-export const FlEndCard:React.FC<{dur?:number;handles?:Handle[];tagline?:string}>=({dur=90,handles,tagline=''})=>{const f=useCurrentFrame();const B=useBrand();handles=handles??B.handles;
+export const FlEndCard:React.FC<{dur?:number;handles?:Handle[];tagline?:string;tm?:string}>=({dur=90,handles,tagline='',tm})=>{const f=useCurrentFrame();const B=useBrand();handles=handles??B.handles;
  const op=(at:number)=>ease(f,at,9);const out=interpolate(f,[dur-10,dur],[1,0],cl);const ein=ease(f,0,12);
  return <AbsoluteFill data-layer="end" style={{zIndex:40,opacity:out}}><style>{FONTS}</style>
   <AbsoluteFill style={{background:FT.bg,opacity:interpolate(f,[0,8],[0,1],cl)}}/>
@@ -176,6 +176,7 @@ export const FlEndCard:React.FC<{dur?:number;handles?:Handle[];tagline?:string}>
     <BrandTile icon={h.icon} size={68} radius={18}/><span style={{fontFamily:SANS,fontWeight:500,fontSize:30,color:FT.dim,width:150}}>{PN[h.icon??'']??h.p}</span>
     <span style={{flex:1,textAlign:'right',fontFamily:SANS,fontWeight:800,fontSize:fitSize(h.h,330,44,.58),color:FT.ink,whiteSpace:'nowrap'}}>{h.h}</span></div>})}</div>
    <div {...bb('e-legal')} style={{marginTop:40,fontFamily:SANS,fontWeight:500,fontSize:21,lineHeight:1.4,color:FT.dim,opacity:op(28)}}>Flutter and the related logo are trademarks of Google LLC. We are not endorsed by or affiliated with Google LLC.</div>
+   {tm&&<div {...bb('e-tm')} style={{marginTop:10,fontFamily:SANS,fontWeight:500,fontSize:21,lineHeight:1.4,color:FT.dim,opacity:op(30)}}>{tm}</div>}
   </div>
   <Sequence from={4}><Audio src={staticFile('sfx/outro_sting.wav')} volume={0.55}/></Sequence>
  </AbsoluteFill>};

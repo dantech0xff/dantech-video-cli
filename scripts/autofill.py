@@ -89,8 +89,11 @@ def beats(raw,res,acc,key=''):
             else: beats(v,r,acc,key)
     elif isinstance(raw,(int,float)) and not isinstance(raw,bool) and key.lower().endswith('at') and key!='at0': acc.append(int(raw))
     return acc
-def plan(S,W,ranges,starts,durs,raw_props,res_props,cta,resolve_word):
-    """-> (ov per scene, log lines, timeline dict)"""
+def plan(S,W,ranges,starts,durs,raw_props,res_props,cta,resolve_word,brands=None,brand_ok=None):
+    """-> (ov per scene, log lines, timeline dict). brands = detected brands with logos (scripts/brands.py resolve), brand_ok = per scene"""
+    import brands as BRS
+    brands=brands or [];brand_ok=brand_ok or [True]*len(S['scenes'])
+    chipped=set()
     gloss={low(k):v for k,v in (S.get('glossary') or {}).items() if isinstance(v,str) and 0<len(v)<=70}
     gterm={low(k):k for k in (S.get('glossary') or {})}
     secs=[];[secs.append(sc['section']) for sc in S['scenes'] if sc['section'] not in secs]
@@ -119,6 +122,54 @@ def plan(S,W,ranges,starts,durs,raw_props,res_props,cta,resolve_word):
                     if low(w)==low(kwd):
                         f0=round(W[lo+i]['s']*FPS)-st
                         if f0>=at+6: ov.append({'kind':'focus','at':f0,'end':f0+54,'match':txt[:60],'why':f'kw "{kwd}" spoken'})
+        # hook: brands named in the first sentence get their logo in seconds 0-3 (inline when the scene draws them next to a
+        # matching label, else a brand chip in the dock)
+        if k==0 and brands and brand_ok[0]:
+            hb=[b for b in brands if b.get('hook')]
+            def _strs(x):
+                if isinstance(x,str): return [] if x.startswith('@') else [x]
+                if isinstance(x,dict): return [t for v in x.values() for t in _strs(v)]
+                if isinstance(x,list): return [t for v in x for t in _strs(v)]
+                return []
+            labels=BRS.drawn_strs(sc['type'],res_props[0])
+            inline=sc['type'] in BRS.INLINE_TYPES and all(any(BRS.brand_in(t,b) for t in labels) for b in hb)
+            if hb and not inline:
+                f0=next((round(W[lo+i]['s']*FPS)-st for i in range(len(say)) if any(BRS.brand_in(' '.join(say[i:i+3]),b) for b in hb)),0)
+                ov.append({'kind':'brand','brands':[b['slug'] for b in hb[:3]],'at':max(0,f0),'end':max(0,f0)+66,'why':'hook: brand named in the first sentence'})
+                log.append(f'autofill: scene 1 ({sc["type"]}) {(st+f0)/FPS:5.1f}s  brand    "{" + ".join(b["name"] for b in hb[:3])}"  ← hook names the brand')
+        # first spoken mention of a brand whose logo this scene cannot draw next to a label: brand chip at that word
+        # (one chip per sentence, max 2 per scene, never over another dock card or the Follow window)
+        if brands and brand_ok[k] and S.get('autofill',True) is not False and sc.get('autofill',True) is not False:
+            def _strs2(x):
+                if isinstance(x,str): return [] if x.startswith('@') else [x]
+                if isinstance(x,dict): return [t for v in x.values() for t in _strs2(v)]
+                if isinstance(x,list): return [t for v in x for t in _strs2(v)]
+                return []
+            labs=BRS.drawn_strs(sc['type'],res_props[k])
+            firsts=[]
+            for b in brands:
+                if b['slug'] in chipped or any(BRS.brand_in(t,b) for t in labs): continue
+                i=next((i for i in range(len(say)) if BRS.brand_in(' '.join(say[i:i+3]),b) and not BRS.brand_in(' '.join(say[i+1:i+4]),b)),None)
+                if i is not None: firsts.append((i,b))
+            firsts.sort(key=lambda x:x[0]);groups=[]
+            for i,b in firsts:
+                if groups and i-groups[-1][0]<=6 and len(groups[-1][1])<3: groups[-1][1].append(b)
+                else: groups.append((i,[b]))
+            n_chip=0
+            for i,bs in groups:
+                if n_chip>=2: break
+                f0=round(W[lo+i]['s']*FPS)-st;end=f0+66
+                voiced0=round(W[hi-1]['e']*FPS)-st
+                if end>voiced0+10 or any(o['kind']!='focus' and not(end+10<o['at'] or f0>o['end']+10) for o in ov): continue
+                if f0+st<cta['outAt'] and end+st>cta['inAt']-12: continue
+                ov.append({'kind':'brand','brands':[b['slug'] for b in bs],'at':f0,'end':end,'why':'first spoken mention, scene cannot draw the logo inline'})
+                for b in bs: chipped.add(b['slug'])
+                n_chip+=1
+                log.append(f'autofill: scene {k+1} ({sc["type"]}) {(st+f0)/FPS:5.1f}s  brand    "{" + ".join(b["name"] for b in bs)}"  ← first mention, no inline logo in this scene')
+            for b in brands:
+                if any(BRS.brand_in(t,b) for t in labs): chipped.add(b['slug'])   # logo already drawn inline: seen
+        for o in ov:
+            if o.get('kind')=='brand': chipped.update(o['brands'])
         # visual-change timeline
         ev=[0]+[b for b in beats(raw_props[k],res_props[k],[]) if 0<=b<dur]+[o['at'] for o in ov]
         for c in (cta['inAt'],cta['pressAt']):
@@ -196,6 +247,13 @@ def plan(S,W,ranges,starts,durs,raw_props,res_props,cta,resolve_word):
                 for keys,g in ICON:
                     if any(re.search(r'(^| )'+re.escape(kk)+r'($| )',win) for kk in keys): o['icon']=g;break
                 return o
+            # brand chip: a detected brand is being spoken and its logo is not already on screen next to a label
+            if brands and brand_ok[k]:
+                win=' '.join(say[i] for i in sorted(idx))
+                for b in brands:
+                    if ('b',b['slug']) in used or b['slug'] in chipped or not BRS.brand_in(win,b): continue
+                    if sc['type'] in BRS.INLINE_TYPES and any(BRS.brand_in(tx,b) for tx,at in items if at<=f): continue
+                    used.add(('b',b['slug']));chipped.add(b['slug']);return {'kind':'brand','brands':[b['slug']],'why':f'brand "{b["name"]}" spoken, logo not on screen'}
             if ('p',) not in used and len(S['scenes'])>1:
                 used.add(('p',));return {'kind':'progress','n':k+1,'m':len(S['scenes']),'label':sc['section'],'why':'no matching item/number/term: lesson progress (scene n/m)'}
             if sc.get('diagram') and ('d',) not in used:
@@ -217,7 +275,7 @@ def plan(S,W,ranges,starts,durs,raw_props,res_props,cta,resolve_word):
                 if o and o['kind']=='focus' and f0<cb and end>ca: o['bot']=cta['top']-24
                 if not o: log.append(f'autofill: scene {k+1} {(st+f0)/FPS:.1f}s: nothing to show (gap {(b-a)/FPS:.1f}s)'); continue
                 o.update({'at':f0,'end':end,'auto':True});ov.append(o)
-                desc=o.get('w') or o.get('match') or o.get('n') or o.get('label')
+                desc=o.get('w') or o.get('match') or o.get('n') or o.get('label') or ' + '.join(o.get('brands') or [])
                 log.append(f'autofill: scene {k+1} ({sc["type"]}) {(st+f0)/FPS:5.1f}-{(st+end)/FPS:5.1f}s  {o["kind"]:<8} "{str(desc)[:34]}"  ← {o["why"]}')
         ev2=sorted(set(ev+[o['at'] for o in ov]))
         tl[-1]['gaps_after']=[(x,y) for x,y in zip(ev2,ev2[1:]+[voiced]) if y-x>G]

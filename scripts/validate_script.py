@@ -298,6 +298,17 @@ CANON=json.load(open(_gp,encoding='utf-8')) if os.path.isfile(_gp) else {}
 for term,gl in (S.get('glossary') or {}).items():
     if term in CANON and gl!=CANON[term]: warn(f'glossary "{term}": differs from the canonical gloss "{CANON[term]}" (glossary.json); reuse it verbatim')
 _new=[t for t in (S.get('glossary') or {}) if t not in CANON]
+# automatic brand logos (no declaration needed): what build_props will detect, and the logo cache state (no network here)
+try:
+    sys.path.insert(0,os.path.join(ROOT,'scripts'));import brands as _BR,brand_logo as _BL
+    _D=_BR.detect(S,offline=True);_R=_BL.registry()
+    if _D['off']: print('ℹ️  brand: brands_off: true (không logo)')
+    for _b in _D['brands']:
+        _e=_R.get(_b['slug'],{});_mp=os.path.join(_BL.BRAND,_b['slug'],'meta.json');_m=json.load(open(_mp,encoding='utf-8')) if os.path.isfile(_mp) else None
+        st=('bỏ qua: '+_e.get('why','')) if _e.get('logo') is False else ('logo ✓ '+_m['source']) if _m and _m.get('status')=='ok' else ('bỏ qua: '+_m.get('reason','')[:120]) if _m else 'chưa có trong cache (build_props sẽ tải)'
+        print(f"ℹ️  brand: {_b['name']} ({_b['source']}, cảnh {','.join(str(x) for x in sorted({h['scene']+1 for h in _b['hits']}))}) · {st}")
+    if _D['opted_out']: print('ℹ️  brand tắt (brands_skip): '+', '.join(_D['opted_out']))
+except Exception as _ex: warn(f'brand detection failed: {_ex}')
 if _new: print('ℹ️  glossary cần duyệt (not in glossary.json; list term + gloss in the report, add to glossary.json only after approval): '+', '.join(_new))
 # voice length per Gemini style / Edge default rate; words/second measured from real renders (voice_log.md + out/words.json:
 # Edge NamMinh +10%: 341 words -> 113.5 s = 3.0; Gemini tu-nhien: 166 -> 53.5 s = 3.1)

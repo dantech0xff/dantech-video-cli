@@ -1,0 +1,15 @@
+{
+ "name": "Docker",
+ "slug": "docker",
+ "fetched_at": "2026-10-18T04:01:06Z",
+ "status": "ok",
+ "file": "logo.svg",
+ "kind": "vector",
+ "mono": false,
+ "color": "#2496ED",
+ "source": "simple-icons",
+ "source_url": "https://simpleicons.org/?q=docker",
+ "match": "Simple Icons title \"Docker\"",
+ "license": "trademark of its owner. Used only to identify the product being discussed (nominative use); no endorsement implied.",
+ "tried": []
+}

@@ -1,0 +1,16 @@
+{
+ "name": "Redis",
+ "slug": "redis",
+ "fetched_at": "2026-10-18T04:03:21Z",
+ "status": "ok",
+ "file": "logo.svg",
+ "kind": "vector",
+ "mono": false,
+ "color": "#FF4438",
+ "source": "simple-icons",
+ "source_url": "https://simpleicons.org/?q=redis",
+ "match": "Simple Icons title \"Redis\"",
+ "attrib": null,
+ "license": "trademark of its owner; brand guidelines: https://redis.io/brand-guidelines. Used only to identify the product being discussed (nominative use); no endorsement implied.",
+ "tried": []
+}

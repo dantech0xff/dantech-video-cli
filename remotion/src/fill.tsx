@@ -20,7 +20,7 @@ export const zf=(s:string,w:number,max:number,r:number,extra=0)=>{const cap=Math
 export const hid=(on:boolean):React.CSSProperties=>on?{}:{visibility:'hidden'};
 export const useRoom=()=>{const s=useS() as any;return (s&&s.room)||SZ.content.h};
 // room a dock overlay needs (frame px card height estimate + gap), in design px
-export const DOCK_H:Record<string,number>={term:170,num:160,icon:132,progress:126,diagram:196};
+export const DOCK_H:Record<string,number>={term:170,num:160,icon:132,progress:126,diagram:196,brand:150};
 export const roomFor=(ov:{kind:string;g?:string;label?:string}[]|undefined,cta:boolean)=>{
  let r=SZ.content.h;const d=(ov??[]).filter(o=>o.kind!=='focus').map(o=>(o.kind==='term'&&!o.g?112:DOCK_H[o.kind]??170)+26);
  if(d.length)r=Math.min(r,SZ.content.h-Math.max(...d)/SZ.content.scale);

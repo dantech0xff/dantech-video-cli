@@ -95,6 +95,7 @@ Nhờ vậy khi đổi giọng (thời lượng khác), keycap, popup, SFX vẫn
 | Biến thể màu (vd GIẢI THÍCH đỏ) | `theme.json` → `variants.<tên>.look`; dùng: `"variant": "red"` trong script.json (hoặc `"look": {...}` ghi đè riêng 1 video) |
 | Tagline end card, vị trí nút Follow, thời gian giữ cuối | `theme.json` → `outro`, `cta`, `tail_hold` |
 | Handle mạng xã hội | `channels/<id>.json`, mặc định `dantech` (YouTube @dantech-0xff, Facebook @dantech0xff, TikTok @dantech_0xff, có logo). Ghi đè từng video bằng `"handles"` trong script nếu thật cần |
+| Logo thương hiệu | Tự động, không khai báo: `build_props` phát hiện tên sản phẩm trong lời + chữ trên hình (`scripts/brands.py`, registry `assets/brand/registry.json`), tải logo chính thức (Simple Icons → trang chủ → GitHub → Wikimedia; `scripts/brand_logo.py`, cache `assets/brand/<slug>/`) rồi đặt cạnh tên trong cảnh hoặc bằng brand chip; end card có dòng "Logo thuộc về chủ sở hữu tương ứng." Tắt: `brands_off` / `brands_skip`. |
 
 Độ dài: **45–120 s lời đọc**, ý trọn vẹn (xem "Định hướng" ở đầu file và write-script "Độ dài 45–120 s, ý phải trọn vẹn"). Ngoài khoảng này có chủ đích: `"long_ok": true` / `"short_ok": true`. Giọng đọc: gọi TTS **một lần** cho mỗi video và giữ style đã rút, không gọi lại để chỉnh độ dài. Lời không đổi thì dùng lại cache `.cache/tts/` (cùng audio, cùng style). Muốn giọng mới: `./dt render <script> --new-voice`.
 

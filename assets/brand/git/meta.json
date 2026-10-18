@@ -1,0 +1,16 @@
+{
+ "name": "Git",
+ "slug": "git",
+ "fetched_at": "2026-10-18T04:03:21Z",
+ "status": "ok",
+ "file": "logo.svg",
+ "kind": "vector",
+ "mono": false,
+ "color": "#F03C2E",
+ "source": "simple-icons",
+ "source_url": "https://simpleicons.org/?q=git",
+ "match": "Simple Icons title \"Git\"",
+ "attrib": "Git Logo by Jason Long, CC BY 3.0",
+ "license": "trademark of its owner; icon license CC-BY-3.0. Used only to identify the product being discussed (nominative use); no endorsement implied.",
+ "tried": []
+}

@@ -1,0 +1,16 @@
+{
+ "name": "Ubuntu",
+ "slug": "ubuntu",
+ "fetched_at": "2026-10-18T04:10:04Z",
+ "status": "ok",
+ "file": "logo.svg",
+ "kind": "vector",
+ "mono": false,
+ "color": "#E95420",
+ "source": "simple-icons",
+ "source_url": "https://simpleicons.org/?q=ubuntu",
+ "match": "Simple Icons title \"Ubuntu\"",
+ "attrib": null,
+ "license": "trademark of its owner; brand guidelines: https://design.ubuntu.com/brand. Used only to identify the product being discussed (nominative use); no endorsement implied.",
+ "tried": []
+}

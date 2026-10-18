@@ -6,7 +6,7 @@
 // Legal: no official Android logo/wordmark/3D head, no Android Studio/IntelliJ/Pixel art. The robot below is our own
 // simplified drawing; the end card carries the CC BY 3.0 attribution line.
 import React from 'react';import {AbsoluteFill,Audio,Sequence,staticFile,interpolate,spring,useCurrentFrame,Easing} from 'remotion';
-import {useS,FONTS,HeadLine} from './sys';import {useBrand,fitSize,BrandTile,Handle} from './brand';import {SZ} from './safezone';import {Fill,z,zg,zf,hid} from './fill';
+import {useS,FONTS,HeadLine} from './sys';import {useBrand,fitSize,BrandTile,Handle} from './brand';import {SZ} from './safezone';import {Fill,z,zg,zf,hid} from './fill';import {BrandText,useBrands,brandChars} from './brandmark';
 const cl={extrapolateLeft:'clamp',extrapolateRight:'clamp'} as const;
 // Main accent is exactly the official Android green #3DDC84 (developer.android.com brand guidelines) everywhere; no pastel M3 tones.
 const AT_ANDROID={bg:'#0B0C0E',card:'#17181B',card2:'#121316',panel:'#101114',line:'#2A2C31',dim:'#8B8F96',ink:'#E6E8EB',green:'#3DDC84',onPrim:'#00391C',
@@ -153,13 +153,13 @@ export const AtLogcat:React.FC<{title:string;lines:{lvl:'D'|'I'|'W'|'E';tag:stri
 const vb=(n:string,v:boolean)=>v?bb(n):{};
 /* Table cell slot: the pill (font + 2×20 px padding) must fit inside CW so a winning cell never covers its neighbour (font sized for bold Vietnamese, ~0.6 em/char) */
 const CW=212;
-export const AtTake:React.FC<{title:string;head?:[string,string];rows:{k:string;a:string;b:string;at:number;win?:'a'|'b'|'both'|'none'}[];rule?:{s:string;at:number}}>=({title,head,rows,rule})=>{const {f}=useS();const vr=!!rule&&f>=rule.at;
+export const AtTake:React.FC<{title:string;head?:[string,string];rows:{k:string;a:string;b:string;at:number;win?:'a'|'b'|'both'|'none'}[];rule?:{s:string;at:number}}>=({title,head,rows,rule})=>{const {f}=useS();const BL=useBrands();const vr=!!rule&&f>=rule.at;
  return <Fill head={<Title s={title}/>}>
   {head&&<div {...bb('head')} style={{display:'flex',padding:`0 30px ${z(14)}`,...lbl(z(28) as any,AT.dim)}}><span style={{flex:1}}/><span style={{width:CW,textAlign:'center'}}>{head[0]}</span><span style={{width:CW,textAlign:'center'}}>{head[1]}</span></div>}
   <div style={{display:'flex',flexDirection:'column',gap:zg(22)}}>{rows.map((r,k)=>{const vis=f>=r.at;const q=m3(f,r.at,'def');
    const cell=(v:string,side:'a'|'b')=>{const ok=r.win?(r.win===side||r.win==='both'):/^(giữ|có|✓)/i.test(v);return <span style={{width:CW,flex:'none',display:'flex',justifyContent:'center'}}><span style={{borderRadius:AT.rp,padding:`${z(10)} 20px`,maxWidth:CW,boxSizing:'border-box',fontFamily:SANS,fontWeight:800,fontSize:zf(v,CW-44,40,.6),whiteSpace:'nowrap',background:ok?AT.green:AT.errBg,color:ok?AT.onPrim:AT.errInk}}>{v}</span></span>};
    return <div key={k} {...vb('row',vis)} style={{...hid(vis),display:'flex',alignItems:'center',background:AT.card,borderRadius:AT.rp,padding:`${z(30)} 30px`,opacity:Math.min(1,m3(f,r.at,'fx')),transform:`translateX(${(1-q)*80}px)`}}>
-    <span style={{flex:1,minWidth:0,whiteSpace:'nowrap',paddingRight:12,fontFamily:SANS,fontWeight:500,fontSize:zf(r.k,396,46,.52),color:AT.ink}}>{r.k}</span>{cell(r.a,'a')}{cell(r.b,'b')}</div>})}</div>
+    <span style={{flex:1,minWidth:0,whiteSpace:'nowrap',paddingRight:12,fontFamily:SANS,fontWeight:500,fontSize:zf(r.k,396,46,.52,brandChars(r.k,BL,.52)),color:AT.ink}}><BrandText s={r.k} on={AT.card}/></span>{cell(r.a,'a')}{cell(r.b,'b')}</div>})}</div>
   {rule&&(()=>{const q=m3(f,rule.at,'def');return <div {...vb('rule',vr)} style={{...hid(vr),marginTop:zg(44),background:AT.tint(.12),border:`2px solid ${AT.green}`,borderRadius:AT.r,padding:`${z(28)} 32px`,display:'flex',gap:22,alignItems:'center',transform:`scale(${.9+.1*q})`,opacity:Math.min(1,m3(f,rule.at,'fx')),transformOrigin:'left center'}}>
    <svg width={64} height={64} style={{flex:'none'}} viewBox="0 0 64 64"><path d={cookiePath(32,32,28,.1*(1-Math.min(1,q))+.04,9,f*.01)} fill={AT.green}/></svg>
    <span style={{fontFamily:SANS,fontWeight:800,fontSize:z(50),lineHeight:1.25,color:AT.ink}}>{rule.s}</span></div>})()}</Fill>};
@@ -250,13 +250,13 @@ export const AtDevice:React.FC<{title:string;devices:{kind?:'phone'|'mac';name:s
    </div>})}</div>
   {note&&<Note s={note.s} at={note.at}/>}</Fill>};
 /* 10. spec tiles (recap of requirements): 2-column grid, big value pops at `at`, tile turns green at `ok` (or on pop). */
-export const AtSpec:React.FC<{title:string;tiles:{big:string;small:string;at:number;ok?:number}[];note?:{s:string;at:number}}>=({title,tiles,note})=>{const {f}=useS();
+export const AtSpec:React.FC<{title:string;tiles:{big:string;small:string;at:number;ok?:number}[];note?:{s:string;at:number}}>=({title,tiles,note})=>{const {f}=useS();const BL=useBrands();
  return <Fill head={<Title s={title} one/>}>
   <div style={{display:'flex',flexWrap:'wrap',columnGap:24,rowGap:zg(24)}}>
   {tiles.map((t,k)=>{const vis=f>=t.at;const q=m3(f,t.at,'def');const done=vis&&f>=(t.ok??t.at);
    return <div key={k} {...vb('tile',vis)} style={{...hid(vis),width:435,boxSizing:'border-box',background:done?AT.tint(.09):AT.card,border:`2.5px solid ${done?AT.green:AT.line}`,borderRadius:AT.r,padding:`${z(26)} 30px ${z(24)}`,opacity:Math.min(1,m3(f,t.at,'fx')),transform:`scale(${.85+.15*q})`,transformOrigin:'left bottom'}}>
-    <div style={{fontFamily:MONO,fontWeight:800,fontSize:zf(t.big,370,104,.62),color:done?AT.green:AT.ink,lineHeight:1.05,whiteSpace:'nowrap'}}>{t.big}</div>
-    <div style={{fontFamily:SANS,fontWeight:600,fontSize:zf(t.small,740,36,.5),color:AT.sub,marginTop:z(10),lineHeight:1.2}}>{t.small}</div></div>})}</div>
+    <div style={{fontFamily:MONO,fontWeight:800,fontSize:zf(t.big,370,104,.62,brandChars(t.big,BL,.62)),color:done?AT.green:AT.ink,lineHeight:1.05,whiteSpace:'nowrap'}}><BrandText s={t.big} size="0.9em" on={done?AT.bg:AT.card}/></div>
+    <div style={{fontFamily:SANS,fontWeight:600,fontSize:zf(t.small,740,36,.5),color:AT.sub,marginTop:z(10),lineHeight:1.2}}><BrandText s={t.small} size="1.1em" on={done?AT.bg:AT.card}/></div></div>})}</div>
   {note&&<Note s={note.s} at={note.at}/>}</Fill>};
 /* chrome: slim header (robot + brand left, page right, one line in SZ.header), decorative gutter, mid-ground shapes.
    The file name lives on the code card tab (AtCode/AtPreview), not in a strip under the header. */
@@ -267,7 +267,7 @@ export const AtChrome:React.FC<{section:string;page:string}>=({section,page})=>{
  <div style={{position:'absolute',left:30,top:SZ.content.y,width:56}}>{Array.from({length:22},(_,k)=><div key={k} style={{height:50,textAlign:'right',...lbl(20,k%5===4?'#4A4D53':'#2C2E33')}}>{k+1}</div>)}</div></>};
 const PN:Record<string,string>={youtube:'YouTube',facebook:'Facebook',tiktok:'TikTok'};
 /* end card: robot, brand, tagline, 3 handle tiles, CC BY 3.0 attribution (end ≤ y 1480) */
-export const AtEndCard:React.FC<{dur?:number;handles?:Handle[];tagline?:string}>=({dur=90,handles,tagline=''})=>{const f=useCurrentFrame();const B=useBrand();handles=handles??B.handles;
+export const AtEndCard:React.FC<{dur?:number;handles?:Handle[];tagline?:string;tm?:string}>=({dur=90,handles,tagline='',tm})=>{const f=useCurrentFrame();const B=useBrand();handles=handles??B.handles;
  const S=(at:number,k:keyof typeof SPR='def')=>m3(f,at,k);const op=(at:number)=>Math.min(1,S(at,'fx'));const out=interpolate(f,[dur-10,dur],[1,0],cl);
  const ein=interpolate(f,[0,14],[0,1],{...cl,easing:Easing.bezier(.05,.7,.1,1)});
  return <AbsoluteFill data-layer="end" style={{zIndex:40,opacity:out}}><style>{FONTS}</style>
@@ -282,6 +282,7 @@ export const AtEndCard:React.FC<{dur?:number;handles?:Handle[];tagline?:string}>
     <BrandTile icon={h.icon} size={68} radius={34}/><span style={{fontFamily:SANS,fontWeight:500,fontSize:30,color:AT.dim,width:150}}>{PN[h.icon??'']??h.p}</span>
     <span style={{flex:1,textAlign:'right',fontFamily:SANS,fontWeight:800,fontSize:fitSize(h.h,330,44,.58),color:AT.ink,whiteSpace:'nowrap'}}>{h.h}</span></div>})}</div>
    <div {...bb('e-legal')} style={{marginTop:40,fontFamily:SANS,fontWeight:500,fontSize:21,lineHeight:1.4,color:AT.dim,opacity:op(30)}}>The Android robot is reproduced or modified from work created and shared by Google and used according to terms described in the Creative Commons 3.0 Attribution License. Android is a trademark of Google LLC.</div>
+   {tm&&<div {...bb('e-tm')} style={{marginTop:10,fontFamily:SANS,fontWeight:500,fontSize:21,lineHeight:1.4,color:AT.dim,opacity:op(32)}}>{tm}</div>}
   </div>
   <Sequence from={4}><Audio src={staticFile('sfx/outro_sting.wav')} volume={0.55}/></Sequence>
  </AbsoluteFill>};

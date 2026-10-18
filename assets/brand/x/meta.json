@@ -1,0 +1,15 @@
+{
+ "name": "X",
+ "slug": "x",
+ "fetched_at": "2026-10-18T04:01:06Z",
+ "status": "ok",
+ "file": "logo.svg",
+ "kind": "vector",
+ "mono": true,
+ "color": "#000000",
+ "source": "simple-icons",
+ "source_url": "https://simpleicons.org/?q=x",
+ "match": "Simple Icons title \"X\"",
+ "license": "trademark of its owner; brand guidelines: https://about.x.com/en/who-we-are/brand-toolkit. Used only to identify the product being discussed (nominative use); no endorsement implied.",
+ "tried": []
+}

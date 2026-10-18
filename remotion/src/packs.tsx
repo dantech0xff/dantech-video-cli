@@ -8,7 +8,7 @@
 // Every visible content box carries data-bb (bbcheck); every item with text has `s` (or `d`/`q`) so `kw` and autofill focus can target it.
 import React from 'react';import {interpolate,Easing,random} from 'remotion';
 import {useS,Kicker,Media} from './sys';import {fitSize} from './brand';
-import {AT,bb,fonts,Title,Note,Tick,kt} from './android';import {GLYPH} from './overlay';import {Fill,z,zg,zf,hid,useRoom} from './fill';
+import {AT,bb,fonts,Title,Note,Tick,kt} from './android';import {BrandText,useBrands,brandsIn,brandChars} from './brandmark';import {GLYPH} from './overlay';import {Fill,z,zg,zf,hid,useRoom} from './fill';
 const cl={extrapolateLeft:'clamp',extrapolateRight:'clamp'} as const;
 const EMD=Easing.bezier(.05,.7,.1,1);
 const em=(f:number,at:number,d=14)=>interpolate(f,[at,at+d],[0,1],{...cl,easing:EMD});
@@ -66,7 +66,7 @@ export const Scale:React.FC<{title:string;a:It&{w:number;sub?:string};b:It&{w:nu
 /* ───────── concept ───────── */
 /* DataFlow: vertical chain of nodes (reel friendly); the arrow into node k lights up and a packet travels down when node k appears.
    `via` labels the arrow into a node, `icon` is a glyph from the overlay set. */
-export const DataFlow:React.FC<{title:string;nodes:(It&{sub?:string;via?:string;icon?:string})[];note?:N}>=({title,nodes,note})=>{const {f}=useS();const nk=newest(f,nodes.map(n=>n.at));const comp=nodes.length>4;
+export const DataFlow:React.FC<{title:string;nodes:(It&{sub?:string;via?:string;icon?:string})[];note?:N}>=({title,nodes,note})=>{const {f}=useS();const BL=useBrands();const nk=newest(f,nodes.map(n=>n.at));const comp=nodes.length>4;
  return <Fill head={<Title s={title} one={comp}/>}>
   <div style={{display:'flex',flexDirection:'column'}}>{nodes.map((n,k)=>{const vis=f>=n.at;const pq=em(f,n.at-10,14);const lit=vis&&pq>.95;
    return <React.Fragment key={k}>
@@ -76,18 +76,18 @@ export const DataFlow:React.FC<{title:string;nodes:(It&{sub?:string;via?:string;
      {vis&&pq>0&&pq<1&&<div style={{position:'absolute',left:-9,top:`calc(${pq} * (100% - 40px))`,width:24,height:24,borderRadius:12,background:AT.green}}/>}
      {n.via&&<span style={{position:'absolute',left:38,top:'50%',transform:'translateY(-50%)',...M(z(32),AT.dim,600),whiteSpace:'nowrap',opacity:em(f,n.at-6,10)}}>{n.via}</span>}</div>}
     <div {...vb('node',vis)} style={{...hid(vis),...card(vis&&k===nk,{padding:comp?pad(20,28):pad(26,30),display:'flex',alignItems:'center',gap:22}),...enter(f,n.at,30)}}>
-     {n.icon&&<Glyph n={n.icon} s={z(52)}/>}<div style={{minWidth:0}}><div style={B(zf(n.s,1300,52,.5),AT.ink,800)}>{n.s}</div>
+     {n.icon&&!brandsIn(n.s,BL).length&&<Glyph n={n.icon} s={z(52)}/>}<div style={{minWidth:0}}><div style={B(zf(n.s,1300,52,.5,brandChars(n.s,BL,.5)),AT.ink,800)}><BrandText s={n.s} on={AT.card}/></div>
      {n.sub&&<div style={{...B(z(38),AT.dim,500),marginTop:6}}>{n.sub}</div>}</div></div></React.Fragment>})}</div>
   {note&&<Note s={note.s} at={note.at}/>}</Fill>};
 /* Layers: stacked bands of an architecture, top layer first; chevrons between bands show the dependency direction */
-export const Layers:React.FC<{title:string;layers:(It&{sub?:string})[];dir?:'down'|'up';note?:N}>=({title,layers,dir='down',note})=>{const {f}=useS();const nk=newest(f,layers.map(l=>l.at));
+export const Layers:React.FC<{title:string;layers:(It&{sub?:string})[];dir?:'down'|'up';note?:N}>=({title,layers,dir='down',note})=>{const {f}=useS();const BL=useBrands();const nk=newest(f,layers.map(l=>l.at));
  return <Fill head={<Title s={title} one={layers.length>4}/>}>
   <div style={{display:'flex',flexDirection:'column'}}>{layers.map((l,k)=>{const vis=f>=l.at;const w=894-k*36;
    return <React.Fragment key={k}>
     {k>0&&<div style={{height:zg(46),display:'flex',justifyContent:'center',alignItems:'center',opacity:em(f,l.at,10),...hid(vis)}}>
      <svg width={60} height={30} viewBox="0 0 60 30"><path d={dir==='down'?'M8 6 30 24 52 6':'M8 24 30 6 52 24'} stroke={AT.dim} strokeWidth={5} fill="none" strokeLinecap="round" strokeLinejoin="round"/></svg></div>}
     <div {...vb('layer',vis)} style={{width:w,alignSelf:'center',...hid(vis),...card(vis&&k===nk,{padding:pad(40,34),display:'flex',justifyContent:'space-between',alignItems:'center',gap:20,background:vis&&k===nk?AT.tint(.12):AT.card}),...enter(f,l.at,30)}}>
-     <span style={B(zf(l.s,520,52,.5),AT.ink,800)}>{l.s}</span>{l.sub&&<span style={{...M(zf(l.sub,360,34,.62),AT.dim,600),textAlign:'right'}}>{l.sub}</span>}</div></React.Fragment>})}</div>
+     <span style={B(zf(l.s,520,52,.5,brandChars(l.s,BL,.5)),AT.ink,800)}><BrandText s={l.s} on={AT.card}/></span>{l.sub&&<span style={{...M(zf(l.sub,360,34,.62),AT.dim,600),textAlign:'right'}}>{l.sub}</span>}</div></React.Fragment>})}</div>
   {note&&<Note s={note.s} at={note.at}/>}</Fill>};
 /* Loop: lifecycle nodes on a ring (an ellipse that grows taller with the room), arcs draw clockwise as each node appears;
    `cur` moves the highlight around the loop later */
@@ -192,13 +192,13 @@ export const EvidenceLegacy:React.FC<{n:string;kick:string;media?:string;pos?:st
 /* ───────── tips / review ───────── */
 type Side={s:string;lines?:string[];code?:boolean;at?:number;kw?:string[]};
 /* BeforeAfter: "before" card, then the "after" card lands under it and the before card steps back (dimmed) */
-export const BeforeAfter:React.FC<{title:string;before:Side;after:Side&{at:number};tags?:[string,string];note?:N}>=({title,before,after,tags=['Trước','Sau'],note})=>{const {f}=useS();
+export const BeforeAfter:React.FC<{title:string;before:Side;after:Side&{at:number};tags?:[string,string];note?:N}>=({title,before,after,tags=['Trước','Sau'],note})=>{const {f}=useS();const BL=useBrands();
  const ba=before.at??4;const aq=em(f,after.at,14);
  const Card:React.FC<{sd:Side;good:boolean;tag:string;at:number}>=({sd,good,tag,at})=>{const vis=f>=at;return <div {...vb(good?'after':'before',vis)} style={{...hid(vis),...card(good,{padding:pad(26,30),border:`${good?3:2}px solid ${good?AT.good:AT.line}`,background:good?AT.good+'14':AT.card}),...enter(f,at,40),
    ...(good?{}:{opacity:em(f,at,10)*(1-.45*aq),transform:`scale(${1-.03*aq})`,transformOrigin:'center top'})}}>
    <div style={{display:'flex',alignItems:'center',gap:16,marginBottom:sd.lines?.length?z(16):0}}>
     <span style={{...M(z(30),good?AT.onGood:AT.ink,800),background:good?AT.good:AT.errBg,border:good?'none':`1.5px solid ${AT.line}`,borderRadius:AT.rp,padding:'4px 18px',flex:'none'}}>{good?'✓':'✗'} {tag}</span>
-    <span style={B(zf(sd.s,1100,48,.5),AT.ink,800)}>{sd.s}</span></div>
+    <span style={B(zf(sd.s,1100,48,.5,brandChars(sd.s,BL,.5)),AT.ink,800)}><BrandText s={sd.s} on={AT.card}/></span></div>
    {(sd.lines??[]).map((l,k)=><div key={k} style={sd.code?{...M(zf(l,1150,40,.6),AT.ink,500),whiteSpace:'pre',lineHeight:1.5}:{...B(z(44),good?AT.ink:AT.dim,500),marginTop:6}}>{sd.code?kt(l):'• '+l}</div>)}</div>};
  return <Fill head={<Title s={title} one/>}>
   <div style={{display:'flex',flexDirection:'column',gap:zg(34)}}><Card sd={before} good={false} tag={tags[0]} at={ba}/><Card sd={after} good tag={tags[1]} at={after.at}/></div>

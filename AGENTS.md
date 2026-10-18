@@ -70,6 +70,8 @@ Mọi chữ thương hiệu trên màn hình lấy từ file kênh, không hardc
 | `id`, `name`, `wordmark` | id file; tên hiển thị ("Dan Tech", end card cyber); wordmark chữ hoa ("DAN TECH", top bar/rail/end card). Tên dài sẽ tự co cho vừa |
 | `tagline` | chuỗi, hoặc map `{default, <theme id>: …}` cho dòng dưới wordmark ở end card |
 | `handles` | `[{p, icon: youtube\|facebook\|tiktok, h}]`, 3 dòng có logo ở end card |
+
+**Logo sản phẩm bên thứ ba** không nằm trong file kênh: hoàn toàn tự động (SCHEMA "Logo thương hiệu tự động"): `scripts/brands.py` phát hiện, `scripts/brand_logo.py` tải + cache vào `assets/brand/<slug>/`, `remotion/src/brandmark.tsx` vẽ. Thương hiệu có luật riêng (Flutter, Android, Apple, Microsoft…) đặt `logo:false` trong `assets/brand/registry.json`. Không tự vẽ/bịa logo.
 | `followLabel`, `followDone`, `followSub` | chữ trên nút Follow, chữ sau khi bấm, dòng nhỏ dưới nút (chuỗi hoặc map theo theme) |
 | `ctaPhrase`, `ctaInWord`, `ctaPressWord` | câu kết bắt buộc trong lời đọc (validator kiểm), chữ làm nút hiện ra, chữ làm nút bị bấm |
 | `site`, `course` | tuỳ chọn: website/khoá học để nhắc nhẹ ở cảnh cuối |

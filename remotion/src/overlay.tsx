@@ -5,10 +5,10 @@
 // Colours/fonts come from the active theme tokens. Motion: Material emphasized-decelerate, rise + fade, no zoom/pop, no shapes over the frame.
 // Events come from props.scenes[i].ov (build_props.py: script "overlays", item "kw" keywords, and the Layer-1 auto-filler).
 import React,{useEffect,useLayoutEffect,useRef,useState} from 'react';import {interpolate,Easing,delayRender,continueRender} from 'remotion';
-import {useS} from './sys';import {Theme} from './themes';import {SZ} from './safezone';import {fitSize} from './brand';
+import {useS} from './sys';import {Theme} from './themes';import {SZ} from './safezone';import {fitSize} from './brand';import {BrandMark,useBrands} from './brandmark';
 const cl={extrapolateLeft:'clamp',extrapolateRight:'clamp'} as const;
 const EMD=Easing.bezier(.05,.7,.1,1),EIN=Easing.bezier(.3,0,.8,.15);
-export type Ov={kind:'term'|'num'|'icon'|'progress'|'diagram'|'focus';at:number;end:number;
+export type Ov={kind:'term'|'num'|'icon'|'progress'|'diagram'|'focus'|'brand';brands?:string[];at:number;end:number;
  w?:string;g?:string;n?:number|string;label?:string;icon?:string;m?:number;nodes?:string[];match?:string;why?:string};
 const DOCK_B=SZ.content.y+SZ.content.h*SZ.content.scale-6;  // ~1353: lower edge of the dock (captions start at 1366)
 const X0=SZ.content.x,X1=SZ.right,GAP=26;
@@ -18,7 +18,7 @@ export const tok=(t:Theme)=>{const pal={...((t as any).pack||{}),...((t as any).
  return {A:t.accent,on:t.onAccent,ink:t.ink,bg:t.bg,light,card:pal.card??(light?'#FFFFFF':'#16171A'),line:pal.line??(light?'rgba(17,17,17,.22)':'rgba(255,255,255,.16)'),
   dim:pal.dim??t.muted,head:t.head,body:t.body,mono:t.id==='flutter-tutor'?'GSC':'JBM',r:sharp?0:t.id==='quick-tips'?24:26,upper:t.upper,
   hw:t.head==='Anton'?400:800,shadow:light?'0 10px 30px rgba(0,0,0,.12)':'0 14px 40px rgba(0,0,0,.45)'}};
-/* inline glyph set (own drawings, 24x24 stroke icons; no third-party logos) */
+/* inline glyph set (own drawings, 24x24 stroke icons; no third-party logos here: product logos come through brandmark.tsx) */
 export const GLYPH:Record<string,string>={
  check:'M4.5 12.5 10 18 19.5 6.5',warn:'M12 3 2.5 20h19L12 3zM12 10v4.5M12 17.5v.01',download:'M12 4v11M7 10.5l5 5 5-5M5 20h14',
  play:'M8 5v14l11-7z',terminal:'M4 5h16v14H4zM7.5 10l3 2.5-3 2.5M12.5 15.5h4',phone:'M8 2.5h8a1.5 1.5 0 0 1 1.5 1.5v16a1.5 1.5 0 0 1-1.5 1.5H8A1.5 1.5 0 0 1 6.5 20V4A1.5 1.5 0 0 1 8 2.5zM11 18.5h2',
@@ -67,7 +67,12 @@ const Diagram:React.FC<{o:Ov;t:ReturnType<typeof tok>;f:number}>=({o,t,f})=>{con
    return <React.Fragment key={k}>{k>0&&<svg width={70} height={40} style={{flex:'none',opacity:aq}}><path d={`M4 20 H${4+52*aq}`} stroke={t.A} strokeWidth={5} strokeLinecap="round"/>{aq>.9&&<path d="M48 9 60 20 48 31" fill="none" stroke={t.A} strokeWidth={5} strokeLinecap="round" strokeLinejoin="round"/>}</svg>}
     <div style={{width:bw,boxSizing:'border-box',padding:'20px 12px',textAlign:'center',border:`3px solid ${k===N.length-1?t.A:t.line}`,borderRadius:t.r?18:0,background:k===N.length-1?(t.light?'rgba(0,0,0,.03)':'rgba(255,255,255,.04)'):'transparent',
      fontFamily:t.head,fontWeight:t.hw,fontSize:fitSize(s,bw-24,40,.56),color:t.ink,textTransform:t.upper?'uppercase':'none',opacity:q,transform:`translateY(${(1-q)*16}px)`,whiteSpace:'nowrap'}}>{s}</div></React.Fragment>})}</div></Card>};
-const ELS:Record<string,React.FC<{o:Ov;t:ReturnType<typeof tok>;f:number}>>={term:Term,num:Num,icon:Icon,progress:Progress,diagram:Diagram};
+/* 7. brand chip: logo + name of the product being spoken (props.brands, fetched automatically); 1-3 brands in a row */
+const BrandChip:React.FC<{o:Ov;t:ReturnType<typeof tok>;f:number}>=({o,t,f})=>{const list=useBrands();const bs=(o.brands??[]).map(s=>list.find(b=>b.slug===s)).filter(Boolean).slice(0,3) as any[];
+ if(!bs.length)return null;const n=bs.length;const sz=n===1?84:n===2?72:60;const w=(X1-X0-60-(n-1)*36)/n-sz-18;
+ return <Card t={t} o={o} f={f} name="brand" pad="20px 30px"><div style={{display:'flex',alignItems:'center',gap:36}}>{bs.map(b=><div key={b.slug} style={{display:'flex',alignItems:'center',gap:18,minWidth:0}}>
+  <BrandMark b={b} size={sz} on={t.card}/><span style={{fontFamily:t.head,fontWeight:t.hw,fontSize:fitSize(b.name,w,n===1?60:46,t.head==='Anton'?.48:.56),lineHeight:1.1,color:t.ink,textTransform:t.upper?'uppercase':'none',whiteSpace:'nowrap'}}>{b.name}</span></div>)}</div></Card>};
+const ELS:Record<string,React.FC<{o:Ov;t:ReturnType<typeof tok>;f:number}>>={term:Term,num:Num,icon:Icon,progress:Progress,diagram:Diagram,brand:BrandChip};
 const norm=(s:string)=>s.toLowerCase().replace(/\\@/g,'@').replace(/\s+/g,' ').trim();
 /* 4. focus: find the scene element whose text contains `match`, spotlight it (rest dims), ring it, push in <= 6% within the content box */
 const findEl=(root:HTMLElement,needle:string):HTMLElement|null=>{const nd=norm(needle);if(!nd)return null;let best:HTMLElement|null=null,ba=1e12;

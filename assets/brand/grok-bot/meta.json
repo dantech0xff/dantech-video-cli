@@ -1,0 +1,17 @@
+{
+ "name": "Grok Bot",
+ "slug": "grok-bot",
+ "fetched_at": "2026-10-18T04:01:50Z",
+ "status": "ok",
+ "file": "logo.svg",
+ "kind": "vector",
+ "mono": true,
+ "color": "#000000",
+ "source": "official-site",
+ "source_url": "https://x.ai/bot",
+ "match": "<svg> \"grok-bot-mark grok-bot-mark--fill\" trên trang (HTML tĩnh)",
+ "license": "trademark of its owner (mark from https://x.ai/bot). Used only to identify the product being discussed (nominative use); no endorsement implied.",
+ "tried": [
+  "Simple Icons: không có"
+ ]
+}
