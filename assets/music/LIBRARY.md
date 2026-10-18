@@ -14,6 +14,17 @@ Audio files are not committed (110 MB). `./dt fetch-music` downloads the Wikimed
 | echoes_of_lumen-epic-background-music-595722 | Echoes of Lumen | registered |
 | pink_sound-storm-zone-…-587216 | pink_sound | registered |
 
+## love (duoly theme, fixed track)
+
+| id | artist | licence | Content ID | source |
+|---|---|---|---|---|
+| luisalvaz-lofi-music-001 | Luisalvaz | CC0 1.0 (public domain dedication, "own work") | unknown: not verified against Facebook Rights Manager / YouTube Content ID | https://commons.wikimedia.org/wiki/File:Lofi_music_001.wav |
+
+166 s soft lofi beat, -15.3 LUFS / LRA 3.2, quiet intro to ~8 s and a gap at ~22–30 s, so the duoly theme starts it at 30 s.
+Picked for duoly (18/10/2026) because it is the only warm/soft bed with a CC0 licence (no attribution, no ShareAlike);
+every other soft track in the library is CC BY with Content ID unknown, and the Content-ID-free Pixabay tracks are epic trailers.
+CC0 on Commons is the uploader's own declaration: listen before posting and keep the credit line anyway.
+
 # Wikimedia Commons library (original notes)
 
 

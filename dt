@@ -5,7 +5,7 @@
 #   ./dt gate <script>                      static-screen gate only (needs out/props.json; low-res re-render, no TTS)
 #   ./dt render <script> --new-voice        force a fresh TTS take (otherwise unchanged narration reuses .cache/tts)
 #   ./dt render <script> --tts edge         free Edge TTS (no key); --tts gemini forces Gemini. Default: key -> Gemini, no key -> Edge
-#     Edge options: --voice vi-VN-HoaiMyNeural --rate +10% --pitch +0Hz --volume +0%   (or script.json "tts": {...})
+#     Edge options: --voice vi-VN-HoaiMyNeural --rate +10% --pitch +0Hz --volume +0%   (or script.json "tts": {...}; theme.json "tts" is the theme default, script keys win)
 #   ./dt fetch-music                        download the Commons music library
 #   ./dt doctor                             check this machine has everything needed
 #   ./dt setup                              install deps (venv, npm, whisper model, music); idempotent

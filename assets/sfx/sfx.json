@@ -166,5 +166,21 @@
   "license": "own work",
   "url": "",
   "use": "LOOT CRYPTO quarter-sweep transition: soft dark air (centroid ~270 Hz), 0.56 s, peak -22 dBFS at the fastest part of the sweep"
+ },
+ "drift_soft": {
+  "source": "own",
+  "pack": "scripts/sfx_soft.py drift",
+  "orig": "drift_soft.wav",
+  "license": "own work",
+  "url": "",
+  "use": "DUOLY transition (drift): warm low air, 0.5 s, peak -24 dBFS"
+ },
+ "bubble_soft": {
+  "source": "own",
+  "pack": "scripts/sfx_soft.py bubble",
+  "orig": "bubble_soft.wav",
+  "license": "own work",
+  "url": "",
+  "use": "DUOLY chat bubble / sticker blip: 0.14 s sine 720->540 Hz, peak -24 dBFS"
  }
 }

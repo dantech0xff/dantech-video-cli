@@ -9,8 +9,10 @@ words being spoken at that moment, in this order:
   > progress (scene n/m, once per scene) > diagram (scene "diagram" hint, once) > re-focus a visible item
   > the scene title (once per scene) > diagram / progress again.
 Scenes with "still": true only get fillers beyond STILL_S (the gate lets them hold up to 5 s).
-Disable with script/scene "autofill": false. Returns overlay events (scene-relative frames) + a log."""
+Disable with script/scene "autofill": false. theme.json "autofill": {"progress": false} drops the progress chip for a theme
+(client pages where "section n/m" reads like a lesson, duoly); script "autofill_progress": true/false overrides it. Returns overlay events (scene-relative frames) + a log."""
 import re
+DECO_KEYS={'stickers','artAt'}   # duoly: stickers + hook art are data-deco
 FPS=30; GAP_S=2.5; STILL_S=4.5; GAP=round(GAP_S*FPS); STILL_GAP=round(STILL_S*FPS)
 STOP=set('''và là thì mà của cho với để trong khi nếu nhưng còn rồi này đó kia cái các những một được bị có không cũng đã
 sẽ đang thôi nhé nha ra vào lên xuống từ tới đến theo như bạn mình ta chúng nó họ hay hoặc vì nên lại vẫn chỉ ngay
@@ -66,6 +68,7 @@ def texts(props):
     num=lambda v:isinstance(v,(int,float)) and not isinstance(v,bool)
     def walk(x,path,inh=None):
         # inh: reveal frame inherited from the parent (e.g. VersusHook a/b appear at the parent's sidesAt, before/after at their own at)
+        if path.endswith('.stickers'): return   # decoration (duoly sticker kinds like 'sparkle' are not on-screen text)
         if isinstance(x,dict):
             s=next((x[k] for k in ('s','name','k','label','big','msg','w','line') if isinstance(x.get(k),str)),None)
             at=x.get('at') if num(x.get('at')) else inh
@@ -81,7 +84,9 @@ def beats(raw,res,acc,key=''):
     if isinstance(raw,str):
         if raw.startswith('@') and isinstance(res,(int,float)): acc.append(int(res))
     elif isinstance(raw,dict):
-        for k,v in raw.items(): beats(v,res.get(k) if isinstance(res,dict) else None,acc,k)
+        for k,v in raw.items():
+            if k in DECO_KEYS: continue   # decoration (data-deco) is hidden in the gate's QC render: its entrance is not a beat
+            beats(v,res.get(k) if isinstance(res,dict) else None,acc,k)
     elif isinstance(raw,list):
         for k,v in enumerate(raw):
             r=res[k] if isinstance(res,list) and k<len(res) else None
@@ -98,6 +103,10 @@ def plan(S,W,ranges,starts,durs,raw_props,res_props,cta,resolve_word,brands=None
     gterm={low(k):k for k in (S.get('glossary') or {})}
     secs=[];[secs.append(sc['section']) for sc in S['scenes'] if sc['section'] not in secs]
     allov=[];log=[];tl=[]
+    try:
+        from common import theme as _theme;_tp=(_theme(S['theme']).get('autofill') or {}).get('progress',True)
+    except Exception: _tp=True
+    PROG=S.get('autofill_progress',_tp) is not False   # progress chip allowed?
     for k,sc in enumerate(S['scenes']):
         lo,hi=ranges[k];st=starts[k];dur=durs[k];ws=[w['t'] for w in W[lo:hi]]
         say=sc['say'].split()
@@ -254,7 +263,7 @@ def plan(S,W,ranges,starts,durs,raw_props,res_props,cta,resolve_word,brands=None
                     if ('b',b['slug']) in used or b['slug'] in chipped or not BRS.brand_in(win,b): continue
                     if sc['type'] in BRS.INLINE_TYPES and any(BRS.brand_in(tx,b) for tx,at in items if at<=f): continue
                     used.add(('b',b['slug']));chipped.add(b['slug']);return {'kind':'brand','brands':[b['slug']],'why':f'brand "{b["name"]}" spoken, logo not on screen'}
-            if ('p',) not in used and len(S['scenes'])>1:
+            if PROG and ('p',) not in used and len(S['scenes'])>1:
                 used.add(('p',));return {'kind':'progress','n':k+1,'m':len(S['scenes']),'label':sc['section'],'why':'no matching item/number/term: lesson progress (scene n/m)'}
             if sc.get('diagram') and ('d',) not in used:
                 used.add(('d',));d=sc['diagram'];return {'kind':'diagram','nodes':d['nodes'],'label':d.get('label'),'why':'scene diagram hint'}
@@ -263,7 +272,7 @@ def plan(S,W,ranges,starts,durs,raw_props,res_props,cta,resolve_word,brands=None
             if vis: txt=vis[(f//GAP)%len(vis)];last_focus=txt;return {'kind':'focus','match':txt[:60],'why':'fallback: re-focus a visible item'}
             if still and ('title',) not in used: used.add(('title',));txt=still[0];last_focus=txt;return {'kind':'focus','match':txt[:60],'why':'fallback: focus the scene title (once per scene)'}
             if sc.get('diagram'): d=sc['diagram'];return {'kind':'diagram','nodes':d['nodes'],'label':d.get('label'),'why':'fallback after title focus: diagram again'}
-            if len(S['scenes'])>1: return {'kind':'progress','n':k+1,'m':len(S['scenes']),'label':sc['section'],'why':'fallback after title focus: progress again'}
+            if PROG and len(S['scenes'])>1: return {'kind':'progress','n':k+1,'m':len(S['scenes']),'label':sc['section'],'why':'fallback after title focus: progress again'}
             return None
         for a,b in gaps:
             n=-(-(b-a)//G)-1; slots=[a+round((b-a)*j/(n+1)) for j in range(1,n+1)]

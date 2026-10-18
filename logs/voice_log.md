@@ -122,3 +122,10 @@ Every TIN NÓNG render picks 1 of the 7 approved Pixabay tracks at random (tin_n
 - 2026-10-18 14:53 loot-vi-nong-vi-lanh: music **kuromaru-ft-hereafter-laxin** from 0s (random LRU, Content ID: unknown)
 - 2026-10-18 14:56 loot-vi-nong-vi-lanh: music **raspberrymusic-technology-background-music** from 0s (random LRU, Content ID: unknown)
 - 2026-10-18 15:14 loot-vi-nong-vi-lanh: music **kuromaru-ft-hereafter-laxin** from 0s (random LRU, Content ID: unknown)
+- 2026-10-18 17:42 duoly-demo: voice edge vi-VN-HoaiMyNeural rate +10% pitch +0Hz volume +0% (--tts edge), 60.2s
+- 2026-10-18 17:43 duoly-demo: music **raspberrymusic-lofi-hip-hop-upbeat** from 0s (random LRU, Content ID: unknown)
+- 2026-10-18 17:48 duoly-demo: music **sappheiros-perspective** from 0s (random LRU, Content ID: unknown)
+- 2026-10-18 18:01 duoly-demo: voice reused from cache 386a87cfa4bf4080a71f (edge vi-VN-HoaiMyNeural rate +10% pitch +0Hz volume +0%, made 2026-10-18 17:42), 60.2s, no TTS call (script tts.engine=edge)
+- 2026-10-18 18:07 duoly-demo: music **luisalvaz-lofi-music-001** from 30s (random LRU, Content ID: unknown)
+- 2026-10-18 18:10 duoly-demo: music **luisalvaz-lofi-music-001** from 30s (random LRU, Content ID: unknown)
+- 2026-10-18 18:11 duoly-demo: music **luisalvaz-lofi-music-001** from 30s (random LRU, Content ID: unknown)

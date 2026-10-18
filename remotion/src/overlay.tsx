@@ -118,11 +118,12 @@ export const Overlays:React.FC<{ov:Ov[];section:string}>=({ov})=>{const {t,f}=us
    const zmax=Math.max(1,Math.min((t as any).focusPush??1.06,lim(72,X1,P.x,c.x,c.r),lim(SZ.content.y,dockTop,P.y,c.y,c.b)));z=1+(zmax-1)*fp}}
   const S=SZ.content.scale*sq*z;const dx=(1-z)*(P.x-O.x),dy=(1-z)*(P.y-O.y);wrap.style.transformOrigin='top left';wrap.style.transform=`${pre} translate(${dx}px,${dy}px) scale(${S})`;
   // softSpot themes (photographic plate behind the content): never lay a dim panel over the plate (it reads as a blurry slab);
-  // dim the other content boxes themselves instead. Reset first: imperative styles persist between frames.
+  // dim the other content boxes themselves instead (look.dimFade: fade them, for light plates where brightness() turns pink cards
+  // grey, duoly). Reset first: imperative styles persist between frames.
   wrap.querySelectorAll<HTMLElement>('[data-dim]').forEach(el=>{el.style.filter=el.dataset.dim==='-'?'':el.dataset.dim!;delete el.dataset.dim});
   const tEl=foc&&target?findEl(wrap,foc.match??''):null;
   if(soft&&tEl&&fp>0){const keep=(el:HTMLElement)=>el.contains(tEl)||tEl.contains(el);
-   wrap.querySelectorAll<HTMLElement>('[data-bb]').forEach(el=>{if(keep(el)||el.parentElement?.closest('[data-dim]'))return;el.dataset.dim=el.style.filter||'-';el.style.filter=`brightness(${1-.55*fp}) saturate(${1-.4*fp})`})}
+   wrap.querySelectorAll<HTMLElement>('[data-bb]').forEach(el=>{if(keep(el)||el.parentElement?.closest('[data-dim]'))return;el.dataset.dim=el.style.filter||'-';el.style.filter=(t as any).dimFade?`opacity(${1-.5*fp}) saturate(${1-.3*fp})`:`brightness(${1-.55*fp}) saturate(${1-.4*fp})`})}
   if(ring.current&&spot.current){if(target&&fp>0){const m=(v:number,o:number)=>P[o===0?'x':'y']+(v-P[o===0?'x':'y'])*z;const x=m(target.x,0)-14,y=m(target.y,1)-12,w=m(target.r,0)-m(target.x,0)+28,h=m(target.b,1)-m(target.y,1)+24;
     Object.assign(ring.current.style,{display:'block',left:`${x}px`,top:`${y}px`,width:`${w}px`,height:`${h}px`,opacity:String(fp)});
     if(!soft)Object.assign(spot.current.style,{display:'block',opacity:String(fp),clipPath:`polygon(evenodd,0 0,1080px 0,1080px 1920px,0 1920px,0 0,${x}px ${y}px,${x+w}px ${y}px,${x+w}px ${y+h}px,${x}px ${y+h}px,${x}px ${y}px)`});}
@@ -132,5 +133,5 @@ export const Overlays:React.FC<{ov:Ov[];section:string}>=({ov})=>{const {t,f}=us
  const C=SZ.content;
  return <div ref={me} data-ov="1" style={{position:'absolute',inset:0,pointerEvents:'none',zIndex:5}}>
   <div style={{position:'absolute',left:C.x-36,top:C.y-8,width:1080-(C.x-36),height:DOCK_B-C.y+14,overflow:'hidden',...((t as any).softSpot?SOFT:{})}}><div ref={spot} style={{position:'absolute',left:-(C.x-36),top:-(C.y-8),width:1080,height:1920,background:/^#[0-9a-fA-F]{6}$/.test(T.bg)?T.bg+'80':'rgba(0,0,0,.5)',display:'none'}}/></div>
-  <div ref={ring} style={{position:'absolute',display:'none',border:`${(t as any).softSpot?2:4}px solid ${T.A}`,borderRadius:(t as any).lc?'30px 8px 30px 30px':T.r?22:0,boxShadow:`0 0 0 8px ${T.light?'rgba(0,0,0,.05)':'rgba(255,255,255,.04)'}`}}/>
+  <div ref={ring} style={{position:'absolute',display:'none',border:`${(t as any).softSpot?2:4}px solid ${T.A}`,borderRadius:(t as any).lc?'30px 8px 30px 30px':(t as any).dl?34:T.r?22:0,boxShadow:`0 0 0 8px ${T.light?'rgba(0,0,0,.05)':'rgba(255,255,255,.04)'}`}}/>
   {dock&&React.createElement(ELS[dock.kind],{o:dock,t:T,f})}</div>};

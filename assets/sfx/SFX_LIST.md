@@ -25,6 +25,8 @@ Kenney packs: CC0 1.0 (the License.txt in each pack says Creative Commons Zero),
 | slide_soft.wav | ANDROID TUTOR transitions (shared-axis X slide): barely audible low-passed air, 0.45 s, raised-cosine fade, peak at 0.17 s (fastest part of the slide), peak -20 dBFS | own | `scripts/sfx_soft.py` (numpy) | own work |
 | hero_soft.wav | FLUTTER TUTOR transitions (Hero flight + cross-fade): barely audible low-passed air, 0.5 s, raised-cosine fade, peak at 0.24 s (fastest part of the fastOutSlowIn flight), peak -22 dBFS | own | `scripts/sfx_soft.py hero` (numpy) | own work |
 | quarter_soft.wav | LOOT CRYPTO transitions (quarter sweep around the bottom-left corner): soft dark air, 0.56 s, raised-cosine fade, peak at 0.2 s (fastest part of the sweep), peak -22 dBFS, centroid ~270 Hz, no whistle/impact | own | `scripts/sfx_soft.py quarter` (numpy) | own work |
+| drift_soft.wav | DUOLY transitions (drift: content floats out up / in from below, plate stays): warm low-passed air, 0.5 s, raised-cosine fade, peak at 0.2 s, peak -24 dBFS, no whistle/impact | own | `scripts/sfx_soft.py drift` (numpy) | own work |
+| bubble_soft.wav | DUOLY chat bubble / sticker arrival (script scene `sfx`, v ≈ 0.35): 0.14 s soft sine blip gliding 720→540 Hz, raised-cosine, peak -24 dBFS, no click | own | `scripts/sfx_soft.py bubble` (numpy) | own work |
 | morph_soft.wav | spare (old android-tutor cookie transition, removed): soft air 0.72 s, peak -12 dBFS | own | `scripts/sfx_soft.py morph` | own work |
 
 More candidates (33 sounds, preview reel) were auditioned in /workspace/dantech-sfx; not part of this repo.

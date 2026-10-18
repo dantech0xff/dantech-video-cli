@@ -31,6 +31,9 @@ if tt.get('voice') and not re.fullmatch(r'[a-z]{2,3}-[A-Z]{2}-\w+Neural',tt['voi
 elif tt.get('voice') and not tt['voice'].startswith('vi-VN-'): warn(f'tts.voice {tt["voice"]} is not a Vietnamese voice: multilingual voices read Vietnamese with a foreign accent')
 for k in set(tt)-{'engine','voice','rate','pitch','volume'}: warn(f'tts.{k} is unknown (engine, voice, rate, pitch, volume)')
 if tt.get('engine')=='gemini' and set(tt)&{'voice','rate','pitch','volume'}: warn('tts voice/rate/pitch/volume are Edge options, ignored under Gemini')
+TT=((T or {}).get('tts') or {})   # theme-pinned engine/voice (client themes, e.g. duoly = Edge HoaiMy only)
+if TT.get('engine') and tt.get('engine') and tt['engine']!=TT['engine']: err(f'tts.engine "{tt["engine"]}" overrides the theme-pinned engine "{TT["engine"]}" (theme {S.get("theme")}); remove it')
+if TT.get('voice') and tt.get('voice') and tt['voice']!=TT['voice']: warn(f'tts.voice {tt["voice"]} differs from the theme voice {TT["voice"]}')
 if tt.get('engine')=='edge' and v.get('style','random')!='random': warn(f'voice.style "{v["style"]}" is Gemini-only, ignored under Edge')
 TR={t['id']:t for t in json.load(open(os.path.join(ROOT,'assets/music/tracks.json')))}; tracks=set(TR)
 tid=S.get('music',{}).get('track','random')
@@ -60,8 +63,12 @@ for i,sc in enumerate(sc_list,1):
     for k in ['say','type','section']:
         if not sc.get(k): err(f'{tag}: missing "{k}"')
     if sc.get('type') not in types: err(f'{tag}: unknown type, use one of {sorted(types)}')
-    if sc.get('out') and sc['out'] not in ['page','bar','zoom','push','stack','morph','scroll','signal','sharedx','hero','quarter']: err(f'{tag}: bad out "{sc["out"]}"')
+    if sc.get('out') and sc['out'] not in ['page','bar','zoom','push','stack','morph','scroll','signal','sharedx','hero','quarter','drift']: err(f'{tag}: bad out "{sc["out"]}"')
     if i<len(sc_list) and not sc.get('out') and not (T or {}).get('look',{}).get('defaultOut'): warn(f'{tag}: no "out" transition (defaults to bar)')  # themes with look.defaultOut (flutter hero, loot quarter) need none
+    # duoly: unsourced poll numbers must carry the MINH HỌA tag (Dan 18/10/2026); a sourced poll sets "src"
+    pp=sc.get('props') or {}
+    if sc.get('type')=='DlVersus' and pp.get('poll') and not pp.get('src') and 'label' in pp and 'MINH HỌA' not in str(pp.get('label') or '').upper():
+        err(f'{tag}: poll % without "src" must keep the MINH HỌA tag (omit "label" or set "label": "MINH HỌA"); sourced numbers -> "src"')
     if sc.get('out')=='morph' and not sc.get('morph'): err(f'{tag}: out "morph" needs a "morph" {{from,to,txt}}')
     extra=set(sc.get('props',{}))-known.get(sc.get('type'),set())
     if sc.get('type') in known and extra: warn(f'{tag}: props not used in examples: {sorted(extra)} (check the .tsx)')

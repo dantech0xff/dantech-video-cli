@@ -1,6 +1,6 @@
 import {BrandTile,HANDLES,Handle,useBrand,fitSize} from './brand';
 import React from 'react';import {AbsoluteFill,Audio,Sequence,staticFile,useCurrentFrame,interpolate,Easing} from 'remotion';
-import {Theme} from './themes';import {H,Bd,FONTS} from './sys';import {SZ} from './safezone';
+import {Theme} from './themes';import {H,Bd,FONTS} from './sys';import {SZ} from './safezone';import {Heart,DL} from './duoly';
 const EO=Easing.bezier(.16,1,.3,1),EIO=Easing.bezier(.7,0,.2,1);const cl={extrapolateLeft:'clamp',extrapolateRight:'clamp'} as const;
 const r=(t:Theme,v:number)=>t.id==='quick-tips'?v:0;
 const Bell:React.FC<{c:string;s:number;rot?:number}>=({c,s,rot=0})=><svg width={s} height={s} viewBox="0 0 24 24" style={{transform:`rotate(${rot}deg)`,transformOrigin:'50% 10%'}}><path d="M12 2.5c-.8 0-1.4.6-1.4 1.4v.6C7.9 5.2 6 7.6 6 10.5v4.2L4.2 17v1.2h15.6V17L18 14.7v-4.2c0-2.9-1.9-5.3-4.6-6v-.6c0-.8-.6-1.4-1.4-1.4z" fill={c}/><path d="M9.6 19.3a2.4 2.4 0 0 0 4.8 0z" fill={c}/></svg>;
@@ -16,6 +16,19 @@ export const FollowCTA:React.FC<{t:Theme;inAt:number;pressAt:number;outAt:number
  const wig=f>=pressAt+3?Math.sin((f-pressAt-3)*1.3)*22*Math.exp(-(f-pressAt-3)/9):0;
  const flip=interpolate(f,[pressAt,pressAt+4],[0,1],cl);
  const lc=t.id==='loot-crypto';const isCy=t.id==='tech-explain-cyber'||t.id==='hot-news-glitch'||t.id==='android-tutor'||t.id==='flutter-tutor'||lc;const at=t.id==='android-tutor'||t.id==='flutter-tutor';const FF=at?'GSF':'BVPX';const FW=at?800:400;const LQ='40px 8px 40px 40px'; // loot-crypto: logomark corner set (sharp top-right)
+ if(t.id==='duoly')return <AbsoluteFill data-layer="g" style={{zIndex:30,pointerEvents:'none'}}>{/* duoly: soft white pill, heart instead of bell, fills hot pink when pressed; no sub line unless the channel sets one */}
+  <div data-bb="cta" style={{position:'absolute',left:136,right:SZ.cta.right,top,transform:`translateY(${(1-pin)*30-ex*40}px) scale(${1-0.02*dn})`,opacity:pin*(1-ex)}}>
+   <div style={{display:'flex',alignItems:'center',height:140,borderRadius:70,overflow:'hidden',position:'relative',background:'#FFFFFF',boxShadow:'0 24px 50px rgba(216,11,70,.18)'}}>
+    <div style={{position:'absolute',inset:0,background:DL.grad,opacity:flip}}/>
+    <div style={{position:'relative',width:108,height:108,marginLeft:16,borderRadius:54,background:pressed?'rgba(255,255,255,.22)':DL.grad,display:'flex',alignItems:'center',justifyContent:'center',transform:`rotate(${wig*.5}deg)`}}><Heart s={54} c="#FFFFFF"/></div>
+    <div style={{position:'relative',flex:1,height:'100%',overflow:'hidden'}}>
+     <div style={{position:'absolute',inset:0,display:'flex',alignItems:'center',paddingLeft:30,transform:`translateY(${-flip*100}%)`}}><span style={{fontFamily:'BVPX',fontSize:fitSize(label!,500,46,.6),color:DL.rasp,whiteSpace:'nowrap',letterSpacing:-.5}}>{label}</span></div>
+     <div style={{position:'absolute',inset:0,display:'flex',alignItems:'center',paddingLeft:30,transform:`translateY(${(1-flip)*100}%)`}}><span style={{fontFamily:'BVPX',fontSize:fitSize(done!,500,48,.6),color:'#FFFFFF',whiteSpace:'nowrap'}}>{done}</span></div>
+    </div></div>
+   {sub&&<div style={{fontFamily:'BVPS',fontSize:24,color:DL.mute,marginTop:20,paddingLeft:24,opacity:interpolate(f,[pressAt+4,pressAt+10],[0,1],cl)}}>{sub}</div>}
+  </div>
+  <div style={{position:'absolute',left:cx,top:cy-20,opacity:cOp*(1-ex),transform:`scale(${0.8-0.12*dn})`,transformOrigin:'10% 5%'}}><Cursor t={t}/></div>
+ </AbsoluteFill>;
  if(isCy)return <AbsoluteFill data-layer="g" style={{zIndex:30,pointerEvents:'none'}}>
   <div data-bb="cta" style={{position:'absolute',left:136,right:SZ.cta.right,top,transform:`translateY(${(1-pin)*30-ex*40}px) scale(${1-0.02*dn})`,opacity:pin*(1-ex)}}>
    <div style={{display:'flex',border:`1.5px solid ${pressed?t.accent:'#4A4A4A'}`,background:at?((t as any).pal?.card??'#17181B'):'#222222',height:150,overflow:'hidden',borderRadius:lc?LQ:at?75:0,...(lc?{background:'linear-gradient(162deg, rgba(40,40,46,.94), rgba(14,14,17,.96))',boxShadow:'0 30px 70px rgba(0,0,0,.55)'}:{})}}>

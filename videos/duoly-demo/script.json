@@ -1,0 +1,238 @@
+{
+ "theme": "duoly",
+ "channel": "duoly",
+ "title": "3 buổi hẹn dưới 200k mà vẫn nhớ lâu",
+ "date": "18 · 10 · 2026",
+ "topic": [
+  "hẹn hò"
+ ],
+ "caption": "Hẹn hò dưới 200k mà vẫn nhớ lâu: picnic công viên, ngồi xe buýt tới cuối tuyến, đi chợ nấu chung một món. Bạn chọn buổi nào? Comment A, B, C và tag người ấy nhé. #DuolyInLove #HenHo #TinhYeu #CapDoi",
+ "sources": [
+  "Soha, Từ 1/7, vé lượt xe buýt chỉ từ 3.000đ (Hà Nội, vé điện tử 3.000đ + 450đ/km; 20 km ≈ 12.000đ; QĐ 3316/QĐ-UBND): https://soha.vn/tu-1-7-ve-luot-xe-buyt-chi-tu-3000d-vi-cach-tinh-tien-moi-di-nhieu-tra-nhieu-di-it-tra-it-198260628235927285.htm (đọc 18/10/2026)",
+  "CafeF, Từ 17/7 thêm 24 tuyến buýt Hà Nội tính vé theo cự ly (5 km ≈ 5.250đ, 10 km ≈ 7.500đ, 20 km ≈ 12.000đ): https://cafef.vn/tu-ngay-mai-17-7-dich-vu-hang-trieu-nguoi-dang-dung-thay-doi-cach-tinh-gia-ve-188260716195113359.chn (đọc 18/10/2026)",
+  "Giá picnic (~100k) và đi chợ nấu ăn (~200k) cho hai người là ước tính, chờ Dan duyệt."
+ ],
+ "hook": {
+  "kind": "tips",
+  "claim": "Hẹn hò dưới 200k mà vẫn nhớ lâu",
+  "promise": "ba kiểu buổi hẹn rẻ mà hai người còn nhắc lại"
+ },
+ "tts": {
+  "engine": "edge",
+  "voice": "vi-VN-HoaiMyNeural"
+ },
+ "voice": {
+  "style": "random"
+ },
+ "music": {
+  "track": "random"
+ },
+ "scenes": [
+  {
+   "say": "Hẹn hò dưới hai trăm nghìn mà vẫn nhớ lâu. Có ba kiểu buổi hẹn rẻ thôi, mà hai đứa sẽ còn nhắc lại mãi.",
+   "type": "DlHook",
+   "section": "hẹn hò dưới 200k",
+   "props": {
+    "kick": "Hẹn hò tiết kiệm",
+    "big": "Hẹn hò dưới 200k mà vẫn nhớ lâu",
+    "hl": "200k|nhớ lâu",
+    "line": "Ba kiểu buổi hẹn rẻ mà hai đứa còn nhắc lại.",
+    "lineAt": "@Có",
+    "chips": [
+     "Picnic",
+     "Xe buýt",
+     "Nấu chung"
+    ],
+    "chipsAt": "@thôi",
+    "art": "ring",
+    "artAt": 6,
+    "stickers": [
+     {
+      "k": "sparkle",
+      "x": 790,
+      "y": 190,
+      "s": 70,
+      "at": "@ba"
+     }
+    ]
+   }
+  },
+  {
+   "say": "Chuyện quen lắm. Hỏi cuối tuần đi đâu, người ấy bảo đi đâu cũng được. Mà cuối tháng rồi, ví thì đang mỏng.",
+   "type": "DlChat",
+   "section": "đi đâu cũng được",
+   "props": {
+    "title": "Cuối tuần đi đâu?",
+    "hl": "đi đâu",
+    "typing": "@Hỏi",
+    "msgs": [
+     {
+      "s": "Cuối tuần mình đi đâu nè?",
+      "me": true,
+      "at": "@Hỏi"
+     },
+     {
+      "s": "Đi đâu cũng được á",
+      "at": "@bảo",
+      "react": {
+       "at": "@Mà",
+       "k": "heart"
+      }
+     },
+     {
+      "s": "Mà cuối tháng rồi…",
+      "me": true,
+      "at": "@Mà"
+     }
+    ]
+   },
+   "sfx": [
+    {
+     "at": "@Hỏi",
+     "s": "bubble_soft",
+     "v": 0.35
+    },
+    {
+     "at": "@bảo",
+     "s": "bubble_soft",
+     "v": 0.35
+    },
+    {
+     "at": "@Mà",
+     "s": "bubble_soft",
+     "v": 0.35
+    }
+   ]
+  },
+  {
+   "say": "Thứ nhất, picnic công viên. Bánh mì, trà đá, một tấm bạt, chừng một trăm nghìn cho hai người. Thứ hai, ngồi xe buýt tới cuối tuyến, chia nhau tai nghe. Vé hai chiều cho cả hai thường dưới năm mươi nghìn. Thứ ba, đi chợ rồi nấu chung một món chưa ai nấu bao giờ, khoảng hai trăm nghìn.",
+   "type": "DlTips",
+   "section": "3 buổi hẹn",
+   "props": {
+    "title": "3 buổi hẹn dưới 200k",
+    "hl": "200k",
+    "items": [
+     {
+      "s": "Picnic công viên",
+      "sub": "Bánh mì, trà đá, một tấm bạt",
+      "price": "~100k",
+      "at": "@nhất"
+     },
+     {
+      "s": "Xe buýt tới cuối tuyến",
+      "sub": "Chia nhau tai nghe",
+      "price": "dưới 50k",
+      "at": "@hai#2"
+     },
+     {
+      "s": "Nấu chung một món mới",
+      "sub": "Đi chợ cùng nhau",
+      "price": "~200k",
+      "at": "@ba"
+     }
+    ]
+   },
+   "sfx": [
+    {
+     "at": "@nhất",
+     "s": "bubble_soft",
+     "v": 0.35
+    },
+    {
+     "at": "@hai#2",
+     "s": "bubble_soft",
+     "v": 0.35
+    },
+    {
+     "at": "@ba",
+     "s": "bubble_soft",
+     "v": 0.35
+    }
+   ]
+  },
+  {
+   "say": "Vì người ta ít khi nhớ buổi đó tốn bao nhiêu. Người ta nhớ ai ngồi cạnh, và hôm đó hai đứa cười vì chuyện gì.",
+   "type": "DlLove",
+   "section": "vì sao nhớ lâu",
+   "props": {
+    "kick": "yêu là…",
+    "s": "Nhớ ai ngồi cạnh, không nhớ tốn bao nhiêu",
+    "hl": "ai ngồi cạnh",
+    "at": "@Người",
+    "sub": "và hôm đó hai đứa cười vì chuyện gì",
+    "subAt": "@cười",
+    "stickers": [
+     {
+      "k": "peach",
+      "x": 720,
+      "y": 150,
+      "s": 130,
+      "at": "@Người"
+     }
+    ]
+   }
+  },
+  {
+   "say": "Nếu chỉ chọn một cho cuối tuần này, bạn chọn buổi nào? A, picnic. B, xe buýt. C, nấu chung. Comment A, B, C và tag người ấy nhé.",
+   "type": "DlQuiz",
+   "section": "bạn chọn buổi nào",
+   "props": {
+    "kick": "Chọn một thôi",
+    "q": "Cuối tuần này, bạn chọn buổi nào?",
+    "hl": "buổi nào",
+    "opts": [
+     {
+      "k": "A",
+      "s": "Picnic công viên",
+      "at": "@A"
+     },
+     {
+      "k": "B",
+      "s": "Xe buýt tới cuối tuyến",
+      "at": "@B"
+     },
+     {
+      "k": "C",
+      "s": "Nấu chung một món",
+      "at": "@C"
+     }
+    ],
+    "prompt": {
+     "s": "Comment A, B, C và tag người ấy",
+     "at": "@Comment"
+    }
+   },
+   "sfx": [
+    {
+     "at": "@A",
+     "s": "bubble_soft",
+     "v": 0.35
+    },
+    {
+     "at": "@B",
+     "s": "bubble_soft",
+     "v": 0.35
+    },
+    {
+     "at": "@C",
+     "s": "bubble_soft",
+     "v": 0.35
+    }
+   ]
+  },
+  {
+   "say": "Rẻ thôi, miễn là có mặt nhau. Theo dõi Duoly để cuối tuần nào cũng có thêm một ý tưởng hẹn hò.",
+   "type": "DlHook",
+   "section": "chốt",
+   "props": {
+    "big": "Rẻ thôi, miễn là có mặt nhau",
+    "hl": "có mặt nhau",
+    "line": "Mỗi cuối tuần, thêm một ý tưởng hẹn hò.",
+    "lineAt": "@cuối",
+    "art": "heart",
+    "artAt": "@miễn"
+   }
+  }
+ ],
+ "brands_off": true
+}

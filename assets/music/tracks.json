@@ -322,5 +322,17 @@
   "credit": "Music by pink_sound from Pixabay (Pixabay Content License)",
   "content_id": "registered",
   "fetch": "manual"
+ },
+ {
+  "id": "luisalvaz-lofi-music-001",
+  "mood": "love",
+  "file": "assets/music/love/luisalvaz-lofi-music-001.mp3",
+  "title": "Lofi music 001",
+  "artist": "Luisalvaz",
+  "license": "CC0 1.0",
+  "source": "https://commons.wikimedia.org/wiki/File:Lofi_music_001.wav",
+  "credit": "Music: \"Lofi music 001\" by Luisalvaz (CC0 1.0, public domain dedication) via Wikimedia Commons, https://commons.wikimedia.org/wiki/File:Lofi_music_001.wav",
+  "content_id": "unknown",
+  "fetch": "commons"
  }
 ]

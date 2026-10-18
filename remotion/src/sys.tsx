@@ -1,7 +1,7 @@
 import {useBrand,fitSize} from './brand';
 import React,{createContext,useContext} from 'react';
 import {AbsoluteFill,Audio,OffthreadVideo,Sequence,staticFile,useCurrentFrame,interpolate,Easing,random,spring} from 'remotion';
-import {Theme} from './themes';import {BpChrome} from './cyber';import {SZ} from './safezone';import {GlChrome} from './glitch';import {AtChrome} from './android';import {Overlays,Ov} from './overlay';import {FlChrome,HeroFlight,FOSI} from './flutter';import {roomFor} from './fill';import {LcChrome,LC} from './loot';
+import {Theme} from './themes';import {BpChrome} from './cyber';import {SZ} from './safezone';import {GlChrome} from './glitch';import {AtChrome} from './android';import {Overlays,Ov} from './overlay';import {FlChrome,HeroFlight,FOSI} from './flutter';import {roomFor} from './fill';import {LcChrome,LC} from './loot';import {DlChrome,DriftHeart} from './duoly';
 export const FONTS=`@font-face{font-family:Anton;src:url(${staticFile('fonts/anton.ttf')})}@font-face{font-family:Barlow;src:url(${staticFile('fonts/barlow.ttf')})}@font-face{font-family:JBM;src:url(${staticFile('fonts/jbm.ttf')});font-weight:100 800}@font-face{font-family:BVPX;src:url(${staticFile('fonts/bvp_xb.ttf')})}@font-face{font-family:BVPM;src:url(${staticFile('fonts/bvp_md.ttf')})}@font-face{font-family:BVPS;src:url(${staticFile('fonts/bvp_sb.ttf')})}@font-face{font-family:SORA;src:url(${staticFile('fonts/sora_sb.ttf')})}@font-face{font-family:GSF;src:url(${staticFile('fonts/gsf_md.ttf')});font-weight:100 600}@font-face{font-family:GSF;src:url(${staticFile('fonts/gsf_xb.ttf')});font-weight:700 900}@font-face{font-family:GSC;src:url(${staticFile('fonts/gsc_md.ttf')});font-weight:100 600}@font-face{font-family:GSC;src:url(${staticFile('fonts/gsc_bd.ttf')});font-weight:700 900}`;
 export const Ctx=createContext<{t:Theme;f:number;exit:number;hx?:boolean;room?:number}>(null as any);
 export const useS=()=>useContext(Ctx);
@@ -100,12 +100,15 @@ const QuarterEdge:React.FC<{e:number}>=({e})=>{const a=-90+90*e;const o=Math.sin
   <div style={{position:'absolute',left:QP[0],top:QP[1]-1.5,width:QR_,height:3,transformOrigin:'0 50%',transform:`rotate(${a}deg)`,background:`linear-gradient(90deg, rgba(59,224,143,0) 0%, rgba(59,224,143,.75) 30%, rgba(59,224,143,.35) 70%, rgba(59,224,143,0) 100%)`,boxShadow:'0 0 18px rgba(59,224,143,.35)'}}/>
   <div style={{position:'absolute',left:QP[0]+R*Math.cos(rad)-13,top:QP[1]+R*Math.sin(rad)-13,width:26,height:26,background:LC.mint,transform:`rotate(${a+90}deg)`,boxShadow:'0 0 24px rgba(59,224,143,.45)'}}/></div>};
 /* ---------- timeline with designed transitions ---------- */
-export type Scene={dur:number;el:React.ReactNode;section:string;ov?:Ov[];out?:'page'|'bar'|'zoom'|'push'|'stack'|'morph'|'scroll'|'signal'|'sharedx'|'hero'|'quarter';disc?:boolean;hero?:{txt:string;big:boolean};focus?:[number,number];morph?:{from:number[];to:number[];txt:string}};
+export type Scene={dur:number;el:React.ReactNode;section:string;ov?:Ov[];out?:'page'|'bar'|'zoom'|'push'|'stack'|'morph'|'scroll'|'signal'|'sharedx'|'hero'|'quarter'|'drift';disc?:boolean;hero?:{txt:string;big:boolean};focus?:[number,number];morph?:{from:number[];to:number[];txt:string}};
 const T=16;
 // loot-crypto `quarter`: the incoming scene is revealed by a 90° sector sweeping clockwise around the bottom-left corner (QP);
 // its content swings in by -5° around that corner, the outgoing content follows +3° and dims. Plates are identical in both
 // layers (global-frame drift), so only content changes under the sweep. Soft ease-in-out (QE), no zoom, no flash.
-const QE=Easing.bezier(.45,0,.12,1);const QP=[0,1920];const QR_=2400;
+const QE=Easing.bezier(.45,0,.12,1);
+// duoly `drift`: the plate never moves; the outgoing content floats up 36 px and fades, the incoming layer fades in over it
+// (identical plates, so only content and page number change) while its content rises 44 px. Gentle in-out (DFE), no zoom, no pop.
+const DFE=Easing.bezier(.4,0,.2,1);const QP=[0,1920];const QR_=2400;
 const sector=(e:number)=>{const a1=-90+90*e;const pts=[`${QP[0]}px ${QP[1]}px`];for(let k=0;k<=16;k++){const a=(-90+(a1+90)*k/16)*Math.PI/180;pts.push(`${QP[0]+QR_*Math.cos(a)}px ${QP[1]+QR_*Math.sin(a)}px`)}return `polygon(${pts.join(',')})`};
 export const Timeline:React.FC<{t:Theme;scenes:Scene[];words:any[];voice:string;sfx:{at:number;s:string;v?:number}[];date:string;cta?:{inAt:number;outAt:number}}>=({t,scenes,words,voice,sfx,date,cta})=>{const f=useCurrentFrame();const B=useBrand();
  const starts=scenes.reduce<number[]>((a,s,i)=>[...a,(a[i]??0)+s.dur],[0]);
@@ -115,7 +118,7 @@ export const Timeline:React.FC<{t:Theme;scenes:Scene[];words:any[];voice:string;
   const outP=i<scenes.length-1?interpolate(f,[starts[i+1]-T/2,starts[i+1]+T/2],[0,1],{...cl,easing:EIO}):0;
   const exitStag=i<scenes.length-1&&['bar','morph','stack','push'].includes(s.out??'bar')?interpolate(f,[starts[i+1]-T-6,starts[i+1]-2],[0,1],cl):0;
   const DO=(t as any).defaultOut??'bar';const kin=i>0?scenes[i-1].out??DO:DO,kout=s.out??DO;
-  let st:React.CSSProperties={};let z=1;let crot=0,cop=1;
+  let st:React.CSSProperties={};let z=1;let crot=0,cop=1,cdy=0;
   const blur=(p:number,k=14)=>`blur(${Math.sin(Math.PI*p)*k}px)`;
   if(outP>0){ if(kout==='page'){st={transform:`perspective(1600px) translateX(${-outP*700}px) rotateY(${outP*-35}deg)`,transformOrigin:'left center',filter:blur(outP),boxShadow:`${40*outP}px 0 60px rgba(0,0,0,${.35*outP})`};z=2}
    else if(kout==='zoom'){const [fx,fy]=s.focus??[540,900];st={transform:`scale(${1+Math.pow(outP,2.2)*14})`,transformOrigin:`${fx}px ${fy}px`,filter:blur(outP,6),opacity:outP>.75?interpolate(outP,[.75,.9],[1,0],cl):1};z=2}
@@ -125,6 +128,7 @@ export const Timeline:React.FC<{t:Theme;scenes:Scene[];words:any[];voice:string;
    else if(kout==='signal'){const g=Math.sin(Math.PI*outP);st={opacity:outP<.5?1:0,...sig(g,f)}}
    else if(kout==='sharedx'){const q=interpolate(outP,[.06,.94],[0,1],cl);const e=EMD(q);st={transform:`translateX(${-SAX*e}px) scale(${1-.04*e})`,opacity:interpolate(q,[0,.35],[1,0],cl)}}
    else if(kout==='hero'){st={};z=1} // hero: outgoing layer stays put under the incoming cross-fade; only the chip travels
+   else if(kout==='drift'){const e=DFE(interpolate(f,[starts[i+1]-T/2,starts[i+1]+T/2],[0,1],cl));cop=1-e}  // old content fades in place (moving it up pushed the title into the header band)
    else if(kout==='quarter'){const e=QE(interpolate(f,[starts[i+1]-T/2,starts[i+1]+T/2],[0,1],cl));st={filter:`brightness(${1-.45*e})`};crot=3*e;cop=1-.5*e}
    else if(kout==='bar'||kout==='morph'){st={opacity:outP<.5?1:0}}}
   if(i>0&&inP<1){ if(kin==='page'){st={...st,transform:`translateX(${(1-inP)*260}px)`,filter:`brightness(${.75+.25*inP})`};z=1}
@@ -135,18 +139,21 @@ export const Timeline:React.FC<{t:Theme;scenes:Scene[];words:any[];voice:string;
    else if(kin==='signal'){const g=Math.sin(Math.PI*inP);st={...st,opacity:inP>=.5?1:0,...sig(g,f+7)}}
    else if(kin==='sharedx'){const q=interpolate(inP,[.06,.94],[0,1],cl);const e=EMD(q);st={...st,transform:`translateX(${SAX*(1-e)}px)`,opacity:interpolate(q,[.25,.7],[0,1],cl)};z=3}
    else if(kin==='hero'){const r=interpolate(f,[starts[i]-T/2,starts[i]+T/2],[0,1],cl);const e=FOSI(r);st={...st,opacity:e,transform:`translateY(${12*(1-e)}px)`};z=3}
+   else if(kin==='drift'){const e=DFE(interpolate(f,[starts[i]-T/2,starts[i]+T/2],[0,1],cl));st={...st,opacity:e};z=3;cdy=44*(1-e)}
    else if(kin==='quarter'){const e=QE(interpolate(f,[starts[i]-T/2,starts[i]+T/2],[0,1],cl));st={...st,clipPath:sector(e)};z=3;crot=-5*(1-e)}
    else if(kin==='bar'||kin==='morph'){st={...st,opacity:inP>=.5?1:0}}}
-  const lf=f-starts[i]+(i>0&&kin==='quarter'?T/2:0); // quarter: the incoming scene is already entering while the sweep reveals it (no empty plate mid-sweep)
+  const lf=f-starts[i]+(i>0&&(kin==='quarter'||kin==='drift')?T/2:0); // quarter: the incoming scene is already entering while the sweep reveals it (no empty plate mid-sweep)
   // hero flight window: the chip is hidden in both layers (hx) and drawn once by HeroFlight on top
   const hOut=i<scenes.length-1&&kout==='hero'&&!!s.hero&&!!scenes[i+1].hero&&f>=starts[i+1]-T/2;
   const hIn=i>0&&kin==='hero'&&!!s.hero&&!!scenes[i-1].hero&&f<starts[i]+T/2;
   if(hOut&&f<starts[i+1]+T/2)overlay=<HeroFlight a={s.hero!} b={scenes[i+1].hero!} p={interpolate(f,[starts[i+1]-T/2,starts[i+1]+T/2],[0,1],cl)}/>;
+  const pre=(crot?`translate(${QP[0]-SZ.content.x}px,${QP[1]-SZ.content.y}px) rotate(${crot}deg) translate(${SZ.content.x-QP[0]}px,${SZ.content.y-QP[1]}px)`:'')+(cdy?` translateY(${cdy}px)`:''); // transition pre-transform, kept outermost by overlay focus/squeeze
   layers.push(<AbsoluteFill key={i} data-layer={String(i)} style={{zIndex:z,background:t.bg,backgroundImage:t.texture?`url(${staticFile(t.texture)})`:'none',...st}}>
-   <Ctx.Provider value={{t,f:lf,exit:exitStag,hx:hOut||hIn,room:roomFor(s.ov,!!cta&&starts[i]<cta.outAt&&starts[i+1]>cta.inAt)}}>{t.id==='flutter-tutor'?<FlChrome section={s.section} page={`${String(i+1).padStart(2,'0')} / ${String(scenes.length).padStart(2,'0')}`}/>:t.id==='android-tutor'?<AtChrome section={s.section} page={`${String(i+1).padStart(2,'0')} / ${String(scenes.length).padStart(2,'0')}`}/>:t.id==='hot-news-glitch'?<GlChrome date={date}/>:t.id==='tech-explain-cyber'?<BpChrome section={s.section} page={`${String(i+1).padStart(2,'0')} / ${String(scenes.length).padStart(2,'0')}`}/>:t.id==='tech-explain'?<TermChrome section={s.section} page={`${i+1}/${scenes.length}`} idx={i}/>:t.id==='loot-crypto'?<LcChrome section={s.section} disc={s.disc} page={`${String(i+1).padStart(2,'0')} / ${String(scenes.length).padStart(2,'0')}`}/>:<Chrome section={s.section} page={`TRANG ${i+1}/${scenes.length}`} date={date}/>}
-   <div data-content="1" data-pre={crot?`translate(${QP[0]-SZ.content.x}px,${QP[1]-SZ.content.y}px) rotate(${crot}deg) translate(${SZ.content.x-QP[0]}px,${SZ.content.y-QP[1]}px)`:''} style={{position:'absolute',left:SZ.content.x,top:SZ.content.y,width:SZ.content.w,height:SZ.content.h,transform:crot?`translate(${QP[0]-SZ.content.x}px,${QP[1]-SZ.content.y}px) rotate(${crot}deg) translate(${SZ.content.x-QP[0]}px,${SZ.content.y-QP[1]}px) scale(${SZ.content.scale})`:`scale(${SZ.content.scale})`,transformOrigin:'top left',opacity:cop}}>{s.el}</div>{s.ov&&s.ov.length>0&&<Overlays ov={s.ov} section={s.section}/>}</Ctx.Provider></AbsoluteFill>);
+   <Ctx.Provider value={{t,f:lf,exit:exitStag,hx:hOut||hIn,room:roomFor(s.ov,!!cta&&starts[i]<cta.outAt&&starts[i+1]>cta.inAt)}}>{t.id==='flutter-tutor'?<FlChrome section={s.section} page={`${String(i+1).padStart(2,'0')} / ${String(scenes.length).padStart(2,'0')}`}/>:t.id==='android-tutor'?<AtChrome section={s.section} page={`${String(i+1).padStart(2,'0')} / ${String(scenes.length).padStart(2,'0')}`}/>:t.id==='hot-news-glitch'?<GlChrome date={date}/>:t.id==='tech-explain-cyber'?<BpChrome section={s.section} page={`${String(i+1).padStart(2,'0')} / ${String(scenes.length).padStart(2,'0')}`}/>:t.id==='tech-explain'?<TermChrome section={s.section} page={`${i+1}/${scenes.length}`} idx={i}/>:t.id==='duoly'?<DlChrome section={s.section} page={`${String(i+1).padStart(2,'0')} / ${String(scenes.length).padStart(2,'0')}`}/>:t.id==='loot-crypto'?<LcChrome section={s.section} disc={s.disc} page={`${String(i+1).padStart(2,'0')} / ${String(scenes.length).padStart(2,'0')}`}/>:<Chrome section={s.section} page={`TRANG ${i+1}/${scenes.length}`} date={date}/>}
+   <div data-content="1" data-pre={pre} style={{position:'absolute',left:SZ.content.x,top:SZ.content.y,width:SZ.content.w,height:SZ.content.h,transform:`${pre} scale(${SZ.content.scale})`,transformOrigin:'top left',opacity:cop}}>{s.el}</div>{s.ov&&s.ov.length>0&&<Overlays ov={s.ov} section={s.section}/>}</Ctx.Provider></AbsoluteFill>);
   if(i<scenes.length-1&&(kout==='bar')&&outP>0&&outP<1){const p=outP;const w=p<.5?interpolate(p,[0,.5],[96,1080]):1080;const x=p<.5?0:interpolate(p,[.5,1],[0,1080],{easing:EIO});
    overlay=<div style={{position:'absolute',top:0,bottom:0,left:x,width:w-(p<.5?0:0),background:t.accent,zIndex:10,display:'flex',alignItems:'center',justifyContent:'center',overflow:'hidden'}}><div style={{transform:`rotate(-90deg) translateY(${(p-.5)*400}px)`,fontFamily:t.id==='tech-explain'?'JBM':'Anton',fontWeight:t.id==='tech-explain'?800:400,fontSize:t.id==='tech-explain'?150:fitSize(B.wordmark+' ■',1000,200,.47,1),color:t.onAccent,whiteSpace:'nowrap'}}>{t.id==='tech-explain'?'git commit ▸':B.wordmark+' ■'}</div></div>}
+  if(i<scenes.length-1&&kout==='drift'&&(t as any).dl?.driftHeart){const r=interpolate(f,[starts[i+1]-T/2-4,starts[i+1]+T/2+4],[0,1],cl);if(r>0&&r<1)overlay=<DriftHeart e={r}/>}
   if(i<scenes.length-1&&kout==='quarter'){const r=interpolate(f,[starts[i+1]-T/2,starts[i+1]+T/2],[0,1],cl);if(r>0&&r<1){const e=QE(r);overlay=<QuarterEdge e={e}/>}}
   if(i<scenes.length-1&&kout==='signal'&&outP>0&&outP<1){const g=Math.sin(Math.PI*outP);overlay=<SignalBreak g={g} f={f} c={t.accent}/>}
   if(i<scenes.length-1&&kout==='zoom'&&outP>0&&outP<1){overlay=<AbsoluteFill style={{zIndex:2,background:t.accent,opacity:interpolate(outP,[.4,.6,.8],[0,1,0],cl)}}/>}
