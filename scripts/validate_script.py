@@ -326,6 +326,10 @@ if lo or so: print(f'⏱  {"long_ok" if lo else "short_ok"}: true · ~{est:.0f}s
 if est>BUDGET_MAX and not lo: warn(f'length: ~{est:.0f}s voiced ({n} words at ~{BUDGET_WPS} w/s) > {BUDGET_MAX}s; stop and confirm with the user: (a) trim along one direction, (b) split into self-contained videos, (c) ask the video\'s goal. Confirmed long video: "long_ok": true')
 if est<BUDGET_MIN and not so: warn(f'length: ~{est:.0f}s voiced ({n} words) < {BUDGET_MIN}s; check the idea is complete (problem → explanation → payoff), not fragments. Confirmed short clip (e.g. teaser): "short_ok": true')
 if sc_list and not lo and est/len(sc_list)<MIN_AVG_SCENE: warn(f'length: {len(sc_list)} scenes for ~{est:.0f}s (~{est/len(sc_list):.1f}s each) is choppy; aim ~1 scene per 7–10 s')
+if T and T.get('look',{}).get('plates'):  # full-frame plates must never be upscaled (scripts/check_plates.py)
+    import subprocess
+    r=subprocess.run([sys.executable,os.path.join(ROOT,'scripts','check_plates.py'),os.path.basename(os.path.dirname(tp))],capture_output=True,text=True)
+    if r.returncode: err('background plates too small for look.plateScale: '+' | '.join(l for l in r.stdout.splitlines() if l.startswith('❌')))
 for m in W: print('⚠️ ',m)
 for m in E: print('❌',m)
 print(f'{"✅ OK" if not E else "❌ FAIL"}: {p} · {len(sc_list)} scenes · {n} words')

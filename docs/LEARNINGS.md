@@ -42,3 +42,9 @@
 - **Chuyển cảnh quét (`quarter`):** nếu cảnh mới bắt đầu đúng ở mốc, giữa sweep chỉ thấy plate trống → bắt đầu sớm T/2. Overlay focus/squeeze ghi đè transform của wrapper → rotation đi qua `data-pre`.
 - **Spotlight focus trên nền ảnh** lộ cạnh hình chữ nhật → `look.softSpot` (mask mờ mép).
 - **Nội dung tiền:** disclaimer header tự động trên cảnh giá/biểu đồ/coin/flow, tag MINH HỌA khi không có nguồn, end card luôn có disclaimer.
+
+## 2026-10-18 · LOOT CRYPTO: "tấm mờ bị zoom" (Dan, demo v1)
+- **Triệu chứng:** cảnh 02/09 và mọi chỗ có focus: một tấm chữ nhật mờ lớn phủ vùng nội dung, nền như bị phóng to, khối 3D khổng lồ mờ bị cắt ở mép.
+- **Gốc rễ (3 lớp chồng nhau):** (1) spotlight focus phủ một tấm dim bán trong suốt trên toàn vùng nội dung; trên plate ảnh, kể cả mép mờ (softSpot cũ), nó thành "tấm kính mờ". Cộng push-in 6% → giống bị zoom. (2) plate 1188×2112 hiển thị ở 1188×1.06 ≈ 1259 px, tức bị phóng 1.06×, cộng drift scale "thở". (3) sprite `float_wedge` 470 px blur 14 px ở góc trái trên + khối gần camera trong plate (vùng mờ DoF lớn) bị cắt mép, nằm ngay sau caption.
+- **Sửa:** softSpot không còn tấm dim: các hộp `data-bb` khác tự tối lại; `look.focusPush: 1` (không push). Plate render 1296×2304, vẽ đúng 1080×1920, scale cố định `look.plateScale` 1.03, chỉ drift translate trong biên 3%. Bỏ `float_wedge`/`float_cube`. Layout plate mới: khối mint nhỏ ở xa (trên header), 2 khối graphite nhỏ ở vùng đáy không chữ.
+- **Chặn tái phát:** `scripts/check_plates.py` (gọi trong `./dt render` và validator) fail nếu plate nhỏ hơn 1080×1920 × plateScale hoặc plateScale > 1.05.

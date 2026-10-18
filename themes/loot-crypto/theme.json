@@ -17,6 +17,9 @@
   "video": "clean",
   "entry": "rise",
   "rule": "rgba(245,245,242,.10)",
+  "plateScale": 1.03,
+  "plates": ["textures/loot/plate_main.jpg", "textures/loot/plate_end.jpg"],
+  "focusPush": 1,
   "lc": {
    "red": "signal",
    "redBar": true,

@@ -2,7 +2,7 @@
 // Look = "studio + quarter geometry":
 //  A. studio: pre-rendered 3D product-shot plates (assets/textures/loot, made with tools/loot-3d: graphite + mint glossy blocks
 //     on a dark floor, one soft light pool, cool rim, shallow depth of field, vignette, grain). Remotion only drifts them (slow
-//     Ken Burns + breathing pool + one out-of-focus foreground block), all data-deco, so the static gate never sees them.
+//     translate-only drift inside look.plateScale + breathing pool, never upscaled), all data-deco, so the static gate never sees them.
 //  B. geometry from the logomark (off-white 3/4 disc + mint square in the missing quarter):
 //     - cards = 3 round corners + 1 sharp top-right corner (QR) with an optional mint square in it,
 //     - mint squares are the bullets / accents, a short red bar sits above titles (theme.json look.lc.redBar),
@@ -75,14 +75,17 @@ const Tile:React.FC<{k?:string;coin?:string;s:number|string;tone?:string}>=({k,c
  if(b)return <BrandMark b={b} size={s} on="#1A1A1E"/>;
  return <span style={{width:s,height:s,flex:'none',borderRadius:typeof s==='number'?QRs(s*.3):'30% 6% 30% 30%',background:'linear-gradient(160deg,#2A2A30,#141418)',border:`1.5px solid ${LC.line2}`,display:'flex',alignItems:'center',justifyContent:'center',boxSizing:'border-box'}}>
   <Glyph k={k??'wallet'} s={typeof s==='number'?s*.56:'56%'} c={tone}/></span>};
-/* ---------- studio background (plates are pre-rendered; motion is slow drift only, data-deco) ---------- */
-export const LcStudio:React.FC<{plate?:string;push?:number}>=({plate='textures/loot/plate_main.jpg',push=0})=>{const g=useCurrentFrame();
- const s=1.06+.012*osc(g,43)+push,x=12*osc(g,57),y=16*osc(g,49,1);const pool=.55+.45*(.5+.5*osc(g,23,2));
+/* ---------- studio background (plates are pre-rendered; motion is slow drift only, data-deco) ----------
+   The plate is drawn at frame size and never upscaled: plates are rendered at 1296x2304 (1.2x) and the total scale is capped at
+   look.plateScale (1.03), translate-only drift inside that 3% margin. scripts/check_plates.py fails the render if a plate is smaller
+   than 1080x1920 x plateScale. No extra blurred foreground sprite on top (a giant cropped bokeh blob read as a glitch, 18/10/2026). */
+export const LcStudio:React.FC<{plate?:string;push?:number;ms?:number}>=({plate,push=0,ms})=>{const g=useCurrentFrame();const t=(useS() as any)?.t;
+ const src=plate??t?.lc?.studio??'textures/loot/plate_main.jpg';const MS=Math.min(1.03,ms??t?.plateScale??1.03);
+ const mx=540*(MS-1)-1,my=960*(MS-1)-1;  // translate room left by the scale (px each side)
+ const x=mx*.7*osc(g,57),y=my*.6*osc(g,49,1)-my*.3*push;const pool=.55+.45*(.5+.5*osc(g,23,2));
  return <AbsoluteFill data-deco="studio" style={{overflow:'hidden',background:LC.bg}}>
-  <Img src={staticFile(plate)} style={{position:'absolute',left:-54,top:-96,width:1188,height:2112,transform:`translate(${x}px,${y}px) scale(${s})`,transformOrigin:'50% 40%'}}/>
-  <div style={{position:'absolute',inset:0,background:'radial-gradient(ellipse 560px 420px at 52% 30%, rgba(245,245,242,.07), rgba(245,245,242,0) 70%)',opacity:pool}}/>
-  {/* foreground block, far out of focus (shallow DoF), drifts across the top-left corner only (no-text zone) */}
-  <Img src={staticFile('textures/loot/float_wedge.png')} style={{position:'absolute',left:-170+18*osc(g,37),top:-150+14*osc(g,31,1),width:470,filter:'blur(14px) brightness(.8)',opacity:.75,transform:`rotate(${-18+4*osc(g,41)}deg)`}}/>
+  <Img src={staticFile(src)} style={{position:'absolute',left:0,top:0,width:1080,height:1920,transform:`translate(${x}px,${y}px) scale(${MS})`,transformOrigin:'50% 50%'}}/>
+  <div style={{position:'absolute',inset:0,background:'radial-gradient(ellipse 560px 420px at 52% 30%, rgba(245,245,242,.06), rgba(245,245,242,0) 70%)',opacity:pool}}/>
   <div style={{position:'absolute',inset:0,background:'linear-gradient(180deg, rgba(8,8,10,.30) 0%, rgba(8,8,10,0) 18%, rgba(8,8,10,0) 70%, rgba(8,8,10,.55) 100%)'}}/>
  </AbsoluteFill>};
 /* ---------- header: symbol + wordmark (Sora) left; disclaimer (money scenes) + page right ---------- */
@@ -290,11 +293,11 @@ export const LcSteps:React.FC<{title:string;kick?:string;steps:{s:string;sub?:st
    {s.icon&&<Glyph k={s.icon} s={z(52) as any} c={LC.grey}/>}</div>})}</div></Fill>};
 /* ================= 11. end card: hero plate (3D logomark in the light pool), page name, handles, disclaimer ================= */
 const PN:Record<string,string>={youtube:'YouTube',facebook:'Facebook',tiktok:'TikTok'};
-export const LcEndCard:React.FC<{dur?:number;handles?:Handle[];tagline?:string;tm?:string}>=({dur=96,handles,tagline='',tm})=>{const f=useCurrentFrame();const B=useBrand();handles=handles??B.handles;
+export const LcEndCard:React.FC<{dur?:number;handles?:Handle[];tagline?:string;tm?:string;plate?:string;ms?:number}>=({dur=96,handles,tagline='',tm,plate,ms})=>{const f=useCurrentFrame();const B=useBrand();handles=handles??B.handles;
  const op=(at:number)=>ease(f,at,14);const out=interpolate(f,[dur-10,dur],[1,0],cl);const fade=interpolate(f,[0,10],[0,1],cl);
  const page=B.page??B.name;const top=SZ.end.top+470;
  return <AbsoluteFill data-layer="end" style={{zIndex:40,opacity:out}}><style>{FONTS}</style>
-  <AbsoluteFill style={{opacity:fade}}><LcStudio plate="textures/loot/plate_end.jpg" push={.02*ease(f,0,dur)}/></AbsoluteFill>
+  <AbsoluteFill style={{opacity:fade}}><LcStudio plate={plate??"textures/loot/plate_end.jpg"} ms={ms} push={ease(f,0,dur)}/></AbsoluteFill>
   <div style={{position:'absolute',left:SZ.end.x,right:SZ.end.right,top,opacity:fade}}>
    <div {...bb('e-kick')} style={{display:'table',...L('THEO DÕI FANPAGE',26),opacity:op(6)}}>THEO DÕI FANPAGE</div>
    <div {...bb('e-name')} style={{display:'flex',alignItems:'center',gap:22,marginTop:22,opacity:op(9),transform:`translateY(${(1-op(9))*18}px)`}}>

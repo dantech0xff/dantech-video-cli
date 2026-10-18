@@ -15,9 +15,11 @@ Setup once: `npm install` (three only). Output lands in `out/`.
 - `final.py name W H "params" focus layfile cocK` renders colour + depth, then depth of field (blur levels by circle of
   confusion), vignette and fine grain -> `out/name.png`.
 
-Shipped plates (1188x2112, saved as JPEG q90 into assets/textures/loot/):
+Shipped plates (1296x2304 = 1.2x the frame, so look.plateScale 1.03 never upscales; `scripts/check_plates.py` enforces it; saved as JPEG q90 into assets/textures/loot/):
 
-    python3 final.py plate_main 1188 2112 "&sp=320&ang=.36&dec=1.7&spx=0.1&spy=8&spz=-0.8&tx=0&tz=-1.0&rs=75&rsy=7&fc=592137&key=1.6" 0.42 lay.json 2.2
-    python3 final.py plate_end  1188 2112 "&sp=320&ang=.36&dec=1.7&spx=0.1&spy=8&spz=-0.8&tx=0&tz=-1.0&rs=75&rsy=7&fc=592137&key=1.6" 0.40 lay_end.json 2.2
+    python3 final.py plate_main 1296 2304 "&sp=320&ang=.36&dec=1.7&spx=0.1&spy=8&spz=-0.8&tx=0&tz=-1.0&rs=75&rsy=7&fc=592137&key=1.6" 0.30 lay.json 2.0
+    python3 final.py plate_end  1296 2304 "&sp=320&ang=.36&dec=1.7&spx=0.1&spy=8&spz=-0.8&tx=0&tz=-1.0&rs=75&rsy=7&fc=592137&key=1.6" 0.40 lay_end.json 2.2
 
-`float_wedge.png`, `float_cube.png`, `hero3d.png` are single-object renders (`obj=wedge|cube|hero`, transparent).
+Layout rules (lay.json): near-camera blocks (z > 3) small and in the bottom no-text band (y ≥ 1500 px), far blocks small and above the
+header; nothing cropped by the frame edge, nothing large behind titles or captions. No separate blurred sprites on top of the plate.
+Single-object renders (`obj=wedge|cube|hero`, transparent) are for previews only.
