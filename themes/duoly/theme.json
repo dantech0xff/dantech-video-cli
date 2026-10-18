@@ -1,0 +1,114 @@
+{
+ "channel": "duoly",
+ "look": {
+  "id": "duoly",
+  "label": "DUOLY",
+  "subtitle": "client: Duoly in Love · soft pink + glossy 3D ring-hearts + chat bubbles & stickers",
+  "bg": "#FFF6F4",
+  "ink": "#5B1F33",
+  "onAccent": "#FFFFFF",
+  "accent": "#E72055",
+  "accent2": "#D80B46",
+  "muted": "#9A6170",
+  "head": "BVPX",
+  "body": "BVPM",
+  "upper": false,
+  "step": 1,
+  "video": "clean",
+  "entry": "rise",
+  "rule": "rgba(216,11,70,.12)",
+  "plateScale": 1.03,
+  "plates": ["textures/duoly/plate_soft.jpg", "textures/duoly/plate_bold.jpg"],
+  "focusPush": 1,
+  "softSpot": true,
+  "dimFade": true,
+  "dl": {
+   "plate": "textures/duoly/plate_soft.jpg",
+   "endPlate": "textures/duoly/plate_bold.jpg",
+   "floaters": true,
+   "driftHeart": true
+  },
+  "pal": {
+   "card": "#FFFFFF",
+   "card2": "#FFF0EE",
+   "panel": "#FFFFFF",
+   "line": "rgba(216,11,70,.12)",
+   "dim": "#9A6170"
+  },
+  "sfx": {
+   "trans": "drift_soft",
+   "stamp": "bubble_soft",
+   "tick": "bubble_soft",
+   "entry": "bubble_soft"
+  },
+  "trans": ["drift"],
+  "defaultOut": "drift",
+  "caption": {
+   "font": "BVPX",
+   "size": 46,
+   "upper": false,
+   "weight": 400,
+   "chipBg": "rgba(255,255,255,.94)",
+   "chipText": "#5B1F33",
+   "upcomingText": "rgba(91,31,51,.45)",
+   "activeBg": "#E72055",
+   "activeText": "#FFFFFF",
+   "radius": 20,
+   "pop": 1.04
+  },
+  "pack": {
+   "card": "#FFFFFF",
+   "card2": "#FFF0EE",
+   "panel": "#FFFFFF",
+   "line": "rgba(216,11,70,.14)",
+   "dim": "#9A6170",
+   "sub": "#7A3A4C",
+   "out": "#9A6170",
+   "term": "#FFF0EE",
+   "hl": "accent",
+   "onHl": "#FFFFFF",
+   "good": "#E72055",
+   "onGood": "#FFFFFF",
+   "bad": "#9A6170",
+   "badBg": "rgba(154,97,112,.08)",
+   "badInk": "#9A6170",
+   "badRow": "#C3093F",
+   "warn": "#F78E78",
+   "warnBg": "rgba(247,142,120,.12)",
+   "onWarn": "#FFFFFF",
+   "tint": "accent",
+   "tintK": 0.55,
+   "mono": "BVPS",
+   "r": "34px"
+  }
+ },
+ "tail_hold": 40,
+ "cta": {
+  "top": 1150,
+  "in_offset": -6,
+  "sub": ""
+ },
+ "outro": {
+  "dur": 90,
+  "tagline": ""
+ },
+ "voice": {
+  "voice": "vi-vn-concierge-2",
+  "model": "gemini-3.8-flash-tts",
+  "styles": {
+   "tu-nhien": "dịu dàng, gần gũi, hơi dí dỏm như đang kể chuyện với bạn thân; không sến, không cường điệu"
+  }
+ },
+ "tts": {
+  "engine": "edge",
+  "voice": "vi-VN-HoaiMyNeural"
+ },
+ "music": {
+  "pool": [
+   {"id": "kuromaru-ft-hereafter-laxin", "start": 0},
+   {"id": "sappheiros-perspective", "start": 0},
+   {"id": "raspberrymusic-lofi-hip-hop-upbeat", "start": 0}
+  ],
+  "rel": -11
+ }
+}

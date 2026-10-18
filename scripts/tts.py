@@ -8,6 +8,7 @@ Engines (CLI --tts overrides script.json "tts": {"engine": ...}; default "auto")
   edge    Microsoft Edge read-aloud TTS (pip edge-tts), free, no key. Default vi-VN-NamMinhNeural, rate +10%.
           script.json "tts": {"engine":"edge","voice":"vi-VN-HoaiMyNeural","rate":"+10%","pitch":"+0Hz","volume":"+0%"}
           (CLI --voice/--rate/--pitch/--volume override). Gemini-only voice.style (ke-chuyen...) is ignored with a note.
+          themes/<theme>/theme.json "tts" is the theme default (duoly: {"engine":"edge","voice":"vi-VN-HoaiMyNeural"}); script keys win.
   auto    GEMINI_API_KEY set -> gemini (exactly as before); no key -> edge.
 script.json "voice": {"style": "random" | "<style key>", "file": "<optional pinned audio, skips TTS>"}
 Cache: .cache/tts/<hash>.mp3 + .json (gitignored). Gemini hash = sha256(text|voice|model|style setting) (unchanged);
@@ -25,7 +26,9 @@ def opt(name):
         if a.startswith(name+'='): return a.split('=',1)[1]
     return None
 S=load(script_path); vdir,out,slug=video_paths(script_path); T=theme(S['theme'])['voice']
-dst=os.path.join(out,'voice.mp3'); os.makedirs(out,exist_ok=True); cfg=S.get('voice',{}); tcfg=S.get('tts',{}) or {}
+dst=os.path.join(out,'voice.mp3'); os.makedirs(out,exist_ok=True); cfg=S.get('voice',{})
+# theme.json "tts" = theme default (client themes pin an engine/voice, e.g. duoly: Edge HoaiMy); script "tts" keys win
+TTS_T=theme(S['theme']).get('tts',{}) or {}; tcfg={**TTS_T,**(S.get('tts',{}) or {})}
 dry='--dry-run' in argv; new='--new-voice' in argv or os.environ.get('NEW_VOICE')=='1'
 if cfg.get('file'):  # pinned recording (e.g. an approved take), no TTS call
     if dry: print('tts: engine=none (voice.file pinned:',cfg['file']+')'); sys.exit()
@@ -34,7 +37,7 @@ if cfg.get('file'):  # pinned recording (e.g. an approved take), no TTS call
 
 # ── engine selection: CLI --tts > script tts.engine > auto (key -> gemini, no key -> edge)
 cli=opt('--tts') or os.environ.get('TTS_ENGINE'); req=(cli or tcfg.get('engine') or 'auto').lower()
-src='--tts '+req if cli else ('script tts.engine='+req if tcfg.get('engine') else '')
+src='--tts '+req if cli else (('script' if (S.get('tts') or {}).get('engine') else 'theme')+' tts.engine='+req if tcfg.get('engine') else '')
 if req not in ('auto','gemini','edge'): sys.exit(f'tts: unknown engine "{req}" (auto | gemini | edge)')
 has_key=bool(os.environ.get('GEMINI_API_KEY'))
 if req=='gemini':

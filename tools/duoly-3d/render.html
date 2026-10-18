@@ -1,0 +1,53 @@
+<!doctype html><html><head><style>html,body{margin:0;background:transparent}</style>
+<script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script></head>
+<body><pre id="out"></pre>
+<script type="module">
+// duoly-3d: glossy sprites for the duoly theme (own work, matches the brand logo's look: two glossy rings interlocked into a heart).
+// obj=ring  : white + peach rings (elliptic tubes) tilted ±45° so their lower halves cross into the heart tip; tilted around
+//             their long axis in opposite directions so they truly interlock (no z-fighting).
+// obj=puffy : inflated heart (extruded heart curve, deep bevel), colour c=pink|peach|white
+// params: w h ry (turn around Y, deg) rx rz (deg) s (scale) c exp env
+import * as THREE from 'three';
+import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
+import {RectAreaLightUniformsLib} from 'three/addons/lights/RectAreaLightUniformsLib.js';
+import {MarchingCubes} from 'three/addons/objects/MarchingCubes.js';
+const P=Object.fromEntries(new URLSearchParams(location.hash.slice(1)));
+const W=+(P.w||900),H=+(P.h||900);
+const r=new THREE.WebGLRenderer({antialias:true,alpha:true,preserveDrawingBuffer:true});r.setSize(W,H);r.setPixelRatio(1);
+r.toneMapping=THREE.ACESFilmicToneMapping;r.toneMappingExposure=+(P.exp||1.05);r.outputColorSpace=THREE.SRGBColorSpace;r.setClearColor(0x000000,0);
+document.body.appendChild(r.domElement);RectAreaLightUniformsLib.init();
+const sc=new THREE.Scene();const pm=new THREE.PMREMGenerator(r);sc.environment=pm.fromScene(new RoomEnvironment(),0.03).texture;sc.environmentIntensity=+(P.env||.9);
+const cam=new THREE.PerspectiveCamera(24,W/H,.1,100);cam.position.set(0,0,9.5);cam.lookAt(0,0,0);
+// soft studio: big warm softbox top-left, pink bounce from below (the logo sits on deep pink), faint cool rim
+const key=new THREE.RectAreaLight(0xffffff,+(P.key||4.2),6,6);key.position.set(-3,4.5,5);key.lookAt(0,0,0);sc.add(key);
+const bounce=new THREE.RectAreaLight(0xff6a8a,+(P.bounce||2.2),8,4);bounce.position.set(1,-5,3);bounce.lookAt(0,0,0);sc.add(bounce);
+const rim=new THREE.DirectionalLight(0xffe4ea,+(P.rim||1.4));rim.position.set(4,2,-4);sc.add(rim);
+sc.add(new THREE.HemisphereLight(0xfff3f1,0xf06f86,+(P.fill||.55)));
+const COL={white:0xFFF1EE,peach:0xF58C76,pink:0xEC2A5C,coral:0xF35570,blush:0xF9C9C5};
+const glossy=(c)=>new THREE.MeshPhysicalMaterial({color:COL[c]??COL.pink,roughness:.22,metalness:0,clearcoat:1,clearcoatRoughness:.08,sheen:.4,sheenColor:new THREE.Color(0xffffff),sheenRoughness:.5,iridescence:0});
+class Ell extends THREE.Curve{constructor(a,b){super();this.a=a;this.b=b}getPoint(t,o=new THREE.Vector3()){const u=t*Math.PI*2;return o.set(this.a*Math.cos(u),this.b*Math.sin(u),0)}}
+const root=new THREE.Group();sc.add(root);
+const obj=P.obj||'ring';
+if(obj==='ring'){
+ const A=+(P.a||1.18),B=+(P.b||.70),TUBE=+(P.tube||.2),TILT=+(P.tilt||22)*Math.PI/180,ANG=+(P.ang||46)*Math.PI/180,DX=+(P.dx||.47),DY=+(P.dy||.06);
+ const geo=new THREE.TubeGeometry(new Ell(A,B),360,TUBE,64,true);
+ const mk=(c,side)=>{const g=new THREE.Group();const m=new THREE.Mesh(geo,glossy(c));m.rotation.x=side*TILT;g.add(m);g.rotation.z=-side*ANG;g.position.set(side*-DX,DY,0);return g};
+ root.add(mk('white',1));root.add(mk('peach',-1));
+ root.position.y=-.02;
+}else{
+ // inflated heart: implicit surface (iq's 2D heart SDF, thickness ~ sqrt(depth inside)) polygonised with MarchingCubes -> smooth, no bevel seams
+ const RES=+(P.res||110);const mc=new MarchingCubes(RES,glossy(P.c||'pink'),false,false,400000);mc.isolation=0;
+ const T=+(P.th||.34),D=+(P.dd||.28);const d2=(x,y)=>{x=Math.abs(x);if(y+x>1)return Math.hypot(x-.25,y-.75)-Math.SQRT2/4;
+  const a=(x)**2+(y-1)**2,m=.5*Math.max(x+y,0),b=(x-m)**2+(y-m)**2;return Math.sqrt(Math.min(a,b))*Math.sign(x-y)};
+ // 2D depth map, box-blurred inside so the SDF's medial-axis ridge does not show as a crease
+ const dm=new Float32Array(RES*RES),dp=new Float32Array(RES*RES);for(let j=0;j<RES;j++)for(let i=0;i<RES;i++){const d=d2((i/(RES-1)*2-1)*.78,(j/(RES-1)*2-1)*.78+.5);dm[i+j*RES]=d;dp[i+j*RES]=Math.max(0,-d)}
+ const R=+(P.blur||5);for(let pass=0;pass<3;pass++){for(const ax of [0,1]){const src=dp.slice();for(let j=0;j<RES;j++)for(let i=0;i<RES;i++){if(dm[i+j*RES]>=0)continue;let s=0,n=0;
+   for(let q=-R;q<=R;q++){const ii=ax?i:i+q,jj=ax?j+q:j;if(ii<0||jj<0||ii>=RES||jj>=RES)continue;s+=src[ii+jj*RES];n++}dp[i+j*RES]=s/n}}}
+ for(let k=0;k<RES;k++)for(let j=0;j<RES;j++)for(let i=0;i<RES;i++){const gz=k/(RES-1)*2-1;const d=dm[i+j*RES];
+  const PW=+(P.pw||.62);const sd=d<0?Math.pow(dp[i+j*RES]/D,PW):-Math.pow(d/D,PW);mc.field[i+j*RES+k*RES*RES]=sd-(gz/T)**2;}
+ mc.update();mc.scale.setScalar(1.25);root.add(mc);
+}
+root.rotation.set(+(P.rx||0)*Math.PI/180,+(P.ry||0)*Math.PI/180,+(P.rz||0)*Math.PI/180);root.scale.setScalar(+(P.s||1));
+r.render(sc,cam);
+document.getElementById('out').textContent=r.domElement.toDataURL('image/png');
+</script></body></html>
