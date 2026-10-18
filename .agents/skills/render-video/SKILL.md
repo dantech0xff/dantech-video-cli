@@ -23,7 +23,7 @@ description: Render một videos/<slug>/script.json thành MP4 hoàn chỉnh (TT
    | mix | `pick_music.py` + `mix_bgm.sh` + `measure_vm.py` | `<slug>.mp4`, `stems/`, `music.json`. Nhạc random từ `music.pool` (TIN NÓNG xoay 7 bài Pixabay), có ghi log |
    | describe | `scripts/describe.py` | `description.txt` (nguồn + credit nhạc) |
 4. **QC** (ghi kết quả vào báo cáo):
-   - Thời lượng: `ffprobe -v error -show_entries format=duration -of csv=p=0 videos/<slug>/out/<slug>.mp4` (báo Dan; không gọi lại Gemini TTS vì độ dài. Lời đọc > 45 s mà script không có `long_ok` là lỗi ở bước viết: quay lại write-script "Một clip = một ý", không phải ở render).
+   - Thời lượng: `ffprobe -v error -show_entries format=duration -of csv=p=0 videos/<slug>/out/<slug>.mp4` (báo Dan; không gọi lại Gemini TTS vì độ dài. Lời đọc ngoài 45–120 s mà script không có `long_ok`/`short_ok` là lỗi ở bước viết: quay lại write-script "Độ dài 45–120 s, ý phải trọn vẹn", không phải ở render).
    - Mix: log có `voice/music while speaking: median ~21 dB` (chấp nhận 18–22).
    - Loudness: dòng `mix:` có I ≈ -14 LUFS, Peak ≤ -1 dBTP. Đo lại: `ffmpeg -i <mp4> -af ebur128=peak=true -f null - 2>&1 | tail -12`.
    - Contact sheet: `ffmpeg -i <mp4> -vf "fps=1/3,scale=270:-1,tile=6x2" -frames:v 1 <slug>_sheet.png`, mở ra xem.

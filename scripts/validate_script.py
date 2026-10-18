@@ -297,15 +297,17 @@ for i,sc in enumerate(sc_list,1):
 RATE={'hao-hung':3.8,'tu-nhien':3.1,'ke-chuyen':2.55,'edge +10%':3.0}
 n=len(allw)
 print('⏱  voice estimate (info): '+', '.join(f'{k} ~{n/r:.0f}s' for k,r in RATE.items()))
-# retention budget: one clip = one idea, 30-45 s voiced by default (write-script "Một clip = một ý"); "long_ok": true = approved long video
-BUDGET_WPS,BUDGET_MAX,SCENES_MAX=3.0,45,8
-lo=S.get('long_ok',False)
-if not isinstance(lo,bool): err('long_ok must be true or false')
+# length range: 45-120 s voiced, complete idea (write-script "Độ dài 45–120 s, ý phải trọn vẹn").
+# "long_ok": true = confirmed >120 s (also skips the choppy-scenes check); "short_ok": true = confirmed <45 s (e.g. a teaser)
+BUDGET_WPS,BUDGET_MIN,BUDGET_MAX,MIN_AVG_SCENE=3.0,45,120,5.0
+lo,so=S.get('long_ok',False),S.get('short_ok',False)
+for k,x in (('long_ok',lo),('short_ok',so)):
+    if not isinstance(x,bool): err(f'{k} must be true or false')
 est=n/BUDGET_WPS
-if lo: print(f'⏱  long_ok: true · ~{est:.0f}s voiced, {len(sc_list)} scenes (length budget off; say why in the report)')
-else:
-    if est>BUDGET_MAX: warn(f'length: ~{est:.0f}s voiced ({n} words at ~{BUDGET_WPS} w/s) > {BUDGET_MAX}s budget; keep one idea (~90–135 words) or stop and ask how to cut (one idea / teaser / series). Approved long video: "long_ok": true')
-    if len(sc_list)>SCENES_MAX: warn(f'length: {len(sc_list)} scenes > {SCENES_MAX}; one idea fits in 6–8 scenes. Approved long video: "long_ok": true')
+if lo or so: print(f'⏱  {"long_ok" if lo else "short_ok"}: true · ~{est:.0f}s voiced, {len(sc_list)} scenes (say why in the report)')
+if est>BUDGET_MAX and not lo: warn(f'length: ~{est:.0f}s voiced ({n} words at ~{BUDGET_WPS} w/s) > {BUDGET_MAX}s; stop and confirm with the user: (a) trim along one direction, (b) split into self-contained videos, (c) ask the video\'s goal. Confirmed long video: "long_ok": true')
+if est<BUDGET_MIN and not so: warn(f'length: ~{est:.0f}s voiced ({n} words) < {BUDGET_MIN}s; check the idea is complete (problem → explanation → payoff), not fragments. Confirmed short clip (e.g. teaser): "short_ok": true')
+if sc_list and not lo and est/len(sc_list)<MIN_AVG_SCENE: warn(f'length: {len(sc_list)} scenes for ~{est:.0f}s (~{est/len(sc_list):.1f}s each) is choppy; aim ~1 scene per 7–10 s')
 for m in W: print('⚠️ ',m)
 for m in E: print('❌',m)
 print(f'{"✅ OK" if not E else "❌ FAIL"}: {p} · {len(sc_list)} scenes · {n} words')

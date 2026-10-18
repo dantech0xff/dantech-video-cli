@@ -1,5 +1,14 @@
 # Dan Tech Video
 
+## Định hướng
+
+**dantech-video là engine video ngắn của Dan Tech, cho video 45–120 giây.** Trọng tâm của dự án là **viết kịch bản xuất sắc**; phần dựng hình là code cố định.
+
+- **Kim chỉ nam:** người xem nhận được giá trị thật, không thấy chán, và xem tới cuối.
+- **Điều kiện tiên quyết cho mọi script:** ý phải **trọn vẹn và mạch lạc**: vấn đề → giải thích / giải pháp → payoff. Không bao giờ rời rạc hay là một đống ý không nối với nhau. Không cắt tới mức ý bị đứt mạch, cũng không nhồi cả bài học.
+- **Nguồn cần hơn ~120 s:** người viết **dừng và xác nhận với người yêu cầu trước khi viết**, đưa 3 lựa chọn: (a) rút gọn theo một hướng cụ thể, (b) chia thành nhiều video, mỗi video tự đứng được và trọn vẹn, (c) hỏi mục đích / mục tiêu của video để quyết định giữ gì. Chỉ khi không ai trả lời được mới tự chọn mặc định hợp lý và nêu lý do.
+- Chi tiết: skill [`write-script`](.agents/skills/write-script/SKILL.md), mục "Độ dài 45–120 s, ý phải trọn vẹn".
+
 Repo dựng video dọc ngắn (1080×1920, 30 fps) cho kênh Dan Tech. Anh viết **một file `script.json`**, chạy **một lệnh**, nhận video hoàn chỉnh: giọng đọc AI, phụ đề theo từng chữ, chuyển cảnh, SFX, nhạc nền, nút Follow và end card, cộng thêm `description.txt` có sẵn dòng credit và nguồn.
 
 Có 3 theme:
@@ -87,7 +96,7 @@ Nhờ vậy khi đổi giọng (thời lượng khác), keycap, popup, SFX vẫn
 | Tagline end card, vị trí nút Follow, thời gian giữ cuối | `theme.json` → `outro`, `cta`, `tail_hold` |
 | Handle mạng xã hội | `channels/<id>.json`, mặc định `dantech` (YouTube @dantech-0xff, Facebook @dantech0xff, TikTok @dantech_0xff, có logo). Ghi đè từng video bằng `"handles"` trong script nếu thật cần |
 
-Độ dài: **một clip = một ý, mặc định 30–45 s lời đọc** (≤ 8 cảnh); nguồn dài thì người viết dừng lại, đưa phương án (một ý mạnh nhất / teaser / series) cho người yêu cầu chọn, không nhồi (write-script "Một clip = một ý"). Video cố ý dài: `"long_ok": true`. Giọng đọc: gọi TTS **một lần** cho mỗi video và giữ style đã rút, không gọi lại để chỉnh độ dài. Lời không đổi thì dùng lại cache `.cache/tts/` (cùng audio, cùng style). Muốn giọng mới: `./dt render <script> --new-voice`.
+Độ dài: **45–120 s lời đọc**, ý trọn vẹn (xem "Định hướng" ở đầu file và write-script "Độ dài 45–120 s, ý phải trọn vẹn"). Ngoài khoảng này có chủ đích: `"long_ok": true` / `"short_ok": true`. Giọng đọc: gọi TTS **một lần** cho mỗi video và giữ style đã rút, không gọi lại để chỉnh độ dài. Lời không đổi thì dùng lại cache `.cache/tts/` (cùng audio, cùng style). Muốn giọng mới: `./dt render <script> --new-voice`.
 
 Kiểm tra mix: `./dt render` in ra "voice/music while speaking: median ~21 dB" (mục tiêu 18-22 dB). Loudness cuối: -14 LUFS, true peak ≤ -1 dBTP.
 

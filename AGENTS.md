@@ -1,5 +1,13 @@
 # AGENTS.md: hướng dẫn cho AI CLI (Grok CLI, Claude Code, Codex…)
 
+## Định hướng dự án (đọc trước)
+
+- **dantech-video là engine video ngắn của Dan Tech, cho video 45–120 giây.** Trọng tâm là **viết kịch bản xuất sắc**.
+- **Kim chỉ nam:** người xem nhận giá trị thật, không chán, xem tới cuối.
+- **Điều kiện tiên quyết cho mọi script:** ý **trọn vẹn, mạch lạc**: vấn đề → giải thích / giải pháp → payoff. Không rời rạc, không phải một đống ý không liên quan. Không cắt tới mức đứt mạch; không nhồi cả bài học.
+- **Input cần hơn ~120 s → DỪNG, xác nhận với người dùng trước khi viết**, đưa 3 lựa chọn: (a) rút gọn theo một hướng cụ thể; (b) chia thành nhiều video, mỗi video tự đứng được và trọn vẹn; (c) hỏi mục đích / mục tiêu của video để quyết định giữ gì. Chỉ khi không ai trả lời được mới tự chọn mặc định hợp lý và ghi lý do.
+- Chi tiết + tự kiểm: `.agents/skills/write-script/SKILL.md` mục "Độ dài 45–120 s, ý phải trọn vẹn".
+
 Repo này dựng video dọc 9:16 cho kênh **Dan Tech** (thị trường Việt Nam). Mọi bước dựng là code cố định. **Việc của AI chỉ là: chọn chủ đề, kiểm chứng nguồn, viết `videos/<slug>/script.json`, chạy lệnh render, rồi kiểm tra kết quả.** Đọc `README.md` để biết chi tiết.
 
 ## 1. Cài đặt (một lần trên máy Dan)
@@ -26,7 +34,7 @@ Nguồn chủ đề, lịch đăng, mức tự động đăng do **người đi�
 2. **Chọn theme** (xem bảng dưới + `write-script`). Spec không ghi theme và có người trả lời được thì đề xuất rồi chờ. Chạy tự động thì tự chọn và ghi lý do.
 3. **Viết `videos/<slug>/script.json`** theo skill `write-script`:
    - **Một ý lõi** cho mỗi video. Ý phụ để thành video khác.
-   - **Ngân sách 30–45 s lời đọc** (≈ 90–135 chữ, ≤ 6–8 cảnh), ước lượng TRƯỚC khi viết. Tỉ lệ xem hết quan trọng hơn độ dài. Nguồn cần nhiều hơn → **dừng, đưa 2–3 phương án** (một ý mạnh nhất / teaser bài học / chia series) cho người yêu cầu chọn; không nhồi. Một promise trong hook, payoff sớm, không liệt kê dài. Cố ý dài: `"long_ok": true`.
+   - **45–120 s lời đọc** (≈ 135–360 chữ ở ~3 chữ/giây, ~1 cảnh mỗi 7–10 s), ước lượng TRƯỚC khi viết. Ý trọn vẹn: vấn đề → giải thích/giải pháp → payoff. Cần > ~120 s → **dừng, xác nhận** (rút gọn theo hướng / chia video trọn vẹn / hỏi mục đích). Một promise trong hook (3 s), payoff không để dành, không liệt kê dài, không filler. Ngoài khoảng có chủ đích: `"long_ok": true` / `"short_ok": true`.
    - **Hook theo nội dung** (`hook.kind`: controversy/news → claim cụ thể + 2 phe + payoff; explainer → nêu chủ đề + why; tips → promise). Áp dụng cho mọi theme.
    - **Hook trực diện:** câu đầu cảnh 1 nêu thẳng chủ đề (≤10–12 chữ, ~3 s). Tiêu đề trên màn hình cảnh 1 cũng hiện chủ đề ngay. Khai báo `topic`.
    - **Đặt vấn đề tối đa 2 câu**, rồi vào lõi luôn. Khung: hook → khái niệm lõi → một bằng chứng/ví dụ → takeaway + CTA.
@@ -76,7 +84,7 @@ Mọi chữ thương hiệu trên màn hình lấy từ file kênh, không hardc
 | Skill | Khi nào | File |
 |---|---|---|
 | `setup` | máy mới: cài Node/Python(.venv)/ffmpeg, npm, model whisper, .env, nhạc → `./dt doctor` ✅ | `.agents/skills/setup/SKILL.md` (tự động: `./dt setup`) |
-| `write-script` | spec (chủ đề/link, theme, góc nhìn; mặc định 30–45 s) → `script.json` đã validate | `.agents/skills/write-script/SKILL.md` (+ `SCHEMA.md`, `template.json`) |
+| `write-script` | spec (chủ đề/link, theme, góc nhìn; 45–120 s, ý trọn vẹn) → `script.json` đã validate | `.agents/skills/write-script/SKILL.md` (+ `SCHEMA.md`, `template.json`) |
 | `humanizer` | bỏ "mùi AI" khỏi lời đọc (bước trong write-script) | `.agents/skills/humanizer/SKILL.md` (upstream blader/humanizer, MIT) + `VI.md` (áp dụng cho tiếng Việt) |
 | `render-video` | script → MP4 + QC, chạy lại bằng `--from` | `.agents/skills/render-video/SKILL.md` |
 | `theme` | tạo/chỉnh theme từ spec | `.agents/skills/theme/SKILL.md` |

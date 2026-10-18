@@ -32,8 +32,9 @@
 
 Số trong `props`/`sfx` là frame tính từ đầu cảnh (30 fps). Anchor: `"@chữ"`, `"@chữ#2"`, `"@chữ+4"`, `"@chữ.end"`; chữ phải có trong `say` của **chính cảnh đó** (so khớp bỏ dấu câu, không phân biệt hoa thường).
 
-Ngân sách độ dài mặc định: **30–45 s lời đọc** (≈ 90–135 chữ ở ~3 chữ/giây), ≤ 8 cảnh; validator ⚠️ khi vượt (write-script "Một clip = một ý").
-- `long_ok` (tuỳ chọn, top-level): `true` = video cố ý dài, đã được duyệt; tắt cảnh báo độ dài / số cảnh.
+Độ dài mặc định: **45–120 s lời đọc** (≈ 135–360 chữ ở ~3 chữ/giây), ~1 cảnh mỗi 7–10 s; validator ⚠️ khi < 45 s, > 120 s, hoặc cảnh trung bình < ~5 s (write-script "Độ dài 45–120 s, ý phải trọn vẹn").
+- `long_ok` (tuỳ chọn, top-level): `true` = cố ý dài hơn 120 s, đã xác nhận; tắt cảnh báo > 120 s và cảnh báo cảnh quá vụn.
+- `short_ok` (tuỳ chọn, top-level): `true` = cố ý ngắn hơn 45 s (vd teaser), đã xác nhận; tắt cảnh báo < 45 s.
 
 - `topic` (khuyến nghị): list từ khoá chủ đề, vd `["MVVM","Flutter"]`; validator kiểm tra câu đầu cảnh 1 có gọi tên chủ đề.
 

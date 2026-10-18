@@ -12,7 +12,7 @@
 - **Áp dụng:** `videos/openai-vs-apple-glitch` đã viết lại phần mở (chưa render). Lần render tới sẽ là 1 lần TTS mới vì lời đã đổi.
 - **Đo lại:** sau khi đăng bản mới, ghi % qua 3 s và thời gian xem TB vào đây để so.
 
-## 2026-10-18 · Một clip = một ý, 30–45 s (flutter-install-sdk)
-- **Chuyện gì:** bản đầu `videos/flutter-install-sdk` nhồi cả bài học (341 chữ, 12 cảnh, 117 s). Layout tốt nhưng Dan: tỉ lệ xem hết quan trọng hơn độ dài; clip 30 s xem hết thắng clip 60 s bị bỏ giữa chừng.
-- **Luật:** ước lượng lời đọc trước khi viết (~3.0 chữ/giây Edge +10%, đo: 341 chữ → 113.5 s), ngân sách 30–45 s, ≤ 6–8 cảnh, một promise. Nguồn dài → dừng, đưa phương án (một ý / teaser / series). Validator ⚠️ khi > 45 s hoặc > 8 cảnh; cố ý dài → `"long_ok": true`.
-- **Áp dụng:** `videos/flutter-install-sdk-teaser` (96 chữ, 5 cảnh, voice 31.3 s): promise → 3 nhịp hé lộ (doctor ✓ ! ✗, không cần xanh hết, 3 bẫy) → CTA đọc bài 1 miễn phí trên dantech.academy.
+## 2026-10-18 · Độ dài 45–120 s, ý phải trọn vẹn (flutter-install-sdk)
+- **Chuyện gì:** bản đầu `videos/flutter-install-sdk` nhồi cả bài học (341 chữ, 12 cảnh, 117 s, kể lại từng mục). Hôm đó thử luật 30–45 s và làm `videos/flutter-install-sdk-teaser` (96 chữ, 5 cảnh, voice 31.3 s), nhưng bản đó chỉ hé lộ vài nhịp, ý chưa trọn.
+- **Luật đã sửa (thay luật 30–45 s):** engine cho video **45–120 s**. Điều kiện tiên quyết: ý trọn vẹn, mạch lạc (vấn đề → giải thích/giải pháp → payoff), không rời rạc, không nhồi. Ước lượng trước khi viết ở ~3.0 chữ/giây (Edge +10%, đo: 341 chữ → 113.5 s), tức 135–360 chữ, ~1 cảnh mỗi 7–10 s. Cần > ~120 s → dừng, xác nhận với người dùng: (a) rút gọn theo hướng cụ thể, (b) chia nhiều video tự đứng được, (c) hỏi mục đích. Validator ⚠️ khi < 45 s / > 120 s / cảnh trung bình < ~5 s; có chủ đích thì `"short_ok": true` / `"long_ok": true`.
+- **Kim chỉ nam:** người xem nhận giá trị thật, không chán, xem tới cuối.
