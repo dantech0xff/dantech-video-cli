@@ -1,0 +1,18 @@
+{
+ "name": "IntelliJ IDEA",
+ "slug": "intellij",
+ "fetched_at": "2026-10-18T04:22:53Z",
+ "status": "ok",
+ "file": "logo.svg",
+ "kind": "vector",
+ "mono": false,
+ "color": null,
+ "source": "official-brand-asset",
+ "source_url": "https://resources.jetbrains.com/storage/products/company/brand/logos/IntelliJ_IDEA_icon.svg",
+ "match": "registry official URL",
+ "attrib": null,
+ "license": "trademark of its owner (official brand asset). Used only to identify the product being discussed (nominative use); no endorsement implied.",
+ "tried": [
+  "Simple Icons: không có"
+ ]
+}

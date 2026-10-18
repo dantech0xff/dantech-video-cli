@@ -305,7 +305,7 @@ try:
     if _D['off']: print('ℹ️  brand: brands_off: true (không logo)')
     for _b in _D['brands']:
         _e=_R.get(_b['slug'],{});_mp=os.path.join(_BL.BRAND,_b['slug'],'meta.json');_m=json.load(open(_mp,encoding='utf-8')) if os.path.isfile(_mp) else None
-        st=('bỏ qua: '+_e.get('why','')) if _e.get('logo') is False else ('logo ✓ '+_m['source']) if _m and _m.get('status')=='ok' else ('bỏ qua: '+_m.get('reason','')[:120]) if _m else 'chưa có trong cache (build_props sẽ tải)'
+        st=('bỏ qua: '+_e.get('why','')) if _e.get('logo') is False else ('bỏ qua: '+_e['wordmark']) if isinstance(_e.get('wordmark'),str) else ('logo ✓ '+_m['source']) if _m and _m.get('status')=='ok' else ('bỏ qua: '+_m.get('reason','')[:120]) if _m else 'chưa có trong cache (build_props sẽ tải)'
         print(f"ℹ️  brand: {_b['name']} ({_b['source']}, cảnh {','.join(str(x) for x in sorted({h['scene']+1 for h in _b['hits']}))}) · {st}")
     if _D['opted_out']: print('ℹ️  brand tắt (brands_skip): '+', '.join(_D['opted_out']))
 except Exception as _ex: warn(f'brand detection failed: {_ex}')

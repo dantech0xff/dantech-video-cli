@@ -9,7 +9,7 @@ Flutter Brand Guidelines (https://docs.flutter.dev/brand), which allow them in t
 used by the `flutter-tutor` theme (`remotion/src/flutter.tsx`):
 - Never edit, recolour, crop, rotate, animate the shape of, or outline the file. Only scale it uniformly and fade it in/out as one piece.
 - Keep it small and never the most prominent element. It must not be larger than the DAN TECH wordmark or the headline.
-- Keep clear space at least the height of one "F" around it. No text, chip or shape may touch or overlap it, and it must not sit next to other logos.
+- Keep clear space at least the height of one "F" around it. No text, chip or shape may touch or overlap it, (Dan, 18 Oct 2026: other product logos from BrandMark may appear in the same scene, including the hook, as long as nothing touches the mark.)
 - Never use it in the channel name, avatar or background, or in a way that suggests Google made or endorses the video.
 - Put ™ on the first or most prominent on-screen "Flutter" (the hook tag "Flutter™ · …").
 - The end card carries: "Flutter and the related logo are trademarks of Google LLC. We are not endorsed by or affiliated with Google LLC."

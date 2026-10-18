@@ -1,5 +1,5 @@
 {
- "_doc": "Brand registry for automatic logos (scripts/brands.py detects, scripts/brand_logo.py fetches into assets/brand/<slug>/). Keys = slug. aliases are matched case/diacritic-insensitively on word boundaries in narration + on-screen text. case:true = only when written with a capital first letter (common words: Threads, Make, Go, Medium). ctx:'social' = only when the same sentence/label also names another social platform (single letter X). logo:false = never fetch (why says the reason; shown as 'logo bỏ qua'). si = Simple Icons slug, homepage/github = where the fetcher looks when Simple Icons has no icon.",
+ "_doc": "Brand registry for automatic logos (scripts/brands.py detects, scripts/brand_logo.py fetches into assets/brand/<slug>/). Keys = slug. aliases are matched case/diacritic-insensitively on word boundaries in narration + on-screen text. case:true = only when written with a capital first letter (common words: Threads, Make, Go, Medium). ctx:'social' = only when the same sentence/label also names another social platform (single letter X). Policy (Dan, 18 Oct 2026): every tech logo that can be found is shown; there is no trademark skip list. logo:false (+why) is only for a brand Dan explicitly turns off. attrib = credit line required by the logo licence (CC BY), printed on the end card. commons = explicit Wikimedia Commons file titles to try. si = Simple Icons slug, homepage/github = where the fetcher looks when Simple Icons has no icon. wordmark = quality skip: the only official mark is the name in type (macOS, iOS).  official = direct URL of the owner's brand asset, tried before Simple Icons (when Simple Icons has an outdated mark).",
  "grok-bot": {
   "name": "Grok Bot",
   "aliases": [
@@ -169,9 +169,11 @@
   "aliases": [
    "linkedin"
   ],
-  "logo": false,
-  "why": "LinkedIn đã yêu cầu gỡ logo khỏi Simple Icons; không tự lấy logo",
-  "cat": "social"
+  "cat": "social",
+  "homepage": "https://www.linkedin.com",
+  "commons": [
+   "File:LinkedIn icon.svg"
+  ]
  },
  "github": {
   "name": "GitHub",
@@ -203,9 +205,8 @@
   "aliases": [
    "flutter"
   ],
-  "logo": false,
-  "why": "luật thương hiệu Flutter: logomark chỉ dùng qua FlutterMark của flutter-tutor (khoảng trống, không đứng cạnh logo khác)",
-  "cat": "dev"
+  "cat": "dev",
+  "official": "https://flutter.dev/assets/icon_flutter.817b4a56b047d0d36b338dd9ffd44dbd.svg"
  },
  "dart": {
   "name": "Dart",
@@ -221,17 +222,14 @@
   "aliases": [
    "android"
   ],
-  "logo": false,
-  "why": "logo Android chính thức (đầu robot) có luật thương hiệu riêng; engine không dùng (như android-tutor)",
-  "cat": "dev"
+  "cat": "dev",
+  "attrib": "The Android robot is reproduced or modified from work created and shared by Google and used according to terms described in the Creative Commons 3.0 Attribution License"
  },
  "android-studio": {
   "name": "Android Studio",
   "aliases": [
    "android studio"
   ],
-  "logo": false,
-  "why": "art Android Studio/IntelliJ không dùng (như android-tutor)",
   "cat": "dev"
  },
  "kotlin": {
@@ -240,7 +238,8 @@
    "kotlin"
   ],
   "si": "kotlin",
-  "cat": "dev"
+  "cat": "dev",
+  "official": "https://resources.jetbrains.com/storage/products/company/brand/logos/Kotlin_icon.svg"
  },
  "jetpack-compose": {
   "name": "Jetpack Compose",
@@ -264,18 +263,15 @@
    "intellij",
    "intellij idea"
   ],
-  "logo": false,
-  "why": "art Android Studio/IntelliJ không dùng (như android-tutor)",
-  "cat": "dev"
+  "cat": "dev",
+  "official": "https://resources.jetbrains.com/storage/products/company/brand/logos/IntelliJ_IDEA_icon.svg"
  },
  "xcode": {
   "name": "Xcode",
   "aliases": [
    "xcode"
   ],
-  "cat": "dev",
-  "logo": false,
-  "why": "Apple không cho bên thứ ba dùng logo/biểu tượng Apple (Apple Trademark Guidelines); không tự lấy logo"
+  "cat": "dev"
  },
  "swift": {
   "name": "Swift",
@@ -283,9 +279,7 @@
    "swift"
   ],
   "case": true,
-  "cat": "dev",
-  "logo": false,
-  "why": "Apple không cho bên thứ ba dùng logo/biểu tượng Apple (Apple Trademark Guidelines); không tự lấy logo"
+  "cat": "dev"
  },
  "vs-code": {
   "name": "VS Code",
@@ -294,19 +288,23 @@
    "vscode",
    "visual studio code"
   ],
-  "logo": false,
-  "why": "Microsoft đã yêu cầu gỡ logo VS Code khỏi Simple Icons; không tự lấy logo",
-  "cat": "dev"
+  "cat": "dev",
+  "homepage": "https://code.visualstudio.com",
+  "commons": [
+   "File:Visual Studio Code 1.35 icon.svg"
+  ]
  },
  "windows": {
   "name": "Windows",
   "aliases": [
    "windows"
   ],
-  "logo": false,
-  "why": "Microsoft đã yêu cầu gỡ logo Windows khỏi Simple Icons; không tự lấy logo",
   "case": true,
-  "cat": "os"
+  "cat": "os",
+  "homepage": "https://www.microsoft.com/windows",
+  "commons": [
+   "File:Windows logo - 2021.svg"
+  ]
  },
  "macos": {
   "name": "macOS",
@@ -315,8 +313,7 @@
    "mac os"
   ],
   "cat": "os",
-  "logo": false,
-  "why": "Apple không cho bên thứ ba dùng logo/biểu tượng Apple (Apple Trademark Guidelines); không tự lấy logo"
+  "wordmark": "logo chính thức chỉ là wordmark chữ \"macOS\" (Simple Icons cũng vậy), không có biểu tượng riêng; đặt cạnh tên sẽ thành lặp chữ"
  },
  "ios": {
   "name": "iOS",
@@ -324,8 +321,7 @@
    "ios"
   ],
   "cat": "os",
-  "logo": false,
-  "why": "Apple không cho bên thứ ba dùng logo/biểu tượng Apple (Apple Trademark Guidelines); không tự lấy logo"
+  "wordmark": "logo chính thức chỉ là wordmark chữ \"iOS\" (Simple Icons cũng vậy), không có biểu tượng riêng; đặt cạnh tên sẽ thành lặp chữ"
  },
  "linux": {
   "name": "Linux",
@@ -498,9 +494,11 @@
    "openai",
    "chatgpt"
   ],
-  "logo": false,
-  "why": "OpenAI không có trong Simple Icons (đã gỡ theo yêu cầu); không tự lấy logo",
-  "cat": "ai"
+  "cat": "ai",
+  "homepage": "https://openai.com",
+  "commons": [
+   "File:OpenAI logo 2025 (symbol).svg"
+  ]
  },
  "anthropic": {
   "name": "Anthropic",
@@ -535,9 +533,7 @@
    "apple"
   ],
   "case": true,
-  "cat": "company",
-  "logo": false,
-  "why": "Apple không cho bên thứ ba dùng logo/biểu tượng Apple (Apple Trademark Guidelines); không tự lấy logo"
+  "cat": "company"
  },
  "google": {
   "name": "Google",

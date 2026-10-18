@@ -92,6 +92,7 @@ def _domain_ok(url,name):
     from urllib.parse import urlparse
     host=urlparse(url).hostname or '';base=host.split('.')[-2] if host.count('.')>=1 else host
     return any(t and (t in nrm(base).replace('-','') or nrm(base).replace('-','') in t and len(base)>=4) for t in tokens(name))
+_GENERIC={'logo','logos','icon','icons','mark','logomark','symbol','svg','png','webp','jpg','dark','light','white','black','color','colour','mono','full','small','large','header','footer','nav','brand','assets','img','image','default','primary','new','v2','2x','3x'}
 def _site_candidates(html,base,name):
     from bs4 import BeautifulSoup
     S=BeautifulSoup(html,'lxml');tk=tokens(name);out=[]
@@ -111,6 +112,10 @@ def _site_candidates(html,base,name):
         out.append(('inline-svg',raw,f'<svg> "{at[:60]}" trên trang'))
     for el in S.find_all('img'):
         a=' '.join([el.get('alt') or '',el.get('src') or '',' '.join(el.get('class') or [])])
+        # the file name must not name something else (alt="VS Code on Github" src="github-icon.svg" is GitHub's mark)
+        stem=[w for w in re.split(r'[-_.\s]+',nrm(os.path.basename((el.get('src') or '').split('?')[0]))) if w and w not in _GENERIC and not w.isdigit()]
+        if stem and not any(t in w or w in t for w in stem for t in tk if len(w)>=2): continue
+        if re.search(r'\s(on|for|with|tr\u00ean)\s',el.get('alt') or '',re.I): continue
         if named(a) and re.search(r'logo|mark|icon',a,re.I) and el.get('src'): out.append(('img',_abs(base,el['src']),f'<img alt="{el.get("alt","")}">'))
     icons=[]
     for l in S.find_all('link'):
@@ -183,9 +188,9 @@ def from_github(name,org,offline=False):
     except Exception as ex: return None,f'GitHub avatar: {ex.__class__.__name__}'
     if e: return None,f'GitHub avatar: {e}'
     return {'data':data,'ext':'png','source':'github-avatar','source_url':f'https://github.com/{org}','color':'','license':'trademark of its owner','kind':kind,'match':f'GitHub org {org} (registry)'},None
-def from_commons(name,offline=False):
+def from_commons(name,offline=False,titles=None):
     if offline: return None,'offline'
-    for t in (f'File:{name} logo.svg',f'File:{name} icon.svg',f'File:{name} Logo.svg'):
+    for t in [*(titles or []),f'File:{name} logo.svg',f'File:{name} icon.svg',f'File:{name} Logo.svg']:
         try:
             q=_get('https://commons.wikimedia.org/w/api.php?action=query&format=json&prop=imageinfo&iiprop=url|extmetadata&titles='+t.replace(' ','%20')).json()
             pg=next(iter(q['query']['pages'].values()))
@@ -210,16 +215,28 @@ def ensure(name,entry=None,offline=None,refresh=False,log=None):
         if m.get('status')=='ok' and os.path.isfile(os.path.join(d,m['file'])) or m.get('status')=='skipped': return m
     base={'name':name,'slug':slug,'fetched_at':datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')}
     if entry.get('logo') is False:
-        return {**base,'status':'skipped','reason':entry.get('why','registry: logo off')}   # policy skip: not cached (registry decides)
+        return {**base,'status':'skipped','reason':entry.get('why','registry: logo off')}   # Dan turned this brand off (registry logo:false): not cached
+    if entry.get('wordmark'):   # quality skip: the only mark is the name set in type; next to the name it reads as the word twice
+        return {**base,'status':'skipped','reason':entry['wordmark'] if isinstance(entry['wordmark'],str) else 'chỉ có wordmark (chữ tên), không có biểu tượng riêng'}
     if offline: return {**base,'status':'skipped','reason':'offline, chưa có trong cache','transient':True}
     why=[];got=None
-    x=si_lookup(name,entry.get('si'))
+    # registry "official": a direct asset URL on the owner's own brand page (used first: Simple Icons can carry an outdated mark)
+    if entry.get('official'):
+        try:
+            r=_get(entry['official']);u=entry['official']
+            if u.split('?')[0].endswith('.svg'):
+                e=check_svg(r.text);got=None if e else {'data':r.content,'ext':'svg','source':'official-brand-asset','source_url':u,'color':'','license':'trademark of its owner (official brand asset)','match':'registry official URL'}
+            else:
+                k,e=check_png(r.content);got=None if e else {'data':r.content,'ext':'png','kind':'tile' if k=='tile' else 'raster','source':'official-brand-asset','source_url':u,'color':'','license':'trademark of its owner (official brand asset)','match':'registry official URL'}
+            if not got: why.append(f'official asset {u}: {e}')
+        except Exception as ex: why.append(f'official asset tải lỗi {ex.__class__.__name__}')
+    x=None if got else si_lookup(name,entry.get('si'))
     if x:
         try: got,e=from_si(x)
         except Exception as ex: got,e=None,f'Simple Icons tải lỗi {ex.__class__.__name__}'
         if e: why.append(e)
     else: why.append('Simple Icons: không có')
-    for step in (lambda:from_site(name,entry.get('homepage')),lambda:from_github(name,entry.get('github')),lambda:from_commons(name)):
+    for step in (lambda:from_site(name,entry.get('homepage')),lambda:from_github(name,entry.get('github')),lambda:from_commons(name,titles=entry.get('commons'))):
         if got: break
         g,e=step();got=g
         if e: why.append(e)

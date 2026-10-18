@@ -1,0 +1,20 @@
+{
+ "name": "LinkedIn",
+ "slug": "linkedin",
+ "fetched_at": "2026-10-18T04:19:45Z",
+ "status": "ok",
+ "file": "logo.svg",
+ "kind": "vector",
+ "mono": false,
+ "color": "#007EBB",
+ "source": "wikimedia-commons",
+ "source_url": "https://commons.wikimedia.org/wiki/File:LinkedIn_icon.svg",
+ "match": "Commons title \"File:LinkedIn icon.svg\"",
+ "attrib": null,
+ "license": "Public domain; trademark of its owner. Used only to identify the product being discussed (nominative use); no endorsement implied.",
+ "tried": [
+  "Simple Icons: không có",
+  "HTML tĩnh: <link rel=\"icon\" sizes=\"\">: <link rel=\"icon\" sizes=\"\">: favicon .ico (nhỏ, bỏ); Chrome lỗi TimeoutExpired",
+  "không có GitHub org"
+ ]
+}

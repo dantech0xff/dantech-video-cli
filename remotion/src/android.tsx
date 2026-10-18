@@ -3,8 +3,8 @@
 // (code card beside a generic phone frame running the @Preview) + Material 3 Expressive motion: spring physics with the
 // M3E spatial/effects tokens and a cookie (scallop) shape for small accents only. Scene transition = Material shared-axis X (`sharedx`, sys.tsx);
 // no full-screen zoom/pop shapes (Dan found the old cookie wipe jarring).
-// Legal: no official Android logo/wordmark/3D head, no Android Studio/IntelliJ/Pixel art. The robot below is our own
-// simplified drawing; the end card carries the CC BY 3.0 attribution line.
+// Theme art: no official Android logo/wordmark/3D head, no Android Studio/IntelliJ/Pixel art in the decoration. The robot below is our own
+// simplified drawing (product logos named in the video come separately through BrandMark, brandmark.tsx); the end card carries the CC BY 3.0 attribution line.
 import React from 'react';import {AbsoluteFill,Audio,Sequence,staticFile,interpolate,spring,useCurrentFrame,Easing} from 'remotion';
 import {useS,FONTS,HeadLine} from './sys';import {useBrand,fitSize,BrandTile,Handle} from './brand';import {SZ} from './safezone';import {Fill,z,zg,zf,hid} from './fill';import {BrandText,useBrands,brandChars} from './brandmark';
 const cl={extrapolateLeft:'clamp',extrapolateRight:'clamp'} as const;

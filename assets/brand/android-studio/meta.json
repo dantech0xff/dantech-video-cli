@@ -1,0 +1,16 @@
+{
+ "name": "Android Studio",
+ "slug": "android-studio",
+ "fetched_at": "2026-10-18T04:19:39Z",
+ "status": "ok",
+ "file": "logo.svg",
+ "kind": "vector",
+ "mono": false,
+ "color": "#3DDC84",
+ "source": "simple-icons",
+ "source_url": "https://simpleicons.org/?q=androidstudio",
+ "match": "Simple Icons title \"Android Studio\"",
+ "attrib": null,
+ "license": "trademark of its owner. Used only to identify the product being discussed (nominative use); no endorsement implied.",
+ "tried": []
+}

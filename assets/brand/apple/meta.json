@@ -1,0 +1,16 @@
+{
+ "name": "Apple",
+ "slug": "apple",
+ "fetched_at": "2026-10-18T04:19:42Z",
+ "status": "ok",
+ "file": "logo.svg",
+ "kind": "vector",
+ "mono": true,
+ "color": "#000000",
+ "source": "simple-icons",
+ "source_url": "https://simpleicons.org/?q=apple",
+ "match": "Simple Icons title \"Apple\"",
+ "attrib": null,
+ "license": "trademark of its owner. Used only to identify the product being discussed (nominative use); no endorsement implied.",
+ "tried": []
+}

@@ -1,0 +1,18 @@
+{
+ "name": "Flutter",
+ "slug": "flutter",
+ "fetched_at": "2026-10-18T04:23:26Z",
+ "status": "ok",
+ "file": "logo.svg",
+ "kind": "vector",
+ "mono": false,
+ "color": null,
+ "source": "official-brand-asset",
+ "source_url": "https://flutter.dev/assets/icon_flutter.817b4a56b047d0d36b338dd9ffd44dbd.svg",
+ "match": "registry official URL",
+ "attrib": null,
+ "license": "trademark of its owner (official brand asset). Used only to identify the product being discussed (nominative use); no endorsement implied.",
+ "tried": [
+  "Simple Icons: không có"
+ ]
+}

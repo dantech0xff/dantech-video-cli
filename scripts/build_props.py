@@ -52,8 +52,7 @@ except Exception as e: blist,brep=[],[f'brand: lỗi phát hiện/tải logo ({e
 for l in brep: print(l)
 props['brands']=blist
 for k,sc in enumerate(S['scenes']):
-    # flutter-tutor: the Flutter logomark sits in the hook and must not stand next to other logos (Flutter brand rules)
-    if sc.get('brands') is False or (k==0 and theme_id(S['theme'])=='flutter-tutor'): scenes[k]['brands']=False
+    if sc.get('brands') is False: scenes[k]['brands']=False
 save({'brands':blist,'report':brep},os.path.join(out,'brands.json'))
 # Layer 1/2: overlay events (script "overlays", item "kw" highlights, auto-filler for static stretches) -> scenes[i].ov
 import autofill
@@ -68,7 +67,8 @@ shown=[b for b in blist if any(b['slug'] in (o.get('brands') or []) for o in sum
        any(s_.get('brands',True) is not False and any(BRS.brand_in(t,b) for t in BRS.drawn_strs(s_['type'],s_['props'])) for s_ in scenes)]
 if shown:
     import brand_logo as BL_
-    att=[m.get('attrib') for b in shown for m in [json.load(open(os.path.join(BL_.BRAND,b['slug'],'meta.json'),encoding='utf-8'))] if m.get('attrib')]
+    att=[m.get('attrib') for b in shown for m in [json.load(open(os.path.join(BL_.BRAND,b['slug'],'meta.json'),encoding='utf-8'))] if m.get('attrib')
+         and not (b['slug']=='android' and theme_id(S['theme'])=='android-tutor')]   # android-tutor's end card already carries the robot CC BY line
     props['tm']='Logo thuộc về chủ sở hữu tương ứng.'+(' '+'; '.join(att)+'.' if att else '')
 print(f"brand: {len(shown)}/{len(blist)} logo hiện trên hình: {', '.join(b['name'] for b in shown) or '-'}")
 for b in blist:

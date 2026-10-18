@@ -1,0 +1,20 @@
+{
+ "name": "Windows",
+ "slug": "windows",
+ "fetched_at": "2026-10-18T04:21:19Z",
+ "status": "ok",
+ "file": "logo.svg",
+ "kind": "vector",
+ "mono": false,
+ "color": "#0078D4",
+ "source": "wikimedia-commons",
+ "source_url": "https://commons.wikimedia.org/wiki/File:Windows_logo_-_2021.svg",
+ "match": "Commons title \"File:Windows logo - 2021.svg\"",
+ "attrib": null,
+ "license": "Public domain; trademark of its owner. Used only to identify the product being discussed (nominative use); no endorsement implied.",
+ "tried": [
+  "Simple Icons: không có",
+  "HTML tĩnh: icon của trang thuộc domain không khớp tên \"Windows\" (có thể là logo công ty mẹ), bỏ; DOM sau JS: icon của trang thuộc domain không khớp tên \"Windows\" (có thể là logo công ty mẹ), bỏ",
+  "không có GitHub org"
+ ]
+}

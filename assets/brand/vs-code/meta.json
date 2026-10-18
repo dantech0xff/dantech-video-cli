@@ -1,0 +1,20 @@
+{
+ "name": "VS Code",
+ "slug": "vs-code",
+ "fetched_at": "2026-10-18T04:21:53Z",
+ "status": "ok",
+ "file": "logo.svg",
+ "kind": "vector",
+ "mono": false,
+ "color": null,
+ "source": "wikimedia-commons",
+ "source_url": "https://commons.wikimedia.org/wiki/File:Visual_Studio_Code_1.35_icon.svg",
+ "match": "Commons title \"File:Visual Studio Code 1.35 icon.svg\"",
+ "attrib": null,
+ "license": "Public domain; trademark of its owner. Used only to identify the product being discussed (nominative use); no endorsement implied.",
+ "tried": [
+  "Simple Icons: không có",
+  "HTML tĩnh: icon của trang thuộc domain không khớp tên \"VS Code\" (có thể là logo công ty mẹ), bỏ; DOM sau JS: icon của trang thuộc domain không khớp tên \"VS Code\" (có thể là logo công ty mẹ), bỏ",
+  "không có GitHub org"
+ ]
+}

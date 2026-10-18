@@ -1,0 +1,20 @@
+{
+ "name": "OpenAI",
+ "slug": "openai",
+ "fetched_at": "2026-10-18T04:21:28Z",
+ "status": "ok",
+ "file": "logo.svg",
+ "kind": "vector",
+ "mono": true,
+ "color": null,
+ "source": "wikimedia-commons",
+ "source_url": "https://commons.wikimedia.org/wiki/File:OpenAI_logo_2025_(symbol).svg",
+ "match": "Commons title \"File:OpenAI logo 2025 (symbol).svg\"",
+ "attrib": null,
+ "license": "Public domain; trademark of its owner. Used only to identify the product being discussed (nominative use); no endorsement implied.",
+ "tried": [
+  "Simple Icons: không có",
+  "tải trang lỗi HTTPError; DOM sau JS: <link rel=\"icon\" sizes=\"\">: <link rel=\"icon\" sizes=\"\">: tải lỗi HTTPError; DOM sau JS: <link rel=\"apple-touch-icon\" sizes=\"180x180\">: <link rel=\"apple-touch-icon\" sizes=\"180x180\">: ảnh 180x180 < 256 px; DOM sau JS: <link rel=\"icon\" sizes=\"48x48\">: <link rel=\"icon\" sizes=\"48x48\">: tải lỗi HTTPError",
+  "không có GitHub org"
+ ]
+}

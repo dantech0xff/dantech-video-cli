@@ -1,0 +1,16 @@
+{
+ "name": "Android",
+ "slug": "android",
+ "fetched_at": "2026-10-18T04:19:39Z",
+ "status": "ok",
+ "file": "logo.svg",
+ "kind": "vector",
+ "mono": false,
+ "color": "#3DDC84",
+ "source": "simple-icons",
+ "source_url": "https://simpleicons.org/?q=android",
+ "match": "Simple Icons title \"Android\"",
+ "attrib": "The Android robot is reproduced or modified from work created and shared by Google and used according to terms described in the Creative Commons 3.0 Attribution License",
+ "license": "trademark of its owner; brand guidelines: https://developer.android.com/distribute/marketing-tools/brand-guidelines#brand-android; icon license CC-BY-3.0. Used only to identify the product being discussed (nominative use); no endorsement implied.",
+ "tried": []
+}
