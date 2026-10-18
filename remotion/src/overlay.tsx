@@ -74,7 +74,9 @@ const BrandChip:React.FC<{o:Ov;t:ReturnType<typeof tok>;f:number}>=({o,t,f})=>{c
   <BrandMark b={b} size={sz} on={t.card}/><span style={{fontFamily:t.head,fontWeight:t.hw,fontSize:fitSize(b.name,w,n===1?60:46,t.head==='Anton'?.48:.56),lineHeight:1.1,color:t.ink,textTransform:t.upper?'uppercase':'none',whiteSpace:'nowrap'}}>{b.name}</span></div>)}</div></Card>};
 const ELS:Record<string,React.FC<{o:Ov;t:ReturnType<typeof tok>;f:number}>>={term:Term,num:Num,icon:Icon,progress:Progress,diagram:Diagram,brand:BrandChip};
 const norm=(s:string)=>s.toLowerCase().replace(/\\@/g,'@').replace(/\s+/g,' ').trim();
-// themes on a photographic plate (look.softSpot, loot-crypto): the spotlight dim fades out at its edges, so no hard rectangle shows
+// themes on a photographic plate (look.softSpot, loot-crypto): no dim panel at all (a translucent panel over the plate reads as a
+// blurry slab, Dan 18/10/2026); the other data-bb boxes are dimmed instead. look.focusPush caps the push-in (1 = none). SOFT is kept
+// as a fallback mask for the panel.
 const SOFT:React.CSSProperties={WebkitMaskImage:'linear-gradient(to right, transparent 0, #000 90px, #000 calc(100% - 90px), transparent 100%), linear-gradient(to bottom, transparent 0, #000 70px, #000 calc(100% - 90px), transparent 100%)',WebkitMaskComposite:'source-in',maskComposite:'intersect'} as any;
 /* 4. focus: find the scene element whose text contains `match`, spotlight it (rest dims), ring it, push in <= 6% within the content box */
 const findEl=(root:HTMLElement,needle:string):HTMLElement|null=>{const nd=norm(needle);if(!nd)return null;let best:HTMLElement|null=null,ba=1e12;
@@ -90,7 +92,7 @@ export const Overlays:React.FC<{ov:Ov[];section:string}>=({ov})=>{const {t,f}=us
  useEffect(()=>{let on=true;document.fonts.ready.then(()=>{if(on)setFok(true)});return ()=>{on=false}},[]);
  useEffect(()=>{if(fok)continueRender(fh)},[fok]);const T=tok(t);const me=useRef<HTMLDivElement>(null);const ring=useRef<HTMLDivElement>(null);const spot=useRef<HTMLDivElement>(null);
  const live=ov.filter(o=>f>=o.at-10&&f<o.end+10);const dock=live.find(o=>o.kind!=='focus');const foc=live.find(o=>o.kind==='focus');
- useLayoutEffect(()=>{const layer=me.current?.closest('[data-layer]') as HTMLElement|null;const wrap=layer?.querySelector('[data-content]') as HTMLElement|null;if(!layer||!wrap)return;
+ useLayoutEffect(()=>{const soft=!!(t as any).softSpot;const layer=me.current?.closest('[data-layer]') as HTMLElement|null;const wrap=layer?.querySelector('[data-content]') as HTMLElement|null;if(!layer||!wrap)return;
   const pre=wrap.dataset.pre||''; // Timeline transition rotation (loot-crypto quarter), kept outermost
   const base=`${pre} scale(${SZ.content.scale})`;wrap.style.transform=base;  // reset before measuring (imperative transforms persist between frames)
   const L=layer.getBoundingClientRect();const k=L.width/layer.offsetWidth||1;const R=(el:Element)=>{const r=el.getBoundingClientRect();return {x:(r.left-L.left)/k,y:(r.top-L.top)/k,r:(r.right-L.left)/k,b:(r.bottom-L.top)/k}};
@@ -113,16 +115,22 @@ export const Overlays:React.FC<{ov:Ov[];section:string}>=({ov})=>{const {t,f}=us
    P={x:(target.x+target.r)/2,y:(target.y+target.b)/2};const c={x:O.x+(cb.x-O.x)*sq,y:O.y+(cb.y-O.y)*sq,r:O.x+(cb.r-O.x)*sq,b:O.y+(cb.b-O.y)*sq};
    const lim=(lo:number,hi:number,pv:number,v1:number,v2:number)=>Math.min(v1<pv?(pv-lo)/Math.max(1,pv-v1):9,v2>pv?(hi-pv)/Math.max(1,v2-pv):9);
    const dockTop=card&&dock?DOCK_B-card.offsetHeight-GAP:DOCK_B;
-   const zmax=Math.max(1,Math.min(1.06,lim(72,X1,P.x,c.x,c.r),lim(SZ.content.y,dockTop,P.y,c.y,c.b)));z=1+(zmax-1)*fp}}
+   const zmax=Math.max(1,Math.min((t as any).focusPush??1.06,lim(72,X1,P.x,c.x,c.r),lim(SZ.content.y,dockTop,P.y,c.y,c.b)));z=1+(zmax-1)*fp}}
   const S=SZ.content.scale*sq*z;const dx=(1-z)*(P.x-O.x),dy=(1-z)*(P.y-O.y);wrap.style.transformOrigin='top left';wrap.style.transform=`${pre} translate(${dx}px,${dy}px) scale(${S})`;
+  // softSpot themes (photographic plate behind the content): never lay a dim panel over the plate (it reads as a blurry slab);
+  // dim the other content boxes themselves instead. Reset first: imperative styles persist between frames.
+  wrap.querySelectorAll<HTMLElement>('[data-dim]').forEach(el=>{el.style.filter=el.dataset.dim==='-'?'':el.dataset.dim!;delete el.dataset.dim});
+  const tEl=foc&&target?findEl(wrap,foc.match??''):null;
+  if(soft&&tEl&&fp>0){const keep=(el:HTMLElement)=>el.contains(tEl)||tEl.contains(el);
+   wrap.querySelectorAll<HTMLElement>('[data-bb]').forEach(el=>{if(keep(el)||el.parentElement?.closest('[data-dim]'))return;el.dataset.dim=el.style.filter||'-';el.style.filter=`brightness(${1-.55*fp}) saturate(${1-.4*fp})`})}
   if(ring.current&&spot.current){if(target&&fp>0){const m=(v:number,o:number)=>P[o===0?'x':'y']+(v-P[o===0?'x':'y'])*z;const x=m(target.x,0)-14,y=m(target.y,1)-12,w=m(target.r,0)-m(target.x,0)+28,h=m(target.b,1)-m(target.y,1)+24;
     Object.assign(ring.current.style,{display:'block',left:`${x}px`,top:`${y}px`,width:`${w}px`,height:`${h}px`,opacity:String(fp)});
-    Object.assign(spot.current.style,{display:'block',opacity:String(fp),clipPath:`polygon(evenodd,0 0,1080px 0,1080px 1920px,0 1920px,0 0,${x}px ${y}px,${x+w}px ${y}px,${x+w}px ${y+h}px,${x}px ${y+h}px,${x}px ${y}px)`});}
+    if(!soft)Object.assign(spot.current.style,{display:'block',opacity:String(fp),clipPath:`polygon(evenodd,0 0,1080px 0,1080px 1920px,0 1920px,0 0,${x}px ${y}px,${x+w}px ${y}px,${x+w}px ${y+h}px,${x}px ${y+h}px,${x}px ${y}px)`});}
    else{ring.current.style.display='none';spot.current.style.display='none'}}
  },[f,fok]);
  // spotlight dims the content box only (header, captions, Follow stay untouched); ring has no data-bb (it frames an existing box)
  const C=SZ.content;
  return <div ref={me} data-ov="1" style={{position:'absolute',inset:0,pointerEvents:'none',zIndex:5}}>
   <div style={{position:'absolute',left:C.x-36,top:C.y-8,width:1080-(C.x-36),height:DOCK_B-C.y+14,overflow:'hidden',...((t as any).softSpot?SOFT:{})}}><div ref={spot} style={{position:'absolute',left:-(C.x-36),top:-(C.y-8),width:1080,height:1920,background:/^#[0-9a-fA-F]{6}$/.test(T.bg)?T.bg+'80':'rgba(0,0,0,.5)',display:'none'}}/></div>
-  <div ref={ring} style={{position:'absolute',display:'none',border:`${(t as any).softSpot?3:4}px solid ${T.A}`,borderRadius:(t as any).lc?'30px 8px 30px 30px':T.r?22:0,boxShadow:`0 0 0 8px ${T.light?'rgba(0,0,0,.05)':'rgba(255,255,255,.04)'}`}}/>
+  <div ref={ring} style={{position:'absolute',display:'none',border:`${(t as any).softSpot?2:4}px solid ${T.A}`,borderRadius:(t as any).lc?'30px 8px 30px 30px':T.r?22:0,boxShadow:`0 0 0 8px ${T.light?'rgba(0,0,0,.05)':'rgba(255,255,255,.04)'}`}}/>
   {dock&&React.createElement(ELS[dock.kind],{o:dock,t:T,f})}</div>};

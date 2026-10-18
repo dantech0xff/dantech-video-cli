@@ -39,7 +39,8 @@ case "$cmd" in
     tts)    python3 scripts/tts.py "$SCRIPT" ${TTS_ARGS[@]+"${TTS_ARGS[@]}"} ;;
     align)  python3 scripts/align.py "$SCRIPT" ;;
     props)  python3 scripts/build_props.py "$SCRIPT" ;;
-    render) (cd remotion && npx remotion render src/index.ts "$THEME" "$ROOT/$OUT/raw.mp4" --props="$ROOT/$OUT/props.json" --log=error)
+    render) python3 scripts/check_plates.py "$THEME" >/dev/null || { python3 scripts/check_plates.py "$THEME"; echo "✗ background plate check failed"; exit 1; }
+            (cd remotion && npx remotion render src/index.ts "$THEME" "$ROOT/$OUT/raw.mp4" --props="$ROOT/$OUT/props.json" --log=error)
             scripts/loudnorm.sh "$OUT/raw.mp4" "$OUT/voice_sfx.mp4" ;;
     gate)   python3 scripts/static_gate.py "$SCRIPT" || { echo "✗ static-screen gate failed: no final mp4 exported (details: $OUT/gate.json)"; exit 1; } ;;
     mix)    python3 scripts/pick_music.py "$SCRIPT"
